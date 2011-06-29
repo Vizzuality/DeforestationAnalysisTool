@@ -1,6 +1,6 @@
 
 function canvas_setup(canvas, coord, zoom) {
-      console.log(coord.x, coord.y, zoom);
+      //console.log(coord.x, coord.y, zoom);
       var image = new Image();  
       var ctx = canvas.getContext('2d');
       image.src = "/static/maps/" + zoom + "/"+ coord.x + "/" + coord.y +".png";
@@ -77,13 +77,15 @@ var MapOptions = (function () {
 
 var App = function() {
 
-        var me = {};
+        var me = {
+            deforestation_polys: []
+        };
 
         me.init = function(layer) {
             var mapOptions = {
                 zoom: 3,
                 center: new google.maps.LatLng(41.850033,-87.6500523),
-                mapTypeId: google.maps.MapTypeId.ROADMAP
+                mapTypeId: google.maps.MapTypeId.SATELLITE
             }
             var map = new google.maps.Map(document.getElementById("map"), mapOptions);
             this.map = map;
@@ -116,6 +118,11 @@ var App = function() {
                     apply_filter(that.threshold.low, that.threshold.high);
                 }
             });
+            
+            $("#done").click(function(e) {
+                send_polys();
+                e.preventDefault();
+            });
         }
         // 
         mapCanvasStub = function(map) { this.setMap(map); }
@@ -140,6 +147,7 @@ var App = function() {
             var poly = new google.maps.Polygon();
             poly.setPath(ll);
             poly.setMap(App.map);
+            return poly;
             
         }
         function setup_map() {
@@ -152,10 +160,33 @@ var App = function() {
                 var image_data = ctx.getImageData(0, 0, c.width, c.height);
                 var poly = contour(image_data.data, c.width, c.height, point.x, point.y);
             
-                create_poly(poly);
+                var newpoly = create_poly(poly);
+                me.deforestation_polys.push(newpoly);
                 delete c;
                 
            });
+        }
+        
+        function post(url, data) {
+            $("#loading").fadeIn();
+            $.post(url, data, function() {
+                $("#loading").fadeOut();
+            }).error(function() {
+                $("#loading").fadeOut();
+            });
+        }
+
+        function send_polys() {
+            if(me.deforestation_polys.length > 0) {
+                var polys_kml = [];
+                _.each(me.deforestation_polys, function(o) {
+                    polys_kml.push(o.kml());
+                });
+                post('/api/v0/poly/new', JSON.stringify(polys_kml));
+            } else {
+                alert("you should select at least one deforested zone");
+            }
+            
         }
 
        return me;

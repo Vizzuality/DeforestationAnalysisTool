@@ -11,6 +11,7 @@
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
     <script type="text/javascript" src="{{url_for("static", filename="js/canvas_tile_layer.js")}}"></script>
     <script type="text/javascript" src="{{url_for("static", filename="js/pixel_ops.js")}}"></script>
+    <script src="{{url_for("static", filename="js/kml.js")}}"></script>
     <script src="{{url_for("static", filename="js/app.js")}}"></script>
 {% endblock %}
 
@@ -25,9 +26,14 @@
     <div id="header">
         imazon
     </div>
+    <div id="loading" class="hidden">   
+        <p>Sending</p>
+        <img src="/static/img/loading.gif"></img>
+    </div>
     <div id="toolbar">
         <div id="slider"></div>
         <div id="slider_values">60-80</div>
+        <a id="done" class="button" href="#">done</a>
     </div>
     <canvas id="offscreen_canvas"></canvas>
      

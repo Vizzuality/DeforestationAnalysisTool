@@ -6,6 +6,23 @@ html, body {
     height: 100%;
     padding: 0;
     margin: 0;
+    font-family: Helvetica, sans-serif;
+}
+
+.hidden {
+    display: none;
+}
+
+#loading {
+    top: 50%;
+    left: 50%;
+    padding: 20px 0px;
+    width: 200px;
+    margin: -55px 0 0 -100px;
+    text-align: center;
+    position: absolute;
+    text-align: center;
+    background-color: #CCC;
 }
 
 #map {
@@ -28,7 +45,7 @@ html, body {
     right: 100px;
 }
 .toolbar {
-    background-color: #EEE;
+    background-color: #CCC;
 }
 
 #header {
@@ -51,12 +68,31 @@ html, body {
         margin-left: 20px;
         font-size: 12px;
         width: 250px;
+        float: left;
     }
     
     #slider_values {
         font-size: 10px;
         margin-left: 20px;
-        color: #CCC;
+        color: #AAA;
+        float: left;
+    }
+    #done {
+        float: right; 
+        margin-right: 20px;
+    }
+    
+    .button {
+        background-color: #09c;
+        padding: 5px 10px;
+        float: left;
+        color: white;
+        text-decoration: none;
+        text-transform: uppercase;
+        &:hover { 
+            background-color: #06a;
+        }
+           
     }
     
 }
