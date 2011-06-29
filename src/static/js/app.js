@@ -168,9 +168,17 @@ var App = function() {
         }
         
         function post(url, data) {
+            $("#msg").hide();
+            $("#sending").show();
             $("#loading").fadeIn();
-            $.post(url, data, function() {
-                $("#loading").fadeOut();
+            $.post(url, data, function(ret) {
+                var msg = ret.msg;
+                if(msg) {
+                    $("#msg").html(msg);
+                    $("#sending").hide();
+                    $("#msg").show(msg);
+                }
+                $("#loading").delay(1000).fadeOut();
             }).error(function() {
                 $("#loading").fadeOut();
             });
@@ -182,7 +190,9 @@ var App = function() {
                 _.each(me.deforestation_polys, function(o) {
                     polys_kml.push(o.kml());
                 });
-                post('/api/v0/poly/new', JSON.stringify(polys_kml));
+                post('/api/v0/poly/new', "polys=" + JSON.stringify(polys_kml));
+                me.deforestation_polys = [];
+
             } else {
                 alert("you should select at least one deforested zone");
             }

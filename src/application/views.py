@@ -5,7 +5,6 @@ from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
 
 from flask import render_template, flash, url_for, redirect
 
-from models import ExampleModel
 from decorators import login_required, admin_required
 from forms import ExampleForm
 
