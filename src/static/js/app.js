@@ -83,8 +83,8 @@ var App = function() {
 
         me.init = function(layer) {
             var mapOptions = {
-                zoom: 3,
-                center: new google.maps.LatLng(41.850033,-87.6500523),
+                zoom: 11,
+                center: new google.maps.LatLng(-7.409408064269147,-50.00213741352536),
                 mapTypeId: google.maps.MapTypeId.SATELLITE
             }
             var map = new google.maps.Map(document.getElementById("map"), mapOptions);
