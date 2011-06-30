@@ -14,17 +14,8 @@ function canvas_setup(canvas, coord, zoom) {
       });
 }
 
-function colorize(v) {
-    if(v < 50) {
-        return [0, 100, 0];
-    } else if (v < 80) {
-        return [0, 255, 255];
-    } else if (v < 123) {
-        return [0, 0, 255];
-    }
-    return [255, 0, 0];
-}
-
+/// filter image canvas based on thresholds
+/// and color it
 function filter(image_data, w, h, low, high) {
     var components = 4; //rgba
     var pixel_pos;
@@ -92,8 +83,8 @@ var App = function() {
             this.layer = new CanvasTileLayer(canvas_setup, filter);
             map.overlayMapTypes.insertAt(0, this.layer);
             this.threshold = {
-                low: 60,
-                high: 80
+                low: 40,
+                high: 60
             }
             this.setup_ui();
             MapOptions(this.map);
@@ -110,7 +101,7 @@ var App = function() {
             $("#slider").slider({
                 range: true,
                 min: 0,
-                max: 100,
+                max: 200,
                 values: [ that.threshold.low,  that.threshold.high],
                 slide: function(event, ui) {  
                     that.threshold.low = ui.values[0];
