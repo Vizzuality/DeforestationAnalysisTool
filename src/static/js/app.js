@@ -3,7 +3,7 @@ function canvas_setup(canvas, coord, zoom) {
       //console.log(coord.x, coord.y, zoom);
       var image = new Image();  
       var ctx = canvas.getContext('2d');
-      image.src = "/static/maps/" + zoom + "/"+ coord.x + "/" + coord.y +".png";
+      image.src = "/tiles/" + zoom + "/"+ coord.x + "/" + coord.y +".png";
       canvas.image = image;
       canvas.coord = coord;
       $(image).load(function() { 

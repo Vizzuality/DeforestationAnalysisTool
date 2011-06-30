@@ -1,5 +1,8 @@
 # encoding: utf-8
 
+import os
+from shutil import copyfile
+
 from google.appengine.api import users
 from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
 
@@ -13,6 +16,20 @@ from application import app
 @app.route('/')
 def home():
     return render_template('home.html')
+
+@app.route('/tiles/<path:tile_path>')
+def tiles(tile_path):
+    """ serve static tiles """
+    # save needed tiles
+    if False:
+        base = os.path.dirname(tile_path)
+        try:
+            os.makedirs("static/tiles/" + base)
+        except OSError:
+            pass #java rocks
+        copyfile("static/maps/%s" % tile_path, "static/tiles/%s" % tile_path)
+    return redirect('/static/tiles/%s' % tile_path)
+    #return redirect('/static/maps/%s' % tile_path)
 
 
 @app.route('/admin_only')
