@@ -1,6 +1,9 @@
 
 function GridOverlay(map) {
     this.map = map;
+    this.states = [];
+    this.level = 0;
+    this.cell = { coord: {x: 0, y: 0} };
     this.projector = new Projector(this.map);
     this.bounds = new google.maps.LatLngBounds(
         new google.maps.LatLng(-18.47960905583197, -74.0478515625),
@@ -8,15 +11,48 @@ function GridOverlay(map) {
     );
     
     var that = this;
-    google.maps.event.addListener(App.map, 'tilesloaded', function() {
+    var listener = google.maps.event.addListener(App.map, 'tilesloaded', function() {
         // its needed to wait to tiles was rendered to
         // google maps call 'draw' on projector overlay and 
         // getProjection can be called
         that.create_grid();
+        google.maps.event.removeListener(listener);
     });
 
 }
 
+GridOverlay.prototype.hide= function() {
+    $('#grid').fadeOut();
+}
+
+GridOverlay.prototype.show= function() {
+    $('#grid').fadeIn();
+}
+
+GridOverlay.prototype.push= function() {
+    // clone FTW
+    var b = new google.maps.LatLngBounds(
+        this.bounds.getSouthWest(),
+        this.bounds.getNorthEast()
+    );
+    this.states.push({
+        bounds: b,
+        cell: _.clone(this.cell)
+    });
+}
+
+GridOverlay.prototype.pop = function() {
+    if(this.states.length > 0) {
+        var st = this.states.pop();
+        this.bounds = st.bounds;
+        this.cell = st.cell;
+        this.level--;
+        this.show();
+        this.create_grid();
+        if(this.on_select_cell)
+            this.on_select_cell(this.level, this.cell.coord);
+    }
+}
 
 // focus map on this cell
 GridOverlay.prototype.focus_on = function(cell) {
@@ -25,6 +61,7 @@ GridOverlay.prototype.focus_on = function(cell) {
     var cell_pos = $(cell).position();
     var x = Math.floor(grid_pos.left + cell_pos.left);
     var y = Math.floor(grid_pos.top + cell_pos.top);
+    this.push();
     this.bounds = new google.maps.LatLngBounds(
         this.projector.untransformCoordinates(
             new google.maps.Point(x, y + Math.ceil($(cell).height()))
@@ -33,9 +70,23 @@ GridOverlay.prototype.focus_on = function(cell) {
             new google.maps.Point(x + Math.ceil($(cell).width()), y)
         )
     );
+
     this.map.fitBounds(this.bounds);
-    this.create_grid();
+    this.level++;
+    this.cell.coord = cell.coord;
+
+    // callback time
+    if(this.on_select_cell)
+        this.on_select_cell(this.level, this.cell.coord);
     
+    if(this.level < 2) {
+        this.create_grid();
+    } else {
+        var n = this.map.getZoom() + 1;
+        this.map.setZoom(n);
+        this.hide();
+        this.onworklevel && this.onworklevel();
+    }
     
 }
 
@@ -51,7 +102,7 @@ GridOverlay.prototype.create_cell = function(x, y, w, h) {
     cell.style.background = "rgba(0, 0, 0, 0.3)";
     cell.style.border= "1px solid white";
     $(cell).mouseover(function() {
-        $(this).css('background', "rgba(0, 0, 0, 0.5)");
+        $(this).css('background', "rgba(0, 0, 0, 0.1)");
     }).mouseout(function() {
         $(this).css('background', "rgba(0, 0, 0, 0.3)");
     }).click(function() {
@@ -61,6 +112,7 @@ GridOverlay.prototype.create_cell = function(x, y, w, h) {
 }
 
 GridOverlay.prototype.create_grid = function() {
+    this.map.fitBounds(this.bounds);
     var righttop = this.projector.transformCoordinates(this.bounds.getNorthEast());
     var leftbottom = this.projector.transformCoordinates(this.bounds.getSouthWest());
     var x = leftbottom.x;
@@ -83,9 +135,11 @@ GridOverlay.prototype.create_grid = function() {
     for(var i=0; i < sp;++i) {
         for(var j=0; j < sp;++j) {
             var cell = this.create_cell(i*sx, j*sy, sx, sy);
+            cell.coord = {x: i, y: j};
             grid.appendChild(cell);
         }
     }
+    //this.map.fitBounds(this.bounds);
     //grid.style.background = "#333";
     //var grid= ownerDocument.createElement('DIV');
 

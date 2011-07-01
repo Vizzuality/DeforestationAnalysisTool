@@ -1,6 +1,6 @@
 
 function canvas_setup(canvas, coord, zoom) {
-      //console.log(coord.x, coord.y, zoom);
+      console.log(coord.x, coord.y, zoom);
       var image = new Image();  
       var ctx = canvas.getContext('2d');
       image.src = "/tiles/" + zoom + "/"+ coord.x + "/" + coord.y +".png";
@@ -75,21 +75,26 @@ var App = function() {
 
         me.init = function(layer) {
             var mapOptions = {
-                zoom: 11,
+                zoom: 5, //11,
                 center: new google.maps.LatLng(-7.409408064269147,-50.00213741352536),
-                mapTypeId: google.maps.MapTypeId.SATELLITE
+                mapTypeId: google.maps.MapTypeId.SATELLITE,
+                disableDefaultUI: true
             }
             var map = new google.maps.Map(document.getElementById("map"), mapOptions);
             this.map = map;
             this.layer = new CanvasTileLayer(canvas_setup, filter);
-            //map.overlayMapTypes.insertAt(0, this.layer);
+            map.overlayMapTypes.insertAt(0, this.layer);
             me.grid = new GridOverlay(map);
+            me.grid.on_select_cell = function(level, coord) {
+                $("#youarein").html(level + "/" + coord.x + "/" + coord.y);
+            }
             this.threshold = {
                 low: 40,
                 high: 60
             }
+
             this.setup_ui();
-            MapOptions(this.map);
+            //MapOptions(this.map);
             setup_map();
             
              var marker = new google.maps.Marker({
@@ -99,6 +104,11 @@ var App = function() {
             });   
             marker = new google.maps.Marker({
                   position: new google.maps.LatLng(5.462895560209557, -43.43994140625),
+                  map: map, 
+                  title:"Hello World!"
+            });   
+            marker = new google.maps.Marker({
+                  position: new google.maps.LatLng(-7.409408064269147,-50.00213741352536),
                   map: map, 
                   title:"Hello World!"
             });   
@@ -127,6 +137,11 @@ var App = function() {
                 send_polys();
                 e.preventDefault();
             });
+        
+            $("#back").click(function(e) {
+                me.grid.pop();
+                e.preventDefault();
+            });
         }
         function create_poly(points) {
             var ll = [];
@@ -145,7 +160,6 @@ var App = function() {
         function setup_map() {
            App.app_canvas = new Projector(me.map);
            google.maps.event.addListener(App.map, 'click', function(e) {
-                App.grid.create_grid();
                 return;
                 var c = App.layer.composed("#map");
                 var point = App.app_canvas.transformCoordinates(e.latLng);
