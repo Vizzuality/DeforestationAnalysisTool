@@ -83,11 +83,48 @@ GridOverlay.prototype.focus_on = function(cell) {
         this.create_grid();
     } else {
         var n = this.map.getZoom() + 1;
-        this.map.setZoom(n);
+        this.map.setZoom(12);
         this.hide();
         this.onworklevel && this.onworklevel();
+        this.set_visible_zone();
     }
     
+}
+
+
+GridOverlay.prototype.set_visible_zone = function() {
+    // calculate outer and inner polygon
+    var X = 179.5;
+    var Y = 85;
+    var sw = this.bounds.getSouthWest();
+    var ne = this.bounds.getNorthEast();
+    var paths = [[
+        new google.maps.LatLng(-X, -Y),
+            new google.maps.LatLng(-X, Y),
+            new google.maps.LatLng(X, Y),
+            new google.maps.LatLng(X, -Y)
+    ], [
+        sw, 
+        new google.maps.LatLng(ne.lat(), sw.lng()),
+        ne,
+        new google.maps.LatLng(sw.lat(), ne.lng()),
+    ]];
+
+    this.poly = new google.maps.Polygon({
+      paths: paths,
+      strokeWeight: 3,
+      fillColor: '#000',
+      fillOpacity: 0.5
+    });
+
+    this.poly.setMap(this.map);
+}
+
+GridOverlay.prototype.clear_visible_zone = function() {
+    if(this.poly) {
+        this.poly.setMap(null);
+        delete this.poly;
+    }
 }
 
 GridOverlay.prototype.create_cell = function(x, y, w, h) {
@@ -115,6 +152,7 @@ GridOverlay.prototype.create_cell = function(x, y, w, h) {
 }
 
 GridOverlay.prototype.create_grid = function() {
+    this.clear_visible_zone();
     this.map.fitBounds(this.bounds);
     var righttop = this.projector.transformCoordinates(this.bounds.getNorthEast());
     var leftbottom = this.projector.transformCoordinates(this.bounds.getSouthWest());
