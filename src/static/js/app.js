@@ -66,6 +66,7 @@ var MapOptions = (function () {
 
 })();
 
+
 var App = function() {
 
         var me = {
@@ -81,7 +82,8 @@ var App = function() {
             var map = new google.maps.Map(document.getElementById("map"), mapOptions);
             this.map = map;
             this.layer = new CanvasTileLayer(canvas_setup, filter);
-            map.overlayMapTypes.insertAt(0, this.layer);
+            //map.overlayMapTypes.insertAt(0, this.layer);
+            me.grid = new GridOverlay(map);
             this.threshold = {
                 low: 40,
                 high: 60
@@ -89,6 +91,17 @@ var App = function() {
             this.setup_ui();
             MapOptions(this.map);
             setup_map();
+            
+             var marker = new google.maps.Marker({
+                  position: new google.maps.LatLng(-18.47960905583197, -74.0478515625),
+                  map: map, 
+                  title:"Hello World!"
+            });   
+            marker = new google.maps.Marker({
+                  position: new google.maps.LatLng(5.462895560209557, -43.43994140625),
+                  map: map, 
+                  title:"Hello World!"
+            });   
         }
 
         function apply_filter(low, high) {
@@ -115,18 +128,6 @@ var App = function() {
                 e.preventDefault();
             });
         }
-        // 
-        mapCanvasStub = function(map) { this.setMap(map); }
-        mapCanvasStub.prototype = new google.maps.OverlayView(); 
-        mapCanvasStub.prototype.draw = function() {};
-        mapCanvasStub.prototype.transformCoordinates = function(point) {
-          return this.getProjection().fromLatLngToContainerPixel(point);
-        };
-        mapCanvasStub.prototype.untransformCoordinates = function(point) {
-          return this.getProjection().fromContainerPixelToLatLng(point);
-        };
-
-        
         function create_poly(points) {
             var ll = [];
             var p;
@@ -142,8 +143,10 @@ var App = function() {
             
         }
         function setup_map() {
-           App.app_canvas = new mapCanvasStub(me.map);
+           App.app_canvas = new Projector(me.map);
            google.maps.event.addListener(App.map, 'click', function(e) {
+                App.grid.create_grid();
+                return;
                 var c = App.layer.composed("#map");
                 var point = App.app_canvas.transformCoordinates(e.latLng);
                 // rendef offscreen
