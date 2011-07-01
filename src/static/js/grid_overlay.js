@@ -22,7 +22,7 @@ function GridOverlay(map) {
 }
 
 GridOverlay.prototype.hide= function() {
-    $('#grid').fadeOut();
+    $('#grid').hide();
 }
 
 GridOverlay.prototype.show= function() {
@@ -47,7 +47,6 @@ GridOverlay.prototype.pop = function() {
         this.bounds = st.bounds;
         this.cell = st.cell;
         this.level--;
-        this.show();
         this.create_grid();
         if(this.on_select_cell)
             this.on_select_cell(this.level, this.cell.coord);
@@ -152,6 +151,7 @@ GridOverlay.prototype.create_cell = function(x, y, w, h) {
 }
 
 GridOverlay.prototype.create_grid = function() {
+    this.hide();
     this.clear_visible_zone();
     this.map.fitBounds(this.bounds);
     var righttop = this.projector.transformCoordinates(this.bounds.getNorthEast());
@@ -180,9 +180,7 @@ GridOverlay.prototype.create_grid = function() {
             grid.appendChild(cell);
         }
     }
-    //this.map.fitBounds(this.bounds);
-    //grid.style.background = "#333";
-    //var grid= ownerDocument.createElement('DIV');
+    this.show();
 
 }
 
