@@ -161,7 +161,8 @@ var App = function() {
         function setup_map() {
            App.app_canvas = new Projector(me.map);
            google.maps.event.addListener(App.map, 'click', function(e) {
-                return;
+                if (App.map.getZoom() != 12) 
+                    return;
                 var c = App.layer.composed("#map");
                 var point = App.app_canvas.transformCoordinates(e.latLng);
                 // rendef offscreen
