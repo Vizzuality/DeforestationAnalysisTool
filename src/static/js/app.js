@@ -69,6 +69,7 @@ var MapOptions = (function () {
 
 var App = function() {
 
+        // model 
         var me = {
             deforestation_polys: []
         };

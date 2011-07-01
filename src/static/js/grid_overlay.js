@@ -99,12 +99,14 @@ GridOverlay.prototype.create_cell = function(x, y, w, h) {
     cell.style.height= h + "px";
     cell.style.display = "block";
     cell.style.position = "absolute";
-    cell.style.background = "rgba(0, 0, 0, 0.3)";
+    cell.style.background = "rgba(0, 0, 0, 0.5)";
     cell.style.border= "1px solid white";
     $(cell).mouseover(function() {
-        $(this).css('background', "rgba(0, 0, 0, 0.1)");
+        $(this).css('background', "rgba(0, 0, 0, 0.0)");
+        $(this).css('cursor','pointer');
     }).mouseout(function() {
-        $(this).css('background', "rgba(0, 0, 0, 0.3)");
+        $(this).css('background', "rgba(0, 0, 0, 0.5)");
+        $(this).css('cursor', 'auto');
     }).click(function() {
         self.focus_on(cell);
     });
