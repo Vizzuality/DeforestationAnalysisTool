@@ -101,6 +101,7 @@ GridOverlay.prototype.create_cell = function(x, y, w, h) {
     cell.style.position = "absolute";
     cell.style.background = "rgba(0, 0, 0, 0.5)";
     cell.style.border= "1px solid white";
+    cell.innerHTML = "<div class='cell_wrap'><div class='progress'><div class='data'>15/100</div></div></div>";
     $(cell).mouseover(function() {
         $(this).css('background', "rgba(0, 0, 0, 0.0)");
         $(this).css('cursor','pointer');
