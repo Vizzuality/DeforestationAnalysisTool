@@ -79,7 +79,8 @@ var App = function() {
                 zoom: 5, //11,
                 center: new google.maps.LatLng(-7.409408064269147,-50.00213741352536),
                 mapTypeId: google.maps.MapTypeId.SATELLITE,
-                disableDefaultUI: true
+                disableDefaultUI: true,
+                disableDoubleClickZoom: true
             }
             var map = new google.maps.Map(document.getElementById("map"), mapOptions);
             this.map = map;
