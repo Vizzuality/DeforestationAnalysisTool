@@ -3,9 +3,6 @@
 import os
 from shutil import copyfile
 
-from google.appengine.api import users
-from google.appengine.runtime.apiproxy_errors import CapabilityDisabledError
-
 from flask import render_template, flash, url_for, redirect
 
 from decorators import login_required, admin_required

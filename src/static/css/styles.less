@@ -100,37 +100,68 @@ html, body {
     .toolbar;
     position: absolute;
     bottom: 0;
-    padding: 1em 0;
+    padding: 0em 0;
     
-    #slider {
-        margin-left: 20px;
-        font-size: 12px;
-        width: 250px;
-        float: left;
-    }
     
-    #slider_values {
-        font-size: 10px;
-        margin-left: 20px;
-        color: #AAA;
+
+    #map_selection_wrapper {
+        width: 10%;
         float: left;
+        padding: 1em 0;
     }
-    #done {
-        float: right; 
-        margin-right: 20px;
+        
+    #slider_wrapper {
+        float: left;
+        width: 35%;
+        #slider {
+            margin-left: 20px;
+            font-size: 12px;
+            width: 85%;
+        }
+        #slider_values {
+            font-size: 10px;
+            margin-left: 20px;
+            color: #AAA;
+        }
+        padding: 1em 0;
+    }
+    #polygon_tools {
+        float: left;
+        width: 30%;
+        #degradation {
+            float: left;
+        }
+        #deforestation {
+            float: left;
+        }
+        padding: 1em 0;
+    }
+    #actions {
+        background-color: #bbb;
+        float: left;
+        width: 25%;
+        padding: 1em 0;
+        #done {
+            float: right;
+            margin-right: 10px;
+        }
     }
     
     .button {
+        float: left;
         background-color: #09c;
         padding: 5px 10px;
-        float: left;
+        font-size: 10px;
+        margin-left: 5px;
         color: white;
         text-decoration: none;
         text-transform: uppercase;
         &:hover { 
             background-color: #06a;
         }
-           
+    }
+    .selected {
+        background-color: #348;
     }
     
 }

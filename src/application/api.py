@@ -11,11 +11,13 @@ from models import Area
 
 @app.route('/api/v0/poly/new', methods=('POST',))
 def poly_new():
-    time.sleep(1);
     polys = json.loads(request.form['polys'])
-    for kml in polys:
-        Area(geo=kml, type=Area.DEFORESTATION).save()
+    logging.info(polys)
+    for p in polys:
+        kml = p['geom']
+        type = int(p['type'])
+        type = type if type in (Area.DEGRADATION, Area.DEFORESTATION) else Area.DEFORESTATION
+        Area(geo=kml, type=type).save()
     return jsonify(ok=True, msg="%d polygons saved" % len(polys));
-    
 
 
