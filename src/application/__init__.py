@@ -22,3 +22,5 @@ def server_error(e):
 import views
 import api
 
+import commands
+

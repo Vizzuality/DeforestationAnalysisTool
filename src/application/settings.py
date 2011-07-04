@@ -10,7 +10,7 @@ Important: Place your keys in the secret_keys.py module,
 
 import os
 
-from secret_keys import CSRF_SECRET_KEY, SESSION_KEY
+from secret_keys import *
 
 
 DEBUG_MODE = False

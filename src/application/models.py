@@ -9,6 +9,10 @@ import logging
 from google.appengine.ext import db
 from google.appengine.ext import deferred
 
+from application import settings
+
+from ft import FT
+
 class Area(db.Model):
     """ area selected by user """
 
@@ -35,3 +39,14 @@ class Area(db.Model):
 
     def save_to_fusion_tables(self):
         logging.info("saving to fusion tables %s" % self.key())
+        cl = FT(settings.FT_CONSUMER_KEY, 
+                settings.FT_CONSUMER_SECRET,
+                settings.FT_TOKEN,
+                settings.FT_SECRET)
+        table_id = cl.table_id('areas')
+        if table_id:
+            cl.sql("insert into %s ('geo', 'added_on', 'type') VALUES ('%s', '%s', %d)" % (table_id, self.geo, self.added_on, self.type))
+        else:
+            raise Exception("Create areas tables first")
+
+    
