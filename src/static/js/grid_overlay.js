@@ -18,6 +18,13 @@ function GridOverlay(map) {
         that.create_grid();
         google.maps.event.removeListener(listener);
     });
+    google.maps.event.addListener(App.map, 'center_changed', function() {
+        var grid = $("#grid");
+        var p = that.projector.transformCoordinates(
+            new google.maps.LatLng(5.462895560209557, -74.0478515625)
+        )
+        grid.offset({top: p.y, left: p.x});
+    });
 
 }
 
