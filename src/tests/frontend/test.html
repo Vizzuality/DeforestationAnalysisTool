@@ -31,6 +31,14 @@
                      0, 1, 1, 1, 1, 0,
                      0, 0, 0, 0, 0, 0];
 
+        var bitmap_hole =   [0, 0, 0, 0, 0, 0,
+                             0, 1, 1, 1, 1, 0,
+                             0, 1, 1, 1, 1, 0,
+                             0, 1, 0, 0, 1, 0,
+                             0, 1, 1, 1, 1, 0,
+                             0, 1, 1, 1, 1, 0,
+                             0, 0, 0, 0, 0, 0];
+
         var pixels = generate_pixels(bitmap);
         
         module("flood_fill");
@@ -53,6 +61,13 @@
           var poly = contour(generate_pixels(bitmap), 6, 6, 1, 1);
           equals( poly.length, 14 ,"test");
           var poly = contour(generate_pixels(bitmap), 6, 6, 3, 3);
+          equals( poly.length, 14 ,"test");
+        });
+
+        test("should contour a shape with holes with same color", function() {
+          var poly = contour(generate_pixels(bitmap_hole), 6, 6, 1, 1);
+          equals( poly.length, 14 ,"test");
+          var poly = contour(generate_pixels(bitmap_hole), 6, 6, 3, 2);
           equals( poly.length, 14 ,"test");
         });
 

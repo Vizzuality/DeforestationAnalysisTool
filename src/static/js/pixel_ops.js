@@ -171,9 +171,13 @@ function contour(image_data, width, height, x, y) {
 
     // first find the starting point
     var lower_y = y;
-    while(match_color(x, ++lower_y)) { }
+    var lower_x = x;
+    // search for lower left point
+    while(match_color(lower_x, ++lower_y) ||
+        match_color(--lower_x, --lower_y)) { }
     --lower_y;
-    var start_point = [x, lower_y];
+    ++lower_x;
+    var start_point = [lower_x, lower_y];
 
     // start with moore-neightbor
     var moore = new MooreNeighbour(start_point);
