@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+                    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <script src="http://code.jquery.com/jquery-latest.js"></script>
+  <link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>
+  <script type="text/javascript" src="../../static/js/pixel_ops.js"></script>
+
+  <script>
+  $(document).ready(function(){
+        // generate rgba image based on bitmap
+        function generate_pixels(bm) {
+            var pixels = [];
+            for(var i=0; i < bm.length; ++i) {
+                var p = bm[i];
+                pixels.push(p);
+                pixels.push(p);
+                pixels.push(p);
+                pixels.push(p);
+            }
+            return pixels;
+        }
+
+        // test bitmap
+        var bitmap= [0, 0, 0, 0, 0, 0,
+                     0, 1, 1, 1, 1, 0,
+                     0, 1, 1, 1, 1, 0,
+                     0, 1, 1, 1, 1, 0,
+                     0, 1, 1, 1, 1, 0,
+                     0, 1, 1, 1, 1, 0,
+                     0, 0, 0, 0, 0, 0];
+
+        var pixels = generate_pixels(bitmap);
+        
+        module("flood_fill");
+        test("should replace color of adyacent pixels", function() {
+          var px = pixels.slice();
+          var poly = flood_fill(px, 6, 6, 1, 1, [255, 254, 253]);
+          for(var i=1; i<5; ++i) {
+            for(var j=1; j<5; ++j) {
+                var p = 4*(i*6 + j);
+                equals(px[p], 255);
+                equals(px[p + 1], 254);
+                equals(px[p + 2], 253);
+                    
+            }
+          }
+        });
+
+        module("contour");
+        test("should contour a shape with same color", function() {
+          var poly = contour(generate_pixels(bitmap), 6, 6, 1, 1);
+          equals( poly.length, 14 ,"test");
+          var poly = contour(generate_pixels(bitmap), 6, 6, 3, 3);
+          equals( poly.length, 14 ,"test");
+        });
+
+  });
+  </script>
+  
+</head>
+<body>
+  <h1 id="qunit-header">QUnit example</h1>
+ <h2 id="qunit-banner"></h2>
+ <div id="qunit-testrunner-toolbar"></div>
+ <h2 id="qunit-userAgent"></h2>
+ <ol id="qunit-tests"></ol>
+ <div id="qunit-fixture">test markup, will be hidden</div>
+</body>
+</html>
