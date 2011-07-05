@@ -174,8 +174,11 @@ function contour(image_data, width, height, x, y) {
     var lower_x = x;
     // search for lower left point
     while(match_color(lower_x, ++lower_y) ||
-        match_color(--lower_x, --lower_y)) { }
-    --lower_y;
+        match_color(--lower_x, --lower_y)) { 
+        console.log(lower_x, lower_y);
+    }
+    //while(match_color(lower_x, ++lower_y));
+    //--lower_y;
     ++lower_x;
     var start_point = [lower_x, lower_y];
 

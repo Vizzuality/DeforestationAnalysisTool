@@ -33,7 +33,10 @@ function filter(image_data, w, h, low, high) {
             image_data[pixel_pos + 1] = color[1];
             image_data[pixel_pos + 2] = color[2];
             if(p > 100) {
-                image_data[pixel_pos + 3] = 0;
+                image_data[pixel_pos + 0] = 0;
+                image_data[pixel_pos + 1] = 0;
+                image_data[pixel_pos + 2] = 0;
+                image_data[pixel_pos + 3] = 150;
             } else {
                 image_data[pixel_pos + 3] = 255;
             }
@@ -83,7 +86,8 @@ var App = function() {
                 center: new google.maps.LatLng(-7.409408064269147,-50.00213741352536),
                 mapTypeId: google.maps.MapTypeId.SATELLITE,
                 disableDefaultUI: true,
-                disableDoubleClickZoom: true
+                disableDoubleClickZoom: true,
+                draggableCursor:'crosshair'
             }
             var map = new google.maps.Map(document.getElementById("map"), mapOptions);
             this.map = map;
@@ -102,7 +106,7 @@ var App = function() {
             //MapOptions(this.map);
             setup_map();
 
-             var marker = new google.maps.Marker({
+            /*var marker = new google.maps.Marker({
                   position: new google.maps.LatLng(-18.47960905583197, -74.0478515625),
                   map: map,
                   title:"Hello World!"
@@ -111,7 +115,7 @@ var App = function() {
                   position: new google.maps.LatLng(5.462895560209557, -43.43994140625),
                   map: map,
                   title:"Hello World!"
-            });
+            });*/
             marker = new google.maps.Marker({
                   position: new google.maps.LatLng(-7.409408064269147,-50.00213741352536),
                   map: map,
@@ -190,11 +194,18 @@ var App = function() {
                 var ctx = c.getContext('2d');
                 var image_data = ctx.getImageData(0, 0, c.width, c.height);
                 var poly = contour(image_data.data, c.width, c.height, point.x, point.y);
+                delete image_data;
 
                 var newpoly = create_poly(poly);
                 newpoly.type = selected_polygon_type;
                 me.deforestation_polys.push(newpoly);
                 delete c;
+                google.maps.event.addListener(newpoly, 'click', function(event) {
+                    var infowindow = new google.maps.InfoWindow();
+                    infowindow.setContent(newpoly.type == 1?"deforestation":"degradation");
+                    infowindow.setPosition(event.latLng);
+                    infowindow.open(App.map);
+                });
 
            });
         }
