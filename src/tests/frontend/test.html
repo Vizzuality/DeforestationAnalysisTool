@@ -5,6 +5,7 @@
   <script src="http://code.jquery.com/jquery-latest.js"></script>
   <link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css" media="screen" />
   <script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>
+  <script type="text/javascript" src="../../static/js/underscore.js"></script>
   <script type="text/javascript" src="../../static/js/pixel_ops.js"></script>
 
   <script>
@@ -31,13 +32,25 @@
                      0, 1, 1, 1, 1, 0,
                      0, 0, 0, 0, 0, 0];
 
-        var bitmap_hole =   [0, 0, 0, 0, 0, 0,
-                             0, 1, 1, 1, 1, 0,
-                             0, 1, 1, 1, 1, 0,
-                             0, 1, 0, 0, 1, 0,
-                             0, 1, 1, 1, 1, 0,
-                             0, 1, 1, 1, 1, 0,
-                             0, 0, 0, 0, 0, 0];
+        var bitmap_hole =   [2, 2, 2, 2, 2, 2, 2, 2,
+                             2, 1, 1, 1, 1, 1, 1, 2,
+                             2, 1, 1, 1, 1, 1, 1, 2,
+                             2, 1, 1, 2, 2, 1, 1, 2,
+                             2, 1, 1, 2, 2, 1, 1, 2,
+                             2, 1, 1, 1, 1, 1, 1, 2,
+                             2, 1, 1, 1, 1, 1, 1, 2,
+                             2, 1, 1, 1, 1, 1, 1, 2,
+                             2, 2, 2, 2, 2, 2, 2, 2];
+
+        var bitmap_hole_2 = [2, 2, 2, 2, 2, 2, 2, 2,
+                             2, 1, 1, 1, 1, 1, 1, 2,
+                             2, 1, 1, 1, 1, 1, 1, 2,
+                             2, 1, 1, 2, 1, 1, 1, 2,
+                             2, 1, 1, 1, 1, 1, 1, 2,
+                             2, 1, 1, 1, 2, 1, 1, 2,
+                             2, 1, 1, 1, 1, 1, 1, 2,
+                             2, 1, 1, 1, 1, 1, 1, 2,
+                             2, 2, 2, 2, 2, 2, 2, 2];
 
         var pixels = generate_pixels(bitmap);
         
@@ -65,10 +78,24 @@
         });
 
         test("should contour a shape with holes with same color", function() {
-          var poly = contour(generate_pixels(bitmap_hole), 6, 6, 1, 1);
-          equals( poly.length, 14 ,"test");
-          var poly = contour(generate_pixels(bitmap_hole), 6, 6, 3, 2);
-          equals( poly.length, 14 ,"test");
+          var poly = contour(generate_pixels(bitmap_hole), 8, 8, 1, 1);
+          equals( poly.length, 22 ,"test");
+          var poly = contour(generate_pixels(bitmap_hole), 8, 8, 3, 2);
+          equals( poly.length, 22 ,"test");
+        });
+
+        test("should find holes", function() {
+          var outer_poly = contour(generate_pixels(bitmap_hole), 8, 8, 2, 2);
+          var poly = inner_polygons(generate_pixels(bitmap_hole), 8, 8, outer_poly, [1,1,1]);
+          equals( poly.length, 1 ,"test");
+          equals( poly[0].length, 8 ,"test");
+        });
+        test("should find 2 holes", function() {
+          var outer_poly = contour(generate_pixels(bitmap_hole_2), 8, 8, 2, 2);
+          var poly = inner_polygons(generate_pixels(bitmap_hole_2), 8, 8, outer_poly, [1,1,1]);
+          equals( poly.length, 2 ,"test");
+          equals( poly[0].length, 4 ,"test");
+          equals( poly[1].length, 4 ,"test");
         });
 
   });

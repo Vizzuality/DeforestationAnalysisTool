@@ -1,7 +1,7 @@
 
 
 /**
- * flood fill algorithm 
+ * flood fill algorithm
  * image_data is an array with pixel information as provided in canvas_context.data
  * (x, y) is starting point and color is the color used to replace old color
  */
@@ -21,7 +21,7 @@ function flood_fill(image_data, canvas_width, canvas_height, x, y, color) {
     var startB = image_data[pixel_pos + 2];
 
     function matchStartColor(pixel_pos) {
-      return startR == image_data[pixel_pos] && 
+      return startR == image_data[pixel_pos] &&
              startG == image_data[pixel_pos+1] &&
              startB == image_data[pixel_pos+2];
     }
@@ -41,7 +41,7 @@ function flood_fill(image_data, canvas_width, canvas_height, x, y, color) {
       newPos = pixelStack.pop();
       x = newPos[0];
       y = newPos[1];
-      
+
       pixel_pos = (y*canvas_width + x) * components;
       while(y-- >= 0 && matchStartColor(pixel_pos))
       {
@@ -75,7 +75,7 @@ function flood_fill(image_data, canvas_width, canvas_height, x, y, color) {
         }
 
         // right side
-        if(x < canvas_width-1) { 
+        if(x < canvas_width-1) {
             trace(1);
         }
         pixel_pos += canvas_width * components;
@@ -139,48 +139,47 @@ function MooreNeighbour(start_point) {
 };
 
 /**
-    this function finds contour for a bunch of pixel given 
+    this function finds contour for a bunch of pixel given
     color of an image.
     Uses the Moore-Neighbor Tracing.
     Returns poligon whitout any processing
     usage:
         var poly = countour(ctx_imagedata.data, ctx.with, ctx.height, pointx, pointy)
 */
-function contour(image_data, width, height, x, y) {
-    
+function contour(image_data, width, height, x, y, start_point) {
+
     var components = 4; //rgba
 
-    // get color to match 
+    // get color to match
     var pixel_pos = (y*width + x) * components;
     var color = [image_data[pixel_pos],
                  image_data[pixel_pos + 1],
                  image_data[pixel_pos + 2]];
 
-    // helper 
+    // helper
     function match_color(x, y) {
-      if(x<0 || x>=width || y<0 || y>=height)  
+      if(x<0 || x>=width || y<0 || y>=height)
         return false;
 
       var pixel_pos = (y*width + x) * components;
-      return color[0] == image_data[pixel_pos] && 
+      return color[0] == image_data[pixel_pos] &&
              color[1] == image_data[pixel_pos+1] &&
              color[2] == image_data[pixel_pos+2];
     }
 
     var poly = [];
 
-    // first find the starting point
-    var lower_y = y;
-    var lower_x = x;
-    // search for lower left point
-    while(match_color(lower_x, ++lower_y) ||
-        match_color(--lower_x, --lower_y)) { 
-        console.log(lower_x, lower_y);
+    if (start_point === undefined) {
+        // first find the starting point
+        var lower_y = y;
+        var lower_x = x;
+        // search for lower left point
+        while(match_color(lower_x, ++lower_y) ||
+            match_color(--lower_x, --lower_y)) {
+        }
+        ++lower_x;
+        start_point = [lower_x, lower_y];
     }
-    //while(match_color(lower_x, ++lower_y));
-    //--lower_y;
-    ++lower_x;
-    var start_point = [lower_x, lower_y];
 
     // start with moore-neightbor
     var moore = new MooreNeighbour(start_point);
@@ -191,3 +190,86 @@ function contour(image_data, width, height, x, y) {
     } while(!(start_point[0] == point[0] && start_point[1] == point[1]) && point != undefined);
     return poly;
 }
+
+
+// given a polygon calc bbox
+// poly: list of points [[x, y], [x1, y1]...]
+// return [{x:minx, y:miny}, {x:maxx, y:maxy}];
+function polygon_bounds(poly) {
+    var maxy = _.max(poly, function(point){ return point[1]; })[1];
+    var miny = _.min(poly, function(point){ return point[1]; })[1];
+    var maxx = _.max(poly, function(point){ return point[0]; })[0];
+    var minx = _.min(poly, function(point){ return point[0]; })[0];
+    return [{x:minx, y:miny}, {x:maxx, y:maxy}];
+}
+
+
+// return inner polygons for image_data inside bounds
+function inner_polygons(image_data, width, height, polygon, color) {
+
+    var components = 4; //rgba
+    var bounds = polygon_bounds(polygon);
+
+    function match_color(x, y, col) {
+      if(x<0 || x>=width || y<0 || y>=height)
+        return false;
+
+      var c = col || color;
+      var pixel_pos = (y*width + x) * components;
+      return c[0] == image_data[pixel_pos] &&
+             c[1] == image_data[pixel_pos+1] &&
+             c[2] == image_data[pixel_pos+2];
+    }
+    // mark all polygon pixels
+    function mark_polygon(poly) {
+        _.each(poly, function(p) {
+            var pixel_pos = (p[1]*width + p[0]) * components;
+            image_data[pixel_pos] = 0;
+            image_data[pixel_pos+1] = 0;
+            image_data[pixel_pos+2] = 0;
+            image_data[pixel_pos+3] = 0;
+        });
+    }
+    
+    function search_start(x, y) {
+        var sy = y;
+        while(!match_color(x, --sy)) {
+            if(sy<0 || sy>=height)
+                return undefined;
+        }
+        return [x, sy]
+    }
+
+    var inner_polys = [];
+    mark_polygon(polygon);
+
+    // iterate over all pixels inside polygon bounds
+    for(var y = bounds[0].y; y <= bounds[1].y; ++y) {
+        var inside = false;
+        for(var x = bounds[0].x; x <= bounds[1].x; ++x) {
+            // check if inside polygon
+            if(match_color(x, y, [0, 0, 0])) {
+                inside = !inside;
+            } else {
+                if(inside) {
+                    if(!match_color(x, y)) {
+                        // we've found a hole so find its contour
+                        // and mark it
+                        //var start = search_start(x, y);
+                        var start = [x,y];
+                        if (start) {
+                            var poly = contour(image_data, width, height, 
+                                start[0],
+                                start[1]);//, start);
+                            mark_polygon(poly);
+                            inner_polys.push(poly);
+                            inside = false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return inner_polys;
+}
+

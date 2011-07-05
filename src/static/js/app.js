@@ -1,6 +1,5 @@
 
 function canvas_setup(canvas, coord, zoom) {
-      console.log(coord.x, coord.y, zoom);
       var image = new Image();
       var ctx = canvas.getContext('2d');
       image.src = "/tiles/" + zoom + "/"+ coord.x + "/" + coord.y +".png";
@@ -194,7 +193,6 @@ var App = function() {
                 var ctx = c.getContext('2d');
                 var image_data = ctx.getImageData(0, 0, c.width, c.height);
                 var poly = contour(image_data.data, c.width, c.height, point.x, point.y);
-                delete image_data;
 
                 var newpoly = create_poly(poly);
                 newpoly.type = selected_polygon_type;
@@ -206,6 +204,13 @@ var App = function() {
                     infowindow.setPosition(event.latLng);
                     infowindow.open(App.map);
                 });
+
+                var inners = inner_polygons(image_data.data,
+                         c.width, c.height, poly, [255, 0, 0]);
+                _.each(inners, function(p) {
+                    create_poly(p);
+                });
+                delete image_data;
 
            });
         }
