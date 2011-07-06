@@ -86,7 +86,7 @@ var App = function() {
                 mapTypeId: google.maps.MapTypeId.SATELLITE,
                 disableDefaultUI: true,
                 disableDoubleClickZoom: true,
-                draggableCursor:'crosshair'
+                draggableCursor:'default'
             }
             var map = new google.maps.Map(document.getElementById("map"), mapOptions);
             this.map = map;
