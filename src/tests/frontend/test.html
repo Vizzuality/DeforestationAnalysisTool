@@ -44,9 +44,9 @@
         var bitmap_hole =   [2, 2, 2, 2, 2, 2, 2, 2,
                              2, 1, 1, 1, 1, 1, 1, 2,
                              2, 1, 1, 1, 1, 1, 1, 2,
-                             2, 1, 1, 2, 2, 1, 1, 2,
-                             2, 1, 1, 2, 2, 1, 1, 2,
-                             2, 1, 1, 1, 1, 1, 1, 2,
+                             2, 1, 1, 2, 2, 2, 1, 2,
+                             2, 1, 1, 2, 2, 2, 1, 2,
+                             2, 1, 1, 2, 2, 2, 1, 2,
                              2, 1, 1, 1, 1, 1, 1, 2,
                              2, 1, 1, 1, 1, 1, 1, 2,
                              2, 2, 2, 2, 2, 2, 2, 2];
@@ -110,7 +110,7 @@
           var outer_poly = contour(generate_pixels(bitmap_hole), 8, 8, 2, 2);
           var poly = inner_polygons(generate_pixels(bitmap_hole), 8, 8, outer_poly, [1,1,1]);
           equals( poly.length, 1 ,"test");
-          equals( poly[0].length, 4 ,"test");
+          equals( poly[0].length, 8 ,"test");
         });
         test("should find 2 holes", function() {
           var outer_poly = contour(generate_pixels(bitmap_hole_2), 8, 8, 2, 2);

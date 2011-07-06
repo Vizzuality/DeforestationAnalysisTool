@@ -9,11 +9,11 @@ function GridOverlay(map) {
         new google.maps.LatLng(-18.47960905583197, -74.0478515625),
         new google.maps.LatLng(5.462895560209557, -43.43994140625)
     );
-    
+
     var that = this;
     var listener = google.maps.event.addListener(App.map, 'tilesloaded', function() {
         // its needed to wait to tiles was rendered to
-        // google maps call 'draw' on projector overlay and 
+        // google maps call 'draw' on projector overlay and
         // getProjection can be called
         that.create_grid();
         google.maps.event.removeListener(listener);
@@ -84,7 +84,7 @@ GridOverlay.prototype.focus_on = function(cell) {
     // callback time
     if(this.on_select_cell)
         this.on_select_cell(this.level, this.cell.coord);
-    
+
     if(this.level < 2) {
         this.create_grid();
     } else {
@@ -94,7 +94,7 @@ GridOverlay.prototype.focus_on = function(cell) {
         this.onworklevel && this.onworklevel();
         this.set_visible_zone();
     }
-    
+
 }
 
 
@@ -110,7 +110,7 @@ GridOverlay.prototype.set_visible_zone = function() {
             new google.maps.LatLng(X, Y),
             new google.maps.LatLng(X, -Y)
     ], [
-        sw, 
+        sw,
         new google.maps.LatLng(ne.lat(), sw.lng()),
         ne,
         new google.maps.LatLng(sw.lat(), ne.lng()),
@@ -161,6 +161,9 @@ GridOverlay.prototype.create_grid = function() {
     this.hide();
     this.clear_visible_zone();
     this.map.fitBounds(this.bounds);
+    if(this.map.getZoom() < 5) {
+        this.map.setZoom(5);
+    }
     var righttop = this.projector.transformCoordinates(this.bounds.getNorthEast());
     var leftbottom = this.projector.transformCoordinates(this.bounds.getSouthWest());
     var x = leftbottom.x;
@@ -178,7 +181,7 @@ GridOverlay.prototype.create_grid = function() {
     grid.style.height= h + "px";
     grid.style.display = "block";
     sp = 10;
-    var sx = w/sp;      
+    var sx = w/sp;
     var sy = h/sp;
     for(var i=0; i < sp;++i) {
         for(var j=0; j < sp;++j) {

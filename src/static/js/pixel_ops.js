@@ -226,13 +226,13 @@ function inner_polygons(image_data, width, height, polygon, color) {
     function mark_polygon(poly) {
         _.each(poly, function(p) {
             var pixel_pos = (p[1]*width + p[0]) * components;
-            image_data[pixel_pos] = 0;
-            image_data[pixel_pos+1] = 0;
-            image_data[pixel_pos+2] = 0;
-            image_data[pixel_pos+3] = 0;
+            image_data[pixel_pos] = color[0];
+            image_data[pixel_pos+1] = color[1];
+            image_data[pixel_pos+2] = color[2];
+            //image_data[pixel_pos+3] = 0;
         });
     }
-    
+
     function search_start(x, y) {
         var sy = y;
         while(!match_color(x, --sy)) {
@@ -242,31 +242,43 @@ function inner_polygons(image_data, width, height, polygon, color) {
         return [x, sy]
     }
 
+    function isPointInPoly(poly, pt){
+        for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i)
+            ((poly[i][1] <= pt[1] && pt[1] < poly[j][1]) || (poly[j][1] <= pt[1] && pt[1] < poly[i][1]))
+            && (pt[0] < (poly[j][0] - poly[i][0]) * (pt[1] - poly[i][1]) / (poly[j][1] - poly[i][1]) + poly[i][0])
+            && (c = !c);
+        return c;
+    }
     var inner_polys = [];
-    mark_polygon(polygon);
+
+    function inside_poly(point) {
+        return isPointInPoly(polygon, point) &&
+              !_.any(
+                    _.map(inner_polys, function(p) {
+                        return isPointInPoly(p, point)
+                    })
+              );
+    }
+
 
     // iterate over all pixels inside polygon bounds
     for(var y = bounds[0].y; y <= bounds[1].y; ++y) {
-        var inside = false;
+        //var inside = false;
         for(var x = bounds[0].x; x <= bounds[1].x; ++x) {
             // check if inside polygon
-            if(match_color(x, y, [0, 0, 0])) {
-                inside = !inside;
-            } else {
-                if(inside) {
-                    if(!match_color(x, y)) {
-                        // we've found a hole so find its contour
-                        // and mark it
-                        //var start = search_start(x, y);
-                        var start = [x,y];
-                        if (start) {
-                            var poly = contour(image_data, width, height, 
-                                start[0],
-                                start[1]);//, start);
-                            mark_polygon(poly);
-                            inner_polys.push(poly);
-                            inside = false;
-                        }
+            if(inside_poly([x, y])) {
+                if(!match_color(x, y)) {
+                    // we've found a hole so find its contour
+                    // and mark it
+                    //var start = search_start(x, y);
+                    var start = [x,y];
+                    if (start) {
+                        var poly = contour(image_data, width, height,
+                            start[0],
+                            start[1]);//, start);
+                        mark_polygon(poly);
+                        inner_polys.push(poly);
+                        inside = false;
                     }
                 }
             }

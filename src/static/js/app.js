@@ -168,16 +168,27 @@ var App = function() {
                 e.preventDefault();
             });
         }
-        function create_poly(points) {
-            var ll = [];
-            var p;
-            for(var i in points) {
-                p = points[i];
-                var l = App.app_canvas.untransformCoordinates(new google.maps.Point(p[0], p[1]))
-                ll.push(l);
+        function create_poly(points, inners) {
+            var paths = []
+
+            // pixel -> latlon
+            function unproject(p) {
+                return App.app_canvas.untransformCoordinates(
+                    new google.maps.Point(p[0], p[1])
+                );
             }
-            var poly = new google.maps.Polygon();
-            poly.setPath(ll);
+            // outer path
+            paths.push(_.map(points, unproject));
+
+            // inner paths (reversed)
+            _.each(inners, function(p) {
+                paths.push(_.map(p.reverse(), unproject));
+            });
+            inners && console.log(inners.length);
+            var poly = new google.maps.Polygon({
+                paths: paths,
+                strokeWeight: 1
+            })
             poly.setMap(App.map);
             return poly;
 
@@ -192,12 +203,31 @@ var App = function() {
                 // rendef offscreen
                 var ctx = c.getContext('2d');
                 var image_data = ctx.getImageData(0, 0, c.width, c.height);
+
+
+                // get pixel color
+                var pixel_pos = (point.y*c.width + point.x) * 4;
+                var color = []; 
+                color[0] = image_data.data[pixel_pos + 0];
+                color[1] = image_data.data[pixel_pos + 1];
+                color[2] = image_data.data[pixel_pos + 2];
+                color[3] = image_data.data[pixel_pos + 3];
+                // if isn't a solid color can't be picked
+                if(color[3] != 255) {
+                    return;
+                }
+
                 var poly = contour(image_data.data, c.width, c.height, point.x, point.y);
 
-                var newpoly = create_poly(poly);
+                var inners = inner_polygons(image_data.data,
+                         c.width, c.height, poly, color);
+
+                // discard small polys
+                inners = _.select(inners, function(p){ return p.length > 8; });
+
+                var newpoly = create_poly(poly, inners);
                 newpoly.type = selected_polygon_type;
                 me.deforestation_polys.push(newpoly);
-                delete c;
                 google.maps.event.addListener(newpoly, 'click', function(event) {
                     var infowindow = new google.maps.InfoWindow();
                     //FIX
@@ -205,15 +235,8 @@ var App = function() {
                     infowindow.setPosition(event.latLng);
                     infowindow.open(App.map);
                 });
-
-                var inners = inner_polygons(image_data.data,
-                         c.width, c.height, poly, [255, 0, 0]);
-                // discard small polys
-                inners = _.select(inners, function(p){ return p.length > 8; });
-                _.each(inners, function(p) {
-                    create_poly(p);
-                });
                 delete image_data;
+                delete c;
 
            });
         }
