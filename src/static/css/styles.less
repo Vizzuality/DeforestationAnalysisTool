@@ -13,6 +13,33 @@ html, body {
     display: none;
 }
 
+.screen_centered {
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    padding: 0px 20px 10px;
+    width: 200px;
+    margin: -55px 0 0 -100px;
+    background-color: #CCC;
+}
+
+#settings {
+    .screen_centered;
+    #close_settings {
+        display: block;
+        float: right;
+        margin-top: 20px;
+    }
+    p {
+         margin : 0;
+    }
+    .small {
+        font-size: 80%;
+        color: #777;
+        margin-bottom: 10px;
+    }
+}
+
 #loading {
     top: 50%;
     left: 50%;
@@ -24,6 +51,7 @@ html, body {
     text-align: center;
     background-color: #CCC;
 }
+
 
 #grid {
     position: absolute;

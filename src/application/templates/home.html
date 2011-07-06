@@ -33,16 +33,26 @@
             you are at <span id="youarein">top level</span>
         </div>
     </div>
-    <div id="loading" class="hidden">   
+    <div id="loading" class="hidden">
         <div id="sending">
             <p>Sending</p>
             <img src="/static/img/loading.gif"></img>
         </div>
         <div id="msg"></div>
     </div>
+
+    <div id="settings">
+            <h3>settings</h3>
+            <p>hole detection sensibility</p>
+            <p class="small">higher value makes small holes are detected<p>
+            <div id="inner_slider"></div>
+            <div id="inner_slider_value">8</div>
+            <a id="close_settings" href="#" onclick="$(this).parent().fadeOut()">close</a>
+    </div>
+
     <div id="toolbar">
         <div id="map_selection_wrapper">
-            <a class="button" id="map_selection" href="#">map</a>
+            <a class="button" id="map_selection" href="#" onclick="$('#settings').fadeIn()">settings</a>
         </div>
         <div id="slider_wrapper">
             <div id="slider"></div>
@@ -57,5 +67,5 @@
         </div>
     </div>
     <canvas id="offscreen_canvas"></canvas>
-     
+
 {% endblock %}

@@ -75,6 +75,7 @@ var App = function() {
         var DEGRADATION = 0;
         var DEFORESTATION = 1;
         var selected_polygon_type = DEFORESTATION;
+        var inner_poly_sensibility = 8;
         var me = {
             deforestation_polys: [],
         };
@@ -167,6 +168,18 @@ var App = function() {
                 me.grid.pop();
                 e.preventDefault();
             });
+
+            $("#inner_slider").slider({
+                value: 75,
+                min: 0,
+                max: 100,
+                slide: function(event, ui) {
+                    var s = 100 - ui.value;
+                    inner_poly_sensibility = 1 + 30*s/100.0;
+                    console.log(inner_poly_sensibility);
+                    $("#inner_slider_value").html(inner_poly_sensibility);
+                }
+            });
         }
         function create_poly(points, inners) {
             var paths = []
@@ -223,7 +236,7 @@ var App = function() {
                          c.width, c.height, poly, color);
 
                 // discard small polys
-                inners = _.select(inners, function(p){ return p.length > 8; });
+                inners = _.select(inners, function(p){ return p.length > inner_poly_sensibility; });
 
                 var newpoly = create_poly(poly, inners);
                 newpoly.type = selected_polygon_type;
