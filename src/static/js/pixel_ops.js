@@ -188,7 +188,8 @@ function contour(image_data, width, height, x, y, start_point) {
     var point;
     do {
         point = moore.next(match_color);
-        poly.push(point);
+        if(point)
+            poly.push(point);
     } while(point !== undefined && !(start_point[0] == point[0] && start_point[1] == point[1]));
     return poly;
 }
@@ -276,7 +277,7 @@ function inner_polygons(image_data, width, height, polygon, color) {
                         var poly = contour(image_data, width, height,
                             start[0],
                             start[1]);//, start);
-                        if(poly)
+                        if(poly && poly.length > 0)
                             inner_polys.push(poly);
                     }
                 }
