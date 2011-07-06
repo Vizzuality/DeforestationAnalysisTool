@@ -136,7 +136,7 @@ function MooreNeighbour(start_point) {
             old_cell = n;
         }
         // points around not found, return current pixel
-        return [x, y]
+        //return [x, y]
     }
 };
 
