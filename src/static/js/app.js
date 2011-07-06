@@ -200,13 +200,16 @@ var App = function() {
                 delete c;
                 google.maps.event.addListener(newpoly, 'click', function(event) {
                     var infowindow = new google.maps.InfoWindow();
-                    infowindow.setContent(newpoly.type == 1?"deforestation":"degradation");
+                    //FIX
+                    infowindow.setContent(newpoly.type == 1 ? "deforestation":"degradation");
                     infowindow.setPosition(event.latLng);
                     infowindow.open(App.map);
                 });
 
                 var inners = inner_polygons(image_data.data,
                          c.width, c.height, poly, [255, 0, 0]);
+                // discard small polys
+                inners = _.select(inners, function(p){ return p.length > 8; });
                 _.each(inners, function(p) {
                     create_poly(p);
                 });

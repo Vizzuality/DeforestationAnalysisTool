@@ -32,6 +32,15 @@
                      0, 1, 1, 1, 1, 0,
                      0, 0, 0, 0, 0, 0];
 
+        var small_bitmap=   [0, 0, 0, 0,
+                             0, 1, 1, 0,
+                             0, 1, 1, 0,
+                             0, 0, 0, 0];
+        var one_px_bitmap=   [0, 0, 0, 0,
+                             0, 1, 0, 0,
+                             0, 0, 0, 0,
+                             0, 0, 0, 0];
+
         var bitmap_hole =   [2, 2, 2, 2, 2, 2, 2, 2,
                              2, 1, 1, 1, 1, 1, 1, 2,
                              2, 1, 1, 1, 1, 1, 1, 2,
@@ -45,7 +54,7 @@
         var bitmap_hole_2 = [2, 2, 2, 2, 2, 2, 2, 2,
                              2, 1, 1, 1, 1, 1, 1, 2,
                              2, 1, 1, 1, 1, 1, 1, 2,
-                             2, 1, 1, 2, 1, 1, 1, 2,
+                             2, 1, 1, 2, 2, 1, 1, 2,
                              2, 1, 1, 1, 1, 1, 1, 2,
                              2, 1, 1, 1, 2, 1, 1, 2,
                              2, 1, 1, 1, 1, 1, 1, 2,
@@ -70,11 +79,24 @@
         });
 
         module("contour");
+
         test("should contour a shape with same color", function() {
           var poly = contour(generate_pixels(bitmap), 6, 6, 1, 1);
           equals( poly.length, 14 ,"test");
           var poly = contour(generate_pixels(bitmap), 6, 6, 3, 3);
           equals( poly.length, 14 ,"test");
+        });
+
+        test("should contour a small shape with same color", function() {
+          var poly = contour(generate_pixels(small_bitmap), 4, 4, 1, 1);
+          equals( poly.length, 4 ,"test");
+        });
+
+        test("should contour 1px shape with same color", function() {
+          var poly = contour(generate_pixels(one_px_bitmap), 4, 4, 1, 1);
+          equals( poly.length, 1 ,"test");
+          equals( poly[0][0], 1 ,"test");
+          equals( poly[0][1], 1 ,"test");
         });
 
         test("should contour a shape with holes with same color", function() {
@@ -88,14 +110,14 @@
           var outer_poly = contour(generate_pixels(bitmap_hole), 8, 8, 2, 2);
           var poly = inner_polygons(generate_pixels(bitmap_hole), 8, 8, outer_poly, [1,1,1]);
           equals( poly.length, 1 ,"test");
-          equals( poly[0].length, 8 ,"test");
+          equals( poly[0].length, 4 ,"test");
         });
         test("should find 2 holes", function() {
           var outer_poly = contour(generate_pixels(bitmap_hole_2), 8, 8, 2, 2);
           var poly = inner_polygons(generate_pixels(bitmap_hole_2), 8, 8, outer_poly, [1,1,1]);
           equals( poly.length, 2 ,"test");
-          equals( poly[0].length, 4 ,"test");
-          equals( poly[1].length, 4 ,"test");
+          equals( poly[0].length, 2 ,"test");
+          equals( poly[1].length, 1 ,"test");
         });
 
   });

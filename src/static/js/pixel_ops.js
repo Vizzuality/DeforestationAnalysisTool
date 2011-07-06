@@ -135,6 +135,8 @@ function MooreNeighbour(start_point) {
             }
             old_cell = n;
         }
+        // points around not found, return current pixel
+        return [x, y]
     }
 };
 
@@ -187,7 +189,7 @@ function contour(image_data, width, height, x, y, start_point) {
     do {
         point = moore.next(match_color);
         poly.push(point);
-    } while(!(start_point[0] == point[0] && start_point[1] == point[1]) && point != undefined);
+    } while(point !== undefined && !(start_point[0] == point[0] && start_point[1] == point[1]));
     return poly;
 }
 
