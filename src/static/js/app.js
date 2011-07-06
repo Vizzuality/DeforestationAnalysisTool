@@ -241,13 +241,15 @@ var App = function() {
                 var newpoly = create_poly(poly, inners);
                 newpoly.type = selected_polygon_type;
                 me.deforestation_polys.push(newpoly);
-                google.maps.event.addListener(newpoly, 'click', function(event) {
-                    var infowindow = new google.maps.InfoWindow();
-                    //FIX
-                    infowindow.setContent(newpoly.type == 1 ? "deforestation":"degradation");
-                    infowindow.setPosition(event.latLng);
-                    infowindow.open(App.map);
-                });
+                (function(newpoly) {
+                    google.maps.event.addListener(newpoly, 'click', function(event) {
+                        var infowindow = new google.maps.InfoWindow();
+                        //FIX
+                        infowindow.setContent(newpoly.type == 1 ? "deforestation":"degradation");
+                        infowindow.setPosition(event.latLng);
+                        infowindow.open(App.map);
+                    })
+                })(newpoly);
                 delete image_data;
                 delete c;
 
