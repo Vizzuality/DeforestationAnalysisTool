@@ -276,9 +276,8 @@ function inner_polygons(image_data, width, height, polygon, color) {
                         var poly = contour(image_data, width, height,
                             start[0],
                             start[1]);//, start);
-                        mark_polygon(poly);
-                        inner_polys.push(poly);
-                        inside = false;
+                        if(poly)
+                            inner_polys.push(poly);
                     }
                 }
             }
