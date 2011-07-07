@@ -243,24 +243,24 @@ function inner_polygons(image_data, width, height, polygon, color) {
         return [x, sy]
     }
 
-    function isPointInPoly(poly, pt){
-        for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i)
+    function isPointInPoly(poly, pt, include_border){
+        for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i) {
+            if(include_border && poly[i][0] == pt[0] && poly[i][1] == pt[1]) 
+                return true;
             ((poly[i][1] <= pt[1] && pt[1] < poly[j][1]) || (poly[j][1] <= pt[1] && pt[1] < poly[i][1]))
             && (pt[0] < (poly[j][0] - poly[i][0]) * (pt[1] - poly[i][1]) / (poly[j][1] - poly[i][1]) + poly[i][0])
             && (c = !c);
+        }
         return c;
     }
     var inner_polys = [];
 
+    // is inside wrapper poly but not inside inner polygons
     function inside_poly(point) {
-        return isPointInPoly(polygon, point) &&
-              !_.any(
-                    _.map(inner_polys, function(p) {
-                        return isPointInPoly(p, point)
-                    })
-              );
+        return isPointInPoly(polygon, point) 
     }
 
+    mark_polygon(polygon);
 
     // iterate over all pixels inside polygon bounds
     for(var y = bounds[0].y; y <= bounds[1].y; ++y) {
@@ -271,12 +271,13 @@ function inner_polygons(image_data, width, height, polygon, color) {
                 if(!match_color(x, y)) {
                     // we've found a hole so find its contour
                     // and mark it
-                    //var start = search_start(x, y);
                     var start = [x,y];
                     if (start) {
                         var poly = contour(image_data, width, height,
                             start[0],
-                            start[1]);//, start);
+                            start[1]);
+                        // fill with color in order to not count twice
+                        flood_fill(image_data, width, height, start[0], start[1], color);
                         if(poly && poly.length > 0)
                             inner_polys.push(poly);
                     }
