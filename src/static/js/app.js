@@ -213,13 +213,25 @@ var App = function() {
             return poly;
 
         }
+        
         function setup_map() {
+           /*$("#canvas_test").click(function() {
+                var c = App.layer.composed("#map");
+                var cn = document.getElementById('canvas_test');
+                var ctx = cn.getContext('2d');
+                cn.width = ctx.width = c.width;
+                cn.height = ctx.height = c.height;
+                //ctx.globalAlpha = 0.5;
+                ctx.drawImage(c, 0, 0);
+                console.log("canvas");
+           });*/
            App.app_canvas = new Projector(me.map);
            google.maps.event.addListener(App.map, 'click', function(e) {
                 if (App.map.getZoom() != 12)
                     return;
                 var c = App.layer.composed("#map");
                 var point = App.app_canvas.transformCoordinates(e.latLng);
+
                 // rendef offscreen
                 var ctx = c.getContext('2d');
                 var image_data = ctx.getImageData(0, 0, c.width, c.height);
@@ -251,7 +263,6 @@ var App = function() {
                 (function(newpoly) {
                     google.maps.event.addListener(newpoly, 'click', function(event) {
                         var infowindow = new google.maps.InfoWindow();
-                        //FIX
                         infowindow.setContent(newpoly.type == 1 ? "deforestation":"degradation");
                         infowindow.setPosition(event.latLng);
                         infowindow.open(App.map);

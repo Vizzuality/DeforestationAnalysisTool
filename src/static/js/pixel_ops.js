@@ -1,4 +1,12 @@
 
+function isPointInPoly(poly, pt) {
+    for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i) {
+        ((poly[i][1] <= pt[1] && pt[1] < poly[j][1]) || (poly[j][1] <= pt[1] && pt[1] < poly[i][1]))
+        && (pt[0] < (poly[j][0] - poly[i][0]) * (pt[1] - poly[i][1]) / (poly[j][1] - poly[i][1]) + poly[i][0])
+        && (c = !c);
+    }
+    return c;
+}
 
 /**
  * flood fill algorithm
@@ -148,7 +156,7 @@ function MooreNeighbour(start_point) {
     usage:
         var poly = countour(ctx_imagedata.data, ctx.with, ctx.height, pointx, pointy)
 */
-function contour(image_data, width, height, x, y, start_point) {
+function contour(image_data, width, height, x, y, start_point, bounds) {
 
     var components = 4; //rgba
 
@@ -162,6 +170,10 @@ function contour(image_data, width, height, x, y, start_point) {
     function match_color(x, y) {
       if(x<0 || x>=width || y<0 || y>=height)
         return false;
+
+      if (bounds && !isPointInPoly(bounds, [x, y])) {
+        return false;
+      }
 
       var pixel_pos = (y*width + x) * components;
       return color[0] == image_data[pixel_pos] &&
@@ -243,16 +255,6 @@ function inner_polygons(image_data, width, height, polygon, color) {
         return [x, sy]
     }
 
-    function isPointInPoly(poly, pt, include_border){
-        for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i) {
-            if(include_border && poly[i][0] == pt[0] && poly[i][1] == pt[1]) 
-                return true;
-            ((poly[i][1] <= pt[1] && pt[1] < poly[j][1]) || (poly[j][1] <= pt[1] && pt[1] < poly[i][1]))
-            && (pt[0] < (poly[j][0] - poly[i][0]) * (pt[1] - poly[i][1]) / (poly[j][1] - poly[i][1]) + poly[i][0])
-            && (c = !c);
-        }
-        return c;
-    }
     var inner_polys = [];
 
     // is inside wrapper poly but not inside inner polygons
@@ -275,7 +277,9 @@ function inner_polygons(image_data, width, height, polygon, color) {
                     if (start) {
                         var poly = contour(image_data, width, height,
                             start[0],
-                            start[1]);
+                            start[1],
+                            undefined,
+                            polygon);
                         // fill with color in order to not count twice
                         flood_fill(image_data, width, height, start[0], start[1], color);
                         if(poly && poly.length > 0)
@@ -285,6 +289,7 @@ function inner_polygons(image_data, width, height, polygon, color) {
             }
         }
     }
+
     return inner_polys;
 }
 

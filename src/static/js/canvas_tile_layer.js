@@ -52,6 +52,9 @@ CanvasTileLayer.prototype.filter_tile = function(canvas, args) {
 // map: map where tiles are rendering
 CanvasTileLayer.prototype.composed = function(map, w, h) {
     var canvas = document.createElement('canvas');
+    canvas.style.padding = "0";
+    canvas.style.margin = "0";
+    canvas.style.border = "none";
     var ctx = canvas.getContext('2d');
     ctx.width = canvas.width = w || $(map).width();
     ctx.height = canvas.height = h || $(map).height();
