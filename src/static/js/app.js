@@ -195,15 +195,9 @@ var App = function() {
 
             // inner paths (reversed)
             _.each(inners, function(p) {
-                
                 paths.push(_.map(p.reverse(), unproject));
-                new google.maps.Marker({
-                      position: unproject(p[0]),
-                      map: App.map,
-                      title:""
-                });
             });
-            inners && console.log(inners.length);
+            //inners && console.log(inners.length);
 
             var poly = new google.maps.Polygon({
                 paths: paths,
