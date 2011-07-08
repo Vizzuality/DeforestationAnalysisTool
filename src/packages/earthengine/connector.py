@@ -6,12 +6,14 @@
     :See UNLICENSE or http://unlicense.org/ for public domain notice.
 """
 
+import logging
+
 import cgi, sys
 
 from google.appengine.api import urlfetch
 import simplejson as json
 
-DEFAULT_API = "http://earthengine.googleapis.com"
+DEFAULT_API = "http://earthengine.googleapis.com/api"
 
 class EarthEngine( object ):
     """ google earth engine conector for app engine 
@@ -25,6 +27,7 @@ class EarthEngine( object ):
         self.auth = token
 
     def _http( self, method, url, params=None ):
+        logging.info("ee -> %s" % url)
         try:
             response = urlfetch.fetch(
                 method = method,
@@ -34,7 +37,7 @@ class EarthEngine( object ):
                 deadline = 10
             )
             if response.status_code == 200:
-                data = data.loads( response.content )
+                data = json.loads( response.content )
             else:
                 data = { 'error': { 'type':'http', 'code': response.status_code } }
         except urlfetch.DownloadError:
