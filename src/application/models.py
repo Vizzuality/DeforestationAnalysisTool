@@ -49,4 +49,14 @@ class Area(db.Model):
         else:
             raise Exception("Create areas tables first")
 
+
     
+class Note(db.Model):
+    """ user note on a cell """
+
+    msg = db.TextProperty(required=True)
+    #added_by = db.UserProperty()
+    added_on = db.DateTimeProperty(auto_now_add=True)
+    cell_z = db.IntegerProperty(required=True)
+    cell_x = db.IntegerProperty(required=True)
+    cell_y = db.IntegerProperty(required=True)
