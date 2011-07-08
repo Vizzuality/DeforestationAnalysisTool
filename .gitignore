@@ -2,4 +2,5 @@
 *.pyc
 *.swp
 src/static/maps
+src/application/secret_keys.py
 
