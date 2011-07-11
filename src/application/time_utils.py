@@ -1,6 +1,7 @@
 
+from dateutil.relativedelta import *
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 def timestamp(d):
     """ return timestamp from datetime in milliseconds """
@@ -14,3 +15,11 @@ def first_of_current_month(now=None):
     """
     now = now or datetime.now()
     return timestamp(now - timedelta(days=now.day-1))
+
+def past_month_range(now):
+    today = date(now.year, now.month, now.day)
+    d = today - relativedelta(months=1)
+    return map(timestamp,
+            (date(d.year, d.month, 1),
+            date(today.year, today.month, 1) - relativedelta(days=1)))
+

@@ -4,15 +4,16 @@ import time
 from datetime import datetime
 import logging
 import simplejson as json
-from time_utils import timestamp, first_of_current_month
+from time_utils import timestamp, first_of_current_month, past_month_range
 
 from flask import jsonify, request
 from application import app
 import settings
 
 from models import Area, Note
-from earthengine.connector import EarthEngine
+from ee import NDFI
 
+#TODO: add auth
 @app.route('/api/v0/poly/new', methods=('POST',))
 def poly_new():
     polys = json.loads(request.form['polys'])
@@ -24,6 +25,7 @@ def poly_new():
         Area(geo=kml, type=type).save()
     return jsonify(ok=True, msg="%d polygons saved" % len(polys));
 
+#TODO: add auth
 @app.route('/api/v0/notes/new', methods=('POST',))
 def note_new():
     note = json.loads(request.form['note'])
@@ -32,6 +34,7 @@ def note_new():
     Note(msg=msg, cell_z=cell_z, cell_x=cell_x, cell_y=cell_y).put()
     return jsonify(ok=True)
 
+#TODO: add auth
 @app.route('/api/v0/notes/<int:cell_z>/<int:cell_x>/<int:cell_y>')
 def note_for_cell(cell_z, cell_x, cell_y):
     query = Note.gql("WHERE cell_x = :cell_x "
@@ -44,7 +47,7 @@ def note_for_cell(cell_z, cell_x, cell_y):
     res = query.fetch(100)
     return jsonify(notes=[{'msg': x.msg} for x in res])
 
-
+#TODO: add auth
 @app.route('/api/v0/ndfi')
 def ndfi_map():
     """ return map_id for specified ndfi range date
@@ -58,16 +61,12 @@ def ndfi_map():
 
         starttime and endtime are timestamp in milliseconds
     """
-    starttime = request.args.get('starttime', '')
-    endtime = request.args.get('endtime', '')
+    # parse params
+    now = datetime.now()
+    starttime = float(request.args.get('starttime', first_of_current_month()))
+    endtime = float(request.args.get('endtime', timestamp(now)))
     ee_resource = 'MOD09GA'
-    starttime = starttime or first_of_current_month()
-    endtime = endtime or timestamp(datetime.now())
-    ee = EarthEngine(settings.EE_TOKEN)
-    image_list = ee.get("/list?id=%s&starttime=%s&endtime=%s" % ( ee_resource,
-        starttime,
-        endtime
-    ))
-    image_list = [x['id'] for x in image_list['data']]
-    return jsonify(image_list)
-    #&starttime=1254305000000&endtime=1256900200000
+    ndfi = NDFI(ee_resource,
+        past_month_range(datetime.fromtimestamp(starttime/1000)),
+        (starttime, endtime))
+    return jsonify(ndfi.mapid())
