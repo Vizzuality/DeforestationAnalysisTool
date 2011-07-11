@@ -5,6 +5,7 @@ Primary App Engine app handler
 
 """
 
+import logging
 import sys, os
 
 package_dir = "packages"
@@ -27,6 +28,7 @@ from application import app
 def main():
     if DEBUG_MODE:
         # Run debugged app
+        logging.getLogger().setLevel(logging.DEBUG)
         from werkzeug_debugger_appengine import get_debugged_app
         app.debug=True
         debugged_app = get_debugged_app(app)

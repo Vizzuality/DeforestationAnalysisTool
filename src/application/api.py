@@ -5,6 +5,7 @@ from datetime import datetime
 import logging
 import simplejson as json
 from time_utils import timestamp, first_of_current_month, past_month_range
+from dateutil.parser import parse
 
 from flask import jsonify, request
 from application import app
@@ -63,8 +64,16 @@ def ndfi_map():
     """
     # parse params
     now = datetime.now()
-    starttime = float(request.args.get('starttime', first_of_current_month()))
-    endtime = float(request.args.get('endtime', timestamp(now)))
+    starttime = request.args.get('starttime', first_of_current_month())
+    endtime = request.args.get('endtime', timestamp(now))
+    try:
+        starttime = float(starttime)
+        endtime = float(endtime)
+    except ValueError:
+        # try to parse as normal format (not timestamp)
+        starttime = timestamp(parse(request.args.get('starttime')))
+        endtime = timestamp(parse(request.args.get('endtime')))
+
     ee_resource = 'MOD09GA'
     ndfi = NDFI(ee_resource,
         past_month_range(datetime.fromtimestamp(starttime/1000)),

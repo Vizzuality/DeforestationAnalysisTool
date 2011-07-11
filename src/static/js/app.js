@@ -1,8 +1,14 @@
 
 function canvas_setup(canvas, coord, zoom) {
+      if (zoom != 12) {
+        return;
+      }
       var image = new Image();
       var ctx = canvas.getContext('2d');
-      image.src = "/tiles/" + zoom + "/"+ coord.x + "/" + coord.y +".png";
+      var token = "b50ffb43564bfa6dffb5dba524750e7c";
+      var mapid = "90b0dacb31e53042a8e1f396b771f235";
+    
+      image.src = "/ee/tiles/" + mapid + "/"+ zoom + "/"+ coord.x + "/" + coord.y +"?token=" + token;
       canvas.image = image;
       canvas.coord = coord;
       $(image).load(function() {
@@ -10,6 +16,8 @@ function canvas_setup(canvas, coord, zoom) {
             ctx.drawImage(image, 0, 0);
             canvas.image_data = ctx.getImageData(0, 0, canvas.width, canvas.height);
             App.layer.filter_tile(canvas, [App.threshold.low, App.threshold.high]);
+      }).error(function() {
+        console.log("server error loading image");
       });
 }
 

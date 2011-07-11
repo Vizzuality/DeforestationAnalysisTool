@@ -1,5 +1,6 @@
 #encoding: utf-8
 
+import logging
 import settings
 import simplejson as json
 
@@ -50,6 +51,9 @@ class NDFI(object):
         # get image list from those days
         reference_images = self._images_for_period(self.last_perdiod)
         work_images = self._images_for_period(self.work_period)
+
+        logging.debug("reference images " + str(reference_images))
+        logging.debug("work images " + str(work_images))
 
         # get map id from EE
         cmd = self._NDFI_map_command(
