@@ -3,7 +3,9 @@
 import os
 from shutil import copyfile
 
-from flask import render_template, flash, url_for, redirect
+from google.appengine.api import urlfetch
+
+from flask import render_template, flash, url_for, redirect, abort, request, make_response 
 
 from decorators import login_required, admin_required
 from forms import ExampleForm
@@ -27,6 +29,19 @@ def tiles(tile_path):
         copyfile("static/maps/%s" % tile_path, "static/tiles/%s" % tile_path)
     return redirect('/static/tiles/%s' % tile_path)
     #return redirect('/static/maps/%s' % tile_path)
+
+
+EARTH_ENGINE_TILE_SERVER = 'http://earthengine.googleapis.com/map/'
+@app.route('/ee/tiles/<path:tile_path>')
+def earth_engine_tile_proyx(tile_path):
+    token = request.args.get('token', '')
+    if not token:
+        abort(401)
+    result = urlfetch.fetch(EARTH_ENGINE_TILE_SERVER + tile_path + '?token='+ token)
+
+    response = make_response(result.content)
+    response.headers['Content-Type'] = result.headers['Content-Type']
+    return response
 
 
 @app.route('/admin_only')
