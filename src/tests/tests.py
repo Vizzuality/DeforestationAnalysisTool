@@ -13,8 +13,9 @@ from google.appengine.ext import db
 from application import app
 from application.models import Area, Note
 
+from base import GoogleAuthMixin
 
-class ApiTestCase(unittest.TestCase):
+class ApiTestCase(unittest.TestCase, GoogleAuthMixin):
 
     def setUp(self):
         app.config['TESTING'] = True
@@ -36,7 +37,7 @@ class ApiTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
-class NotesApiTest(unittest.TestCase):
+class NotesApiTest(unittest.TestCase, GoogleAuthMixin):
     def setUp(self):
         app.config['TESTING'] = True
         self.app = app.test_client()
@@ -66,11 +67,12 @@ class NotesApiTest(unittest.TestCase):
         js = json.loads(rv.data)['notes']
         self.assertEquals(0, len(js))
 
-class HomeTestCase(unittest.TestCase):
+class HomeTestCase(unittest.TestCase, GoogleAuthMixin):
 
     def setUp(self):
         app.config['TESTING'] = True
         self.app = app.test_client()
+        self.login('test@gmail.com', 'testuser')
 
     def test_home(self):
         rv = self.app.get('/')
