@@ -13,6 +13,7 @@ from forms import ExampleForm
 from application import app
 
 @app.route('/')
+@login_required
 def home():
     return render_template('home.html')
 
