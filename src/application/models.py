@@ -47,7 +47,7 @@ class Area(db.Model):
         table_id = cl.table_id('areas')
         if table_id:
             rowid = cl.sql("insert into %s ('geo', 'added_on', 'type') VALUES ('%s', '%s', %d)" % (table_id, self.geo, self.added_on, self.type))
-            self.fusion_tables_id = int(rowid)
+            self.fusion_tables_id = int(rowid.split('\n')[1])
             self.put()
         else:
             raise Exception("Create areas tables first")
