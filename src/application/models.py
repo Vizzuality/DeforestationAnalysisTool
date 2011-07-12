@@ -23,6 +23,7 @@ class Area(db.Model):
     #added_by = db.UserProperty()
     added_on = db.DateTimeProperty(auto_now_add=True)
     type = db.IntegerProperty(required=True)
+    fusion_tables_id = db.IntegerProperty()
     
     def save(self):
         """ wrapper for put makes compatible with django"""
@@ -45,7 +46,9 @@ class Area(db.Model):
                 settings.FT_SECRET)
         table_id = cl.table_id('areas')
         if table_id:
-            cl.sql("insert into %s ('geo', 'added_on', 'type') VALUES ('%s', '%s', %d)" % (table_id, self.geo, self.added_on, self.type))
+            rowid = cl.sql("insert into %s ('geo', 'added_on', 'type') VALUES ('%s', '%s', %d)" % (table_id, self.geo, self.added_on, self.type))
+            self.fusion_tables_id = rowid
+            self.put()
         else:
             raise Exception("Create areas tables first")
 
