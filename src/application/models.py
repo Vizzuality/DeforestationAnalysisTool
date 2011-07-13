@@ -10,6 +10,7 @@ from google.appengine.ext import db
 from google.appengine.ext import deferred
 
 from application import settings
+import simplejson as json
 
 from ft import FT
 
@@ -63,3 +64,10 @@ class Note(db.Model):
     cell_z = db.IntegerProperty(required=True)
     cell_x = db.IntegerProperty(required=True)
     cell_y = db.IntegerProperty(required=True)
+
+    def as_dict(self):
+        return {'id': str(self.key()),
+            'msg': self.msg}
+
+    def as_json(self):
+        return json.dumps(self.as_dict())

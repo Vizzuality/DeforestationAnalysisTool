@@ -14,6 +14,10 @@ import settings
 from models import Area, Note
 from ee import NDFI
 
+from resources.notes import NoteAPI
+
+NoteAPI.add_urls(app, '/api/test/note')
+
 #TODO: add auth
 @app.route('/api/v0/poly/new', methods=('POST',))
 def poly_new():
