@@ -13,6 +13,10 @@ builtins:
 inbound_services:
 - warmup
 
+skip_files:
+    config.rb
+    Gemfile
+
 handlers:
 - url: /favicon.ico
   static_files: static/img/favicon.ico
@@ -27,3 +31,4 @@ handlers:
 
 - url: .*
   script: main.py
+
