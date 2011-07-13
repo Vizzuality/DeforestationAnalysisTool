@@ -1,0 +1,7 @@
+#!/bin/sh
+
+appcfg.py update .
+git rev-parse HEAD >> deploy_info.txt
+date >> deploy_info.txt
+
+
