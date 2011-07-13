@@ -5,7 +5,7 @@ Initialize Flask app
 
 from flask import Flask, render_template
 
-app = Flask('application')
+app = Flask('application', template_folder='templates')
 app.config.from_object('application.settings')
 
 ## Error handlers
