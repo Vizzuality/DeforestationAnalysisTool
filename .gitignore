@@ -1,6 +1,15 @@
 
 *.pyc
 *.swp
+.DS_Store
 src/static/maps
 src/application/secret_keys.py
+pip-log.txt
 
+src/.DS_Store
+src/application/pip-log.txt
+src/deploy_info.txt
+src/packages/flask/
+src/packages/jinja2/
+src/packages/simplejson/
+src/packages/wtforms/
