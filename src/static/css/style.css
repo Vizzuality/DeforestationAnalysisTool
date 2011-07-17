@@ -391,10 +391,11 @@ article .example .field {
 }
 #header #tools {
   background: url("../img/tools_bkg.png");
-  height: 60px;
+  height: 59px;
   color: white;
 }
 #header #overview {
+  z-index: 10;
   width: 198px;
   height: 112px;
   padding: 20px;
@@ -406,6 +407,13 @@ article .example .field {
 
 body, html {
   height: 100%;
+  overflow: hidden;
+}
+
+#workarea {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
 }
 
 #map {

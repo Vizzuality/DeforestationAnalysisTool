@@ -35,11 +35,12 @@
     }
     #tools {
         background: url('../img/tools_bkg.png');
-        height: 60px;
+        height: 59px;
         color: white;
     }
 
     #overview {
+        z-index: 10;
         $padding: 20px;
         width: 238px - 2*$padding;
         height: 152px - 2*$padding;
