@@ -100,10 +100,6 @@ label, input[type="button"], input[type="submit"], input[type="image"], button {
 /* Webkit browsers add a 2px margin outside the chrome of form elements */
 button, input, select, textarea { margin: 0; }
 
-/* These selection declarations have to be separate
-No text-shadow:twitter.com/miketaylr/status/12228805301 */
-  ::-moz-selection{ background:$selection_color; color:#fff; text-shadow:none; }
-  ::selection { background:$selection_color; color:#fff; text-shadow:none; }
 
 input::-webkit-input-placeholder { color:$gray; }
 input:-moz-placeholder { color:$gray; }

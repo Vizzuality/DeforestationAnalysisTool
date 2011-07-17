@@ -1,0 +1,53 @@
+#header {
+    text-align: center;
+
+    .noise {
+    }
+
+    .content {
+        position: relative;
+        text-align: left;
+        width: 1024px;
+        margin:0 auto;
+    }
+
+    #title {
+        background: url('../img/title_bkg.png');
+        border-bottom: 1px solid #000;
+        color: white;
+        padding: 0 0 25px 30px;
+        h1 {
+            font-family: $font_title;
+            letter-spacing: 1px;
+            font-size: 16px;
+            margin: 0;
+            padding: 0;
+        }
+        h2 {
+            font-size: 16px;
+            .small {
+                font-size: 11px;
+            }
+        }
+        #intro {
+            padding-top: 27px;
+        }
+    }
+    #tools {
+        background: url('../img/tools_bkg.png');
+        height: 60px;
+        color: white;
+    }
+
+    #overview {
+        $padding: 20px;
+        width: 238px - 2*$padding;
+        height: 152px - 2*$padding;
+        padding: $padding;
+        position: absolute;
+        right: 30px;
+        top: 0;
+        background: -webkit-gradient(linear, left top, left bottom, from($overview_top), to($overview_bottom));
+        
+    }
+}
