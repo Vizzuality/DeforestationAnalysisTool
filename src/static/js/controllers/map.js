@@ -1,11 +1,12 @@
 
 
+// google maps map
 var MapView = Backbone.View.extend({
     mapOptions: {
                 zoom: 5,
                 center: new google.maps.LatLng(-7.409408064269147,-50.00213741352536),
                 mapTypeId: google.maps.MapTypeId.TERRAIN,
-                disableDefaultUI: true,
+                //disableDefaultUI: true,
                 disableDoubleClickZoom: true,
                 draggableCursor:'default'
     },
@@ -25,6 +26,8 @@ var MapView = Backbone.View.extend({
             this.trigger('center_changed', this.map.getCenter());
     },
 
+    // called when map is ready 
+    // its a helper method to avoid calling getProjection whiout map loaded
     ready: function() {
             this.projector.draw = function(){};
             this.trigger('ready');

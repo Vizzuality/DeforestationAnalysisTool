@@ -11,10 +11,10 @@ $(function() {
 
         initialize:function() {
             this.map = new MapView();
-            this.grid = new Grid({
+            this.gridstack = new GridStack({
                 mapview: this.map,
                 el: $("#grid"),
-                bounds: this.amazon_bounds
+                initial_bounds: this.amazon_bounds
             });
         }
     });

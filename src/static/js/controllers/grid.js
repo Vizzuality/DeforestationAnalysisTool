@@ -2,7 +2,7 @@
 var CellView = Backbone.View.extend({
 
     tagName: 'div',
-    
+
     events:  {
         'mouseover': 'onmouseover',
         'mouseout': 'onmouseout',
@@ -10,7 +10,7 @@ var CellView = Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'onmouseover', 'onmouseout', 'click');
+        _.bindAll(this, 'onmouseover', 'onmouseout', 'onclick');
     },
 
     render: function() {
@@ -37,74 +37,105 @@ var CellView = Backbone.View.extend({
     onmouseout: function() {
         $(this.el).css('background', "rgba(0, 0, 0, 0.1)");
     },
-    
+
     onclick: function(e) {
-        this.trigger('enter');
-        
+        this.trigger('enter', this.model);
     }
-    
-
-
 });
 
-// render a grid over a map, example usage:
-// var grid = new Grid({ mapview: MapView,
-//            el: $("#grid"),
-//            bounds: new google.maps.LatLngBounds(...)
-// })
+// render a grid over a map
 var Grid = Backbone.View.extend({
 
     initialize: function() {
-        _.bindAll(this, 'map_ready', 'render', 'add_cells');
+        _.bindAll(this, 'render', 'add_cells', 'cell_selected', 'populate_cells');
         if(this.options.mapview === undefined) {
             throw "you should specify MapView in constructor";
         }
-        this.mapview = this.options.mapview;
-        this.bounds = this.options.bounds;
-        this.mapview.bind('ready', this.map_ready);
         this.el.css('position', 'absolute');
-
     },
 
     add_cells: function() {
         var that = this;
+        this.el.html('');
         this.cells.each(function(c) {
             var cellview = new CellView({model: c});
             that.el.append(cellview.render().el);
+            cellview.bind('enter', that.cell_selected);
         });
+        this.render();
     },
 
-    // this function is called when tiles on map are loaded
-    // and projection can be used
-    map_ready: function() {
-        this.mapview.unbind('tilesloaded');
-        this.mapview.bind('center_changed', this.render);
-        this.projector = new Projector(this.mapview.map);
-        this.cells = new Cells(undefined, {
-            bounds: this.bounds,
-            projector: this.projector
-        });
+    // called when user clicks on a cell
+    cell_selected: function(cell) {
+        this.trigger('enter_cell', cell);
+    },
+
+    populate_cells: function(cells) {
+        this.cells = cells;
         this.cells.bind('reset', this.add_cells);
-        var me = this;
-        this.cells.populate_cells();
         this.render();
-        console.log("map ready");
     },
 
     render: function() {
-        var righttop = this.projector.transformCoordinates(this.bounds.getNorthEast());
-        var leftbottom = this.projector.transformCoordinates(this.bounds.getSouthWest());
-        var x = leftbottom.x;
-        var y = righttop.y;
-        var w = righttop.x - leftbottom.x;
-        var h = - righttop.y + leftbottom.y;
-        this.el.css('top', y);
-        this.el.css('left', x);
-        this.el.css('width', w);
-        this.el.css('height', h);
+        this.cells.calc_projection();
+        this.el.css('top', this.cells.y);
+        this.el.css('left', this.cells.x);
+        this.el.css('width', this.cells.w);
+        this.el.css('height', this.cells.h);
         this.el.css('background', 'rgba(0,0,0,0.2)');
     }
 
 });
 
 
+// controls grid and map changes
+var GridStack = Backbone.View.extend({
+    // contains cells for each level
+    cell_stack: [],
+
+    initialize: function(options) {
+        _.bindAll(this, 'map_ready', 'enter_cell');
+        this.mapview = options.mapview;
+        this.bounds = options.initial_bounds;
+        this.mapview.bind('ready', this.map_ready);
+        this.grid = new Grid({
+            mapview: this.mapview,
+            el: options.el
+        });
+        this.grid.bind('enter_cell', this.enter_cell);
+    },
+
+    // this function is called when tiles on map are loaded
+    // and projection can be used
+    map_ready: function() {
+        var cells = new Cells(undefined, {
+            bounds: this.bounds,
+            projector: this.mapview.projector
+        });
+        this.set_cells(cells);
+        this.mapview.bind('center_changed', this.grid.render);
+        // hack, set projector into prototype to avoid projector 
+        Cell.prototype.projector = this.mapview.projector;
+        console.log(" === Grid stack ready === ");
+    },
+
+    set_cells: function(cells) {
+        this.current_cells = cells;
+        this.grid.populate_cells(this.current_cells);
+        this.current_cells.populate_cells();
+    },
+
+    // when user enter on a cell, this level cells need to be loaded
+    // and map changed to this bounds
+    enter_cell: function(cell) {
+        this.bounds = cell.bounds();
+        this.mapview.map.fitBounds(this.bounds);
+        var cells = new Cells(undefined, {
+            bounds: this.bounds,
+            projector: this.mapview.projector
+        });
+        this.set_cells(cells);
+        
+    }
+
+});
