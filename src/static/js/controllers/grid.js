@@ -94,6 +94,13 @@ var Grid = Backbone.View.extend({
 
 // controls grid and map changes
 var GridStack = Backbone.View.extend({
+    zoom_mapping: {
+        0: 5,
+        1: 8,
+        2: 12
+    },
+
+    WORKING_ZOOM: 2,
 
     initialize: function(options) {
         _.bindAll(this, 'map_ready', 'enter_cell', 'cell_click');
@@ -133,12 +140,17 @@ var GridStack = Backbone.View.extend({
     // and map changed to this bounds
     enter_cell: function(x, y, z) {
         this.mapview.map.fitBounds(window.mapper.cell_bounds(x, y, z));
-        var cells = new Cells(undefined, {
-            x: x,
-            y: y,
-            z: z
-        });
-        this.set_cells(cells);
+        this.mapview.map.setZoom(this.zoom_mapping[z]);
+        if(z < this.WORKING_ZOOM) {
+            var cells = new Cells(undefined, {
+                x: x,
+                y: y,
+                z: z
+            });
+            this.set_cells(cells);
+        } else {
+            this.el.hide();
+        }
     }
 
 });

@@ -44,7 +44,9 @@ $(function() {
         // is called
         start: function() {
             this.map.map.setCenter(this.amazon_bounds.getCenter());
-            router.navigate('cell/0/0/0');
+            if(location.hash === '') {
+                router.navigate('cell/0/0/0');
+            }
             Backbone.history.start();
             console.log(" === App started === ");
         },
