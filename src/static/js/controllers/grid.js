@@ -142,6 +142,7 @@ var GridStack = Backbone.View.extend({
         this.mapview.map.fitBounds(window.mapper.cell_bounds(x, y, z));
         this.mapview.map.setZoom(this.zoom_mapping[z]);
         if(z < this.WORKING_ZOOM) {
+            this.el.show();
             var cells = new Cells(undefined, {
                 x: x,
                 y: y,

@@ -361,6 +361,9 @@ article .example .field {
 #header {
   text-align: center;
 }
+#header .hidden {
+  display: none;
+}
 #header .content {
   position: relative;
   text-align: left;
@@ -401,6 +404,9 @@ article .example .field {
 #header #tools #range_select #selected_range {
   color: white;
   font-weigth: bold;
+}
+#header #tools #work_toolbar {
+  padding-top: 20px;
 }
 #header #tools #work_toolbar ul, #header #tools #work_toolbar li {
   display: inline;

@@ -21,7 +21,7 @@ $(function() {
         ),
 
         initialize:function() {
-            _.bindAll(this, 'to_cell', 'start');
+            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode');
 
             //Backbone.history.start({pushState: true});
             this.map = new MapView();
@@ -35,9 +35,32 @@ $(function() {
             });
             router.bind('route:cell', this.to_cell);
             this.map.bind('ready', this.start);
-            
+            this.gridstack.bind('select_mode', this.select_mode);
+            this.gridstack.bind('work_mode', this.work_mode);
+
+            this.init_ui();
+
         },
-        
+
+        init_ui: function() {
+            this.selection_toolbar = new ReportToolbar();
+            this.polygon_tools = new PolygonToolbar();
+        },
+
+        // entering on work mode
+        work_mode: function() {
+            console.log("work");
+            this.selection_toolbar.hide();
+            this.polygon_tools.show();
+        },
+
+        // entering on select_mode
+        select_mode: function() {
+            console.log("select");
+            this.selection_toolbar.show();
+            this.polygon_tools.hide();
+        },
+
         // this function is called when map is loaded
         // and all stuff can start to work.
         // do *NOT* perform any operation over map before this function
@@ -52,7 +75,7 @@ $(function() {
         },
 
         to_cell:function (z, x, y) {
-            console.log(z, x, y);
+            console.log("t", z, x, y);
             this.gridstack.enter_cell(parseInt(x, 10), parseInt(y, 10), parseInt(z, 10));
         }
 

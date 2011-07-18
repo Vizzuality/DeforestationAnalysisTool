@@ -1,5 +1,9 @@
 #header {
     text-align: center;
+    
+    .hidden {
+        display: none;
+    }
 
     .content {
         position: relative;
@@ -46,6 +50,7 @@
         }
 
         #work_toolbar {
+            padding-top: 20px;
             ul, li {
                 display: inline;
             }
