@@ -91,12 +91,12 @@ var Grid = Backbone.View.extend({
 // controls grid and map changes
 var GridStack = Backbone.View.extend({
     // contains cells for each level
-    cell_stack: [],
 
     initialize: function(options) {
         _.bindAll(this, 'map_ready', 'enter_cell');
         this.mapview = options.mapview;
         this.bounds = options.initial_bounds;
+        this.level = 0;
         this.mapview.bind('ready', this.map_ready);
         this.grid = new Grid({
             mapview: this.mapview,
@@ -114,7 +114,7 @@ var GridStack = Backbone.View.extend({
         });
         this.set_cells(cells);
         this.mapview.bind('center_changed', this.grid.render);
-        // hack, set projector into prototype to avoid projector 
+        // hack, set projector into prototype to avoid projector mess
         Cell.prototype.projector = this.mapview.projector;
         console.log(" === Grid stack ready === ");
     },
@@ -135,7 +135,6 @@ var GridStack = Backbone.View.extend({
             projector: this.mapview.projector
         });
         this.set_cells(cells);
-        
     }
 
 });
