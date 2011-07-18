@@ -1,9 +1,6 @@
 #header {
     text-align: center;
 
-    .noise {
-    }
-
     .content {
         position: relative;
         text-align: left;
@@ -34,9 +31,30 @@
         }
     }
     #tools {
+
         background: url('../img/tools_bkg.png');
         height: 59px;
         color: white;
+
+        #range_select {
+            padding-top: 20px;
+            color: #CCC;
+            #selected_range {
+                color: white;
+                font-weigth: bold;
+            }
+        }
+
+        #work_toolbar {
+            ul, li {
+                display: inline;
+            }
+            #selection {
+            }
+            #polytype {
+                margin-left: 10px;
+            }
+        }
     }
 
     #overview {
@@ -49,6 +67,6 @@
         right: 30px;
         top: 0;
         background: -webkit-gradient(linear, left top, left bottom, from($overview_top), to($overview_bottom));
-        
+
     }
 }

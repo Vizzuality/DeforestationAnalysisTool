@@ -394,6 +394,20 @@ article .example .field {
   height: 59px;
   color: white;
 }
+#header #tools #range_select {
+  padding-top: 20px;
+  color: #CCC;
+}
+#header #tools #range_select #selected_range {
+  color: white;
+  font-weigth: bold;
+}
+#header #tools #work_toolbar ul, #header #tools #work_toolbar li {
+  display: inline;
+}
+#header #tools #work_toolbar #polytype {
+  margin-left: 10px;
+}
 #header #overview {
   z-index: 10;
   width: 198px;
