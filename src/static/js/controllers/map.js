@@ -13,20 +13,20 @@ var MapView = Backbone.View.extend({
     el: $("#map"),
 
     initialize: function() {
-        _.bindAll(this, 'center_changed', 'tilesloaded');
+        _.bindAll(this, 'center_changed', 'ready');
        this.map = new google.maps.Map(this.el[0], this.mapOptions);
        google.maps.event.addListener(this.map, 'center_changed', this.center_changed);
-       google.maps.event.addListener(this.map, 'tilesloaded', this.tilesloaded);
+       //google.maps.event.addListener(this.map, 'idle', this.tilesloaded);
+       this.projector = new Projector(this.map);
+       this.projector.draw = this.ready;
     },
 
     center_changed: function() {
             this.trigger('center_changed', this.map.getCenter());
     },
 
-    tilesloaded: function() {
-            // its needed to wait to tiles was rendered to
-            // google maps call 'draw' on projector overlay and
-            // getProjection can be called
-            this.trigger('tilesloaded');
+    ready: function() {
+            this.projector.draw = function(){};
+            this.trigger('ready');
     }
 });

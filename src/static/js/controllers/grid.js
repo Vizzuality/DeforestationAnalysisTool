@@ -5,19 +5,23 @@ var CellView = Backbone.View.extend({
     
     events:  {
         'mouseover': 'onmouseover',
-        'mouseout': 'onmouseout'
+        'mouseout': 'onmouseout',
+        'click': 'onclick'
     },
 
     initialize: function() {
-        _.bindAll(this, 'onmouseover', 'onmouseout');
+        _.bindAll(this, 'onmouseover', 'onmouseout', 'click');
     },
 
     render: function() {
         var cell = this.el;
+        var border = 1;
         cell.style.top = this.model.get('top') + "px";
         cell.style.left = this.model.get('left') + "px";
-        cell.style.width = this.model.get('width') + "px";
-        cell.style.height = this.model.get('height') + "px";
+        cell.style.width = this.model.get('width') - 2*border + "px";
+        cell.style.height = this.model.get('height') - 2*border+ "px";
+        cell.style.margin = border + "px";
+        cell.style.padding= 0;
         cell.style.display = "block";
         cell.style.position = "absolute";
         cell.style.background = "rgba(0, 0, 0, 0.1)";
@@ -29,9 +33,16 @@ var CellView = Backbone.View.extend({
     onmouseover: function() {
         $(this.el).css('background', "rgba(0, 0, 0, 0.5)");
     },
+
     onmouseout: function() {
         $(this.el).css('background', "rgba(0, 0, 0, 0.1)");
+    },
+    
+    onclick: function(e) {
+        this.trigger('enter');
+        
     }
+    
 
 
 });
@@ -44,32 +55,15 @@ var CellView = Backbone.View.extend({
 var Grid = Backbone.View.extend({
 
     initialize: function() {
-        _.bindAll(this, 'tiles_loaded', 'render', 'add_cells');
+        _.bindAll(this, 'map_ready', 'render', 'add_cells');
         if(this.options.mapview === undefined) {
             throw "you should specify MapView in constructor";
         }
         this.mapview = this.options.mapview;
         this.bounds = this.options.bounds;
-        this.mapview.bind('tilesloaded', this.tiles_loaded);
+        this.mapview.bind('ready', this.map_ready);
         this.el.css('position', 'absolute');
 
-        this.cells = new Cells();
-        this.cells.bind('reset', this.add_cells);
-
-        this.cells.reset([
-        {
-            top: 0,
-            left: 0,
-            width: 100,
-            height: 100
-        },
-        {
-            top: 0,
-            left: 100,
-            width: 100,
-            height: 100
-        }
-        ]);
     },
 
     add_cells: function() {
@@ -82,10 +76,19 @@ var Grid = Backbone.View.extend({
 
     // this function is called when tiles on map are loaded
     // and projection can be used
-    tiles_loaded: function() {
+    map_ready: function() {
         this.mapview.unbind('tilesloaded');
         this.mapview.bind('center_changed', this.render);
         this.projector = new Projector(this.mapview.map);
+        this.cells = new Cells(undefined, {
+            bounds: this.bounds,
+            projector: this.projector
+        });
+        this.cells.bind('reset', this.add_cells);
+        var me = this;
+        this.cells.populate_cells();
+        this.render();
+        console.log("map ready");
     },
 
     render: function() {
@@ -101,4 +104,7 @@ var Grid = Backbone.View.extend({
         this.el.css('height', h);
         this.el.css('background', 'rgba(0,0,0,0.2)');
     }
+
 });
+
+
