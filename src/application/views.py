@@ -13,8 +13,9 @@ from forms import ExampleForm
 from application import app
 
 @app.route('/')
+@app.route('/cell/<path:cell_path>')
 @login_required
-def home():
+def home(cell_path=None):
     return render_template('home.html')
 
 @app.route('/tiles/<path:tile_path>')

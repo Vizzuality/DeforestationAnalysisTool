@@ -13,13 +13,16 @@ var CellView = Backbone.View.extend({
         _.bindAll(this, 'onmouseover', 'onmouseout', 'onclick');
     },
 
-    render: function() {
+    render: function(topx, topy) {
         var cell = this.el;
         var border = 1;
-        cell.style.top = this.model.get('top') + "px";
-        cell.style.left = this.model.get('left') + "px";
-        cell.style.width = this.model.get('width') - 2*border + "px";
-        cell.style.height = this.model.get('height') - 2*border+ "px";
+        var p = window.mapper.cell_position(this.model.get('x'),
+            this.model.get('y'),
+            this.model.get('z'));
+        cell.style.top = p.y - topy + "px";
+        cell.style.left = p.x - topx + "px";
+        cell.style.width = p.width - 2*border + "px";
+        cell.style.height = p.height - 2*border+ "px";
         cell.style.margin = border + "px";
         cell.style.padding= 0;
         cell.style.display = "block";
@@ -58,8 +61,9 @@ var Grid = Backbone.View.extend({
         var that = this;
         this.el.html('');
         this.cells.each(function(c) {
+            var pos = that.el.position();
             var cellview = new CellView({model: c});
-            that.el.append(cellview.render().el);
+            that.el.append(cellview.render(pos.left, pos.top).el);
             cellview.bind('enter', that.cell_selected);
         });
         this.render();
@@ -77,11 +81,11 @@ var Grid = Backbone.View.extend({
     },
 
     render: function() {
-        this.cells.calc_projection();
-        this.el.css('top', this.cells.y);
-        this.el.css('left', this.cells.x);
-        this.el.css('width', this.cells.w);
-        this.el.css('height', this.cells.h);
+        var p = window.mapper.cell_position(this.cells.x, this.cells.y, this.cells.z);
+        this.el.css('top', p.y);
+        this.el.css('left', p.x);
+        this.el.css('width', p.width);
+        this.el.css('height', p.height);
         this.el.css('background', 'rgba(0,0,0,0.2)');
     }
 
@@ -90,10 +94,9 @@ var Grid = Backbone.View.extend({
 
 // controls grid and map changes
 var GridStack = Backbone.View.extend({
-    // contains cells for each level
 
     initialize: function(options) {
-        _.bindAll(this, 'map_ready', 'enter_cell');
+        _.bindAll(this, 'map_ready', 'enter_cell', 'cell_click');
         this.mapview = options.mapview;
         this.bounds = options.initial_bounds;
         this.level = 0;
@@ -102,20 +105,17 @@ var GridStack = Backbone.View.extend({
             mapview: this.mapview,
             el: options.el
         });
-        this.grid.bind('enter_cell', this.enter_cell);
+        this.grid.bind('enter_cell', this.cell_click);
     },
+
 
     // this function is called when tiles on map are loaded
     // and projection can be used
     map_ready: function() {
-        var cells = new Cells(undefined, {
-            bounds: this.bounds,
-            projector: this.mapview.projector
-        });
+        window.mapper.projector = this.mapview.projector;
+        var cells = new Cells(undefined, {x: 0, y:0, z: 0});
         this.set_cells(cells);
         this.mapview.bind('center_changed', this.grid.render);
-        // hack, set projector into prototype to avoid projector mess
-        Cell.prototype.projector = this.mapview.projector;
         console.log(" === Grid stack ready === ");
     },
 
@@ -124,15 +124,19 @@ var GridStack = Backbone.View.extend({
         this.grid.populate_cells(this.current_cells);
         this.current_cells.populate_cells();
     },
+    
+    cell_click: function(cell) {
+        this.enter_cell(cell.get('x'), cell.get('y'), cell.get('z'));
+    },
 
     // when user enter on a cell, this level cells need to be loaded
     // and map changed to this bounds
-    enter_cell: function(cell) {
-        this.bounds = cell.bounds();
-        this.mapview.map.fitBounds(this.bounds);
+    enter_cell: function(x, y, z) {
+        this.mapview.map.fitBounds(window.mapper.cell_bounds(x, y, z));
         var cells = new Cells(undefined, {
-            bounds: this.bounds,
-            projector: this.mapview.projector
+            x: x,
+            y: y,
+            z: z
         });
         this.set_cells(cells);
     }
