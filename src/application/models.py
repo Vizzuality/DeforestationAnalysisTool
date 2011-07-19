@@ -11,6 +11,7 @@ from google.appengine.ext import deferred
 
 from application import settings
 import simplejson as json
+from time_utils import timestamp
 
 from ft import FT
 
@@ -25,7 +26,7 @@ class Area(db.Model):
     added_on = db.DateTimeProperty(auto_now_add=True)
     type = db.IntegerProperty(required=True)
     fusion_tables_id = db.IntegerProperty()
-    
+
     def save(self):
         """ wrapper for put makes compatible with django"""
         exists = True
@@ -41,7 +42,7 @@ class Area(db.Model):
 
     def save_to_fusion_tables(self):
         logging.info("saving to fusion tables %s" % self.key())
-        cl = FT(settings.FT_CONSUMER_KEY, 
+        cl = FT(settings.FT_CONSUMER_KEY,
                 settings.FT_CONSUMER_SECRET,
                 settings.FT_TOKEN,
                 settings.FT_SECRET)
@@ -54,7 +55,7 @@ class Area(db.Model):
             raise Exception("Create areas tables first")
 
 
-    
+
 class Note(db.Model):
     """ user note on a cell """
 
@@ -68,6 +69,46 @@ class Note(db.Model):
     def as_dict(self):
         return {'id': str(self.key()),
             'msg': self.msg}
+
+    def as_json(self):
+        return json.dumps(self.as_dict())
+
+class Report(db.Model):
+
+    start = db.DateProperty();
+    end = db.DateProperty();
+    finished = db.BooleanProperty();
+
+    def as_dict(self):
+        return {
+                'id': str(self.key()),
+                'start': timestamp(self.start),
+                'end': timestamp(self.end),
+                'finished': self.finished
+        }
+
+    def as_json(self):
+        return json.dumps(self.as_dict())
+
+class Cell(db.Model):
+
+    z = db.IntegerProperty(required=True)
+    x = db.IntegerProperty(required=True)
+    y = db.IntegerProperty(required=True)
+    report = db.ReferenceProperty(Report)
+    ndfi_low = db.FloatProperty()
+    ndfi_high = db.FloatProperty()
+
+    def as_dict(self):
+        return {
+                #'id': str(self.key()),
+                'z': self.z,
+                'x': self.x,
+                'y': self.y,
+                'report_id': str(self.report),
+                'ndfi_low': self.ndfi_low,
+                'ndfi_high': self.ndfi_high
+        }
 
     def as_json(self):
         return json.dumps(self.as_dict())

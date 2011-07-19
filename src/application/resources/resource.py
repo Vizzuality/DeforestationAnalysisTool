@@ -1,8 +1,13 @@
 
 from flask import abort, request, Response
 
+import simplejson as json
+
 class Resource(object):
     """ CRUD resource """
+
+    def _as_json(self, o):
+        return Response(json.dumps(o), mimetype='application/json')
 
     def create(self): self._not_implemented()
     def list(self): self._not_implemented()
@@ -19,7 +24,7 @@ class Resource(object):
             m = request.method.upper()
             r = cls()
             if m == "GET":
-                if len(kwargs) > 0:
+                if 'id' in kwargs:
                     return r.get(*args, **kwargs)
                 else:
                     return r.list(*args, **kwargs)

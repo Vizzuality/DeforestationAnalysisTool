@@ -2,6 +2,7 @@
 # encoding: utf-8
 
 import os
+from datetime import datetime, timedelta, date
 import simplejson as json
 import flask
 import unittest
@@ -11,7 +12,7 @@ from google.appengine.ext import testbed
 from google.appengine.ext import db
 
 from application import app
-from application.models import Area, Note
+from application.models import Area, Note, Cell, Report
 
 from base import GoogleAuthMixin
 
@@ -66,6 +67,54 @@ class NotesApiTest(unittest.TestCase, GoogleAuthMixin):
         self.assertEquals(200, rv.status_code)
         js = json.loads(rv.data)['notes']
         self.assertEquals(0, len(js))
+
+class CellApi(unittest.TestCase, GoogleAuthMixin):
+    def setUp(self):
+        app.config['TESTING'] = True
+        self.app = app.test_client()
+        for x in Cell.all():
+            x.delete()
+        r = Report(start=date.today(), end=date.today()+timedelta(days=1), finished=False)
+        r.put()
+        self.r = r
+
+    def test_cell_list(self):
+        rv = self.app.get('/api/v0/report/1/cell')
+        self.assertEquals(200, rv.status_code)
+        js = json.loads(rv.data)
+        self.assertEquals(100, len(js))
+
+    def test_cell_0_0_0(self):
+        rv = self.app.get('/api/v0/report/1/cell/0_0_0')
+        self.assertEquals(200, rv.status_code)
+        js = json.loads(rv.data)
+        self.assertEquals(100, len(js))
+
+    def test_cell_1_0_0(self):
+        Cell(x=0, y=0, z=2, report=self.r, ndfi_high=1.0, ndfi_low=0.0).put()
+        rv = self.app.get('/api/v0/report/' + str(self.r.key())+'/cell/1_0_0')
+        self.assertEquals(200, rv.status_code)
+        js = json.loads(rv.data)
+        self.assertEquals(100, len(js))
+        self.assertEquals(2, js[0]['z'])
+        cell = [x for x in js if x['z'] == 2 and x['x'] == 0 and x['y'] == 0][0]
+        self.assertAlmostEquals(0, cell['ndfi_low'])
+        self.assertAlmostEquals(1.0, cell['ndfi_high'])
+    
+    def test_update_cell_2_0_1(self):
+        rv = self.app.put('/api/v0/report/' + str(self.r.key())+'/cell/2_1_3',
+            data='{"ndfi_low": 0.0, "ndfi_high": 1.0}'
+        )
+        self.assertEquals(200, rv.status_code)
+        js = json.loads(rv.data)
+        q = Cell.all()
+        q.filter("z =", 2)
+        q.filter("x =", 1)
+        q.filter("y =", 3)
+        cell = q.fetch(1)[0]
+        self.assertAlmostEquals(0, cell.ndfi_low)
+        self.assertAlmostEquals(1.0, cell.ndfi_high)
+
 
 class HomeTestCase(unittest.TestCase, GoogleAuthMixin):
 
