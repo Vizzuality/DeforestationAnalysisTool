@@ -45,6 +45,10 @@ $(function() {
         init_ui: function() {
             this.selection_toolbar = new ReportToolbar();
             this.polygon_tools = new PolygonToolbar();
+
+            this.ndfi_layer = new NDFILayer({mapview: this.map});
+
+            this.polygon_tools.ndfi_range.bind('change', this.ndfi_layer.apply_filter);
         },
 
         // entering on work mode
@@ -52,6 +56,7 @@ $(function() {
             console.log("work");
             this.selection_toolbar.hide();
             this.polygon_tools.show();
+            this.ndfi_layer.show();
         },
 
         // entering on select_mode
@@ -59,6 +64,7 @@ $(function() {
             console.log("select");
             this.selection_toolbar.show();
             this.polygon_tools.hide();
+            this.ndfi_layer.hide();
         },
 
         // this function is called when map is loaded

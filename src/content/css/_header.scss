@@ -1,5 +1,13 @@
 #header {
+    z-index: 19;
+    @mixin box-shadow {
+        -webkit-box-shadow: 0px 0px 10px #000;
+    }
+    @include box-shadow;
     text-align: center;
+    a {
+        color: white;
+    }
     
     .hidden {
         display: none;
@@ -58,6 +66,34 @@
             }
             #polytype {
                 margin-left: 10px;
+            }
+        }
+
+        #maptools {
+            
+            $bkg_slider: #232427;
+            margin-left: 200px;
+
+            #range:hover #slider_wrapper{
+                display: block;
+            }
+
+            #range:hover {
+                background: $bkg_slider;
+            }
+            #range {
+                position: relative;
+            }
+            #slider_wrapper {
+                @include box-shadow;
+                z-index: 20;
+                display: none;
+                padding: 20px;
+                width: 250px;
+                position: absolute;
+                left: -175px;
+                font-size: 8px;
+                background: $bkg_slider;
             }
         }
     }

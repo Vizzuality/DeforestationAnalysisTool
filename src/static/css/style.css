@@ -359,7 +359,12 @@ article .example .field {
 }
 
 #header {
+  z-index: 19;
+  -webkit-box-shadow: 0px 0px 10px #000;
   text-align: center;
+}
+#header a {
+  color: white;
 }
 #header .hidden {
   display: none;
@@ -413,6 +418,29 @@ article .example .field {
 }
 #header #tools #work_toolbar #polytype {
   margin-left: 10px;
+}
+#header #tools #maptools {
+  margin-left: 200px;
+}
+#header #tools #maptools #range:hover #slider_wrapper {
+  display: block;
+}
+#header #tools #maptools #range:hover {
+  background: #232427;
+}
+#header #tools #maptools #range {
+  position: relative;
+}
+#header #tools #maptools #slider_wrapper {
+  -webkit-box-shadow: 0px 0px 10px #000;
+  z-index: 20;
+  display: none;
+  padding: 20px;
+  width: 250px;
+  position: absolute;
+  left: -175px;
+  font-size: 8px;
+  background: #232427;
 }
 #header #overview {
   z-index: 10;

@@ -19,10 +19,16 @@
   <script src="{{url_for('static',filename='js/helpers.js')}}"></script> 
 
   <!-- backbone application -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
   <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
   <script src="{{url_for("static", filename="js/projector.js")}}"></script>
 
   <script src="{{url_for('static',filename='js/models/mapper.js')}}"></script>
+
+  <!-- map layers -->
+  <script src="{{url_for("static", filename="js/canvas_tile_layer.js")}}"></script>
+  <script src="{{url_for('static',filename='js/controllers/map_layer.js')}}"></script>
+
   <!-- map -->
   <script src="{{url_for('static',filename='js/models/map.js')}}"></script>
   <script src="{{url_for('static',filename='js/controllers/map.js')}}"></script> 
