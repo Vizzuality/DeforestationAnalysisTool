@@ -1,5 +1,6 @@
 
 from dateutil.relativedelta import *
+
 import time
 from datetime import datetime, timedelta, date
 
@@ -23,3 +24,8 @@ def past_month_range(now):
             (date(d.year, d.month, 1),
             date(today.year, today.month, 1) - relativedelta(days=1)))
 
+def month_range(month, year):
+    start = date(year, month, 1)
+    end = start + relativedelta(months=1)
+    end = date(end.year, end.month, 1) - relativedelta(days=1)
+    return (start, end)

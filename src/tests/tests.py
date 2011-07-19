@@ -127,6 +127,26 @@ class HomeTestCase(unittest.TestCase, GoogleAuthMixin):
         rv = self.app.get('/')
         assert 'imazon' in rv.data
 
+class CommandTest(unittest.TestCase, GoogleAuthMixin):
+
+    def setUp(self):
+        app.config['TESTING'] = True
+        self.app = app.test_client()
+        for x in Report.all():
+            x.delete()
+    
+    def test_create_report(self):
+        rv = self.app.post('/_ah/cmd/create_report?month=11&year=2010')
+        self.assertEquals(200, rv.status_code)
+        self.assertEquals(1, Report.all().count())
+        r = Report.all().fetch(1)[0]
+        self.assertEquals(1, r.start.day)
+        self.assertEquals(11, r.start.month)
+        self.assertEquals(2010, r.start.year)
+        self.assertEquals(30, r.end.day)
+        self.assertEquals(11, r.end.month)
+        self.assertEquals(2010, r.end.year)
+
 if __name__ == '__main__':
     unittest.main()
 

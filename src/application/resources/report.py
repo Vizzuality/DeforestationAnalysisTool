@@ -50,10 +50,6 @@ class CellAPI(Resource):
 
     def list(self, report_id):
         cells = self.cells_for(0, 0, 0)
-        """
-        for x in cells:
-            x.report = Key(report_id)
-        """
         return self._as_json([x.as_dict() for x in cells])
 
     def get(self, report_id, id):
