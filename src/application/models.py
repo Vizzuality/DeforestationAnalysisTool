@@ -91,6 +91,9 @@ class Report(db.Model):
     def as_json(self):
         return json.dumps(self.as_dict())
 
+    def range(self):
+        return tuple(map(timestamp, (self.start, self.end)))
+
 class Cell(db.Model):
 
     z = db.IntegerProperty(required=True)
@@ -99,10 +102,14 @@ class Cell(db.Model):
     report = db.ReferenceProperty(Report)
     ndfi_low = db.FloatProperty()
     ndfi_high = db.FloatProperty()
+    
+    def external_id(self):
+        return "_".join(map(str,(self.z, self.x, self.y)))
 
     def as_dict(self):
         return {
                 #'id': str(self.key()),
+                'id': self.external_id(),
                 'z': self.z,
                 'x': self.x,
                 'y': self.y,

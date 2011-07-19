@@ -1,19 +1,33 @@
 
 import logging
 from application.models import Report, Cell
+from application.ee import NDFI
 from resource import Resource
-from flask import Response, request
+from flask import Response, request, jsonify
 
 import simplejson as json
+from application.time_utils import timestamp, past_month_range
 
 from google.appengine.ext.db import Key
 
 SPLITS = 10
 
+class NDFIMapApi(Resource):
+    """ resource to get ndfi map access data """
+    def list(self, report_id):
+        r = Report.get(Key(report_id))
+        ee_resource = 'MOD09GA'
+        ndfi = NDFI(ee_resource,
+            past_month_range(r.start),
+            r.range())
+        return jsonify(ndfi.mapid()['data'])
+
+
 class ReportAPI(Resource):
 
     def list(self):
         return self._as_json([x.as_dict() for x in Report.all()])
+
 
 
 class CellAPI(Resource):

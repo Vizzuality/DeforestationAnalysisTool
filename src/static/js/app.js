@@ -34,7 +34,7 @@ $(function() {
             this.selection_toolbar = new ReportToolbar();
             this.polygon_tools = new PolygonToolbar();
 
-            this.ndfi_layer = new NDFILayer({mapview: this.map});
+            this.ndfi_layer = new NDFILayer({mapview: this.map, report: this.active_report});
 
             this.polygon_tools.ndfi_range.bind('change', this.ndfi_layer.apply_filter);
         },

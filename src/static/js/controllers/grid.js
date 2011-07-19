@@ -67,7 +67,6 @@ var Grid = Backbone.View.extend({
             that.el.append(cellview.render(p.x, p.y).el);
             cellview.bind('enter', that.cell_selected);
         });
-        this.el.show();
         this.render();
     },
 
@@ -77,17 +76,18 @@ var Grid = Backbone.View.extend({
     },
 
     populate_cells: function(cells) {
-        this.el.hide();
         this.cells = cells;
         this.cells.bind('reset', this.add_cells);
     },
 
     render: function() {
-        var p = window.mapper.cell_position(this.cells.x, this.cells.y, this.cells.z);
-        this.el.css('top', p.y);
-        this.el.css('left', p.x);
-        this.el.css('width', p.width);
-        this.el.css('height', p.height);
+        if(this.cells) {
+            var p = window.mapper.cell_position(this.cells.x, this.cells.y, this.cells.z);
+            this.el.css('top', p.y);
+            this.el.css('left', p.x);
+            this.el.css('width', p.width);
+            this.el.css('height', p.height);
+        }
         //this.el.css('background', 'rgba(0,0,0,0.2)');
     }
 
@@ -124,16 +124,21 @@ var GridStack = Backbone.View.extend({
     // and projection can be used
     map_ready: function() {
         window.mapper.projector = this.mapview.projector;
-        var cells = new Cells(undefined, {x: 0, y:0, z: 0, report: this.report});
-        this.set_cells(cells);
+        //var cells = new Cells(undefined, {x: 0, y:0, z: 0, report: this.report});
+        //this.set_cells(cells);
         this.mapview.bind('center_changed', this.grid.render);
         console.log(" === Grid stack ready === ");
     },
 
     set_cells: function(cells) {
+        var self = this;
+        this.el.hide();
         this.current_cells = cells;
         this.grid.populate_cells(this.current_cells);
-        this.current_cells.populate_cells();
+        this.current_cells.bind('reset', function() {
+            self.el.show();
+        });
+        this.current_cells.fetch();
     },
     
     cell_click: function(cell) {

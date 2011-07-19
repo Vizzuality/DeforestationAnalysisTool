@@ -15,11 +15,12 @@ from models import Area, Note
 from ee import NDFI
 
 from resources.notes import NoteAPI
-from resources.report import ReportAPI, CellAPI
+from resources.report import ReportAPI, CellAPI, NDFIMapApi
 
 NoteAPI.add_urls(app, '/api/test/note')
 ReportAPI.add_urls(app, '/api/v0/report')
 CellAPI.add_urls(app, '/api/v0/report/<report_id>/cell')
+NDFIMapApi.add_urls(app, '/api/v0/report/<report_id>/map')
 
 #TODO: add auth
 @app.route('/api/v0/poly/new', methods=('POST',))
