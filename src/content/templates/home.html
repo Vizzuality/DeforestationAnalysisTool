@@ -25,6 +25,9 @@
 
   <script src="{{url_for('static',filename='js/models/mapper.js')}}"></script>
 
+  <!-- report -->
+  <script src="{{url_for("static", filename="js/models/report.js")}}"></script>
+
   <!-- map layers -->
   <script src="{{url_for("static", filename="js/canvas_tile_layer.js")}}"></script>
   <script src="{{url_for('static',filename='js/controllers/map_layer.js')}}"></script>
@@ -46,8 +49,12 @@
 {% endblock %}
 
 {% block js %}
+    function initial_data() {
+        window.app.reports.reset({{reports_json|safe}});
+        console.log("=== Initial data loaded == ");
+    }
     $(document).ready(function() {
-        console.log("=== Init ");
+        initial_data();
     });
 {% endblock %}
 

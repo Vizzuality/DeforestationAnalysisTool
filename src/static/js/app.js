@@ -21,25 +21,13 @@ $(function() {
         ),
 
         initialize:function() {
-            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode');
+            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report');
 
-            //Backbone.history.start({pushState: true});
+            this.reports = new ReportCollection();
+            this.reports.bind('reset', this.change_report);
+
             this.map = new MapView();
-            this.gridstack = new GridStack({
-                mapview: this.map,
-                el: $("#grid"),
-                initial_bounds: this.amazon_bounds
-            });
-            this.gridstack.grid.bind('enter_cell', function(cell) {
-                router.navigate('cell/' +  cell.get('z') + "/" + cell.get('x') + "/" + cell.get('y'));
-            });
-            router.bind('route:cell', this.to_cell);
             this.map.bind('ready', this.start);
-            this.gridstack.bind('select_mode', this.select_mode);
-            this.gridstack.bind('work_mode', this.work_mode);
-
-            this.init_ui();
-
         },
 
         init_ui: function() {
@@ -51,9 +39,13 @@ $(function() {
             this.polygon_tools.ndfi_range.bind('change', this.ndfi_layer.apply_filter);
         },
 
+        change_report: function() {
+            //TODO: use comboxbox to select the active report
+            this.active_report = this.reports.models[0];
+        },
+
         // entering on work mode
         work_mode: function() {
-            console.log("work");
             this.selection_toolbar.hide();
             this.polygon_tools.show();
             this.ndfi_layer.show();
@@ -61,7 +53,6 @@ $(function() {
 
         // entering on select_mode
         select_mode: function() {
-            console.log("select");
             this.selection_toolbar.show();
             this.polygon_tools.hide();
             this.ndfi_layer.hide();
@@ -72,6 +63,27 @@ $(function() {
         // do *NOT* perform any operation over map before this function
         // is called
         start: function() {
+
+            // grid manager
+            this.gridstack = new GridStack({
+                mapview: this.map,
+                el: $("#grid"),
+                initial_bounds: this.amazon_bounds,
+                report: this.active_report
+            });
+    
+
+            // bindings
+            this.gridstack.grid.bind('enter_cell', function(cell) {
+                router.navigate('cell/' +  cell.get('z') + "/" + cell.get('x') + "/" + cell.get('y'));
+            });
+            router.bind('route:cell', this.to_cell);
+            this.gridstack.bind('select_mode', this.select_mode);
+            this.gridstack.bind('work_mode', this.work_mode);
+
+            // init interface elements
+            this.init_ui();
+
             this.map.map.setCenter(this.amazon_bounds.getCenter());
             if(location.hash === '') {
                 router.navigate('cell/0/0/0');
@@ -90,7 +102,7 @@ $(function() {
 
     //setup global object to centralize all projection operations
     window.mapper = new Mapper();
-    var app = new IMazon();
+    window.app = new IMazon();
 
 
 });

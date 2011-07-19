@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 import os
+import simplejson as json
 from shutil import copyfile
 
 from google.appengine.api import urlfetch
@@ -12,11 +13,14 @@ from forms import ExampleForm
 
 from application import app
 
+from models import Report
+
 @app.route('/')
 @app.route('/cell/<path:cell_path>')
 @login_required
 def home(cell_path=None):
-    return render_template('home.html')
+    reports = json.dumps([x.as_dict() for x in Report.all()])
+    return render_template('home.html', reports_json=reports)
 
 @app.route('/tiles/<path:tile_path>')
 def tiles(tile_path):

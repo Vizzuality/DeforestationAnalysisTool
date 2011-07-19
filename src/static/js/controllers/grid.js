@@ -60,12 +60,14 @@ var Grid = Backbone.View.extend({
     add_cells: function() {
         var that = this;
         this.el.html('');
+        var p = window.mapper.cell_position(this.cells.x, this.cells.y, this.cells.z);
         this.cells.each(function(c) {
             var pos = that.el.position();
             var cellview = new CellView({model: c});
-            that.el.append(cellview.render(pos.left, pos.top).el);
+            that.el.append(cellview.render(p.x, p.y).el);
             cellview.bind('enter', that.cell_selected);
         });
+        this.el.show();
         this.render();
     },
 
@@ -75,9 +77,9 @@ var Grid = Backbone.View.extend({
     },
 
     populate_cells: function(cells) {
+        this.el.hide();
         this.cells = cells;
         this.cells.bind('reset', this.add_cells);
-        this.render();
     },
 
     render: function() {
@@ -86,7 +88,7 @@ var Grid = Backbone.View.extend({
         this.el.css('left', p.x);
         this.el.css('width', p.width);
         this.el.css('height', p.height);
-        this.el.css('background', 'rgba(0,0,0,0.2)');
+        //this.el.css('background', 'rgba(0,0,0,0.2)');
     }
 
 });
@@ -106,13 +108,15 @@ var GridStack = Backbone.View.extend({
         _.bindAll(this, 'map_ready', 'enter_cell', 'cell_click');
         this.mapview = options.mapview;
         this.bounds = options.initial_bounds;
+        this.report = options.report;
         this.level = 0;
-        this.mapview.bind('ready', this.map_ready);
+
         this.grid = new Grid({
             mapview: this.mapview,
             el: options.el
         });
         this.grid.bind('enter_cell', this.cell_click);
+        this.map_ready();
     },
 
 
@@ -120,7 +124,7 @@ var GridStack = Backbone.View.extend({
     // and projection can be used
     map_ready: function() {
         window.mapper.projector = this.mapview.projector;
-        var cells = new Cells(undefined, {x: 0, y:0, z: 0});
+        var cells = new Cells(undefined, {x: 0, y:0, z: 0, report: this.report});
         this.set_cells(cells);
         this.mapview.bind('center_changed', this.grid.render);
         console.log(" === Grid stack ready === ");
@@ -139,20 +143,21 @@ var GridStack = Backbone.View.extend({
     // when user enter on a cell, this level cells need to be loaded
     // and map changed to this bounds
     enter_cell: function(x, y, z) {
+        //TODO: show loading
         this.mapview.map.fitBounds(window.mapper.cell_bounds(x, y, z));
         this.mapview.map.setZoom(this.zoom_mapping[z]);
         if(z < this.WORKING_ZOOM) {
-            this.el.show();
             var cells = new Cells(undefined, {
                 x: x,
                 y: y,
-                z: z
+                z: z,
+                report: this.report
             });
             this.set_cells(cells);
             this.trigger('select_mode');
         } else {
-            this.trigger('work_mode');
             this.el.hide();
+            this.trigger('work_mode');
         }
     }
 

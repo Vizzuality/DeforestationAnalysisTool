@@ -21,10 +21,12 @@ var Cells = Backbone.Collection.extend({
         this.x = options.x;
         this.y = options.y;
         this.z = options.z;
+        this.report = options.report;
     },
 
     // this function is a helper to calculate subcells at this level
     populate_cells: function() {
+        /*
         var cells = [];
         for(var i = 0; i < SPLITS; ++i) {
             for(var j = 0; j < SPLITS; ++j) {
@@ -36,6 +38,12 @@ var Cells = Backbone.Collection.extend({
             }
         }
         this.reset(cells);
+        */
+        this.fetch();
+    },
+
+    url: function() {
+        return "/api/v0/report/" + this.report.id + "/cell/" + this.z + "_" + this.x + "_" + this.y;
     }
 
 });
