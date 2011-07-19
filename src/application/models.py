@@ -84,7 +84,8 @@ class Report(db.Model):
                 'id': str(self.key()),
                 'start': timestamp(self.start),
                 'end': timestamp(self.end),
-                'finished': self.finished
+                'finished': self.finished,
+                'str': self.start.strftime("%B-%Y")
         }
 
     def as_json(self):
