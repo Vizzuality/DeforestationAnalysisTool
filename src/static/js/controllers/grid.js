@@ -133,10 +133,12 @@ var GridStack = Backbone.View.extend({
     set_cells: function(cells) {
         var self = this;
         this.el.hide();
+        window.loading.loading();
         this.current_cells = cells;
         this.grid.populate_cells(this.current_cells);
         this.current_cells.bind('reset', function() {
             self.el.show();
+            window.loading.finished();
         });
         this.current_cells.fetch();
     },

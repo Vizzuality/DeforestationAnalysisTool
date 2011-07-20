@@ -14,9 +14,10 @@ var MapView = Backbone.View.extend({
     el: $("#map"),
 
     initialize: function() {
-        _.bindAll(this, 'center_changed', 'ready');
+        _.bindAll(this, 'center_changed', 'ready', 'click');
        this.map = new google.maps.Map(this.el[0], this.mapOptions);
        google.maps.event.addListener(this.map, 'center_changed', this.center_changed);
+       google.maps.event.addListener(this.map, 'click', this.click);
        //google.maps.event.addListener(this.map, 'idle', this.tilesloaded);
        this.projector = new Projector(this.map);
        this.projector.draw = this.ready;
@@ -24,6 +25,10 @@ var MapView = Backbone.View.extend({
 
     center_changed: function() {
             this.trigger('center_changed', this.map.getCenter());
+    },
+
+    click: function(e) {
+            this.trigger('click', e);
     },
 
     // called when map is ready 

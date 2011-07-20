@@ -2,17 +2,24 @@
 
 var NDFILayer = Backbone.View.extend({
 
+    DEFORESTATION_COLOR: [248, 8, 8],
+    DEGRADATION_COLOR: [247, 119, 87],
+    FOREST_COLOR: [32, 224, 32],
+    NDFI_ENCODING_LIMIT: 200,
+
     initialize: function() {
-        _.bindAll(this, 'canvas_setup', 'filter', 'apply_filter', 'map_auth');
+        _.bindAll(this, 'canvas_setup', 'filter', 'apply_filter', 'map_auth', 'click');
         this.mapview = this.options.mapview;
         this.report = this.options.report;
         this.layer = new CanvasTileLayer(this.canvas_setup, this.filter);
         this.low = 40;
         this.high = 60;
         this.showing = false;
+        this.inner_poly_sensibility = 10;
 
         this.ndfimap = new NDFIMap({report_id: this.report.id});
         this.ndfimap.bind('change', this.map_auth);
+        this.mapview.bind('click', this.click);
         this.ndfimap.fetch();
         console.log(" === NDFI layer created === ");
     },
@@ -25,6 +32,85 @@ var NDFILayer = Backbone.View.extend({
             this.hide();
             this.show();
         }
+    },
+
+    click: function(e) {
+        return;
+        var c = this.layer.composed(this.mapview.el[0]);
+        var point = this.mapview.projector.transformCoordinates(e.latLng);
+
+        // rendef offscreen
+        var ctx = c.getContext('2d');
+        var image_data = ctx.getImageData(0, 0, c.width, c.height);
+
+
+        // get pixel color
+        var pixel_pos = (point.y*c.width + point.x) * 4;
+        var color = [];
+        color[0] = image_data.data[pixel_pos + 0];
+        color[1] = image_data.data[pixel_pos + 1];
+        color[2] = image_data.data[pixel_pos + 2];
+        color[3] = image_data.data[pixel_pos + 3];
+        // if isn't a solid color can't be picked
+        if(color[3] != 255) {
+            return;
+        }
+
+        var poly = contour(image_data.data, c.width, c.height, point.x, point.y);
+
+        var inners = inner_polygons(image_data.data,
+                 c.width, c.height, poly, color);
+
+        // discard small polys
+        inners = _.select(inners, function(p){ return p.length > this.inner_poly_sensibility; });
+
+        var newpoly = this.create_poly(poly, inners);
+        //newpoly.type = selected_polygon_type;
+        /*
+        me.deforestation_polys.push(newpoly);
+        (function(newpoly) {
+            google.maps.event.addListener(newpoly, 'click', function(event) {
+                var infowindow = new google.maps.InfoWindow();
+                infowindow.setContent(newpoly.type == 1 ? "deforestation":"degradation");
+                infowindow.setPosition(event.latLng);
+                infowindow.open(App.map);
+            })
+        })(newpoly);
+        */
+
+        delete image_data;
+        delete c;
+    },
+
+    create_poly: function(points, inners) {
+            var self = this;
+            var paths = [];
+
+            // pixel -> latlon
+            function unproject(p) {
+                return self.mapview.projector.untransformCoordinates(
+                    new google.maps.Point(p[0], p[1])
+                );
+            }
+            // outer path
+            paths.push(_.map(points, unproject));
+
+            // inner paths (reversed)
+            _.each(inners, function(p) {
+                paths.push(_.map(p.reverse(), unproject));
+            });
+
+            //inners && console.log(inners.length);
+
+            /*
+            var poly = new google.maps.Polygon({
+                paths: paths,
+                strokeWeight: 1
+            })
+            poly.setMap(App.map);
+            return poly;
+            */
+
     },
 
     show: function() {
@@ -58,13 +144,16 @@ var NDFILayer = Backbone.View.extend({
       image.src = "/ee/tiles/" + this.mapid + "/"+ zoom + "/"+ coord.x + "/" + coord.y +"?token=" + this.token;
       canvas.image = image;
       canvas.coord = coord;
+      window.loading.loading();
       $(image).load(function() {
             //ctx.globalAlpha = 0.5;
             ctx.drawImage(image, 0, 0);
             canvas.image_data = ctx.getImageData(0, 0, canvas.width, canvas.height);
             self.layer.filter_tile(canvas, [self.low, self.high]);
+            window.loading.finished();
       }).error(function() {
-        console.log("server error loading image");
+            console.log("server error loading image");
+            window.loading.finished();
       });
     },
 
@@ -72,21 +161,36 @@ var NDFILayer = Backbone.View.extend({
     // and color it
     filter: function(image_data, w, h, low, high) {
         var components = 4; //rgba
+
+        // yes, this variables are the same as declared on this view
+        // this is because javascript looks like optimize if
+        // variables are local and a constant
+        var NDFI_ENCODING_LIMIT = this.NDFI_ENCODING_LIMIT;
+        var DEFORESTATION_COLOR= [248, 8, 8];
+        var DEGRADATION_COLOR= [247, 119, 87];
+        var FOREST_COLOR= [32, 224, 32];
+
         var pixel_pos;
         for(var i=0; i < w; ++i) {
             for(var j=0; j < h; ++j) {
                 pixel_pos = (j*w + i) * components;
                 var p = image_data[pixel_pos];
-                var color = [255, 255, 0];
+                // there is a better way to do this but is more fast 
                 if(p < low) {
-                    color = [0, 255, 0];
+                    image_data[pixel_pos + 0] = FOREST_COLOR[0];
+                    image_data[pixel_pos + 1] = FOREST_COLOR[1];
+                    image_data[pixel_pos + 2] = FOREST_COLOR[2];
                 } else if(p > high) {
-                    color = [255, 0, 0];
+                    image_data[pixel_pos + 0] = DEFORESTATION_COLOR[0];
+                    image_data[pixel_pos + 1] = DEFORESTATION_COLOR[1];
+                    image_data[pixel_pos + 2] = DEFORESTATION_COLOR[2];
+                } else {
+                    image_data[pixel_pos + 0] = DEGRADATION_COLOR[0];
+                    image_data[pixel_pos + 1] = DEGRADATION_COLOR[1];
+                    image_data[pixel_pos + 2] = DEGRADATION_COLOR[2];
                 }
-                image_data[pixel_pos + 0] = color[0];
-                image_data[pixel_pos + 1] = color[1];
-                image_data[pixel_pos + 2] = color[2];
-                if(p > 100) {
+
+                if(p > NDFI_ENCODING_LIMIT) {
                     image_data[pixel_pos + 0] = 0;
                     image_data[pixel_pos + 1] = 0;
                     image_data[pixel_pos + 2] = 0;

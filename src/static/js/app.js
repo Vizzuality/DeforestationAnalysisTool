@@ -1,6 +1,26 @@
 
 $(function() {
 
+    var Loading = Backbone.View.extend({
+        el: $("#loading"),
+
+        refcount: 0,
+        
+        initialize: function() {
+        },
+
+        loading: function() {
+            this.refcount++;
+            this.el.fadeIn();
+        },
+        finished: function() {
+            --this.refcount;
+            if(this.refcount === 0) {
+                this.el.hide();
+            }
+        }
+        
+    });
     var Rutes = Backbone.Router.extend({
       routes: {
         "cell/:z/:x/:y":   "cell"
@@ -23,6 +43,7 @@ $(function() {
         initialize:function() {
             _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report');
 
+            window.loading.loading();
             this.reports = new ReportCollection();
             this.reports.bind('reset', this.change_report);
 
@@ -89,6 +110,7 @@ $(function() {
                 router.navigate('cell/0/0/0');
             }
             Backbone.history.start();
+            window.loading.finished();
             console.log(" === App started === ");
         },
 
@@ -102,6 +124,7 @@ $(function() {
 
     //setup global object to centralize all projection operations
     window.mapper = new Mapper();
+    window.loading = new Loading();
     window.app = new IMazon();
 
 
