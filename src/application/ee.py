@@ -114,8 +114,8 @@ class NDFI(object):
                "args": [ndfi_image_1,
                         ndfi_image_2,
                         self.PRODES_IMAGE,
-                        dummy, # not used by needed for the momment
-                        dummy, # not used by needed for the momment
+                        #dummy, # not used by needed for the momment
+                        #dummy, # not used by needed for the momment
                         self.THIS_POLY]
 
             }),
