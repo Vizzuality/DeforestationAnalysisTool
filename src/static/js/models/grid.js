@@ -26,19 +26,6 @@ var Cells = Backbone.Collection.extend({
 
     // this function is a helper to calculate subcells at this level
     populate_cells: function() {
-        /*
-        var cells = [];
-        for(var i = 0; i < SPLITS; ++i) {
-            for(var j = 0; j < SPLITS; ++j) {
-                cells.push({
-                    z: this.z + 1,
-                    x: Math.pow(SPLITS, this.z)*this.x + i,
-                    y: Math.pow(SPLITS, this.z)*this.y + j
-                });
-            }
-        }
-        this.reset(cells);
-        */
         this.fetch();
     },
 

@@ -10,6 +10,7 @@ import tempfile
 
 from google.appengine.ext import testbed
 from google.appengine.ext import db
+from google.appengine.api import users
 
 from application import app
 from application.models import Area, Note, Cell, Report
@@ -68,6 +69,46 @@ class NotesApiTest(unittest.TestCase, GoogleAuthMixin):
         js = json.loads(rv.data)['notes']
         self.assertEquals(0, len(js))
 
+class PolygonApi(unittest.TestCase, GoogleAuthMixin):
+    def setUp(self):
+        app.config['TESTING'] = True
+        self.app = app.test_client()
+        for x in Area.all():
+            x.delete()
+        r = Report(start=date.today(), end=date.today()+timedelta(days=1), finished=False)
+        r.put()
+        self.r = r
+        self.cell = Cell(x=0, y=0, z=2, report=self.r, ndfi_high=1.0, ndfi_low=0.0)
+        self.cell.put()
+        self.area = Area(geo='test', added_by=users.get_current_user(), type=1, cell=self.cell)
+        self.area.put()
+
+    def test_list(self):
+        rv = self.app.get('/api/v0/report/' + str(self.r.key()) + '/cell/2_0_0/polygon')
+        js = json.loads(rv.data)
+        self.assertEquals(1, len(js))
+
+    def test_create(self):
+        rv = self.app.post('/api/v0/report/' + str(self.r.key()) + '/cell/2_0_0/polygon',
+            data='{"geo": "test", "type": 1}'
+        )
+        self.assertEquals(2, Area.all().count())
+
+    def test_update(self):
+        rv = self.app.put('/api/v0/report/' + str(self.r.key()) + '/cell/2_0_0/polygon/' + str(self.area.key()),
+            data='{"geo": "epic", "type": 100}'
+        )
+        self.assertEquals(1, Area.all().count())
+        a = Area.get(self.area.key())
+        self.assertEquals(100, a.type)
+        self.assertEquals("epic", a.geo)
+
+    def test_delete(self):
+        rv = self.app.delete('/api/v0/report/' + str(self.r.key()) + '/cell/2_0_0/polygon/' + str(self.area.key()))
+
+        self.assertEquals(0, Area.all().count())
+
+
 class CellApi(unittest.TestCase, GoogleAuthMixin):
     def setUp(self):
         app.config['TESTING'] = True
@@ -79,13 +120,13 @@ class CellApi(unittest.TestCase, GoogleAuthMixin):
         self.r = r
 
     def test_cell_list(self):
-        rv = self.app.get('/api/v0/report/1/cell')
+        rv = self.app.get('/api/v0/report/' + str(self.r.key()) + '/cell')
         self.assertEquals(200, rv.status_code)
         js = json.loads(rv.data)
         self.assertEquals(100, len(js))
 
     def test_cell_0_0_0(self):
-        rv = self.app.get('/api/v0/report/1/cell/0_0_0')
+        rv = self.app.get('/api/v0/report/' + str(self.r.key()) + '/cell/0_0_0')
         self.assertEquals(200, rv.status_code)
         js = json.loads(rv.data)
         self.assertEquals(100, len(js))
@@ -111,6 +152,7 @@ class CellApi(unittest.TestCase, GoogleAuthMixin):
         q.filter("z =", 2)
         q.filter("x =", 1)
         q.filter("y =", 3)
+        q.filter("report =", self.r)
         cell = q.fetch(1)[0]
         self.assertAlmostEquals(0, cell.ndfi_low)
         self.assertAlmostEquals(1.0, cell.ndfi_high)

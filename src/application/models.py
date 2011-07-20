@@ -15,44 +15,6 @@ from time_utils import timestamp
 
 from ft import FT
 
-class Area(db.Model):
-    """ area selected by user """
-
-    DEGRADATION = 0
-    DEFORESTATION = 1
-
-    geo = db.TextProperty(required=True)
-    #added_by = db.UserProperty()
-    added_on = db.DateTimeProperty(auto_now_add=True)
-    type = db.IntegerProperty(required=True)
-    fusion_tables_id = db.IntegerProperty()
-
-    def save(self):
-        """ wrapper for put makes compatible with django"""
-        exists = True
-        try:
-            self.key()
-        except db.NotSavedError:
-            exists = False
-        ret = self.put()
-        # call defer AFTER saving instance
-        if not exists:
-            deferred.defer(self.save_to_fusion_tables)
-        return ret
-
-    def save_to_fusion_tables(self):
-        logging.info("saving to fusion tables %s" % self.key())
-        cl = FT(settings.FT_CONSUMER_KEY,
-                settings.FT_CONSUMER_SECRET,
-                settings.FT_TOKEN,
-                settings.FT_SECRET)
-        table_id = cl.table_id('areas')
-        if table_id:
-            rowid = cl.sql("insert into %s ('geo', 'added_on', 'type') VALUES ('%s', '%s', %d)" % (table_id, self.geo, self.added_on, self.type))
-            self.fusion_tables_id = int(rowid.split('\n')[1])
-            self.put()
-        else:
-            raise Exception("Create areas tables first")
 
 
 
@@ -108,7 +70,7 @@ class Cell(db.Model):
 
     def as_dict(self):
         return {
-                #'id': str(self.key()),
+                #'key': str(self.key()),
                 'id': self.external_id(),
                 'z': self.z,
                 'x': self.x,
@@ -120,3 +82,57 @@ class Cell(db.Model):
 
     def as_json(self):
         return json.dumps(self.as_dict())
+
+class Area(db.Model):
+    """ area selected by user """
+
+    DEGRADATION = 0
+    DEFORESTATION = 1
+
+    geo = db.TextProperty(required=True)
+    added_by = db.UserProperty()
+    added_on = db.DateTimeProperty(auto_now_add=True)
+    type = db.IntegerProperty(required=True)
+    fusion_tables_id = db.IntegerProperty()
+    cell = db.ReferenceProperty(Cell)
+
+    def as_dict(self):
+        return {
+                'key': str(self.key()),
+                'cell': str(self.cell.key()),
+                'geo': self.geo,
+                'type': self.type,
+                'fusion_tables_id': self.fusion_tables_id,
+                'added_on': timestamp(self.added_on),
+                'added_by': str(self.added_by.nickname())
+        }
+
+    def as_json(self):
+        return json.dumps(self.as_dict())
+
+    def save(self):
+        """ wrapper for put makes compatible with django"""
+        exists = True
+        try:
+            self.key()
+        except db.NotSavedError:
+            exists = False
+        ret = self.put()
+        # call defer AFTER saving instance
+        if not exists:
+            deferred.defer(self.save_to_fusion_tables)
+        return ret
+
+    def save_to_fusion_tables(self):
+        logging.info("saving to fusion tables %s" % self.key())
+        cl = FT(settings.FT_CONSUMER_KEY,
+                settings.FT_CONSUMER_SECRET,
+                settings.FT_TOKEN,
+                settings.FT_SECRET)
+        table_id = cl.table_id('areas')
+        if table_id:
+            rowid = cl.sql("insert into %s ('geo', 'added_on', 'type') VALUES ('%s', '%s', %d)" % (table_id, self.geo, self.added_on, self.type))
+            self.fusion_tables_id = int(rowid.split('\n')[1])
+            self.put()
+        else:
+            raise Exception("Create areas tables first")

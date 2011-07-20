@@ -1,4 +1,9 @@
 
+function is_color(col1, col2) {
+    return col1[0] == col2[0] && 
+            col1[1] == col2[1] &&
+            col1[2] == col2[2];
+}
 
 var NDFILayer = Backbone.View.extend({
 
@@ -33,9 +38,9 @@ var NDFILayer = Backbone.View.extend({
             this.show();
         }
     },
+    
 
     click: function(e) {
-        return;
         var c = this.layer.composed(this.mapview.el[0]);
         var point = this.mapview.projector.transformCoordinates(e.latLng);
 
@@ -51,8 +56,9 @@ var NDFILayer = Backbone.View.extend({
         color[1] = image_data.data[pixel_pos + 1];
         color[2] = image_data.data[pixel_pos + 2];
         color[3] = image_data.data[pixel_pos + 3];
-        // if isn't a solid color can't be picked
-        if(color[3] != 255) {
+        var deg = is_color(color, this.DEFORESTATION_COLOR);
+        var def = is_color(color, this.DEGRADATION_COLOR);
+        if(!deg && !def) {
             return;
         }
 
@@ -65,6 +71,7 @@ var NDFILayer = Backbone.View.extend({
         inners = _.select(inners, function(p){ return p.length > this.inner_poly_sensibility; });
 
         var newpoly = this.create_poly(poly, inners);
+        this.trigger('polygon', {paths: newpoly, type: 0});
         //newpoly.type = selected_polygon_type;
         /*
         me.deforestation_polys.push(newpoly);
@@ -100,6 +107,7 @@ var NDFILayer = Backbone.View.extend({
                 paths.push(_.map(p.reverse(), unproject));
             });
 
+            return paths;
             //inners && console.log(inners.length);
 
             /*
