@@ -164,7 +164,7 @@ var GridStack = Backbone.View.extend({
             this.trigger('select_mode');
         } else {
             this.el.hide();
-            this.trigger('work_mode');
+            this.trigger('work_mode', x, y, z);
         }
     }
 

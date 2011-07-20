@@ -49,8 +49,17 @@ class CellAPI(Resource):
     def cell_id(id):
         return tuple(map(int, id.split('_')))
 
-    def default_cell(self, x, y, z):
-        return Cell(z=z, x=x, y=y, ndfi_low=0.6, ndfi_high=0.8)
+    @staticmethod
+    def get_or_create(r, x, y ,z):
+        c = CellAPI.get_cell(r, x, y, z)
+        if not c:
+            c = CellAPI.default_cell(r, x, y ,z)
+            c.put()
+        return c
+
+    @staticmethod
+    def default_cell(r, x, y, z):
+        return Cell(z=z, x=x, y=y, ndfi_low=0.6, ndfi_high=0.8, report=r)
 
     def cells_for(self, report, x, y, z):
         cells = []
@@ -62,12 +71,12 @@ class CellAPI(Resource):
 
                 cell = CellAPI.get_cell(report, xx, yy, zz)
                 if not cell:
-                    cell = self.default_cell(xx, yy, zz)
+                    cell = CellAPI.default_cell(report, xx, yy, zz)
                 cells.append(cell)
         return cells
 
     def list(self, report_id):
-        cells = self.cells_for(report_id, 0, 0, 0)
+        cells = self.cells_for(Report.get(Key(report_id)), 0, 0, 0)
         return self._as_json([x.as_dict() for x in cells])
 
     def get(self, report_id, id):
@@ -81,7 +90,7 @@ class CellAPI(Resource):
         z, x, y = CellAPI.cell_id(id)
         cell = CellAPI.get_cell(r, x, y, z)
         if not cell:
-            cell = self.default_cell(x, y, z)
+            cell = CellAPI.default_cell(r, x, y, z)
         cell.report = r
 
         data = json.loads(request.data)
@@ -98,17 +107,27 @@ class PolygonAPI(Resource):
         r = Report.get(Key(report_id))
         z, x, y = CellAPI.cell_id(cell_pos)
         cell = CellAPI.get_cell(r, x, y, z)
-        return self._as_json([x.as_dict() for x in cell.area_set])
+        if not cell:
+            return self._as_json([])
+        else:
+            return self._as_json([x.as_dict() for x in cell.area_set])
+
+    def get(self, report_id, cell_pos, id):
+        a = Area.get(Key(id))
+        if not a:
+            abort(404)
+        return Response(a.as_json(), mimetype='application/json')
+        
 
     def create(self, report_id, cell_pos):
         r = Report.get(Key(report_id))
         z, x, y = CellAPI.cell_id(cell_pos)
-        cell = CellAPI.get_cell(r, x, y, z)
+        cell = CellAPI.get_or_create(r, x, y, z)
         data = json.loads(request.data)
-        a = Area(geo=data['geo'],
+        a = Area(geo=json.dumps(data['paths']),
             type=data['type'],
             added_by = users.get_current_user(),
-            cell = cell)
+            cell=cell)
         a.put();
         return Response(a.as_json(), mimetype='application/json')
 
@@ -121,7 +140,7 @@ class PolygonAPI(Resource):
         data = json.loads(request.data)
         a = Area.get(Key(id))
 
-        for prop in ('geo', 'type'):
+        for prop in ('paths', 'type'):
             setattr(a, prop, data[prop])
         a.added_by = users.get_current_user()
         a.put();

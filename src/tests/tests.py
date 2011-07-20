@@ -75,12 +75,14 @@ class PolygonApi(unittest.TestCase, GoogleAuthMixin):
         self.app = app.test_client()
         for x in Area.all():
             x.delete()
+        for x in Cell.all():
+            x.delete()
         r = Report(start=date.today(), end=date.today()+timedelta(days=1), finished=False)
         r.put()
         self.r = r
         self.cell = Cell(x=0, y=0, z=2, report=self.r, ndfi_high=1.0, ndfi_low=0.0)
         self.cell.put()
-        self.area = Area(geo='test', added_by=users.get_current_user(), type=1, cell=self.cell)
+        self.area = Area(geo='[]', added_by=users.get_current_user(), type=1, cell=self.cell)
         self.area.put()
 
     def test_list(self):
@@ -88,20 +90,30 @@ class PolygonApi(unittest.TestCase, GoogleAuthMixin):
         js = json.loads(rv.data)
         self.assertEquals(1, len(js))
 
-    def test_create(self):
-        rv = self.app.post('/api/v0/report/' + str(self.r.key()) + '/cell/2_0_0/polygon',
-            data='{"geo": "test", "type": 1}'
+    def test_create_non_existing_cell(self):
+        rv = self.app.post('/api/v0/report/' + str(self.r.key()) + '/cell/2_1_0/polygon',
+            data='{"paths": "test", "type": 1}'
         )
         self.assertEquals(2, Area.all().count())
+        self.assertEquals(2, Cell.all().count())
+
+    def test_create(self):
+        rv = self.app.post('/api/v0/report/' + str(self.r.key()) + '/cell/2_0_0/polygon',
+            data='{"paths": "[]", "type": 1}'
+        )
+        self.assertEquals(2, Area.all().count())
+        rv = self.app.get('/api/v0/report/' + str(self.r.key()) + '/cell/2_0_0/polygon')
+        js = json.loads(rv.data)
+        self.assertEquals(2, len(js))
 
     def test_update(self):
         rv = self.app.put('/api/v0/report/' + str(self.r.key()) + '/cell/2_0_0/polygon/' + str(self.area.key()),
-            data='{"geo": "epic", "type": 100}'
+            data='{"paths": "[]", "type": 100}'
         )
         self.assertEquals(1, Area.all().count())
         a = Area.get(self.area.key())
         self.assertEquals(100, a.type)
-        self.assertEquals("epic", a.geo)
+        self.assertEquals("[]", a.geo)
 
     def test_delete(self):
         rv = self.app.delete('/api/v0/report/' + str(self.r.key()) + '/cell/2_0_0/polygon/' + str(self.area.key()))

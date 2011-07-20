@@ -6,16 +6,7 @@
 {% endblock %}
 
 {% block js_files %}
-    <!--
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-    <script type="text/javascript" src="{{url_for("static", filename="js/canvas_tile_layer.js")}}"></script>
-    <script type="text/javascript" src="{{url_for("static", filename="js/pixel_ops.js")}}"></script>
-    <script src="{{url_for("static", filename="js/projector.js")}}"></script>
-    <script src="{{url_for("static", filename="js/grid_overlay.js")}}"></script>
-    <script src="{{url_for("static", filename="js/kml.js")}}"></script>
-    <script src="{{url_for("static", filename="js/app.js")}}"></script>
-    -->
+
   <script src="{{url_for('static',filename='js/helpers.js')}}"></script> 
 
   <!-- backbone application -->
@@ -26,6 +17,10 @@
   <!-- pixel operations library -->
   <script type="text/javascript" src="{{url_for("static", filename="js/pixel_ops.js")}}"></script>
 
+  <!-- kml utils -->
+  <script src="{{url_for("static", filename="js/kml.js")}}"></script>
+
+  <!-- projection helper -->
   <script src="{{url_for('static',filename='js/models/mapper.js')}}"></script>
 
   <!-- report -->
@@ -37,7 +32,6 @@
   <script src="{{url_for('static',filename='js/controllers/map_layer.js')}}"></script>
 
   <!-- map -->
-  <!-- <script src="{{url_for('static',filename='js/models/map.js')}}"></script> -->
   <script src="{{url_for('static',filename='js/controllers/map.js')}}"></script> 
 
   <!-- polygon -->

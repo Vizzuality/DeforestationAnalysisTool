@@ -71,19 +71,8 @@ var NDFILayer = Backbone.View.extend({
         inners = _.select(inners, function(p){ return p.length > this.inner_poly_sensibility; });
 
         var newpoly = this.create_poly(poly, inners);
+        //TODO: inner rings
         this.trigger('polygon', {paths: newpoly, type: 0});
-        //newpoly.type = selected_polygon_type;
-        /*
-        me.deforestation_polys.push(newpoly);
-        (function(newpoly) {
-            google.maps.event.addListener(newpoly, 'click', function(event) {
-                var infowindow = new google.maps.InfoWindow();
-                infowindow.setContent(newpoly.type == 1 ? "deforestation":"degradation");
-                infowindow.setPosition(event.latLng);
-                infowindow.open(App.map);
-            })
-        })(newpoly);
-        */
 
         delete image_data;
         delete c;
@@ -95,9 +84,10 @@ var NDFILayer = Backbone.View.extend({
 
             // pixel -> latlon
             function unproject(p) {
-                return self.mapview.projector.untransformCoordinates(
+                var ll = self.mapview.projector.untransformCoordinates(
                     new google.maps.Point(p[0], p[1])
                 );
+                return [ll.lat(), ll.lng()];
             }
             // outer path
             paths.push(_.map(points, unproject));

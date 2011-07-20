@@ -41,7 +41,7 @@ $(function() {
         ),
 
         initialize:function() {
-            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report');
+            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'new_polygon');
 
             window.loading.loading();
             this.reports = new ReportCollection();
@@ -58,6 +58,7 @@ $(function() {
             this.ndfi_layer = new NDFILayer({mapview: this.map, report: this.active_report});
 
             this.polygon_tools.ndfi_range.bind('change', this.ndfi_layer.apply_filter);
+            this.ndfi_layer.bind('polygon', this.new_polygon);
         },
 
         change_report: function() {
@@ -65,11 +66,21 @@ $(function() {
             this.active_report = this.reports.models[0];
         },
 
+        new_polygon: function(data) {
+            this.cell_polygons.polygons.create(data);
+        },
+
         // entering on work mode
-        work_mode: function() {
+        work_mode: function(x, y, z) {
             this.selection_toolbar.hide();
             this.polygon_tools.show();
             this.ndfi_layer.show();
+            this.cell_polygons = new CellPolygons({
+                x: x, y: y, z: z,
+                report: this.active_report,
+                mapview: this.map
+
+            });
         },
 
         // entering on select_mode
@@ -77,6 +88,10 @@ $(function() {
             this.selection_toolbar.show();
             this.polygon_tools.hide();
             this.ndfi_layer.hide();
+            if (this.cell_polygons) {
+                this.cell_polygons.remove();
+                delete this.cell_polygons;
+            }
         },
 
         // this function is called when map is loaded

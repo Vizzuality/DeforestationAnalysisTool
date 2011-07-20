@@ -100,7 +100,7 @@ class Area(db.Model):
         return {
                 'key': str(self.key()),
                 'cell': str(self.cell.key()),
-                'geo': self.geo,
+                'paths': json.loads(self.geo),
                 'type': self.type,
                 'fusion_tables_id': self.fusion_tables_id,
                 'added_on': timestamp(self.added_on),
@@ -119,8 +119,9 @@ class Area(db.Model):
             exists = False
         ret = self.put()
         # call defer AFTER saving instance
-        if not exists:
-            deferred.defer(self.save_to_fusion_tables)
+        # TODO: convert to KML
+        #if not exists:
+            #deferred.defer(self.save_to_fusion_tables)
         return ret
 
     def save_to_fusion_tables(self):
