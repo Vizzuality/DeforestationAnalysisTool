@@ -190,7 +190,8 @@ $(function() {
 
     });
 
-
+    // avoid cached GET
+    $.ajaxSetup({ cache: false });
     //setup global object to centralize all projection operations
     window.mapper = new Mapper();
     window.loading = new Loading();

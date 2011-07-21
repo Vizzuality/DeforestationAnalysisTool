@@ -41,6 +41,7 @@ var NDFILayer = Backbone.View.extend({
     
 
     click: function(e) {
+        var self = this;
         var c = this.layer.composed(this.mapview.el[0]);
         var point = this.mapview.projector.transformCoordinates(e.latLng);
 
@@ -68,9 +69,10 @@ var NDFILayer = Backbone.View.extend({
                  c.width, c.height, poly, color);
 
         // discard small polys
-        inners = _.select(inners, function(p){ return p.length > this.inner_poly_sensibility; });
+        inners = _.select(inners, function(p){ return p.length > self.inner_poly_sensibility; });
 
         var newpoly = this.create_poly(poly, inners);
+        console.log(newpoly);
         //TODO: inner rings
         this.trigger('polygon', {paths: newpoly, type: 0});
 
