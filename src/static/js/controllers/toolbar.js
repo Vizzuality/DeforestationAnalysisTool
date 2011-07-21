@@ -10,6 +10,28 @@ var Toolbar = Backbone.View.extend({
     }
 });
 
+var PressedButton = Backbone.View.extend({
+
+    events: {
+        "click": 'press'
+    },
+
+    initialize: function() {
+        _.bindAll(this, 'press');
+        this.pressed = false;
+    },
+
+    press: function() {
+        if(this.pressed) {
+            this.el.removeClass('selected');
+        } else {
+            this.el.addClass('selected');
+        }
+        this.pressed = !this.pressed;
+        this.trigger('change', this, this.pressed);
+    }
+
+});
 
 // jqueryui slider wrapper
 // triggers change with values
@@ -44,12 +66,36 @@ var ReportToolbar = Toolbar.extend({
 
 });
 
+var ButtonGroup = Backbone.View.extend({
+
+    initialize: function() {
+        //_.bindAll(this, 'change');
+        var self = this;
+        this.buttons = this.$('.button').click(function(e) { self.click($(this), e); });
+    },
+
+    click: function(button, event) {
+        this.buttons.removeClass('selected');
+        button.addClass('selected');
+        event.preventDefault();
+        this.trigger('state', button.attr('id'));
+    }
+});
+
 var PolygonToolbar = Toolbar.extend({
 
     el: $("#work_toolbar"),
 
     initialize: function() {
+        _.bindAll(this, 'change_state');
+        this.buttons = new ButtonGroup({el: this.$('#selection')});
+        this.polytype = new ButtonGroup({el: this.$('#polytype')});
         this.ndfi_range = new RangeSlider({el: this.$("#ndfi_slider")});
+        this.buttons.bind('state', this.change_state);
+    },
+
+    change_state: function(st) {
+        this.trigger('state', st);
     }
 
 });

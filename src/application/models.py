@@ -98,6 +98,7 @@ class Area(db.Model):
 
     def as_dict(self):
         return {
+                'id': str(self.key()),
                 'key': str(self.key()),
                 'cell': str(self.cell.key()),
                 'paths': json.loads(self.geo),

@@ -57,14 +57,29 @@
             }
         }
 
+        @mixin buttonize {
+            a {
+                background: #28292D;
+                padding: 3px 8px;
+                &:hover {
+                    background: #1B1B1C;
+                }
+                text-decoration: none;
+            }
+            .selected  {
+                    background: #0B0B0C;
+            }
+        }
         #work_toolbar {
             padding-top: 20px;
             ul, li {
                 display: inline;
             }
             #selection {
+                @include buttonize;
             }
             #polytype {
+                @include buttonize;
                 margin-left: 10px;
             }
         }

@@ -416,8 +416,30 @@ article .example .field {
 #header #tools #work_toolbar ul, #header #tools #work_toolbar li {
   display: inline;
 }
+#header #tools #work_toolbar #selection a {
+  background: #28292D;
+  padding: 3px 8px;
+  text-decoration: none;
+}
+#header #tools #work_toolbar #selection a:hover {
+  background: #1B1B1C;
+}
+#header #tools #work_toolbar #selection .selected {
+  background: #0B0B0C;
+}
 #header #tools #work_toolbar #polytype {
   margin-left: 10px;
+}
+#header #tools #work_toolbar #polytype a {
+  background: #28292D;
+  padding: 3px 8px;
+  text-decoration: none;
+}
+#header #tools #work_toolbar #polytype a:hover {
+  background: #1B1B1C;
+}
+#header #tools #work_toolbar #polytype .selected {
+  background: #0B0B0C;
 }
 #header #tools #maptools {
   margin-left: 200px;

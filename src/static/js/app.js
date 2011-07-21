@@ -1,11 +1,54 @@
 
 $(function() {
 
+    var EditingToolsRuoter = Backbone.View.extend({
+
+        initialize: function() {
+            _.bindAll(this, 'change_state', 'new_polygon', 'reset');
+            this.state = 'move';
+            this.app = this.options.app;
+            this.app.polygon_tools.bind('state', this.change_state);
+        },
+
+        new_polygon: function(data) {
+            //this.cell_polygons.polygons.create(data);
+            this.app.cell_polygons.polygons.add(data);
+        },
+
+        //reset to initial state
+        reset: function() {
+            this.app.ndfi_layer.unbind('polygon', this.new_polygon);
+            this.app.cell_polygons.editing_state = false;
+        },
+
+        change_state: function(st) {
+            if(st == this.state) {
+                return;
+            }
+            this.state = st;
+            this.reset();
+            switch(st) {
+                case 'edit':
+                    break;
+                case 'remove':
+                    this.app.cell_polygons.editing_state = true;
+                    break;
+                case 'draw':
+                    break;
+                case 'auto':
+                    this.app.ndfi_layer.bind('polygon', this.new_polygon);
+                    break;
+            }
+            console.log(st);
+        }
+
+    });
+
     var Loading = Backbone.View.extend({
         el: $("#loading"),
 
         refcount: 0,
-        
+
         initialize: function() {
         },
 
@@ -19,7 +62,7 @@ $(function() {
                 this.el.hide();
             }
         }
-        
+
     });
     var Rutes = Backbone.Router.extend({
       routes: {
@@ -41,7 +84,7 @@ $(function() {
         ),
 
         initialize:function() {
-            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'new_polygon');
+            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report');
 
             window.loading.loading();
             this.reports = new ReportCollection();
@@ -59,7 +102,7 @@ $(function() {
             this.ndfi_layer = new NDFILayer({mapview: this.map, report: this.active_report});
 
             this.polygon_tools.ndfi_range.bind('change', this.ndfi_layer.apply_filter);
-            this.ndfi_layer.bind('polygon', this.new_polygon);
+
         },
 
         change_report: function() {
@@ -67,10 +110,6 @@ $(function() {
             this.active_report = this.reports.models[0];
         },
 
-        new_polygon: function(data) {
-            //this.cell_polygons.polygons.create(data);
-            this.cell_polygons.polygons.add(data);
-        },
 
         // entering on work mode
         work_mode: function(x, y, z) {
@@ -83,8 +122,13 @@ $(function() {
                 mapview: this.map
 
             });
+
             this.overview.on_cell(x, y, z);
             this.overview.bind('done', this.cell_polygons.commit);
+
+            this.editing_router = new EditingToolsRuoter({
+                app: this
+            });
         },
 
         // entering on select_mode
@@ -98,7 +142,12 @@ $(function() {
                 this.cell_polygons.remove();
                 delete this.cell_polygons;
             }
-        },
+            if(this.editing_router) {
+                //unbind all
+                this.editing_router.reset();
+                delete this.editing_router;
+            }
+        }, 
 
         // this function is called when map is loaded
         // and all stuff can start to work.
@@ -113,7 +162,6 @@ $(function() {
                 initial_bounds: this.amazon_bounds,
                 report: this.active_report
             });
-    
 
             // bindings
             this.gridstack.grid.bind('enter_cell', function(cell) {

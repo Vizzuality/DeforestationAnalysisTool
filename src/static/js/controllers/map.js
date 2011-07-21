@@ -3,12 +3,12 @@
 // google maps map
 var MapView = Backbone.View.extend({
     mapOptions: {
-                zoom: 5,
-                center: new google.maps.LatLng(-7.409408064269147,-50.00213741352536),
-                mapTypeId: google.maps.MapTypeId.TERRAIN,
-                //disableDefaultUI: true,
-                disableDoubleClickZoom: true,
-                draggableCursor:'default'
+            zoom: 5,
+            center: new google.maps.LatLng(-7.409408064269147,-50.00213741352536),
+            mapTypeId: google.maps.MapTypeId.TERRAIN,
+            //disableDefaultUI: true,
+            disableDoubleClickZoom: true,
+            draggableCursor:'default'
     },
 
     el: $("#map"),

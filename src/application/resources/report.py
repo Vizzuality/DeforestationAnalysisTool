@@ -3,7 +3,7 @@ import logging
 from application.models import Report, Cell, Area
 from application.ee import NDFI
 from resource import Resource
-from flask import Response, request, jsonify
+from flask import Response, request, jsonify, abort
 
 import simplejson as json
 from application.time_utils import timestamp, past_month_range
@@ -148,6 +148,10 @@ class PolygonAPI(Resource):
 
     def delete(self, report_id, cell_pos, id):
         a = Area.get(Key(id))
-        a.delete();
-        return 'deleted'
+        if a:
+            a.delete();
+            a = Response("deleted", mimetype='text/plain')
+            a.status_code = 204;
+            return a
+        abort(404)
 
