@@ -54,6 +54,7 @@ $(function() {
         init_ui: function() {
             this.selection_toolbar = new ReportToolbar();
             this.polygon_tools = new PolygonToolbar();
+            this.overview = new Overview();
 
             this.ndfi_layer = new NDFILayer({mapview: this.map, report: this.active_report});
 
@@ -67,7 +68,8 @@ $(function() {
         },
 
         new_polygon: function(data) {
-            this.cell_polygons.polygons.create(data);
+            //this.cell_polygons.polygons.create(data);
+            this.cell_polygons.polygons.add(data);
         },
 
         // entering on work mode
@@ -81,6 +83,8 @@ $(function() {
                 mapview: this.map
 
             });
+            this.overview.on_cell(x, y, z);
+            this.overview.bind('done', this.cell_polygons.commit);
         },
 
         // entering on select_mode
@@ -88,7 +92,9 @@ $(function() {
             this.selection_toolbar.show();
             this.polygon_tools.hide();
             this.ndfi_layer.hide();
+            this.overview.select_mode();
             if (this.cell_polygons) {
+                this.overview.unbind(this.cell_polygons.commit);
                 this.cell_polygons.remove();
                 delete this.cell_polygons;
             }

@@ -34,7 +34,7 @@ var PolygonView = Backbone.View.extend({
 var CellPolygons = Backbone.View.extend({
 
     initialize: function() {
-        _.bindAll(this, 'remove', 'add', 'addAll');
+        _.bindAll(this, 'remove', 'add', 'addAll', 'commit');
         this.mapview = this.options.mapview;
         this.report = this.options.report;
         this.poly_views = [];
@@ -56,6 +56,10 @@ var CellPolygons = Backbone.View.extend({
         this.poly_views.push(p);
     },
 
+    create: function() {
+        throw "use commit if you want to save models";
+    },
+
     addAll: function() {
         this.polygons.each(this.add);
     },
@@ -65,6 +69,21 @@ var CellPolygons = Backbone.View.extend({
         _.each(this.poly_views, function(p) {
             p.remove();
         });
+    },
+
+    commit: function() {
+        var finished = function () {
+            console.log("finished");
+            window.loading.finished();
+        };
+        this.polygons.each(function(p) {
+            window.loading.loading();
+            p.save(null, {
+                success: finished,
+                error: finished
+            });
+        });
     }
+
 
 });

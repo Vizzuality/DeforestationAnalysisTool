@@ -108,6 +108,12 @@
         right: 30px;
         top: 0;
         background: -webkit-gradient(linear, left top, left bottom, from($overview_top), to($overview_bottom));
+        #done {
+            margin-top: 20px;
+            background: #CCC;
+            padding: 5px 10px;
+            display: block;
+        }
 
     }
 }

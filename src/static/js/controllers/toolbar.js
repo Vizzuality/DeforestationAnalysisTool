@@ -54,3 +54,31 @@ var PolygonToolbar = Toolbar.extend({
 
 });
 
+var Overview = Backbone.View.extend({
+
+    el: $("#overview"),
+
+    events: {
+        'click #done': 'done'
+    },
+
+    initialize: function() {
+        _.bindAll(this, 'done', 'on_cell', 'select_mode');
+        this.done = this.$('#done');
+    },
+
+    done: function(e) {
+        e.preventDefault();
+        this.trigger('done');
+    },
+
+    on_cell: function(x, y, z) {
+        this.done.show();
+    },
+
+    select_mode: function() {
+        this.done.hide();
+    }
+
+
+});
