@@ -5,6 +5,7 @@ import simplejson as json
 from shutil import copyfile
 
 from google.appengine.api import urlfetch
+from google.appengine.api import users
 
 from flask import render_template, flash, url_for, redirect, abort, request, make_response 
 
@@ -20,7 +21,8 @@ from models import Report
 @login_required
 def home(cell_path=None):
     reports = json.dumps([x.as_dict() for x in Report.all()])
-    return render_template('home.html', reports_json=reports)
+    user = users.get_current_user()
+    return render_template('home.html', reports_json=reports, user=user)
 
 @app.route('/tiles/<path:tile_path>')
 def tiles(tile_path):

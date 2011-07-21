@@ -465,6 +465,7 @@ article .example .field {
   background: #232427;
 }
 #header #overview {
+  font-family: "Helvetica Neue", Sans-Serif;
   z-index: 10;
   width: 198px;
   height: 112px;
@@ -479,6 +480,12 @@ article .example .field {
   background: #CCC;
   padding: 5px 10px;
   display: block;
+}
+#header #overview #name {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  font-weight: bold;
+  text-shadow: #812B19 0px 1px 0px;
 }
 
 body, html {
