@@ -1,7 +1,9 @@
 #header {
     z-index: 19;
+    position: absolute;
+    top:0; left:0; right:0; width:100%;
     @mixin box-shadow {
-        -webkit-box-shadow: 0px 0px 10px #000;
+        -webkit-box-shadow: 0px 0px 5px #000;
     }
     @include box-shadow;
     text-align: center;

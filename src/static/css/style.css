@@ -360,7 +360,12 @@ article .example .field {
 
 #header {
   z-index: 19;
-  -webkit-box-shadow: 0px 0px 10px #000;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  -webkit-box-shadow: 0px 0px 5px #000;
   text-align: center;
 }
 #header a {
@@ -454,7 +459,7 @@ article .example .field {
   position: relative;
 }
 #header #tools #maptools #slider_wrapper {
-  -webkit-box-shadow: 0px 0px 10px #000;
+  -webkit-box-shadow: 0px 0px 5px #000;
   z-index: 20;
   display: none;
   padding: 20px;
