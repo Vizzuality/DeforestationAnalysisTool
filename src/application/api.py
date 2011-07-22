@@ -86,12 +86,6 @@ def ndfi_map():
     ee_resource = 'MOD09GA'
     ndfi = NDFI(ee_resource,
         past_month_range(datetime.fromtimestamp(starttime/1000)), (starttime, endtime))
-    POLY = [
-                    [[-61.5, -12], [-61.5, -11], [-60.5, -11], [-60.5, -12]],
-                    [[-62.5, -12], [-62.5, -11], [-61.5, -11], [-61.5, -12]],
-                    [[-62.5, -12], [-62.5, -11], [-61.5, -11], [-61.5, -12]],
-                    [[-62.5, -12], [-62.5, -11], [-61.5, -11], [-61.5, -12]]
-        ]
 
     return jsonify(ndfi.mapid())
     #return jsonify(ndfi.ndfi_change_value(POLY))
