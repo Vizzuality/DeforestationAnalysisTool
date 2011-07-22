@@ -86,7 +86,7 @@ class PolygonAPI(Resource):
             type=data['type'],
             added_by = users.get_current_user(),
             cell=cell)
-        a.put();
+        a.save();
         return Response(a.as_json(), mimetype='application/json')
 
     def update(self, report_id, cell_pos, id):
@@ -97,7 +97,7 @@ class PolygonAPI(Resource):
             setattr(a, prop, data[prop])
 
         a.added_by = users.get_current_user()
-        a.put();
+        a.save();
         return Response(a.as_json(), mimetype='application/json')
 
     def delete(self, report_id, cell_pos, id):

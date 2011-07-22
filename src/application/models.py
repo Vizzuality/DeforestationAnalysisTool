@@ -16,7 +16,7 @@ from mercator import Mercator
 
 from ft import FT
 
-
+from kml import path_to_kml
 
 
 class Note(db.Model):
@@ -194,8 +194,8 @@ class Area(db.Model):
         ret = self.put()
         # call defer AFTER saving instance
         # TODO: convert to KML
-        #if not exists:
-            #deferred.defer(self.save_to_fusion_tables)
+        if not exists:
+            deferred.defer(self.save_to_fusion_tables)
         return ret
 
     def save_to_fusion_tables(self):
@@ -206,7 +206,8 @@ class Area(db.Model):
                 settings.FT_SECRET)
         table_id = cl.table_id('areas')
         if table_id:
-            rowid = cl.sql("insert into %s ('geo', 'added_on', 'type') VALUES ('%s', '%s', %d)" % (table_id, self.geo, self.added_on, self.type))
+            geo_kml = path_to_kml(json.loads(self.geo))
+            rowid = cl.sql("insert into %s ('geo', 'added_on', 'type') VALUES ('%s', '%s', %d)" % (table_id, geo_kml, self.added_on, self.type))
             self.fusion_tables_id = int(rowid.split('\n')[1])
             self.put()
         else:
