@@ -45,7 +45,7 @@ def earth_engine_tile_proyx(tile_path):
     token = request.args.get('token', '')
     if not token:
         abort(401)
-    result = urlfetch.fetch(EARTH_ENGINE_TILE_SERVER + tile_path + '?token='+ token)
+    result = urlfetch.fetch(EARTH_ENGINE_TILE_SERVER + tile_path + '?token='+ token, deadline=10)
 
     response = make_response(result.content)
     response.headers['Content-Type'] = result.headers['Content-Type']

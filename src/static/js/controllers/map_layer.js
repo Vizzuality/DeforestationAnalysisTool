@@ -63,18 +63,24 @@ var NDFILayer = Backbone.View.extend({
             return;
         }
 
+        
+        window.loading.loading();
         var poly = contour(image_data.data, c.width, c.height, point.x, point.y);
 
         var inners = inner_polygons(image_data.data,
                  c.width, c.height, poly, color);
+        window.loading.finished();
 
         // discard small polys
         inners = _.select(inners, function(p){ return p.length > self.inner_poly_sensibility; });
 
         var newpoly = this.create_poly(poly, inners);
-        console.log(newpoly);
-        //TODO: inner rings
-        this.trigger('polygon', {paths: newpoly, type: 0});
+
+        var type = Polygon.prototype.DEGRADATION;
+        if(def) {
+            type = Polygon.prototype.DEFORESTATION;
+        } 
+        this.trigger('polygon', {paths: newpoly, type: type});
 
         delete image_data;
         delete c;

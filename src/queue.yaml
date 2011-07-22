@@ -3,6 +3,6 @@
 queue:
 - name: ndfichangevalue
   rate: 20/s
-  bucket_size: 1000
+  bucket_size: 100
   retry_parameters:
     task_age_limit: 1h
