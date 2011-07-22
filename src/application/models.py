@@ -12,6 +12,7 @@ from google.appengine.ext import deferred
 from application import settings
 import simplejson as json
 from time_utils import timestamp
+from mercator import Mercator
 
 from ft import FT
 
@@ -65,6 +66,7 @@ class Cell(db.Model):
     report = db.ReferenceProperty(Report)
     ndfi_low = db.FloatProperty()
     ndfi_high = db.FloatProperty()
+    ndfi_change_value = db.FloatProperty()
 
     @staticmethod
     def get_cell(report, x, y, z):
@@ -133,6 +135,26 @@ class Cell(db.Model):
 
     def as_json(self):
         return json.dumps(self.as_dict())
+
+    def bounds(self, top_level_bounds):
+        """ return lat,lon bounds given toplevel BB bounds 
+            ``top_level_bounds`` is a tuple with (ne, sw) being
+            ne and sw a (lat, lon) tuple
+            return bounds in the same format
+        """
+        righttop = Mercator.project(*top_level_bounds[0]) #ne
+        leftbottom = Mercator.project(*top_level_bounds[1]) #sw
+        topx = leftbottom[0]
+        topy = righttop[1]
+        w = righttop[0] - leftbottom[0];
+        h = -righttop[1] + leftbottom[1];
+        sp = SPLITS**self.z
+        sx = w/sp;
+        sy = h/sp;
+        return (
+            Mercator.unproject((self.x + 1)*sx + topx, (self.y)*sy + topy),
+            Mercator.unproject(self.x*sx + topx, topy + (self.y+1)*sy)
+        )
 
 class Area(db.Model):
     """ area selected by user """

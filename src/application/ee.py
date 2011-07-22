@@ -31,7 +31,7 @@ class NDFI(object):
                                end=work_period[1])
         self.earth_engine_resource = ee_res
         self.ee = EarthEngine(settings.EE_TOKEN)
-        
+
     def mapid(self):
         """ return a dict with mapid and token to use in google maps tiles url
 
@@ -63,15 +63,32 @@ class NDFI(object):
         params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
         return self.ee.post("/mapid", params)
 
+    def _get_polygon_bbox(self, polygon):
+        lats = [x[0] for x in polygon]
+        lngs = [x[1] for x in polygon]
+        max_lat = max(lats)
+        min_lat = min(lats)
+        max_lng = max(lngs)
+        min_lng = min(lngs)
+        return ((min_lat, max_lat), (min_lng, max_lng))
+        
     def ndfi_change_value(self, polygons):
         """ return how much NDFI has changed in the time period
             ``polygons`` are a list of closed polygons defined by lat, lon::
-            
-            [ 
+
+            [
                 [ [lat, lon], [lat, lon]...],
                 [ [lat, lon], [lat, lon]...]
             ]
+
+            for performance reassons bbox greater than 3 degrees are now allowed
         """
+        # some assertions
+        for p in polygons:
+            bbox = self._get_polygon_bbox(p)
+            if bbox[0][1] - bbox[0][0] > 3.5 or bbox[1][1] - bbox[1][0] > 3.5:
+                raise Exception("polygon bbox size must be less than 3 degrees")
+
         # get image list from those days
         reference_images = self._images_for_period(self.last_perdiod)
         work_images = self._images_for_period(self.work_period)
@@ -85,6 +102,7 @@ class NDFI(object):
             polygons
         )
         params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
+        logging.info("sending %d" % len(params))
         return self.ee.post("/value", params)
 
 
@@ -128,11 +146,11 @@ class NDFI(object):
          }
 
     def _NDFI_change_value(self, reference_images, work_images, polygons):
-        """ calc the ndfi change value between two periods inside specified polys 
-        
+        """ calc the ndfi change value between two periods inside specified polys
+
             ``polygons`` are a list of closed polygons defined by lat, lon::
-            
-            [ 
+
+            [
                 [ [lat, lon], [lat, lon]...],
                 [ [lat, lon], [lat, lon]...]
             ]
@@ -145,8 +163,8 @@ class NDFI(object):
         for i, p in enumerate(polygons):
             POLY.append([[p]])
             fields.append("ndfiSum%d" % i)
-            
-        
+
+
         dummy = 0
         return {
             "image": json.dumps({
@@ -161,7 +179,7 @@ class NDFI(object):
 
             "fields": ','.join(fields)
         }
-        
+
     def _NDFI_map_command(self, reference_images, work_images):
         """ returns command to send to EE to get map token """
         ndfi_image_1 = self._NDFI_image(reference_images)

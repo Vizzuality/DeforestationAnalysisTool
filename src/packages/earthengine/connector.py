@@ -28,13 +28,14 @@ class EarthEngine( object ):
 
     def _http( self, method, url, params=None ):
         logging.info("ee -> %s" % url)
+        #logging.info(params)
         try:
             response = urlfetch.fetch(
                 method = method,
                 url = self.url + url,
                 headers = { 'Authorization': 'GoogleLogin auth=' + self.auth },
                 payload = params,
-                deadline = 10
+                deadline=600
             )
             if response.status_code == 200:
                 data = json.loads( response.content )
