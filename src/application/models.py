@@ -56,6 +56,7 @@ class Report(db.Model):
     def range(self):
         return tuple(map(timestamp, (self.start, self.end)))
 
+SPLITS = 10
 class Cell(db.Model):
 
     z = db.IntegerProperty(required=True)
@@ -64,6 +65,56 @@ class Cell(db.Model):
     report = db.ReferenceProperty(Report)
     ndfi_low = db.FloatProperty()
     ndfi_high = db.FloatProperty()
+
+    @staticmethod
+    def get_cell(report, x, y, z):
+        q = Cell.all()
+        q.filter("z =", z)
+        q.filter("x =", x)
+        q.filter("y =", y)
+        q.filter("report =", report)
+        cell = q.fetch(1)
+        if cell:
+            return cell[0]
+        return None
+
+    def children(self):
+        """ return child cells """
+        cells = []
+        for i in xrange(SPLITS):
+            for j in xrange(SPLITS):
+                zz = self.z+1
+                xx = (SPLITS**self.z)*self.x + i
+                yy = (SPLITS**self.z)*self.y + j
+
+                cell = Cell.get_cell(self.report, xx, yy, zz)
+                if not cell:
+                    cell = Cell.default_cell(self.report, xx, yy, zz)
+                cells.append(cell)
+        return cells
+
+    @staticmethod
+    def cell_id(id):
+        return tuple(map(int, id.split('_')))
+
+    @staticmethod
+    def get_or_create(r, x, y ,z):
+        c = Cell.get_cell(r, x, y, z)
+        if not c:
+            c = Cell.default_cell(r, x, y ,z)
+            c.put()
+        return c
+
+    @staticmethod
+    def get_or_default(r, x, y, z):
+        cell = Cell.get_cell(r, x, y, z)
+        if not cell:
+            cell = Cell.default_cell(r, x, y, z)
+        return cell
+
+    @staticmethod
+    def default_cell(r, x, y, z):
+        return Cell(z=z, x=x, y=y, ndfi_low=0.6, ndfi_high=0.8, report=r)
     
     def external_id(self):
         return "_".join(map(str,(self.z, self.x, self.y)))

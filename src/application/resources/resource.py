@@ -1,6 +1,6 @@
+# encoding: utf-8
 
 from flask import abort, request, Response
-
 import simplejson as json
 
 class Resource(object):
