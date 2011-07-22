@@ -63,6 +63,31 @@ class NDFI(object):
         params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
         return self.ee.post("/mapid", params)
 
+    def ndfi_change_value(self, polygons):
+        """ return how much NDFI has changed in the time period
+            ``polygons`` are a list of closed polygons defined by lat, lon::
+            
+            [ 
+                [ [lat, lon], [lat, lon]...],
+                [ [lat, lon], [lat, lon]...]
+            ]
+        """
+        # get image list from those days
+        reference_images = self._images_for_period(self.last_perdiod)
+        work_images = self._images_for_period(self.work_period)
+
+        logging.debug("reference images " + str(reference_images))
+        logging.debug("work images " + str(work_images))
+
+        cmd = self._NDFI_change_value(
+            reference_images,
+            work_images,
+            polygons
+        )
+        params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
+        return self.ee.post("/value", params)
+
+
     def _images_for_period(self, period):
         reference_images = self.ee.get("/list?id=%s&starttime=%s&endtime=%s" % (
             self.earth_engine_resource,
@@ -102,6 +127,43 @@ class NDFI(object):
             }]
          }
 
+    def _NDFI_change_value(self, reference_images, work_images, polygons):
+        """ calc the ndfi change value between two periods inside specified polys 
+        
+            ``polygons`` are a list of closed polygons defined by lat, lon::
+            
+            [ 
+                [ [lat, lon], [lat, lon]...],
+                [ [lat, lon], [lat, lon]...]
+            ]
+
+        """
+        ndfi_image_1 = self._NDFI_image(reference_images)
+        ndfi_image_2 = self._NDFI_image(work_images)
+        POLY = []
+        fields = []
+        for i, p in enumerate(polygons):
+            POLY.append([[p]])
+            fields.append("ndfiSum%d" % i)
+            
+        
+        dummy = 0
+        return {
+            "image": json.dumps({
+               "creator": 'sad_test/com.google.earthengine.examples.sad.ChangeDetectionData',
+
+               "args": [ndfi_image_1,
+                        ndfi_image_2,
+                        self.PRODES_IMAGE,
+                        #dummy, # not used by needed for the momment
+                        #dummy, # not used by needed for the momment
+                        POLY]
+
+            }),
+
+            "fields": ','.join(fields)
+        }
+        
     def _NDFI_map_command(self, reference_images, work_images):
         """ returns command to send to EE to get map token """
         ndfi_image_1 = self._NDFI_image(reference_images)
