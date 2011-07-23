@@ -17,6 +17,5 @@ src/packages/simplejson/
 src/packages/wtforms/
 .bundle
 .sass-cache
-Gemfile.lock
 static/bb/
 static/tiles/
