@@ -60,8 +60,33 @@ class NDFI(object):
             reference_images,
             work_images
         )
-        params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
-        return self.ee.post("/mapid", params)
+        return self._execute_cmd('/mapid', cmd)
+
+    def rgbid(self):
+        """ return params to access NDFI rgb image """
+        work_images = self._images_for_period(self.work_period)
+        # get map id from EE
+        params = self._RGB_image_command(work_images)
+        return self._execute_cmd('/mapid', params)
+
+    def smaid(self):
+        """ return params to access NDFI rgb image """
+        work_images = self._images_for_period(self.work_period)
+        # get map id from EE
+        params = self._SMA_image_command(work_images)
+        return self._execute_cmd('/mapid', params)
+
+    def ndfi0id(self):
+        reference_images = self._images_for_period(self.last_perdiod)
+        # get map id from EE
+        params = self._NDFI_period_image_command(reference_images)
+        return self._execute_cmd('/mapid', params)
+
+    def ndfi1id(self):
+        work_images = self._images_for_period(self.work_period)
+        # get map id from EE
+        params = self._NDFI_period_image_command(work_images)
+        return self._execute_cmd('/mapid', params)
 
     def _get_polygon_bbox(self, polygon):
         lats = [x[0] for x in polygon]
@@ -71,6 +96,10 @@ class NDFI(object):
         max_lng = max(lngs)
         min_lng = min(lngs)
         return ((min_lat, max_lat), (min_lng, max_lng))
+
+    def _execute_cmd(self, url, cmd):
+        params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
+        return self.ee.post(url, params)
         
     def ndfi_change_value(self, polygons):
         """ return how much NDFI has changed in the time period
@@ -87,7 +116,8 @@ class NDFI(object):
         for p in polygons:
             bbox = self._get_polygon_bbox(p)
             if bbox[0][1] - bbox[0][0] > 3.5 or bbox[1][1] - bbox[1][0] > 3.5:
-                raise Exception("polygon bbox size must be less than 3 degrees")
+                #raise Exception("polygon bbox size must be less than 3 degrees")
+                pass
 
         # get image list from those days
         reference_images = self._images_for_period(self.last_perdiod)
@@ -101,9 +131,7 @@ class NDFI(object):
             work_images,
             polygons
         )
-        params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
-        logging.info("sending %d" % len(params))
-        return self.ee.post("/value", params)
+        return self._execute_cmd('/value', cmd)
 
 
     def _images_for_period(self, period):
@@ -145,7 +173,7 @@ class NDFI(object):
             }]
          }
 
-    def _NDFI_change_value(self, reference_images, work_images, polygons):
+    def _NDFI_change_value(self, reference_images, work_images, polygons, cols=10, rows=10):
         """ calc the ndfi change value between two periods inside specified polys
 
             ``polygons`` are a list of closed polygons defined by lat, lon::
@@ -160,12 +188,7 @@ class NDFI(object):
         ndfi_image_2 = self._NDFI_image(work_images)
         POLY = []
         fields = []
-        for i, p in enumerate(polygons):
-            POLY.append([[p]])
-            fields.append("ndfiSum%d" % i)
 
-
-        dummy = 0
         return {
             "image": json.dumps({
                "creator": 'sad_test/com.google.earthengine.examples.sad.ChangeDetectionData',
@@ -173,11 +196,13 @@ class NDFI(object):
                "args": [ndfi_image_1,
                         ndfi_image_2,
                         self.PRODES_IMAGE,
-                        POLY]
+                        [polygons],
+                        rows,
+                        cols]
 
             }),
 
-            "fields": ','.join(fields)
+            "fields": 'ndfiSum'#','.join(fields)
         }
 
     def _NDFI_map_command(self, reference_images, work_images):
@@ -192,8 +217,10 @@ class NDFI(object):
                "args": [ndfi_image_1,
                         ndfi_image_2,
                         self.PRODES_IMAGE,
-                        #dummy, dummy,
-                        self.THIS_POLY]
+                        self.THIS_POLY,
+                        10, #rows
+                        10  #columns
+                ]
 
             }),
 
@@ -202,5 +229,51 @@ class NDFI(object):
             "bias": 0.0,
             "gamma": 1.6
         }
+
+    def _NDFI_period_image_command(self, reference_images):
+        """ get NDFI command to get map of NDFI for a period of time """
+        ndfi_image = self._NDFI_image(reference_images)
+        return {
+            "image": json.dumps(ndfi_image),
+            "bands": 'vis-red,vis-green,vis-blue',
+            "gain": 1,
+            "bias": 0.0,
+            "gamma": 1.6
+        }
+
+    def _RGB_image_command(self, image_list):
+        """ commands for RGB image """
+        return {
+            "image": json.dumps({
+               "creator": 'SAD/com.google.earthengine.examples.sad.KrigingStub',
+               "args": [{
+                "creator": 'SAD/com.google.earthengine.examples.sad.MakeMosaic',
+                "args": [self._image_composition(image_list), self.MODIS_BANDS]
+              }]
+            }),
+            "bands": 'sur_refl_b01,sur_refl_b04,sur_refl_b03',
+            "gain": 0.1,
+            "bias": 0.0,
+            "gamma": 1.6
+          };
+
+    def _SMA_image_command(self, image_list):
+        return {
+            "image": json.dumps({
+              "creator": 'SAD/com.google.earthengine.examples.sad.UnmixModis',
+              "args": [{
+                "creator": 'SAD/com.google.earthengine.examples.sad.KrigingStub',
+                "args": [{
+                  "creator": 'SAD/com.google.earthengine.examples.sad.MakeMosaic',
+                  "args": [self._image_composition(image_list), self.MODIS_BANDS]
+                }]
+              }]
+            }),
+            "bands": 'gv,soil,npv',
+            "gain": 256,
+            "bias": 0.0,
+            "gamma": 1.6
+        };
+
 
 

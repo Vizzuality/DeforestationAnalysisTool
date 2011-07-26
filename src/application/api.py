@@ -87,5 +87,15 @@ def ndfi_map():
     ndfi = NDFI(ee_resource,
         past_month_range(datetime.fromtimestamp(starttime/1000)), (starttime, endtime))
 
+    amazon_bounds = (
+            (-18.47960905583197, -74.0478515625),
+            (5.462895560209557, -43.43994140625)
+    )
+    ne = amazon_bounds[0]
+    sw = amazon_bounds[1]
+    #polygons = [[ sw, (sw[0], ne[1]), ne, (ne[0], sw[1]) ]]
     return jsonify(ndfi.mapid())
-    #return jsonify(ndfi.ndfi_change_value(POLY))
+    #return jsonify(ndfi.ndfi_change_value(polygons))
+    #return jsonify(ndfi.rgbid())
+    #return jsonify(ndfi.smaid())
+    #return jsonify(ndfi.ndfi0id())
