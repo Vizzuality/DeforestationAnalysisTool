@@ -1,6 +1,6 @@
 
 function is_color(col1, col2) {
-    return col1[0] == col2[0] && 
+    return col1[0] == col2[0] &&
             col1[1] == col2[1] &&
             col1[2] == col2[2];
 }
@@ -38,7 +38,7 @@ var NDFILayer = Backbone.View.extend({
             this.show();
         }
     },
-    
+
 
     click: function(e) {
         var self = this;
@@ -63,7 +63,7 @@ var NDFILayer = Backbone.View.extend({
             return;
         }
 
-        
+
         window.loading.loading();
         var poly = contour(image_data.data, c.width, c.height, point.x, point.y);
 
@@ -79,7 +79,7 @@ var NDFILayer = Backbone.View.extend({
         var type = Polygon.prototype.DEGRADATION;
         if(def) {
             type = Polygon.prototype.DEFORESTATION;
-        } 
+        }
         this.trigger('polygon', {paths: newpoly, type: type});
 
         delete image_data;
@@ -90,6 +90,9 @@ var NDFILayer = Backbone.View.extend({
             var self = this;
             var paths = [];
 
+            function simplify(points) {
+                return GDouglasPeucker(points, 30);
+            }
             // pixel -> latlon
             function unproject(p) {
                 var ll = self.mapview.projector.untransformCoordinates(
@@ -97,12 +100,15 @@ var NDFILayer = Backbone.View.extend({
                 );
                 return [ll.lat(), ll.lng()];
             }
+            console.log("points before ", points.length);
             // outer path
-            paths.push(_.map(points, unproject));
+            var simple = simplify(_.map(points, unproject));
+            paths.push(simple);
+            console.log("points after", simple.length);
 
             // inner paths (reversed)
             _.each(inners, function(p) {
-                paths.push(_.map(p.reverse(), unproject));
+                paths.push(simplify(_.map(p.reverse(), unproject)));
             });
 
             return paths;
@@ -181,7 +187,7 @@ var NDFILayer = Backbone.View.extend({
             for(var j=0; j < h; ++j) {
                 pixel_pos = (j*w + i) * components;
                 var p = image_data[pixel_pos];
-                // there is a better way to do this but is more fast 
+                // there is a better way to do this but this is fastest
                 if(p < low) {
                     image_data[pixel_pos + 0] = FOREST_COLOR[0];
                     image_data[pixel_pos + 1] = FOREST_COLOR[1];
