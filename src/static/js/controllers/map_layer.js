@@ -42,6 +42,8 @@ var NDFILayer = Backbone.View.extend({
 
     click: function(e) {
         var self = this;
+        window.loading.loading();
+
         var c = this.layer.composed(this.mapview.el[0]);
         var point = this.mapview.projector.transformCoordinates(e.latLng);
 
@@ -64,17 +66,16 @@ var NDFILayer = Backbone.View.extend({
         }
 
 
-        window.loading.loading();
         var poly = contour(image_data.data, c.width, c.height, point.x, point.y);
 
         var inners = inner_polygons(image_data.data,
                  c.width, c.height, poly, color);
-        window.loading.finished();
 
         // discard small polys
         inners = _.select(inners, function(p){ return p.length > self.inner_poly_sensibility; });
 
         var newpoly = this.create_poly(poly, inners);
+        window.loading.finished();
 
         var type = Polygon.prototype.DEGRADATION;
         if(def) {
