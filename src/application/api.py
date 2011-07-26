@@ -93,9 +93,12 @@ def ndfi_map():
     )
     ne = amazon_bounds[0]
     sw = amazon_bounds[1]
-    #polygons = [[ sw, (sw[0], ne[1]), ne, (ne[0], sw[1]) ]]
+    polygons = [[ sw, (sw[0], ne[1]), ne, (ne[0], sw[1]) ]]
     return jsonify(ndfi.mapid())
     #return jsonify(ndfi.ndfi_change_value(polygons))
     #return jsonify(ndfi.rgbid())
     #return jsonify(ndfi.smaid())
     #return jsonify(ndfi.ndfi0id())
+    #params = { "image": json.dumps({"creator":"sad_test/com.google.earthengine.examples.sad.ChangeDetectionData","args":[{"creator":"sad_test/com.google.earthengine.examples.sad.NDFIImage","args":[{"creator":"sad_test/com.google.earthengine.examples.sad.UnmixModis","args":[{"creator":"sad_test/com.google.earthengine.examples.sad.KrigingStub","args":[{"creator":"sad_test/com.google.earthengine.examples.sad.ModisCombiner","args": ["MOD09GA_005_2010_04_30","MOD09GQ_005_2010_04_30"]}]}]}]},{"creator": "sad_test/com.google.earthengine.examples.sad.NDFIImage","args":[{"creator": "sad_test/com.google.earthengine.examples.sad.UnmixModis","args": [{"creator":"sad_test/com.google.earthengine.examples.sad.KrigingStub", "args":[{"creator":"sad_test/com.google.earthengine.examples.sad.ModisCombiner","args":["MOD09GA_005_2010_05_14", "MOD09GQ_005_2010_05_14"]}]}]}]},{"creator":"sad_test/com.google.earthengine.examples.sad.ProdesImage","args":["PRODES_2009"]},[[[[-61.5,- 11],[-61.5,-10.95],[-61.3,-10.95],[-61.3,-11]]]],10,10]}), 'fields':'ndfiSum'}
+    #return jsonify(ndfi._execute_cmd('/value', params))
+
