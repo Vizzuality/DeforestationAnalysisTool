@@ -194,7 +194,7 @@ class Area(db.Model):
         ret = self.put()
         # call defer AFTER saving instance
         if not exists:
-            deferred.defer(self.save_to_fusion_tables)
+            deferred.defer(self.create_fusion_tables)
         else:
             deferred.defer(self.update_fusion_tables)
         return ret
@@ -214,18 +214,20 @@ class Area(db.Model):
         return cl
 
     def delete_fusion_tables(self):
+        """ delete area from fusion tables. Do not use this method directly, call delete method"""
         cl = self._get_ft_client()
         table_id = cl.table_id('areas')
         cl.sql("delete from %s where rowid = '%s'" % (table_id, self.fusion_tables_id))
 
     def update_fusion_tables(self):
+        """ update polygon in fusion tables. Do not call this method, use save method when change instance data """
         logging.info("updating fusion tables %s" % self.key())
         cl = self._get_ft_client()
         table_id = cl.table_id('areas')
         geo_kml = path_to_kml(json.loads(self.geo))
         cl.sql("update  %s set geo = '%s', type = '%s' where rowid = '%s'" % (table_id, geo_kml, self.type, self.fusion_tables_id))
 
-    def save_to_fusion_tables(self):
+    def create_fusion_tables(self):
         logging.info("saving to fusion tables %s" % self.key())
         cl = self._get_ft_client()
         table_id = cl.table_id('areas')

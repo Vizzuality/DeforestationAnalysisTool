@@ -196,7 +196,7 @@ class FTTest(unittest.TestCase):
 
     def test_save_on_ft(self):
         self.area.put()
-        self.area.save_to_fusion_tables()
+        self.area.create_fusion_tables()
         self.assertNotEquals(None, self.area.fusion_tables_id)
         self.area.type = 2
         self.area.save()
