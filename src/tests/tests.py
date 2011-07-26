@@ -153,7 +153,7 @@ class CellApi(unittest.TestCase, GoogleAuthMixin):
         cell = [x for x in js if x['z'] == 2 and x['x'] == 0 and x['y'] == 0][0]
         self.assertAlmostEquals(0, cell['ndfi_low'])
         self.assertAlmostEquals(1.0, cell['ndfi_high'])
-    
+
     def test_update_cell_2_0_1(self):
         rv = self.app.put('/api/v0/report/' + str(self.r.key())+'/cell/2_1_3',
             data='{"ndfi_low": 0.0, "ndfi_high": 1.0}'
@@ -182,7 +182,7 @@ class HomeTestCase(unittest.TestCase, GoogleAuthMixin):
         assert 'imazon' in rv.data
 
 class FTTest(unittest.TestCase):
-    
+
     def setUp(self):
         app.config['TESTING'] = True
         self.app = app.test_client()
@@ -197,9 +197,15 @@ class FTTest(unittest.TestCase):
     def test_save_on_ft(self):
         self.area.put()
         self.area.save_to_fusion_tables()
+        self.assertNotEquals(None, self.area.fusion_tables_id)
+        self.area.type = 2
+        self.area.save()
+        self.area.update_fusion_tables()
+        self.area.delete()
+        self.area.delete_fusion_tables()
 
 
-        
+
 class CommandTest(unittest.TestCase, GoogleAuthMixin):
 
     def setUp(self):
@@ -207,7 +213,7 @@ class CommandTest(unittest.TestCase, GoogleAuthMixin):
         self.app = app.test_client()
         for x in Report.all():
             x.delete()
-    
+
     def test_create_report(self):
         rv = self.app.post('/_ah/cmd/create_report?month=11&year=2010')
         self.assertEquals(200, rv.status_code)

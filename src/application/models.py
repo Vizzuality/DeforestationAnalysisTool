@@ -195,22 +195,42 @@ class Area(db.Model):
         # call defer AFTER saving instance
         if not exists:
             deferred.defer(self.save_to_fusion_tables)
+        else:
+            deferred.defer(self.update_fusion_tables)
         return ret
 
-    #TODO: delete and update tableon FT
-
-    def save_to_fusion_tables(self):
-        logging.info("saving to fusion tables %s" % self.key())
+    def delete(self):
+        super(Area, self).delete()
+        deferred.defer(self.delete_fusion_tables)
+    
+    def _get_ft_client(self):
         cl = FT(settings.FT_CONSUMER_KEY,
                 settings.FT_CONSUMER_SECRET,
                 settings.FT_TOKEN,
                 settings.FT_SECRET)
         table_id = cl.table_id('areas')
-        if table_id:
-            geo_kml = path_to_kml(json.loads(self.geo))
-            rowid = cl.sql("insert into %s ('geo', 'added_on', 'type') VALUES ('%s', '%s', %d)" % (table_id, geo_kml, self.added_on, self.type))
-            self.fusion_tables_id = int(rowid.split('\n')[1])
-            rowid = cl.sql("update %s set rowid_copy = '%s' where rowid = '%s'" % (table_id, self.fusion_tables_id, self.fusion_tables_id))
-            self.put()
-        else:
+        if not table_id:
             raise Exception("Create areas tables first")
+        return cl
+
+    def delete_fusion_tables(self):
+        cl = self._get_ft_client()
+        table_id = cl.table_id('areas')
+        cl.sql("delete from %s where rowid = '%s'" % (table_id, self.fusion_tables_id))
+
+    def update_fusion_tables(self):
+        logging.info("updating fusion tables %s" % self.key())
+        cl = self._get_ft_client()
+        table_id = cl.table_id('areas')
+        geo_kml = path_to_kml(json.loads(self.geo))
+        cl.sql("update  %s set geo = '%s', type = '%s' where rowid = '%s'" % (table_id, geo_kml, self.type, self.fusion_tables_id))
+
+    def save_to_fusion_tables(self):
+        logging.info("saving to fusion tables %s" % self.key())
+        cl = self._get_ft_client()
+        table_id = cl.table_id('areas')
+        geo_kml = path_to_kml(json.loads(self.geo))
+        rowid = cl.sql("insert into %s ('geo', 'added_on', 'type') VALUES ('%s', '%s', %d)" % (table_id, geo_kml, self.added_on, self.type))
+        self.fusion_tables_id = int(rowid.split('\n')[1])
+        rowid = cl.sql("update %s set rowid_copy = '%s' where rowid = '%s'" % (table_id, self.fusion_tables_id, self.fusion_tables_id))
+        self.put()
