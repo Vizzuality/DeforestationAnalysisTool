@@ -181,6 +181,25 @@ class HomeTestCase(unittest.TestCase, GoogleAuthMixin):
         rv = self.app.get('/')
         assert 'imazon' in rv.data
 
+class FTTest(unittest.TestCase):
+    
+    def setUp(self):
+        app.config['TESTING'] = True
+        self.app = app.test_client()
+        r = Report(start=date.today(), end=date.today()+timedelta(days=1), finished=False)
+        r.put()
+        self.r = r
+        self.cell = Cell(x=0, y=0, z=2, report=self.r, ndfi_high=1.0, ndfi_low=0.0)
+        self.cell.put()
+        self.area = Area(geo='[[[-61.5,-12],[-61.5,-11],[-60.5,-11],[-60.5,-12]]]', added_by=users.get_current_user(), type=1, cell=self.cell)
+        #self.area.put()
+
+    def test_save_on_ft(self):
+        self.area.put()
+        self.area.save_to_fusion_tables()
+
+
+        
 class CommandTest(unittest.TestCase, GoogleAuthMixin):
 
     def setUp(self):

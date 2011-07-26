@@ -193,10 +193,11 @@ class Area(db.Model):
             exists = False
         ret = self.put()
         # call defer AFTER saving instance
-        # TODO: convert to KML
         if not exists:
             deferred.defer(self.save_to_fusion_tables)
         return ret
+
+    #TODO: delete and update tableon FT
 
     def save_to_fusion_tables(self):
         logging.info("saving to fusion tables %s" % self.key())
@@ -209,6 +210,7 @@ class Area(db.Model):
             geo_kml = path_to_kml(json.loads(self.geo))
             rowid = cl.sql("insert into %s ('geo', 'added_on', 'type') VALUES ('%s', '%s', %d)" % (table_id, geo_kml, self.added_on, self.type))
             self.fusion_tables_id = int(rowid.split('\n')[1])
+            rowid = cl.sql("update %s set rowid_copy = '%s' where rowid = '%s'" % (table_id, self.fusion_tables_id, self.fusion_tables_id))
             self.put()
         else:
             raise Exception("Create areas tables first")

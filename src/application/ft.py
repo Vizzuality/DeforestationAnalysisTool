@@ -1,8 +1,8 @@
 
 # encoding: utf-8
 
-""" 
-small wrapper over fusion tables to simplify usage 
+"""
+small wrapper over fusion tables to simplify usage
 """
 
 import logging
@@ -13,7 +13,7 @@ from fusiontables import ftclient
 
 class FT(object):
     """ wrapper to access to fusion tables """
-    
+
     table_cache = {}
 
     def __init__(self, consumer_key, consumer_secret, token, secret):
@@ -26,7 +26,7 @@ class FT(object):
         if table_name in FT.table_cache:
             return FT.table_cache[table_name]
         return None
-        
+
     def get_tables(self):
         """ return a list with (table_id, table_name) """
         r = self.client.query("show tables")
@@ -47,13 +47,14 @@ class FT(object):
             return int(self.sql(sql).split("\n")[1])
         except ValueError:
             return None
-        
+
     def sql(self, sql):
-        logging.debug("FT:SQL: %s" % sql)
+        logging.info("FT:SQL: %s" % sql)
+        print("FT:SQL: %s" % sql)
         r = self.client.query(sql)
-        logging.debug("-> %s" % r)
+        print("-> %s" % r)
         return r
 
 
-        
+
 

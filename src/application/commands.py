@@ -23,7 +23,9 @@ def create_table():
     table_desc = {'areas': {
        'added_on': 'DATETIME',
        'type': 'NUMBER',
-       'geo': 'LOCATION'
+       'geo': 'LOCATION',
+       'rowid_copy': 'NUMBER',
+       'asset_id': 'NUMBER',
     }}
 
     return str(cl.create_table(table_desc))
