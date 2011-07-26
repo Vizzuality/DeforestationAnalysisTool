@@ -11,10 +11,10 @@ var MapView = Backbone.View.extend({
             draggableCursor:'default'
     },
 
-    el: $("#map"),
+    //el: $("#map"),
 
     initialize: function() {
-        _.bindAll(this, 'center_changed', 'ready', 'click');
+        _.bindAll(this, 'center_changed', 'ready', 'click', 'set_center');
        this.map = new google.maps.Map(this.el[0], this.mapOptions);
        google.maps.event.addListener(this.map, 'center_changed', this.center_changed);
        google.maps.event.addListener(this.map, 'click', this.click);
@@ -25,6 +25,10 @@ var MapView = Backbone.View.extend({
 
     center_changed: function() {
             this.trigger('center_changed', this.map.getCenter());
+    },
+    
+    set_center: function(c) {
+        this.map.setCenter(c);
     },
 
     click: function(e) {

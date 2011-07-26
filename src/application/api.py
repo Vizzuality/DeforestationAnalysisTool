@@ -94,8 +94,8 @@ def ndfi_map():
     ne = amazon_bounds[0]
     sw = amazon_bounds[1]
     polygons = [[ sw, (sw[0], ne[1]), ne, (ne[0], sw[1]) ]]
-    return jsonify(ndfi.mapid())
-    #return jsonify(ndfi.ndfi_change_value(polygons))
+    #return jsonify(ndfi.mapid())
+    return jsonify(ndfi.ndfi_change_value(polygons))
     #return jsonify(ndfi.rgbid())
     #return jsonify(ndfi.smaid())
     #return jsonify(ndfi.ndfi0id())

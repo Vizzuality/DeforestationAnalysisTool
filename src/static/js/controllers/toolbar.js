@@ -21,7 +21,7 @@ var PressedButton = Backbone.View.extend({
         this.pressed = false;
     },
 
-    press: function() {
+    press: function(e) {
         if(this.pressed) {
             this.el.removeClass('selected');
         } else {
@@ -29,6 +29,7 @@ var PressedButton = Backbone.View.extend({
         }
         this.pressed = !this.pressed;
         this.trigger('change', this, this.pressed);
+        e.preventDefault();
     }
 
 });
@@ -86,11 +87,13 @@ var PolygonToolbar = Toolbar.extend({
 
     el: $("#work_toolbar"),
 
+
     initialize: function() {
         _.bindAll(this, 'change_state');
         this.buttons = new ButtonGroup({el: this.$('#selection')});
         this.polytype = new ButtonGroup({el: this.$('#polytype')});
         this.ndfi_range = new RangeSlider({el: this.$("#ndfi_slider")});
+        this.compare = new PressedButton({el: this.$("#compare")});
         this.buttons.bind('state', this.change_state);
     },
 

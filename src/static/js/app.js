@@ -78,18 +78,20 @@ $(function() {
     // application
     var IMazon = Backbone.View.extend({
 
+        el: $('body'),
+
         amazon_bounds: new google.maps.LatLngBounds(
             new google.maps.LatLng(-18.47960905583197, -74.0478515625),
             new google.maps.LatLng(5.462895560209557, -43.43994140625)
         ),
 
         initialize:function() {
-            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report');
+            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view');
 
             window.loading.loading();
             this.reports = new ReportCollection();
 
-            this.map = new MapView();
+            this.map = new MapView({el: this.$("#map")});
             this.cell_polygons = new CellPolygons({mapview: this.map});
 
             this.reports.bind('reset', this.change_report);
@@ -101,10 +103,33 @@ $(function() {
             this.polygon_tools = new PolygonToolbar();
             this.overview = new Overview();
 
+
             this.ndfi_layer = new NDFILayer({mapview: this.map, report: this.active_report});
 
             this.polygon_tools.ndfi_range.bind('change', this.ndfi_layer.apply_filter);
+            this.polygon_tools.compare.bind('change', this.compare_view);
 
+        },
+
+        compare_view: function(button, show) {
+            var self = this;
+            if(show) {
+                this.map.el.css({width: '66.66%'});
+                this.$("#compare_maps").show();
+                this.compare_maps = [];
+                this.compare_maps.push(new MapView({el: this.$("#map1")}));
+                this.compare_maps.push(new MapView({el: this.$("#map2")}));
+                this.compare_maps.push(new MapView({el: this.$("#map3")}));
+                _.each(this.compare_maps, function(m) {
+                    m.map.setZoom(self.map.map.getZoom());
+                    self.map.bind('center_changed', m.set_center);
+                    
+                });
+            } else {
+                //TODO: remove maps
+                this.map.el.css({width: '100%'});
+                this.$("#compare_maps").hide();
+            }
         },
 
         change_report: function() {
@@ -145,7 +170,7 @@ $(function() {
                 this.editing_router.reset();
                 delete this.editing_router;
             }
-        }, 
+        },
 
         // this function is called when map is loaded
         // and all stuff can start to work.
