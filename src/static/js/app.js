@@ -88,9 +88,11 @@ $(function() {
 
             window.loading.loading();
             this.reports = new ReportCollection();
-            this.reports.bind('reset', this.change_report);
 
             this.map = new MapView();
+            this.cell_polygons = new CellPolygons({mapview: this.map});
+
+            this.reports.bind('reset', this.change_report);
             this.map.bind('ready', this.start);
         },
 
@@ -108,6 +110,8 @@ $(function() {
         change_report: function() {
             //TODO: use comboxbox to select the active report
             this.active_report = this.reports.models[0];
+            this.cell_polygons.polygons.report = this.active_report;
+            this.cell_polygons.polygons.fetch();
         },
 
 
@@ -116,15 +120,13 @@ $(function() {
             this.selection_toolbar.hide();
             this.polygon_tools.show();
             this.ndfi_layer.show();
-            this.cell_polygons = new CellPolygons({
-                x: x, y: y, z: z,
-                report: this.active_report,
-                mapview: this.map
-
-            });
 
             this.overview.on_cell(x, y, z);
             this.overview.bind('done', this.cell_polygons.commit);
+            this.cell_polygons.polygons.x = x;
+            this.cell_polygons.polygons.y = y;
+            this.cell_polygons.polygons.z = z;
+            this.cell_polygons.polygons.fetch();
 
             this.editing_router = new EditingToolsRuoter({
                 app: this
@@ -137,11 +139,7 @@ $(function() {
             this.polygon_tools.hide();
             this.ndfi_layer.hide();
             this.overview.select_mode();
-            if (this.cell_polygons) {
-                this.overview.unbind(this.cell_polygons.commit);
-                this.cell_polygons.remove();
-                delete this.cell_polygons;
-            }
+            this.cell_polygons.polygons.reset();
             if(this.editing_router) {
                 //unbind all
                 this.editing_router.reset();

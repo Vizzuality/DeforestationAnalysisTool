@@ -192,6 +192,7 @@ class NDFI(object):
                "args": [ndfi_image_1,
                         ndfi_image_2,
                         self.PRODES_IMAGE,
+                        #dummy, dummy,
                         self.THIS_POLY]
 
             }),

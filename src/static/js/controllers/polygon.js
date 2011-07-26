@@ -44,15 +44,15 @@ var CellPolygons = Backbone.View.extend({
         this.report = this.options.report;
         this.poly_views = [];
         this.polygons = new PolygonCollection({
-            report: this.report,
-            x: this.options.x,
-            y: this.options.y,
-            z: this.options.z
+            report: this.report || '',
+            x: this.options.x || 0,
+            y: this.options.y || 0,
+            z: this.options.z || 0
         });
         this.polygons.bind('add', this.add);
         this.polygons.bind('reset', this.addAll);
         this.polygons.bind('remove', this.remove_poly);
-        this.polygons.fetch();
+    //    this.polygons.fetch();
         this.editing_state = false;
 
     },
