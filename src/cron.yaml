@@ -2,6 +2,6 @@
 
 cron:
 - description: daily ndfi update
-  url: /_ah/cmd/update_cells_ndfi
+  url: /_ah/cmd/cron/update_cells_ndfi
   schedule: every day 00:00
 

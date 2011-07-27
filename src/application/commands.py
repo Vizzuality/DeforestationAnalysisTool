@@ -65,8 +65,7 @@ def update_cells_ndfi():
         deferred.defer(ndfi_value_for_cells_dummy, str(c.key()))
     return 'working DUMMY'
 
-"""
-@app.route('/_ah/cmd/update_cells_ndfi', methods=('GET',))
+@app.route('/_ah/cmd/cron/update_cells_ndfi', methods=('GET',))
 def update_cells_ndfi():
     r = Report.current()
     cell = Cell.get_or_default(r, 0, 0, 0)
@@ -74,7 +73,6 @@ def update_cells_ndfi():
         c.put()
         deferred.defer(ndfi_value_for_cells, str(c.key()))
     return 'working'
-"""
 
 amazon_bounds = (
             (-18.47960905583197, -74.0478515625),
