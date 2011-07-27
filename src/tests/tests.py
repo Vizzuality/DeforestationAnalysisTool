@@ -12,7 +12,7 @@ from google.appengine.ext import testbed
 from google.appengine.ext import db
 from google.appengine.api import users
 
-from application import app
+from application.app import app
 from application.models import Area, Note, Cell, Report
 
 from base import GoogleAuthMixin

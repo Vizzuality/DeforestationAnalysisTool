@@ -2,17 +2,17 @@
 
 import logging
 import random
-from application import app
+from app import app
 from flask import render_template, flash, url_for, redirect, abort, request, make_response
 from application.time_utils import timestamp, past_month_range
 from google.appengine.ext import deferred
+from google.appengine.ext.db import Key
 
 from application import settings
 from ft import FT
 
 from time_utils import month_range
 from application.models import Report, Cell
-from google.appengine.ext.db import Key
 from ee import NDFI
 
 @app.route('/_ah/cmd/create_table')

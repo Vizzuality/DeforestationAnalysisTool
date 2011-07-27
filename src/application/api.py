@@ -8,7 +8,7 @@ from time_utils import timestamp, first_of_current_month, past_month_range
 from dateutil.parser import parse
 
 from flask import jsonify, request
-from application import app
+from app import app
 import settings
 
 from models import Area, Note

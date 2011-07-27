@@ -12,7 +12,7 @@ from flask import render_template, flash, url_for, redirect, abort, request, mak
 from decorators import login_required, admin_required
 from forms import ExampleForm
 
-from application import app
+from app import app
 
 from models import Report
 

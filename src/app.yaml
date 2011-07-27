@@ -19,6 +19,7 @@ skip_files:
 - ^(.*/)?.*\.swp$
 - static/bb
 - content/css
+- ^(.*/)?.*\.sqlite$
 
 handlers:
 - url: /favicon.ico
