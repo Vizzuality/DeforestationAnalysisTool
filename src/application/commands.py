@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 import logging
+import random
 from application import app
 from flask import render_template, flash, url_for, redirect, abort, request, make_response
 from application.time_utils import timestamp, past_month_range
@@ -50,14 +51,54 @@ def show_tables():
     start, end = month_range(int(month), int(year))
     r = Report(start=start, end=end, finished=False)
     r.put()
-    update_ndfi(r)
     return 'created'
+
+
+@app.route('/_ah/cmd/update_cells_dummy', methods=('GET',))
+def update_cells_ndfi():
+    r = Report.current()
+    if not r:
+        return 'create a report first'
+    cell = Cell.get_or_default(r, 0, 0, 0)
+    for c in iter(cell.children()):
+        c.put()
+        deferred.defer(ndfi_value_for_cells_dummy, str(c.key()))
+    return 'working DUMMY'
+
+"""
+@app.route('/_ah/cmd/update_cells_ndfi', methods=('GET',))
+def update_cells_ndfi():
+    r = Report.current()
+    cell = Cell.get_or_default(r, 0, 0, 0)
+    for c in iter(cell.children()[:10]):
+        c.put()
+        deferred.defer(ndfi_value_for_cells, str(c.key()))
+    return 'working'
+"""
 
 amazon_bounds = (
             (-18.47960905583197, -74.0478515625),
             (5.462895560209557, -43.43994140625)
 )
-#def ndfi_value_for_cells(cell_polygons):
+
+def ndfi_value_for_cells_dummy(cell_key):
+
+    cell = Cell.get(Key(cell_key))
+    bounds = cell.bounds(amazon_bounds)
+    logging.info(bounds)
+    ne = bounds[0]
+    sw = bounds[1]
+    polygons = [[ sw, (sw[0], ne[1]), ne, (ne[0], sw[1]) ]]
+    for row in xrange(10):
+        for col in xrange(10):
+            c = cell.child(row, col)
+            c.ndfi_change_value = random.random()
+            c.put()
+
+    cell.calculate_ndfi_change_from_childs()
+
+
+
 def ndfi_value_for_cells(cell_key):
 
     cell = Cell.get(Key(cell_key))
@@ -68,42 +109,27 @@ def ndfi_value_for_cells(cell_key):
 
     bounds = cell.bounds(amazon_bounds)
     logging.info(bounds)
-
     ne = bounds[0]
     sw = bounds[1]
     polygons = [[ sw, (sw[0], ne[1]), ne, (ne[0], sw[1]) ]]
     data = ndfi.ndfi_change_value(polygons)
+    ndfi = data['data']['properties']['ndfiSum']['values']
+    logging.info(ndfi)
+    for row in xrange(10):
+        for col in xrange(10):
+            idx = row*10 + col
+            count = float(ndfi['count'][idx])
+            s = float(ndfi['sum'][idx])
+            if s > 0.0:
+                ratio = count/s
+            else:
+                ratio = 0.0
+            # asign to cell
+            c = cell.child(row, col)
+            c.ndfi_change_value = ratio
+            c.put()
 
-    try:
-        cell.ndfi_change_value = float(data['data']['properties']['ndfiSum0'])
-        logging.info(cell.ndfi_change_value)
-        cell.put()
-    except ValueError, KeyError:
-        logging.error("can't get ndfi change value, bad response", e)
-        #TODO retry
-
-    """
-    for c in iter(cell.children()):
-        c.put();
-        if cell.z < 2:
-            deferred.defer(ndfi_value_for_cells, str(c.key()), _queue="ndfi_change_value")
-    """
-
-def update_ndfi(r):
-    """ update ndfi with values that come from earth engine
-        run once per day
-    """
-    # get polygons for cell
-
-    cell = Cell.get_or_default(r, 0, 0, 0)
-
-    for c in iter(cell.children()[:25]):
-        c.put();
-        deferred.defer(ndfi_value_for_cells, str(c.key()), _queue="ndfichangevalue")
-
-
-
-
+    cell.calculate_ndfi_change_from_childs()
 
 
 

@@ -42,6 +42,14 @@ class Report(db.Model):
     end = db.DateProperty();
     finished = db.BooleanProperty();
 
+    @staticmethod
+    def current():
+        q = Report.all().order("-start")
+        r = q.fetch(1)
+        if r:
+            return r[0]
+        return None
+
     def as_dict(self):
         return {
                 'id': str(self.key()),
@@ -80,6 +88,12 @@ class Cell(db.Model):
             return cell[0]
         return None
 
+    def child(self, i, j):
+        zz = self.z+1
+        xx = (SPLITS**self.z)*self.x + i
+        yy = (SPLITS**self.z)*self.y + j
+        return Cell.get_or_create(self.report, xx, yy, zz)
+        
     def children(self):
         """ return child cells """
         cells = []
@@ -94,6 +108,13 @@ class Cell(db.Model):
                     cell = Cell.default_cell(self.report, xx, yy, zz)
                 cells.append(cell)
         return cells
+
+    def calculate_ndfi_change_from_childs(self):
+        ndfi = 0.0
+        ch = self.children()
+        for c in ch: 
+            ndfi += c.ndfi_change_value
+        self.ndfi_change_value = ndfi/len(ch)
 
     @staticmethod
     def cell_id(id):
@@ -128,9 +149,10 @@ class Cell(db.Model):
                 'z': self.z,
                 'x': self.x,
                 'y': self.y,
-                'report_id': str(self.report),
+                'report_id': str(self.report.key()),
                 'ndfi_low': self.ndfi_low,
-                'ndfi_high': self.ndfi_high
+                'ndfi_high': self.ndfi_high,
+                'ndfi_change_value': self.ndfi_change_value
         }
 
     def as_json(self):

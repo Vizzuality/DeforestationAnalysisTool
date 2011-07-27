@@ -140,6 +140,7 @@ class NDFI(object):
             int(period['start']),
             int(period['end'])
         ))
+        logging.info(reference_images)
         return [x['id'] for x in reference_images['data']]
 
     def _image_composition(self, image_list):

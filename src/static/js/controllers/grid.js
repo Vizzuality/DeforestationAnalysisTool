@@ -1,4 +1,8 @@
 
+function linear(t, a, b) {
+    return (a + t*(b-a)) >> 0;
+}
+
 var CellView = Backbone.View.extend({
 
     tagName: 'div',
@@ -21,24 +25,27 @@ var CellView = Backbone.View.extend({
             this.model.get('z'));
         cell.style.top = p.y - topy + "px";
         cell.style.left = p.x - topx + "px";
-        cell.style.width = p.width - 2*border + "px";
-        cell.style.height = p.height - 2*border+ "px";
-        cell.style.margin = border + "px";
+        cell.style.width = p.width - border + "px";
+        cell.style.height = p.height - border+ "px";
+        cell.style.margin = "0 " + border + "px " + border + "px";
         cell.style.padding= 0;
         cell.style.display = "block";
         cell.style.position = "absolute";
-        cell.style.background = "rgba(0, 0, 0, 0.1)";
-        //cell.style.border= "1px solid white";
-        ////cell.innerHTML = "<div class='cell_wrap'><div class='progress'><div class='data'>15/100</div></div></div>";
+        var t = this.model.get('ndfi_change_value');
+        t = t || 1;
+        var r = linear(t, 225, 224);
+        var g = linear(t, 125, 222);
+        var b = linear(t, 40, 122);
+        cell.style.background = "rgba(" + r + "," + g + "," + b +", 0.9)";
         return this;
     },
 
     onmouseover: function() {
-        $(this.el).css('background', "rgba(0, 0, 0, 0.5)");
+        //$(this.el).css('background', "rgba(0, 0, 0, 0.5)");
     },
 
     onmouseout: function() {
-        $(this.el).css('background', "rgba(0, 0, 0, 0.1)");
+        //$(this.el).css('background', "rgba(0, 0, 0, 0.1)");
     },
 
     onclick: function(e) {
