@@ -365,6 +365,7 @@ article .example .field {
   left: 0;
   right: 0;
   width: 100%;
+  background: url("../img/title_bkg.png");
   -webkit-box-shadow: 0px 0px 5px #000;
   text-align: center;
 }
@@ -381,29 +382,40 @@ article .example .field {
   margin: 0 auto;
 }
 #header #title {
-  background: url("../img/title_bkg.png");
   border-bottom: 1px solid #000;
   color: white;
-  padding: 0 0 25px 0px;
+  height: 84px;
 }
 #header #title h1 {
-  font-family: "Helvetica Neue", Sans-Serif;
-  letter-spacing: 1px;
-  font-size: 16px;
+  font: bold 17px "Droid Sans";
   margin: 0;
   padding: 0;
 }
 #header #title h2 {
-  font-size: 16px;
+  font: normal 13px "Droid Sans";
+  color: white;
+  margin: 3px 0 0 0;
+  text-shadow: 0 1px black;
 }
-#header #title h2 .small {
-  font-size: 11px;
+#header #title h2 small {
+  color: #59646D;
+  font: normal 11px "Droid Sans";
+  text-shadow: 0 1px #000000;
+}
+#header #title h2 a {
+  display: inline-block;
+  width: 50px;
+  height: 20px;
+  margin: 0 0 0 1px;
+  background: url("../img/google.png") no-repeat 0 0;
+  text-indent: -9999px;
 }
 #header #title #intro {
   padding-top: 27px;
 }
 #header #tools {
-  background: url("../img/tools_bkg.png");
+  border-top: 1px solid #333333;
+  background: rgba(0, 0, 0, 0.5);
   height: 59px;
   color: white;
 }
@@ -416,38 +428,167 @@ article .example .field {
   font-weigth: bold;
 }
 #header #tools #work_toolbar {
-  padding-top: 20px;
+  padding-top: 13px;
 }
 #header #tools #work_toolbar ul, #header #tools #work_toolbar li {
   display: inline;
 }
-#header #tools #work_toolbar #selection a {
-  background: #28292D;
-  padding: 3px 8px;
-  text-decoration: none;
+#header #tools #work_toolbar #selection {
+  display: inline-block;
+  width: 120px;
+  height: 29px;
+  padding: 0;
+  -webkit-border-radius: 3px;
+  box-shadow: 0 1px #2A2C2E;
+  border: 1px solid #000000;
 }
-#header #tools #work_toolbar #selection a:hover {
-  background: #1B1B1C;
+#header #tools #work_toolbar #selection li {
+  float: left;
+  width: 30px;
 }
-#header #tools #work_toolbar #selection .selected {
-  background: #0B0B0C;
+#header #tools #work_toolbar #selection li a {
+  display: block;
+}
+#header #tools #work_toolbar #selection li a#auto {
+  width: 28px;
+  height: 29px;
+  text-indent: -9999px;
+  border-right: 1px solid #3f3d43;
+  border-left: 1px solid #1c1d20;
+  width: 29px;
+  -webkit-border-top-left-radius: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  border-left: none;
+  background: url(../img/icons/tool_icons.png) no-repeat 3px 4px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
+}
+#header #tools #work_toolbar #selection li a#auto:hover {
+  background: url(../img/icons/tool_icons.png) no-repeat 3px 4px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #selection li a#auto.selected {
+  background: url(../img/icons/tool_icons.png) no-repeat 3px 4px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #selection li a#draw {
+  width: 28px;
+  height: 29px;
+  text-indent: -9999px;
+  border-right: 1px solid #3f3d43;
+  border-left: 1px solid #1c1d20;
+  background: url(../img/icons/tool_icons.png) no-repeat -27px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
+}
+#header #tools #work_toolbar #selection li a#draw:hover {
+  background: url(../img/icons/tool_icons.png) no-repeat -27px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #selection li a#draw.selected {
+  background: url(../img/icons/tool_icons.png) no-repeat -27px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #selection li a#remove {
+  width: 28px;
+  height: 29px;
+  text-indent: -9999px;
+  border-right: 1px solid #3f3d43;
+  border-left: 1px solid #1c1d20;
+  background: url(../img/icons/tool_icons.png) no-repeat -57px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
+}
+#header #tools #work_toolbar #selection li a#remove:hover {
+  background: url(../img/icons/tool_icons.png) no-repeat -57px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #selection li a#remove.selected {
+  background: url(../img/icons/tool_icons.png) no-repeat -57px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #selection li a#edit {
+  width: 28px;
+  height: 29px;
+  text-indent: -9999px;
+  border-right: 1px solid #3f3d43;
+  border-left: 1px solid #1c1d20;
+  width: 29px;
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  border-right: none;
+  background: url(../img/icons/tool_icons.png) no-repeat -87px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
+}
+#header #tools #work_toolbar #selection li a#edit:hover {
+  background: url(../img/icons/tool_icons.png) no-repeat -87px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #selection li a#edit.selected {
+  background: url(../img/icons/tool_icons.png) no-repeat -87px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
 }
 #header #tools #work_toolbar #polytype {
-  margin-left: 10px;
+  display: inline-block;
+  width: 128px;
+  height: 29px;
+  padding: 0;
+  margin: 0 0 0 10px;
+  -webkit-border-radius: 3px;
+  box-shadow: 0 1px #2A2C2E;
+  border: 1px solid #000000;
 }
-#header #tools #work_toolbar #polytype a {
-  background: #28292D;
-  padding: 3px 8px;
+#header #tools #work_toolbar #polytype li {
+  float: left;
+  width: 64px;
+}
+#header #tools #work_toolbar #polytype li a {
+  display: block;
+  font: bold 11px "Helvetica Neue","Helvetica",Arial;
+  color: white;
+  text-transform: uppercase;
+  text-shadow: 0 1px #000000;
   text-decoration: none;
 }
-#header #tools #work_toolbar #polytype a:hover {
-  background: #1B1B1C;
+#header #tools #work_toolbar #polytype li a#def {
+  width: 29px;
+  height: 11px;
+  padding: 9px 9px 9px 24px;
+  -webkit-border-top-left-radius: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  border-right: 1px solid #3f3d43;
+  background: url("../img/icons/color_circles.png") no-repeat 10px 12px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
 }
-#header #tools #work_toolbar #polytype .selected {
-  background: #0B0B0C;
+#header #tools #work_toolbar #polytype li a#def:hover {
+  background: url("../img/icons/color_circles.png") no-repeat 10px 12px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #polytype li a#def.selected {
+  background: url("../img/icons/color_circles.png") no-repeat 10px 12px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #polytype li a#deg {
+  width: 30px;
+  height: 11px;
+  padding: 9px 9px 9px 24px;
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  background: url("../img/icons/color_circles.png") no-repeat 10px -9px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
+}
+#header #tools #work_toolbar #polytype li a#deg:hover {
+  background: url("../img/icons/color_circles.png") no-repeat 10px -9px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #polytype li a#deg.selected {
+  background: url("../img/icons/color_circles.png") no-repeat 10px -9px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
 }
 #header #tools #maptools {
-  margin-left: 200px;
+  float: right;
+  margin: 9px 280px 0 0;
+}
+#header #tools #maptools li {
+  margin: 0 10px 0;
+}
+#header #tools #maptools li a {
+  font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: white;
+  text-shadow: 0 1px black;
+  padding: 0 25px 3px 0;
+  text-decoration: none;
+}
+#header #tools #maptools li a#compare {
+  background: url("../img/icons/compare.png") no-repeat right 0;
+}
+#header #tools #maptools li a#compare.selected {
+  background-position: right -31px;
+}
+#header #tools #maptools li a#ndfirange {
+  background: url("../img/icons/range.png") no-repeat right 0;
+}
+#header #tools #maptools li a#ndfirange.selected {
+  background-position: right -31px;
 }
 #header #tools #maptools #range:hover #slider_wrapper {
   display: block;
@@ -470,7 +611,7 @@ article .example .field {
   background: #232427;
 }
 #header #overview {
-  font-family: "Helvetica Neue", Sans-Serif;
+  font-family: "Helvetica Neue", Arial, Sans-Serif;
   z-index: 10;
   width: 198px;
   height: 112px;
