@@ -80,16 +80,22 @@ $(function() {
 
         el: $('body'),
 
+        events: {
+            'click #layer_editor': 'open_layer_editor'
+        },
+
         amazon_bounds: new google.maps.LatLngBounds(
             new google.maps.LatLng(-18.47960905583197, -74.0478515625),
             new google.maps.LatLng(5.462895560209557, -43.43994140625)
         ),
 
         initialize:function() {
-            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view');
+            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view',
+            'open_layer_editor');
 
             window.loading.loading();
             this.reports = new ReportCollection();
+            this.map_layers = new LayerCollection();
 
             this.map = new MapView({el: this.$("#map")});
             this.cell_polygons = new CellPolygons({mapview: this.map});
@@ -209,6 +215,21 @@ $(function() {
         to_cell:function (z, x, y) {
             console.log("t", z, x, y);
             this.gridstack.enter_cell(parseInt(x, 10), parseInt(y, 10), parseInt(z, 10));
+        },
+
+        open_layer_editor: function(e) {
+            e.preventDefault();
+            if(this.layer_editor === undefined) {
+                this.layer_editor = new LayerEditor({
+                    el: this.$("#layer_editor_dialog"),
+                    layers: this.map_layers
+                });
+            }
+            if(this.layer_editor.showing) {
+                this.layer_editor.close();
+            } else {
+                this.layer_editor.show($(e.target).offset());
+            }
         }
 
     });

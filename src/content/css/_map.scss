@@ -20,6 +20,45 @@ body, html {
     height: 100%;
 }
 
+#layer_editor {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+}
+
+#layer_editor_dialog {
+    position: absolute;
+    overflow:hidden;
+    width: 217px;
+    height: 254px;
+    z-index: 20;
+    display: none;
+    border: 1px solid #8B8B8B; 
+    border-radius: 10px;
+    ul {
+        height: 254px;
+        width: 100%;
+        li {
+            width: 217px - 25px;
+            $fontsize: 13px;
+            font-size: $fontsize;
+            color: #626262;
+            padding: 20 - $fontsize/2  0 20 - $fontsize/2 25px;
+            /*margin-left: 18px;*/
+            border-top: 1px solid #FBFBFB;
+            border-bottom: 1px solid #CFCFCF;
+            background: #E7E7E7 url('/static/img/tick_unselected.png') no-repeat 12px 15px;
+
+            &:first-child {
+                border-top: none;
+            }
+            .selected {
+                background: url('/static/img/tick_selected.png') no-repeat 12px 15px;
+            }
+        }
+    }
+}
+
 #loading {
     position: absolute;
     top: 50%; 

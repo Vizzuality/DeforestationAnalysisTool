@@ -510,6 +510,43 @@ body, html {
   height: 100%;
 }
 
+#layer_editor {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+}
+
+#layer_editor_dialog {
+  position: absolute;
+  overflow: hidden;
+  width: 217px;
+  height: 254px;
+  z-index: 20;
+  display: none;
+  border: 1px solid #8B8B8B;
+  border-radius: 10px;
+}
+#layer_editor_dialog ul {
+  height: 254px;
+  width: 100%;
+}
+#layer_editor_dialog ul li {
+  width: 192px;
+  font-size: 13px;
+  color: #626262;
+  padding: 13.5px 0 13.5px 25px;
+  /*margin-left: 18px;*/
+  border-top: 1px solid #FBFBFB;
+  border-bottom: 1px solid #CFCFCF;
+  background: #e7e7e7 url("/static/img/tick_unselected.png") no-repeat 12px 15px;
+}
+#layer_editor_dialog ul li:first-child {
+  border-top: none;
+}
+#layer_editor_dialog ul li .selected {
+  background: url("/static/img/tick_selected.png") no-repeat 12px 15px;
+}
+
 #loading {
   position: absolute;
   top: 50%;
