@@ -14,8 +14,11 @@ inbound_services:
 - warmup
 
 skip_files:
-    config.rb
-    Gemfile
+- config.rb
+- Gemfile
+- ^(.*/)?.*\.swp$
+- static/bb
+- content/css
 
 handlers:
 - url: /favicon.ico

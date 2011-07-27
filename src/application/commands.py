@@ -62,16 +62,16 @@ def update_cells_ndfi():
     cell = Cell.get_or_default(r, 0, 0, 0)
     for c in iter(cell.children()):
         c.put()
-        deferred.defer(ndfi_value_for_cells_dummy, str(c.key()))
+        deferred.defer(ndfi_value_for_cells_dummy, str(c.key()), _queue="ndfichangevalue")
     return 'working DUMMY'
 
 @app.route('/_ah/cmd/cron/update_cells_ndfi', methods=('GET',))
 def update_cells_ndfi():
     r = Report.current()
     cell = Cell.get_or_default(r, 0, 0, 0)
-    for c in iter(cell.children()[:10]):
+    for c in iter(cell.children()):
         c.put()
-        deferred.defer(ndfi_value_for_cells, str(c.key()))
+        deferred.defer(ndfi_value_for_cells, str(c.key()), _queue="ndfichangevalue")
     return 'working'
 
 amazon_bounds = (
