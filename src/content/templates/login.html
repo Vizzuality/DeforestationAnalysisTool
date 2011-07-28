@@ -12,8 +12,15 @@
 {% block js %}
 {% endblock %}
 
+{% block login %}login{% endblock %}
+
 {% block body %}
 
-
+  <article class="login">
+    <h1>Deforestation Validation Tool</h1>
+    <h2><small>powered by</small> <a href="http://www.google.com">google</a> Earth Engine</h2>
+    <p>For using this application you need to sign in with your google account. Just press the button below and start contributing</p>
+    <a class="sign_in" href="#login">Sign in</a>
+  </article>
 
 {% endblock %}

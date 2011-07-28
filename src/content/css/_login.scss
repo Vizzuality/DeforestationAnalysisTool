@@ -1,0 +1,82 @@
+
+  html {
+    background:url('../img/login_pattern.jpg') repeat 0 0!important;
+  }
+
+  body.login {
+    background:-webkit-gradient(linear,50% 0%,50% 100%,from(rgba(0,0,0,0)),to(rgba(0,0,0,0.6)));
+  }
+
+  article.login {
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:252px;
+    height:188px;
+    padding:0;
+    margin:-129px 0 0 -149px;
+    padding:35px 28px;
+    background:-webkit-gradient(linear,50% 0%,50% 100%,from(#FF4C34),to(#C24325));
+    box-shadow:0 0 30px rgba(0,0,0,1);
+
+    h1 {
+        display:block;
+        font:bold 17px $DroidSans;
+        color:white;
+        text-shadow: 0 1px #8D2D19;
+        margin: 0;
+        padding: 0;
+    }
+    h2 {
+        display:block;
+        font:normal 13px $DroidSans;
+        color:white;
+        margin:3px 0 0 0;
+        text-shadow:0 -1px rgba(0,0,0,0.3);
+
+
+        small {
+            color:#98331B;
+            font:normal 11px $DroidSans;
+            text-shadow:none;
+        }
+        a {
+          display:inline-block;
+          width:50px;
+          height:20px;
+          margin:0 0 0 1px;
+          background:url('../img/google.png') no-repeat 0 0;
+          text-indent:-9999px;
+        }
+    }
+
+    p {
+      display:block;
+      margin:15px 0 0 0;
+      font:normal 15px Helvetica;
+      color:rgba(0,0,0,0.4);
+      //text-shadow:0 -1px #FFBDA7;
+    }
+
+    a.sign_in {
+      float:right;
+      width:76px;
+      height:15px;
+      margin:30px 0 0 0;
+      padding:8px 0 10px;
+      text-align:center;
+      border:1px solid #7B2615;
+      background:-webkit-gradient(linear,50% 0%,50% 100%,from(#EBEBEB),to(#CCCCCC));
+      font:bold 15px $text_font;
+      color:#333333;
+      text-shadow:0 1px white;
+      text-decoration:none;
+      box-shadow:0 1px rgba(255,255,255,0.6);
+      @include border-radius(3px);
+
+      &:hover {
+        background:-webkit-gradient(linear,50% 0%,50% 100%,from(#CCCCCC),to(#EBEBEB));
+      }
+    }
+
+  }
