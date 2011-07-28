@@ -422,11 +422,29 @@ article .example .field {
 }
 #header #tools #range_select {
   padding-top: 20px;
-  color: #CCC;
 }
-#header #tools #range_select #selected_range {
+#header #tools #range_select p {
+  display: inline-block;
+  vertical-align: top;
+  padding: 2px 0 0;
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: #4D575F;
+  text-shadow: 0 1px black;
+}
+#header #tools #range_select p strong {
+  font-weight: bold;
   color: white;
-  font-weigth: bold;
+}
+#header #tools #range_select a#select_range {
+  display: inline-block;
+  vertical-align: top;
+  width: 19px;
+  height: 19px;
+  text-indent: -9999px;
+  background: url("../img/icons/report.png") no-repeat 0 0;
+}
+#header #tools #range_select a#select_range:hover {
+  background-position: 0 -19px;
 }
 #header #tools #work_toolbar {
   padding-top: 13px;
@@ -724,6 +742,30 @@ body, html {
   width: 100%;
   top: 144px;
   bottom: 0;
+}
+#workarea div.zoom_control {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 22px;
+  height: 44px;
+  z-index: 100;
+}
+#workarea div.zoom_control a {
+  display: block;
+  width: 22px;
+  height: 22px;
+  text-indent: -9999px;
+  background: url("../img/icons/zoom.png") no-repeat 0 0;
+}
+#workarea div.zoom_control a.zoom_in:hover {
+  background-position: 0 -22px;
+}
+#workarea div.zoom_control a.zoom_out {
+  background-position: -22px 0;
+}
+#workarea div.zoom_control a.zoom_out:hover {
+  background-position: -22px -22px;
 }
 
 #map {

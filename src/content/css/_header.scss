@@ -70,12 +70,34 @@
         color: white;
 
         #range_select {
-           padding-top: 20px;
-           color: #CCC;
-           #selected_range {
-               color: white;
-               font-weigth: bold;
-           }
+          padding-top: 20px;
+
+          p {
+            display:inline-block;
+            vertical-align:top;
+            padding:2px 0 0;
+            font:normal 13px $text_font;
+            color:#4D575F;
+            text-shadow:0 1px black;
+
+            strong {
+              font-weight:bold;
+              color:white;
+            }
+          }
+
+          a#select_range {
+            display:inline-block;
+            vertical-align:top;
+            width:19px;
+            height:19px;
+            text-indent:-9999px;
+            background:url('../img/icons/report.png') no-repeat 0 0;
+            &:hover {
+              background-position:0 -19px;
+            }
+          }
+
         }
 
 
@@ -347,13 +369,5 @@
             }
           }
         }
-
-
-//        <div class="analysed">
-//          <button class="analysed">
-//            <p>65 km<sup>2</sup> analysed</p>
-//            <p id="done">done</p>
-//          </button>
-//        </div>
     }
 }
