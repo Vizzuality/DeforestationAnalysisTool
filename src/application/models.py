@@ -166,6 +166,11 @@ class Cell(db.Model):
         }
 
     def latest_polygon(self):
+        try:
+            self.key()
+        except:
+            #not saved
+            return None
         q = Area.all().filter('cell =', self).order('-added_on')
         o = q.fetch(1)
         if o:
