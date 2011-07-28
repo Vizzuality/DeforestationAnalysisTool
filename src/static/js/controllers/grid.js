@@ -19,15 +19,15 @@ var CellView = Backbone.View.extend({
 
     render: function(topx, topy) {
         var cell = this.el;
-        var border = 1;
+        var border = 2;
         var p = window.mapper.cell_position(this.model.get('x'),
             this.model.get('y'),
             this.model.get('z'));
-        cell.style.top = p.y - topy + "px";
-        cell.style.left = p.x - topx + "px";
-        cell.style.width = p.width - border + "px";
-        cell.style.height = p.height - border+ "px";
-        cell.style.margin = "0 " + border + "px " + border + "px";
+        cell.style.top = Math.floor(p.y - topy) + "px";
+        cell.style.left = Math.floor(p.x - topx) + "px";
+        cell.style.width = Math.ceil(p.width) - border + "px";
+        cell.style.height = Math.ceil(p.height) - border+ "px";
+        cell.style.margin = border + "px" ;//"0 " + border + "px " + border + "px";
         cell.style.padding= 0;
         cell.style.display = "block";
         cell.style.position = "absolute";
@@ -62,6 +62,7 @@ var Grid = Backbone.View.extend({
             throw "you should specify MapView in constructor";
         }
         this.el.css('position', 'absolute');
+
     },
 
     add_cells: function() {
@@ -112,11 +113,18 @@ var GridStack = Backbone.View.extend({
     WORKING_ZOOM: 2,
 
     initialize: function(options) {
-        _.bindAll(this, 'map_ready', 'enter_cell', 'cell_click');
+        _.bindAll(this, 'map_ready', 'enter_cell', 'cell_click', 'set_visible_zone');
         this.mapview = options.mapview;
         this.bounds = options.initial_bounds;
         this.report = options.report;
         this.level = 0;
+
+        this.oclusion_poly = new google.maps.Polygon({
+          paths: [],
+          strokeWeight: 0,
+          fillColor: '#000',
+          fillOpacity: 0.5
+        });
 
         this.grid = new Grid({
             mapview: this.mapview,
@@ -154,12 +162,43 @@ var GridStack = Backbone.View.extend({
         this.enter_cell(cell.get('x'), cell.get('y'), cell.get('z'));
     },
 
+    set_visible_zone: function(bounds) {
+        // calculate outer and inner polygon
+        var X = 179.5;
+        var Y = 85;
+        var sw = bounds.getSouthWest();
+        var ne = bounds.getNorthEast();
+        var paths = [[
+            new google.maps.LatLng(-X, -Y),
+                new google.maps.LatLng(-X, Y),
+                new google.maps.LatLng(X, Y),
+                new google.maps.LatLng(X, -Y)
+        ], [
+            sw,
+            new google.maps.LatLng(ne.lat(), sw.lng()),
+            ne,
+            new google.maps.LatLng(sw.lat(), ne.lng())
+        ]];
+
+        this.oclusion_poly.setPaths(paths);
+        this.oclusion_poly.setMap(this.mapview.map);
+    },
+
+    clear_visible_zone: function() {
+        this.oclusion_poly.setMap(null);
+    },
+
     // when user enter on a cell, this level cells need to be loaded
     // and map changed to this bounds
     enter_cell: function(x, y, z) {
+        this.clear_visible_zone();
         //TODO: show loading
-        this.mapview.map.fitBounds(window.mapper.cell_bounds(x, y, z));
+        var cell_bounds = window.mapper.cell_bounds(x, y, z);
+        this.mapview.map.fitBounds(cell_bounds);
         this.mapview.map.setZoom(this.zoom_mapping[z]);
+        if(z > 0) {
+            this.set_visible_zone(cell_bounds);
+        }
         if(z < this.WORKING_ZOOM) {
             var cells = new Cells(undefined, {
                 x: x,
