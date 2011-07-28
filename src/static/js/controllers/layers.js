@@ -18,7 +18,7 @@ var LayerView = Backbone.View.extend({
         $(this.el).html("<a href='#'>" + this.model.get('description') + "</a>");
         $(this.el).attr('id', this.id);
         return this;
-    }, 
+    },
 
     click: function(e) {
         e.preventDefault();
@@ -31,6 +31,7 @@ var LayerView = Backbone.View.extend({
             $(this.el).addClass('selected');
             this.trigger('enable', this);
         }
+        this.model.trigger('changed', this.model);
     }
 });
 
@@ -82,8 +83,8 @@ var LayerEditor = Backbone.View.extend({
         var view = new LayerView({model: layer});
         ul.append(view.render().el);
         this.item_view_map[view.id] = view;
-        view.bind('enable', this.sortLayers);
-        view.bind('disable', this.sortLayers);
+        //view.bind('enable', this.sortLayers);
+        //view.bind('disable', this.sortLayers);
     },
 
     addLayers: function(layers) {
@@ -99,6 +100,7 @@ var LayerEditor = Backbone.View.extend({
         }
         this.el.fadeIn();
         this.showing = true;
+        this.layers.trigger('reset');
     },
 
     close: function() {

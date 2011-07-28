@@ -14,7 +14,7 @@ var MapView = Backbone.View.extend({
     //el: $("#map"),
 
     initialize: function() {
-        _.bindAll(this, 'center_changed', 'ready', 'click', 'set_center', 'reoder_layers');
+        _.bindAll(this, 'center_changed', 'ready', 'click', 'set_center', 'reoder_layers', 'change_layer');
        this.map_layers = {};
        this.map = new google.maps.Map(this.el[0], this.mapOptions);
        google.maps.event.addListener(this.map, 'center_changed', this.center_changed);
@@ -45,27 +45,45 @@ var MapView = Backbone.View.extend({
             this.layers.bind('reset', this.reoder_layers);
     },
 
+    change_layer: function(layer) {
+        var self = this;
+        if(layer.enabled) {
+            if(layer.get('type') === 'fusion_tables') {
+                layer.map_layer.setMap(self.map);
+            }
+            else {
+                self.map.overlayMapTypes.setAt(layer.map_position, layer);
+            }
+        } else {
+            if(layer.get('type') === 'fusion_tables') {
+                layer.map_layer.setMap(null);
+            } else {
+                self.map.overlayMapTypes.removeAt(layer.map_position);
+            }
+        }
+    },
+
     reoder_layers: function() {
         var self = this;
-        self.map.overlayMapTypes.clear();
-        self.layers.each(function(layer) {
+        //self.map.overlayMapTypes.clear();
+        self.layers.each(function(layer, index) {
             var lyr;
-            if(!(layer.get('id') in self.map_layers)) {
+            if(layer.map_layer === undefined) {
                 lyr = self.create_layer(layer.toJSON());
-                self.map_layers[layer.get('id')] = lyr;
+                layer.map_layer = lyr;
+                layer.map_position = index;
+                layer.bind('changed', self.change_layer);
             }
-            lyr = lyr || self.map_layers[layer.get('id')];
+            lyr = layer.map_layer;
             if(lyr) {
                 if(layer.get('type') === 'fusion_tables') {
                     // fusion tables can't be added as overlayMapTypes
                     if(layer.enabled) {
                         lyr.setMap(self.map);
-                    } else {
-                        lyr.setMap(null);
                     }
                 } else {
                     if(layer.enabled) {
-                        self.map.overlayMapTypes.push(lyr);
+                        self.map.overlayMapTypes.setAt(index, lyr);
                     }
                 }
             }
