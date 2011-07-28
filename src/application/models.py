@@ -144,6 +144,12 @@ class Cell(db.Model):
         return "_".join(map(str,(self.z, self.x, self.y)))
 
     def as_dict(self):
+        latest = self.latest_polygon()
+        t = 0
+        by = 'Nobody'
+        if latest:
+            t = timestamp(latest.added_on)
+            by = latest.added_by.nickname()
         return {
                 #'key': str(self.key()),
                 'id': self.external_id(),
@@ -154,8 +160,17 @@ class Cell(db.Model):
                 'ndfi_low': self.ndfi_low,
                 'ndfi_high': self.ndfi_high,
                 'ndfi_change_value': self.ndfi_change_value,
-                'done': self.done
+                'done': self.done,
+                'latest_change': t,
+                'added_by': by,
         }
+
+    def latest_polygon(self):
+        q = Area.all().filter('cell =', self).order('-added_on')
+        o = q.fetch(1)
+        if o:
+            return o[0]
+        return None
 
     def as_json(self):
         return json.dumps(self.as_dict())

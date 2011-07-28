@@ -141,6 +141,26 @@
             <li> Capa3 </li>
         </ul>
     </div>
+   <script type="text/template" id="cell-template">
+      <div class="cell_wrapper_info">
+        <div class="content">
+            <p>
+                <%= z %>/<%= x %>/<%= y %> 
+                <span class="date">
+                <%
+                    if(latest_change !== 0) {
+                        var d = new Date(latest_change);
+                        print(d.getUTCFullYear()+ '/' + (d.getUTCMonth()+1) + '/' + d.getUTCDate());
+                    }
+                %>
+                </span>
+            </p>
+
+            <p><%= added_by %></p>
+        </div>
+      </div>
+    </script>
+
     <!--
     <div id="loading" class="hidden">
         <div id="sending">

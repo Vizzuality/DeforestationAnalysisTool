@@ -7,6 +7,8 @@ var CellView = Backbone.View.extend({
 
     tagName: 'div',
 
+    template: _.template($('#cell-template').html()),
+
     events:  {
         'mouseover': 'onmouseover',
         'mouseout': 'onmouseout',
@@ -31,21 +33,39 @@ var CellView = Backbone.View.extend({
         cell.style.padding= 0;
         cell.style.display = "block";
         cell.style.position = "absolute";
-        var t = this.model.get('ndfi_change_value');
-        t = t || 1;
-        var r = linear(t, 225, 224);
-        var g = linear(t, 125, 222);
-        var b = linear(t, 40, 122);
-        cell.style.background = "rgba(" + r + "," + g + "," + b +", 0.9)";
+        if(this.model.get('done')) {
+            $(cell).addClass('finished');
+            cell.style['background-color'] = "rgba(0, 0 ,0, 0.6)";
+
+        } else {
+            var t = this.model.get('ndfi_change_value');
+            t = t || 1;
+            var r = linear(t, 225, 224);
+            var g = linear(t, 125, 222);
+            var b = linear(t, 40, 122);
+            cell.style['background-color'] = "rgba(" + r + "," + g + "," + b +", 0.9)";
+        }
+        $(cell).append(this.template(this.model.toJSON())).addClass('cell');
         return this;
     },
 
     onmouseover: function() {
-        //$(this.el).css('background', "rgba(0, 0, 0, 0.5)");
+        var el = $(this.el);
+        el.find('.cell_wrapper_info').show();
+        el.addClass('hover');
+        var p = $(this.el).position();
+        el.css({top: p.top - 3, left: p.left - 3});
+        el.css({'z-index': 9});
+        
     },
 
     onmouseout: function() {
-        //$(this.el).css('background', "rgba(0, 0, 0, 0.1)");
+        var el = $(this.el);
+        el.find('.cell_wrapper_info').hide();
+        el.removeClass('hover');
+        var p = $(this.el).position();
+        el.css({top: p.top + 3, left: p.left + 3});
+        el.css({'z-index': 1});
     },
 
     onclick: function(e) {

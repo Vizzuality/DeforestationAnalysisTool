@@ -55,7 +55,7 @@ def show_tables():
 
 
 @app.route('/_ah/cmd/update_cells_dummy', methods=('GET',))
-def update_cells_ndfi():
+def update_cells_ndfi_dummy():
     r = Report.current()
     if not r:
         return 'create a report first'
