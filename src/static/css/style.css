@@ -457,7 +457,9 @@ article .example .field {
   width: 120px;
   height: 29px;
   padding: 0;
-  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-radius: 3px;
   box-shadow: 0 1px #2A2C2E;
   border: 1px solid #000000;
 }
@@ -538,7 +540,9 @@ article .example .field {
   height: 29px;
   padding: 0;
   margin: 0 0 0 10px;
-  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-radius: 3px;
   box-shadow: 0 1px #2A2C2E;
   border: 1px solid #000000;
 }
@@ -612,22 +616,60 @@ article .example .field {
 #header #tools #maptools #range:hover #slider_wrapper {
   display: block;
 }
-#header #tools #maptools #range:hover {
-  background: #232427;
-}
 #header #tools #maptools #range {
   position: relative;
 }
 #header #tools #maptools #slider_wrapper {
-  -webkit-box-shadow: 0px 0px 5px #000;
-  z-index: 20;
-  display: none;
-  padding: 20px;
-  width: 250px;
   position: absolute;
-  left: -175px;
-  font-size: 8px;
-  background: #232427;
+  display: none;
+  top: -22px;
+  right: -23px;
+  width: 273px;
+  height: 101px;
+  background: url("../img/slider_bkg.png") no-repeat 0 0;
+}
+#header #tools #maptools #slider_wrapper a.range {
+  position: absolute;
+  top: 23px;
+  right: 23px;
+  font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: white;
+  text-shadow: 0 1px black;
+  padding: 0 25px 3px 0;
+  text-decoration: none;
+  background: url("../img/icons/range.png") no-repeat right -31px;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_slider {
+  position: absolute;
+  bottom: 31px;
+  left: 27px;
+  border: none;
+  width: 218px;
+  height: 1px;
+  background: none;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_slider span.hack_red {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  height: 1px;
+  background: red;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_slider .ui-slider-handle {
+  top: -6px;
+  width: 13px;
+  height: 14px;
+  background: url("../img/icons/slider_handle.png") no-repeat 0 0;
+  padding: 0;
+  outline: none;
+  border: none;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_slider .ui-slider-handle:focus {
+  outline: none;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_slider .ui-slider-range {
+  background: #FDCC8A;
 }
 #header #overview {
   position: absolute;
