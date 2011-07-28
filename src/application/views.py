@@ -24,6 +24,10 @@ def home(cell_path=None):
     user = users.get_current_user()
     return render_template('home.html', reports_json=reports, user=user)
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
 @app.route('/tiles/<path:tile_path>')
 def tiles(tile_path):
     """ serve static tiles """
