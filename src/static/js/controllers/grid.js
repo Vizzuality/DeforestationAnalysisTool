@@ -51,7 +51,9 @@ var CellView = Backbone.View.extend({
 
     onmouseover: function() {
         var el = $(this.el);
-        el.find('.cell_wrapper_info').show();
+        var popup = el.find('.cell_wrapper_info');
+        popup.show();
+        popup.css({left: el.width()});
         el.addClass('hover');
         var p = $(this.el).position();
         el.css({top: p.top - 3, left: p.left - 3});
@@ -61,7 +63,8 @@ var CellView = Backbone.View.extend({
 
     onmouseout: function() {
         var el = $(this.el);
-        el.find('.cell_wrapper_info').hide();
+        var popup = el.find('.cell_wrapper_info');
+        popup.hide();
         el.removeClass('hover');
         var p = $(this.el).position();
         el.css({top: p.top + 3, left: p.left + 3});
