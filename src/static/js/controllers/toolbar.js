@@ -37,7 +37,6 @@ var PressedButton = Backbone.View.extend({
 // jqueryui slider wrapper
 // triggers change with values
 var RangeSlider = Backbone.View.extend({
-
     initialize: function() {
         var self = this;
         this.el.slider({
@@ -46,10 +45,18 @@ var RangeSlider = Backbone.View.extend({
                 max: 200,
                 values: [40, 60], //TODO: load from model
                 slide: function(event, ui) {
+										// Hack to get red bar resizing
+										var size = $('a.ui-slider-handle:eq(1)').css('left');
+										$('span.hack_red').css('left',size);
                     var low = ui.values[0];
                     var high= ui.values[1];
                     self.slide(low, high);
-                }
+                },
+								create: function(event,ui) {
+									// Hack to get red bar resizing
+									var size = $('a.ui-slider-handle:eq(1)').css('left');
+									$('span.hack_red').css('left',size);
+								}
          });
     },
 
