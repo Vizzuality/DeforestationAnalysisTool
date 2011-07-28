@@ -100,8 +100,8 @@ class NDFI(object):
     def _execute_cmd(self, url, cmd):
         params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
         return self.ee.post(url, params)
-        
-    def ndfi_change_value(self, polygons):
+
+    def ndfi_change_value(self, polygons, rows=10, cols=10):
         """ return how much NDFI has changed in the time period
             ``polygons`` are a list of closed polygons defined by lat, lon::
 
@@ -129,7 +129,9 @@ class NDFI(object):
         cmd = self._NDFI_change_value(
             reference_images,
             work_images,
-            polygons
+            polygons,
+            rows,
+            cols
         )
         return self._execute_cmd('/value', cmd)
 

@@ -9,6 +9,8 @@ from flask import Response, request, jsonify, abort
 import simplejson as json
 from application.time_utils import timestamp, past_month_range
 
+from application.constants import amazon_bounds
+
 from google.appengine.ext.db import Key
 from google.appengine.api import users
 
@@ -35,12 +37,12 @@ class CellAPI(Resource):
 
     BLACK_LIST = ['1_0_0', '1_1_0', '1_0_1', '1_0_2', '1_0_3', '1_0_7', '1_0_8', '1_0_9',
              '1_1_7', '1_1_8', '1_1_9', '1_2_8', '1_2_9', '1_3_8', '1_3_9',
-             '1_2_0', '1_5_0', '1_6_0', '1_8_0', '1_9_0','1_8_1', '1_9_1', 
+             '1_2_0', '1_5_0', '1_6_0', '1_8_0', '1_9_0','1_8_1', '1_9_1',
              '1_8_8', '1_8_9', '1_9_8', '1_9_9']
     def is_in_backlist(self, cell):
         return cell.external_id() in CellAPI.BLACK_LIST
 
-        
+
     def list(self, report_id):
         r = Report.get(Key(report_id))
         cell = Cell.get_or_default(r, 0, 0, 0)
@@ -72,6 +74,32 @@ class CellAPI(Resource):
 
         return Response(cell.as_json(), mimetype='application/json')
 
+    def ndfi_change(self, report_id, id):
+        r = Report.get(Key(report_id))
+        z, x, y = Cell.cell_id(id)
+        cell = Cell.get_or_default(r, x, y, z)
+        ndfi = NDFI('MOD09GA',
+            past_month_range(r.start),
+            r.range())
+
+        bounds = cell.bounds(amazon_bounds)
+        ne = bounds[0]
+        sw = bounds[1]
+        # spcify lon, lat FUCK, MONKEY BALLS
+        polygons = [[ (sw[1], sw[0]), (sw[1], ne[0]), (ne[1], ne[0]), (ne[1], sw[0]) ]]
+        data = ndfi.ndfi_change_value(polygons, 1, 1)
+        ndfi = data['data'] #data['data']['properties']['ndfiSum']['values']
+        return Response(json.dumps(ndfi), mimetype='application/json')
+
+    def bounds(self, report_id, id):
+        r = Report.get(Key(report_id))
+        z, x, y = Cell.cell_id(id)
+        cell = Cell.get_or_default(r, x, y, z)
+        return Response(json.dumps(cell.bounds(amazon_bounds)), mimetype='application/json')
+
+
+
+
 
 class PolygonAPI(Resource):
 
@@ -89,7 +117,7 @@ class PolygonAPI(Resource):
         if not a:
             abort(404)
         return Response(a.as_json(), mimetype='application/json')
-        
+
 
     def create(self, report_id, cell_pos):
         r = Report.get(Key(report_id))

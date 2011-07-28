@@ -13,6 +13,7 @@ from ft import FT
 
 from time_utils import month_range
 from application.models import Report, Cell
+from application.constants import amazon_bounds
 from ee import NDFI
 
 @app.route('/_ah/cmd/create_table')
@@ -74,10 +75,6 @@ def update_cells_ndfi():
         deferred.defer(ndfi_value_for_cells, str(c.key()), _queue="ndfichangevalue")
     return 'working'
 
-amazon_bounds = (
-            (-18.47960905583197, -74.0478515625),
-            (5.462895560209557, -43.43994140625)
-)
 
 def ndfi_value_for_cells_dummy(cell_key):
 
@@ -109,7 +106,7 @@ def ndfi_value_for_cells(cell_key):
     logging.info(bounds)
     ne = bounds[0]
     sw = bounds[1]
-    polygons = [[ sw, (sw[0], ne[1]), ne, (ne[0], sw[1]) ]]
+    polygons = [[ (sw[1], sw[0]), (sw[1], ne[0]), (ne[1], ne[0]), (ne[1], sw[0]) ]]
     data = ndfi.ndfi_change_value(polygons)
     ndfi = data['data']['properties']['ndfiSum']['values']
     logging.info(ndfi)
