@@ -19,9 +19,13 @@ from resources.report import ReportAPI, CellAPI, NDFIMapApi, PolygonAPI
 
 NoteAPI.add_urls(app, '/api/test/note')
 ReportAPI.add_urls(app, '/api/v0/report')
-CellAPI.add_urls(app, '/api/v0/report/<report_id>/cell')
+
+CellAPI.add_urls(app,       '/api/v0/report/<report_id>/cell')
+CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/children', 'children')
+
 NDFIMapApi.add_urls(app, '/api/v0/report/<report_id>/map')
 PolygonAPI.add_urls(app, '/api/v0/report/<report_id>/cell/<cell_pos>/polygon')
+
 
 #TODO: add auth
 @app.route('/api/v0/poly/new', methods=('POST',))

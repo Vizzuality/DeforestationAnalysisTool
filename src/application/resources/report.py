@@ -46,12 +46,18 @@ class CellAPI(Resource):
         cell = Cell.get_or_default(r, 0, 0, 0)
         return self._as_json([x.as_dict() for x in iter(cell.children()) if not self.is_in_backlist(x)])
 
-    def get(self, report_id, id):
+    def children(self, report_id, id):
         r = Report.get(Key(report_id))
         z, x, y = Cell.cell_id(id)
         cell = Cell.get_or_default(r, x, y, z)
         cells = cell.children()
         return self._as_json([x.as_dict() for x in cells if not self.is_in_backlist(x)])
+
+    def get(self, report_id, id):
+        r = Report.get(Key(report_id))
+        z, x, y = Cell.cell_id(id)
+        cell = Cell.get_or_default(r, x, y, z)
+        return Response(cell.as_json(), mimetype='application/json')
 
     def update(self, report_id, id):
         r = Report.get(Key(report_id))
@@ -60,7 +66,7 @@ class CellAPI(Resource):
         cell.report = r
 
         data = json.loads(request.data)
-        for prop in ('ndfi_high', 'ndfi_low'):
+        for prop in ('ndfi_high', 'ndfi_low', 'done'):
             setattr(cell, prop, data[prop])
         cell.put()
 

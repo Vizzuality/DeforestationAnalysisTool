@@ -9,6 +9,19 @@ var Cell = Backbone.Model.extend({
         y:0,
         z:0,
         background: "rgba(0, 0, 0, 0.5)"
+    },
+
+    parent_cell: function() {
+        return new Cell({
+            report_id: this.get('report_id'),
+            z: this.get('z') - 1,
+            x: Math.floor(this.get('x')/SPLITS),
+            y: Math.floor(this.get('y')/SPLITS)
+        });
+    },
+
+    url: function() {
+        return "/api/v0/report/" + this.get('report_id') + "/cell/" + this.get('z') + "_" + this.get('x') + "_" + this.get('y');
     }
 });
 
@@ -30,7 +43,7 @@ var Cells = Backbone.Collection.extend({
     },
 
     url: function() {
-        return "/api/v0/report/" + this.report.id + "/cell/" + this.z + "_" + this.x + "_" + this.y;
+        return "/api/v0/report/" + this.report.id + "/cell/" + this.z + "_" + this.x + "_" + this.y + "/children";
     }
 
 });

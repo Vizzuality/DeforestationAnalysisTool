@@ -14,6 +14,7 @@ from google.appengine.api import users
 
 from application.app import app
 from application.models import Area, Note, Cell, Report
+from application.resources.report import CellAPI
 
 from base import GoogleAuthMixin
 
@@ -123,6 +124,7 @@ class PolygonApi(unittest.TestCase, GoogleAuthMixin):
 
 class CellApi(unittest.TestCase, GoogleAuthMixin):
     def setUp(self):
+        CellAPI.BLACK_LIST = []
         app.config['TESTING'] = True
         self.app = app.test_client()
         for x in Cell.all():
@@ -138,14 +140,14 @@ class CellApi(unittest.TestCase, GoogleAuthMixin):
         self.assertEquals(100, len(js))
 
     def test_cell_0_0_0(self):
-        rv = self.app.get('/api/v0/report/' + str(self.r.key()) + '/cell/0_0_0')
+        rv = self.app.get('/api/v0/report/' + str(self.r.key()) + '/cell/0_0_0/children')
         self.assertEquals(200, rv.status_code)
         js = json.loads(rv.data)
         self.assertEquals(100, len(js))
 
     def test_cell_1_0_0(self):
         Cell(x=0, y=0, z=2, report=self.r, ndfi_high=1.0, ndfi_low=0.0).put()
-        rv = self.app.get('/api/v0/report/' + str(self.r.key())+'/cell/1_0_0')
+        rv = self.app.get('/api/v0/report/' + str(self.r.key())+'/cell/1_0_0/children')
         self.assertEquals(200, rv.status_code)
         js = json.loads(rv.data)
         self.assertEquals(100, len(js))
@@ -156,7 +158,7 @@ class CellApi(unittest.TestCase, GoogleAuthMixin):
 
     def test_update_cell_2_0_1(self):
         rv = self.app.put('/api/v0/report/' + str(self.r.key())+'/cell/2_1_3',
-            data='{"ndfi_low": 0.0, "ndfi_high": 1.0}'
+            data='{"ndfi_low": 0.0, "ndfi_high": 1.0, "done": false}'
         )
         self.assertEquals(200, rv.status_code)
         js = json.loads(rv.data)

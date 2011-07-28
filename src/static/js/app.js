@@ -11,8 +11,8 @@ $(function() {
         },
 
         new_polygon: function(data) {
-            //this.cell_polygons.polygons.create(data);
-            this.app.cell_polygons.polygons.add(data);
+            this.app.cell_polygons.polygons.create(data);
+            //this.app.cell_polygons.polygons.add(data);
         },
 
         //reset to initial state
@@ -99,7 +99,7 @@ $(function() {
         ),
 
         initialize:function() {
-            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view', 'open_layer_editor', 'update_map_layers');
+            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view', 'open_layer_editor', 'update_map_layers', 'cell_done');
 
             window.loading.loading();
             this.reports = new ReportCollection();
@@ -166,7 +166,8 @@ $(function() {
             this.ndfi_layer.show();
 
             this.overview.on_cell(x, y, z);
-            this.overview.bind('done', this.cell_polygons.commit);
+            //cell done!
+            this.overview.bind('done', this.cell_done);
             this.cell_polygons.polygons.x = x;
             this.cell_polygons.polygons.y = y;
             this.cell_polygons.polygons.z = z;
@@ -175,6 +176,15 @@ $(function() {
             this.editing_router = new EditingToolsRuoter({
                 app: this
             });
+        },
+
+        cell_done: function() {
+            this.gridstack.current_cell.set({'done': true});
+            this.gridstack.current_cell.save();
+            // got to parent cell
+            var p = this.gridstack.current_cell.parent_cell();
+            this.to_cell(p.get('z'), p.get('x'), p.get('y'));
+            router.navigate('cell/' +  p.get('z') + "/" + p.get('x') + "/" + p.get('y'));
         },
 
         // entering on select_mode

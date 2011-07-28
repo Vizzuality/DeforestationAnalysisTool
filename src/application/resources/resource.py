@@ -19,6 +19,17 @@ class Resource(object):
         abort(501)
 
     @classmethod
+    def add_custom_url(cls, app, url, method):
+        def _view(*args, **kwargs):
+            r = cls()
+            mth = getattr(r, method)
+            return mth(*args, **kwargs)
+
+        _view.__name__ = "custom"
+        app.add_url_rule(url, view_func=_view, methods=("GET",))
+
+
+    @classmethod
     def add_urls(cls, app, name):
         def _view(*args, **kwargs):
             m = request.method.upper()

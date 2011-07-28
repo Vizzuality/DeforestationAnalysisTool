@@ -75,6 +75,7 @@ class Cell(db.Model):
     ndfi_low = db.FloatProperty()
     ndfi_high = db.FloatProperty()
     ndfi_change_value = db.FloatProperty()
+    done = db.BooleanProperty(default=False);
 
     @staticmethod
     def get_cell(report, x, y, z):
@@ -152,7 +153,8 @@ class Cell(db.Model):
                 'report_id': str(self.report.key()),
                 'ndfi_low': self.ndfi_low,
                 'ndfi_high': self.ndfi_high,
-                'ndfi_change_value': self.ndfi_change_value
+                'ndfi_change_value': self.ndfi_change_value,
+                'done': self.done
         }
 
     def as_json(self):
