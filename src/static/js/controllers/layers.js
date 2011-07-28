@@ -14,9 +14,13 @@ var LayerView = Backbone.View.extend({
     },
 
     render: function() {
+        var el = $(this.el);
         this.id = 'layer_' + this.model.get('id');
-        $(this.el).html("<a href='#'>" + this.model.get('description') + "</a>");
-        $(this.el).attr('id', this.id);
+        el.html("<a href='#'>" + this.model.get('description') + "</a>");
+        el.attr('id', this.id);
+        if(this.model.enabled) {
+            el.addClass('selected');
+        }
         return this;
     },
 

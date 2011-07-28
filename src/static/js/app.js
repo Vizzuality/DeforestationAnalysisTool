@@ -126,7 +126,7 @@ $(function() {
 
         },
         update_map_layers: function() {
-            this.map.layers.reset(this.available_layers.models);
+            
             //update here other maps
         },
 
@@ -229,6 +229,10 @@ $(function() {
             this.init_ui();
 
             this.map.map.setCenter(this.amazon_bounds.getCenter());
+            this.map.layers.reset(this.available_layers.models);
+            // enable layer 0
+            this.map.layers.models[0].enabled = true;
+            this.map.change_layer(this.map.layers.models[0]);
             if(location.hash === '') {
                 router.navigate('cell/0/0/0');
             }

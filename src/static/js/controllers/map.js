@@ -41,8 +41,11 @@ var MapView = Backbone.View.extend({
     // its a helper method to avoid calling getProjection whiout map loaded
     ready: function() {
             this.projector.draw = function(){};
-            this.trigger('ready');
             this.layers.bind('reset', this.reoder_layers);
+            this.trigger('ready');
+    },
+
+    enable_layer: function(idx) {
     },
 
     change_layer: function(layer) {
