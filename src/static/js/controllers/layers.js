@@ -14,17 +14,23 @@ var LayerView = Backbone.View.extend({
     },
 
     render: function() {
-        $(this.el).html(this.model.get('description'));
+        this.id = 'layer_' + this.model.get('id');
+        $(this.el).html("<a href='#'>" + this.model.get('description') + "</a>");
+        $(this.el).attr('id', this.id);
         return this;
     }, 
 
-    click: function() {
-        if(this.enabled) {
+    click: function(e) {
+        e.preventDefault();
+        this.enabled = !this.enabled;
+        this.model.enabled = this.enabled;
+        if(!this.enabled) {
             this.trigger('disable', this);
+            $(this.el).removeClass('selected');
         } else {
+            $(this.el).addClass('selected');
             this.trigger('enable', this);
         }
-        this.enabled = !this.enabled;
     }
 });
 
@@ -33,16 +39,51 @@ var LayerEditor = Backbone.View.extend({
     showing: false,
 
     initialize: function() {
-        _.bindAll(this, 'show', 'addLayer', 'addLayers');
+        _.bindAll(this, 'show', 'addLayer', 'addLayers', 'sortLayers', 'addLayer');
+        var self = this;
+
+        this.item_view_map = {};
         this.layers = this.options.layers;
         this.addLayers(this.layers);
         this.el.find('ul').jScrollPane({autoReinitialise:true});
+
+        this.el.find('ul, div.jspPane').sortable({
+          revert: false,
+          items: 'li',
+          cursor: 'pointer',
+          stop:function(event,ui){
+            $(ui.item).removeClass('moving');
+            //
+            //DONT CALL THIS FUNCTION ON beforeStop event, it will crash :D
+            //
+            self.sortLayers();
+          },
+          start:function(event,ui){
+            $(ui.item).addClass('moving');
+          }
+        });
+    },
+
+    // reorder layers in map
+    sortLayers: function() {
+        var self = this;
+        var new_order_list = [];
+        // sort layers
+        this.el.find('ul').find('li').each(function(idx, item) {
+            var id = $(item).attr('id');
+            var view = self.item_view_map[id];
+            new_order_list.push(view.model);
+        });
+        this.layers.reset(new_order_list);
     },
 
     addLayer: function(layer) {
         var ul = this.el.find('ul');
         var view = new LayerView({model: layer});
         ul.append(view.render().el);
+        this.item_view_map[view.id] = view;
+        view.bind('enable', this.sortLayers);
+        view.bind('disable', this.sortLayers);
     },
 
     addLayers: function(layers) {

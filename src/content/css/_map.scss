@@ -34,7 +34,6 @@ body, html {
     z-index: 20;
     display: none;
     border: 1px solid #8B8B8B; 
-    border-radius: 10px;
     ul {
         height: 254px;
         width: 100%;
@@ -52,8 +51,8 @@ body, html {
             &:first-child {
                 border-top: none;
             }
-            .selected {
-                background: url('/static/img/tick_selected.png') no-repeat 12px 15px;
+            &.selected {
+                background:#E7E7E7 url('/static/img/tick_selected.png') no-repeat 12px 15px;
             }
         }
     }

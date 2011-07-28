@@ -90,18 +90,18 @@ $(function() {
         ),
 
         initialize:function() {
-            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view',
-            'open_layer_editor');
+            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view', 'open_layer_editor', 'update_map_layers');
 
             window.loading.loading();
             this.reports = new ReportCollection();
-            this.map_layers = new LayerCollection();
 
             this.map = new MapView({el: this.$("#map")});
             this.cell_polygons = new CellPolygons({mapview: this.map});
 
             this.reports.bind('reset', this.change_report);
             this.map.bind('ready', this.start);
+            this.available_layers = new LayerCollection();
+            this.available_layers.bind('reset', this.update_map_layers);
         },
 
         init_ui: function() {
@@ -115,6 +115,10 @@ $(function() {
             this.polygon_tools.ndfi_range.bind('change', this.ndfi_layer.apply_filter);
             this.polygon_tools.compare.bind('change', this.compare_view);
 
+        },
+        update_map_layers: function() {
+            this.map.layers.reset(this.available_layers.models);
+            //update here other maps
         },
 
         compare_view: function(button, show) {
@@ -222,7 +226,7 @@ $(function() {
             if(this.layer_editor === undefined) {
                 this.layer_editor = new LayerEditor({
                     el: this.$("#layer_editor_dialog"),
-                    layers: this.map_layers
+                    layers: this.map.layers
                 });
             }
             if(this.layer_editor.showing) {

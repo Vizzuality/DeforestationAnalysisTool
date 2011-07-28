@@ -524,7 +524,6 @@ body, html {
   z-index: 20;
   display: none;
   border: 1px solid #8B8B8B;
-  border-radius: 10px;
 }
 #layer_editor_dialog ul {
   height: 254px;
@@ -543,8 +542,8 @@ body, html {
 #layer_editor_dialog ul li:first-child {
   border-top: none;
 }
-#layer_editor_dialog ul li .selected {
-  background: url("/static/img/tick_selected.png") no-repeat 12px 15px;
+#layer_editor_dialog ul li.selected {
+  background: #e7e7e7 url("/static/img/tick_selected.png") no-repeat 12px 15px;
 }
 
 #loading {
