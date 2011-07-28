@@ -226,6 +226,7 @@ class NDFI(object):
             }),
 
             "bands": 'ndfi_delta',
+            "format": 'png',
             "gain": 1,
             "bias": 0.0,
             "gamma": 1.6
