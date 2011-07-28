@@ -75,7 +75,7 @@
           p {
             display:inline-block;
             vertical-align:top;
-            padding:2px 0 0;
+            padding:1px 0 0;
             font:normal 13px $text_font;
             color:#4D575F;
             text-shadow:0 1px black;
@@ -297,21 +297,18 @@
                   }
                 }
 
+                .ui-state-focus,.ui-state-hover {
+                  background-position:0 -14px;
+                  cursor:pointer;
+                }
+
                 .ui-slider-range {
                   background:#FDCC8A;
                 }
               }
             }
-
-//            <div id="slider_wrapper">
-//                <a href="#" class="range">Range Settings</a>
-//                <span class="hack_red"></span>
-//                <div id="ndfi_slider"></div>
-//            </div>
         }
     }
-
-
     #overview {
         position: absolute;
         right: 30px;
@@ -327,7 +324,7 @@
         h3 {
           display:block;
           padding:0 0 0 15px;
-          background:url('../img/icons/padlock.png') no-repeat 0 0;
+          background:url('../img/icons/padlock.png') no-repeat 0 2px;
           color: #F7C8C0;
           font:bold 13px $text_font;
           text-shadow: #A03420 0px 1px 0px;
