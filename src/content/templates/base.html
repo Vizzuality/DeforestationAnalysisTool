@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
         <title>imazon</title>
@@ -11,6 +11,7 @@
     <body class="{% block login %}{% endblock %}">
         {% block body %}
         {% endblock %}
+
           <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
           <script>window.jQuery || document.write("<script src='js/libs/jquery-1.6.2.min.js'>\x3C/script>")</script>
 
@@ -25,6 +26,33 @@
             {% block js %}
             {% endblock %}
         </script>
+
+        <article class="mamufas" style="display:none">
+          <div class="notes">
+            <a href="#">close</a>
+            <h3>3 Notes</h3>
+            <ul>
+              <li>
+                <p class="comment_text">Review accurattely the up/right corner. I suspect there is something wrong with the degradation thershold</p>
+                <span class="comment_info">
+                  <h5>Lewis Hamilton</h5>
+                  <p class="ago">2 days ago</p>
+                </span>
+              </li>
+            </ul>
+            <form>
+              <div class="left">
+                <textarea name="comment"></textarea>
+                <a href="#close_notes" class="close_notes">close the notes</a>
+                <a href="#add_note" class="add_note">ADD NOTE</a>
+              </div>
+              <div class="right">
+                <h5>You</h5>
+              </div>
+            </form>
+          </div>
+        </article>
+
     </body>
 
 </html>
