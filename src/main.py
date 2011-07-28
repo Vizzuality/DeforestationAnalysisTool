@@ -8,17 +8,18 @@ Primary App Engine app handler
 import logging
 import sys, os
 
+package_dir = "packages"
+sys.path.insert(0, package_dir)
 
 # Allow unzipped packages to be imported
 # from packages folder
 
 # Append zip archives to path for zipimport
-"""
+
 for filename in os.listdir(package_dir):
     if filename.endswith((".zip", ".egg")):
-        pass
-        #sys.path.insert(0, "%s/%s" % (package_dir, filename))
-"""
+        sys.path.insert(0, "%s/%s" % (package_dir, filename))
+
 
 
 from wsgiref.handlers import CGIHandler
