@@ -11,8 +11,36 @@ body, html {
 #workarea{
     position: absolute;
     width: 100%;
-    top: 144px; 
+    top: 144px;
     bottom: 0;
+
+    div.zoom_control {
+      position:absolute;
+      top:20px;
+      left:20px;
+      width:22px;
+      height:44px;
+      z-index:100;
+
+      a {
+        display:block;
+        width:22px;
+        height:22px;
+        text-indent:-9999px;
+        background:url('../img/icons/zoom.png') no-repeat 0 0;
+        &.zoom_in {
+          &:hover {
+            background-position:0 -22px;
+          }
+        }
+        &.zoom_out {
+          background-position:-22px 0;
+          &:hover {
+            background-position:-22px -22px;
+          }
+        }
+      }
+    }
 }
 
 #map {
@@ -33,7 +61,7 @@ body, html {
     height: 254px;
     z-index: 20;
     display: none;
-    border: 1px solid #8B8B8B; 
+    border: 1px solid #8B8B8B;
     ul {
         height: 254px;
         width: 100%;
@@ -60,7 +88,7 @@ body, html {
 
 #loading {
     position: absolute;
-    top: 50%; 
+    top: 50%;
     left: 50%;
     margin-left: -16px;
     margin-top: -16px;
