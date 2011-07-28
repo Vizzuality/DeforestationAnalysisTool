@@ -13,6 +13,7 @@ var PolygonDrawTool = Backbone.View.extend({
         if(editing) {
             this.mapview.bind('click', this.add_vertex);
         } else {
+            this.reset();
             this.mapview.unbind('click', this.add_vertex);
         }
     },
