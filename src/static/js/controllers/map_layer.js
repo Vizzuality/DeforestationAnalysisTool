@@ -14,6 +14,7 @@ var NDFILayer = Backbone.View.extend({
 
     initialize: function() {
         _.bindAll(this, 'canvas_setup', 'filter', 'apply_filter', 'map_auth', 'click');
+        this.editing_state = false;
         this.mapview = this.options.mapview;
         this.report = this.options.report;
         this.layer = new CanvasTileLayer(this.canvas_setup, this.filter);
@@ -42,6 +43,9 @@ var NDFILayer = Backbone.View.extend({
 
     click: function(e) {
         var self = this;
+        if(!this.editing_state) {
+            return;
+        }
         window.loading.loading();
 
         var c = this.layer.composed(this.mapview.el[0]);

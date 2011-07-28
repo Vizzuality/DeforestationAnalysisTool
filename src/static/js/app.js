@@ -18,7 +18,10 @@ $(function() {
         //reset to initial state
         reset: function() {
             this.app.ndfi_layer.unbind('polygon', this.new_polygon);
+            this.app.ndfi_layer.editing_state = false;
             this.app.cell_polygons.editing_state = false;
+            this.app.create_polygon_tool.editing_state(false);
+            this.app.polygon_tools.polytype.hide();
         },
 
         change_state: function(st) {
@@ -34,9 +37,15 @@ $(function() {
                     this.app.cell_polygons.editing_state = true;
                     break;
                 case 'draw':
+                    this.app.create_polygon_tool.editing_state(true);
+                    this.app.polygon_tools.polytype.bind('state', this.app.create_polygon_tool.poly_type);
+                    this.app.create_polygon_tool.bind('polygon', this.new_polygon);
+                    this.app.polygon_tools.polytype.show();
+                    this.app.polygon_tools.polytype.select('def');
                     break;
                 case 'auto':
                     this.app.ndfi_layer.bind('polygon', this.new_polygon);
+                    this.app.ndfi_layer.editing_state = true;
                     break;
             }
             console.log(st);
@@ -133,7 +142,7 @@ $(function() {
                 _.each(this.compare_maps, function(m) {
                     m.map.setZoom(self.map.map.getZoom());
                     self.map.bind('center_changed', m.set_center);
-                    
+
                 });
             } else {
                 //TODO: remove maps
@@ -187,6 +196,8 @@ $(function() {
         // do *NOT* perform any operation over map before this function
         // is called
         start: function() {
+
+            this.create_polygon_tool = new  PolygonDrawTool({mapview: this.map});
 
             // grid manager
             this.gridstack = new GridStack({

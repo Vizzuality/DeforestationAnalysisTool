@@ -70,7 +70,7 @@ var ReportToolbar = Toolbar.extend({
 var ButtonGroup = Backbone.View.extend({
 
     initialize: function() {
-        //_.bindAll(this, 'change');
+        _.bindAll(this, 'show', 'hide', 'select');
         var self = this;
         this.buttons = this.$('.button').click(function(e) { self.click($(this), e); });
     },
@@ -80,6 +80,21 @@ var ButtonGroup = Backbone.View.extend({
         button.addClass('selected');
         event.preventDefault();
         this.trigger('state', button.attr('id'));
+    },
+
+    select: function(opt) {
+        var button = this.$("#" + opt);
+        this.buttons.removeClass('selected');
+        button.addClass('selected');
+        this.trigger('state', button.attr('id'));
+    },
+
+    show: function() {
+        this.el.show();
+    },
+
+    hide: function() {
+        this.el.hide();
     }
 });
 
@@ -94,6 +109,7 @@ var PolygonToolbar = Toolbar.extend({
         this.polytype = new ButtonGroup({el: this.$('#polytype')});
         this.ndfi_range = new RangeSlider({el: this.$("#ndfi_slider")});
         this.compare = new PressedButton({el: this.$("#compare")});
+        this.polytype.hide();
         this.buttons.bind('state', this.change_state);
     },
 
