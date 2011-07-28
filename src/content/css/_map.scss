@@ -1,7 +1,4 @@
-
-@mixin border-radius($r) {
-    -webkit-border-radius: $r;
-}
+@import 'mixins';
 
 body, html {
     height: 100%;
@@ -56,15 +53,17 @@ body, html {
 
 #layer_editor_dialog {
     position: absolute;
-    overflow:hidden;
     width: 217px;
     height: 254px;
     z-index: 20;
     display: none;
     border: 1px solid #8B8B8B;
+    background:#E7E7E7;
+
     ul {
         height: 254px;
         width: 100%;
+        overflow:hidden;
         li {
             width: 217px - 25px;
             $fontsize: 13px;
@@ -74,13 +73,35 @@ body, html {
             /*margin-left: 18px;*/
             border-top: 1px solid #FBFBFB;
             border-bottom: 1px solid #CFCFCF;
-            background: #E7E7E7 url('/static/img/tick_unselected.png') no-repeat 12px 15px;
+            background: #E7E7E7 url('/static/img/tick_unselected.png') no-repeat 12px 16px;
 
             &:first-child {
                 border-top: none;
             }
+
+            &:last-child {
+                border-bottom: none;
+            }
+
             &.selected {
-                background:#E7E7E7 url('/static/img/tick_selected.png') no-repeat 12px 15px;
+                background:#E7E7E7 url('/static/img/tick_selected.png') no-repeat 12px 16px;
+            }
+
+            &:hover a {
+              color:#333333;
+            }
+
+            a {
+              display:block;
+              width:175px;
+              font:normal 13px "Helvetica Neue";
+              color:#666666;
+              text-shadow:0 1px white;
+              text-decoration:none;
+
+              &:hover {
+                color:#333333;
+              }
             }
         }
     }

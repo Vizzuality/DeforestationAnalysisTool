@@ -827,16 +827,17 @@ body, html {
 
 #layer_editor_dialog {
   position: absolute;
-  overflow: hidden;
   width: 217px;
   height: 254px;
   z-index: 20;
   display: none;
   border: 1px solid #8B8B8B;
+  background: #E7E7E7;
 }
 #layer_editor_dialog ul {
   height: 254px;
   width: 100%;
+  overflow: hidden;
 }
 #layer_editor_dialog ul li {
   width: 192px;
@@ -846,13 +847,30 @@ body, html {
   /*margin-left: 18px;*/
   border-top: 1px solid #FBFBFB;
   border-bottom: 1px solid #CFCFCF;
-  background: #e7e7e7 url("/static/img/tick_unselected.png") no-repeat 12px 15px;
+  background: #e7e7e7 url("/static/img/tick_unselected.png") no-repeat 12px 16px;
 }
 #layer_editor_dialog ul li:first-child {
   border-top: none;
 }
+#layer_editor_dialog ul li:last-child {
+  border-bottom: none;
+}
 #layer_editor_dialog ul li.selected {
-  background: #e7e7e7 url("/static/img/tick_selected.png") no-repeat 12px 15px;
+  background: #e7e7e7 url("/static/img/tick_selected.png") no-repeat 12px 16px;
+}
+#layer_editor_dialog ul li:hover a {
+  color: #333333;
+}
+#layer_editor_dialog ul li a {
+  display: block;
+  width: 175px;
+  font: normal 13px "Helvetica Neue";
+  color: #666666;
+  text-shadow: 0 1px white;
+  text-decoration: none;
+}
+#layer_editor_dialog ul li a:hover {
+  color: #333333;
 }
 
 #loading {
@@ -863,7 +881,9 @@ body, html {
   margin-top: -16px;
   padding: 10px;
   background-color: rgba(0, 0, 0, 0.2);
-  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-radius: 5px;
   display: none;
 }
 
@@ -950,7 +970,9 @@ article.login a.sign_in {
   text-shadow: 0 1px white;
   text-decoration: none;
   box-shadow: 0 1px rgba(255, 255, 255, 0.6);
-  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-radius: 3px;
 }
 article.login a.sign_in:hover {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(#cccccc), to(#ebebeb));
