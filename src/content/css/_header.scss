@@ -64,8 +64,9 @@
     }
     #tools {
         border-top:1px solid #333333;
+        border-bottom:1px solid #202021;
         background: rgba(0,0,0,0.5);
-        height: 59px;
+        height: 58px;
         color: white;
 
         #range_select {
@@ -234,29 +235,125 @@
         }
     }
 
+
     #overview {
-        font-family: $text_font;
-        z-index: 10;
-        $padding: 20px;
-        width: 238px - 2*$padding;
-        height: 152px - 2*$padding;
-        padding: $padding;
         position: absolute;
         right: 30px;
         top: 0;
+        $padding: 20px;
+        width: 240px - 2*$padding;
+        height: 153px - 2*$padding;
+        padding: $padding;
+
+        z-index: 10;
         background: -webkit-gradient(linear, left top, left bottom, from($overview_top), to($overview_bottom));
-        #done {
-            margin-top: 20px;
-            background: #CCC;
-            padding: 5px 10px;
-            display: block;
-        }
-        #name {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 13px;
-            font-weight: bold;
-            text-shadow: #812B19 0px 1px 0px;
+
+        h3 {
+          display:block;
+          padding:0 0 0 15px;
+          background:url('../img/icons/padlock.png') no-repeat 0 0;
+          color: #F7C8C0;
+          font:bold 13px $text_font;
+          text-shadow: #A03420 0px 1px 0px;
         }
 
+        p#cells {
+          display:block;
+          padding:2px 0 0 0;
+          color:#AC3722;
+          font:normal 13px $text_font;
+          text-shadow:0 1px #FA8B73;
+        }
+
+        div.info {
+          display:block;
+          margin:15px 0 0 0;
+
+          p {
+            float:left;
+            width:auto;
+            padding:0 0 0 12px!important;
+            font:normal 13px $text_font;
+            color:#96301C;
+            text-shadow:0 1px #E67F6A;
+            background:url('../img/icons/marker_overview.png') no-repeat 0 2px;
+
+            a {
+              color:#96301C;
+              text-decoration:none;
+              &:hover {
+                text-decoration:underline;
+              }
+            }
+          }
+
+          a.notes {
+            float:right;
+            padding:2px 5px 3px;
+            @include border-radius(3px);
+            background:#C74027;
+            font:normal 10px $text_font;
+            color:#FF8873;
+            text-decoration:none;
+
+            &:hover {
+              color:white;
+            }
+          }
+        }
+
+        div.analysed {
+          display:inline-block;
+          padding:10px 0 0 0!important;
+
+          button#done {
+            float:left;
+            width:200px;
+            height:35px;
+            padding:8px 5px 9px 10px;
+            border:1px solid #333333;
+            @include border-radius(5px);
+            box-shadow:0 1px #F3775E;
+            background:-webkit-gradient(linear,50% 0%,50% 100%,from(#EBEBEB),to(#CCCCCC));
+
+            &:hover {
+              background:-webkit-gradient(linear,50% 0%,50% 100%,from(#CCCCCC),to(#EBEBEB));
+            }
+
+            span.separator {
+              float:left;
+              height:18px;
+              width:2px;
+              background:url('../img/button_separator.png') no-repeat 0 0;
+            }
+
+            p.stats {
+              float:left;
+              width:120px;
+              padding:1px 0 0 0;
+              font:normal 13px $text_font;
+              color:#666666;
+              text-shadow:0 1px white;
+              text-align:left;
+            }
+            p.done {
+              float:right;
+              width:58px;
+              padding:1px 0 0 0;
+              font:bold 12px $text_font;
+              color:#333333;
+              text-transform:uppercase;
+              text-align:center;
+            }
+          }
+        }
+
+
+//        <div class="analysed">
+//          <button class="analysed">
+//            <p>65 km<sup>2</sup> analysed</p>
+//            <p id="done">done</p>
+//          </button>
+//        </div>
     }
 }

@@ -10,19 +10,20 @@
             </div>
 
             <div id="overview">
-                <div id="name">
-                {{ user.nickname() }}
-                </div>
-                <div id="cells">
-                12 cells this month
-                </div>
-
-                <div id="">
-                global map
-                </div>
-                <div id=""></div>
-                <a href="#" id="done">done</a>
-             </div>
+              <h3 id="name">{{ user.nickname() }}</h3>
+              <p id="cells">12 cells this month</p>
+              <div class="info">
+                <p>Cell JG.65 - <a href="#go_back">go back</a></p>
+                <a href="#notes" class="notes">2 NOTES</a>
+              </div>
+              <div class="analysed">
+                <button id="done">
+                  <p class="stats">65 km<sup>2</sup> analysed</p>
+                  <span class="separator"></span>
+                  <p class="done">done</p>
+                </button>
+              </div>
+           </div>
         </div>  <!-- content -->
     </div>
 
