@@ -97,7 +97,7 @@ $(function() {
         ),
 
         initialize:function() {
-            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view', 'update_map_layers', 'cell_done', 'go_back');
+            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view', 'update_map_layers', 'cell_done', 'go_back', 'open_notes');
 
             window.loading.loading("Imazon:initialize");
             this.reports = new ReportCollection();
@@ -124,6 +124,7 @@ $(function() {
             this.polygon_tools.ndfi_range.bind('change', this.ndfi_layer.apply_filter);
             this.polygon_tools.compare.bind('state', this.compare_view);
             this.overview.bind('go_back', this.go_back);
+            this.overview.bind('open_notes', this.open_notes);
 
         },
         update_map_layers: function() {
@@ -298,6 +299,14 @@ $(function() {
         to_cell:function (z, x, y) {
             this.overview.on_cell(x, y, z);
             this.gridstack.enter_cell(parseInt(x, 10), parseInt(y, 10), parseInt(z, 10));
+        },
+        
+        open_notes: function() {
+            var notes_dialog = new NotesDialog({
+                el: this.$(".mamufas"),
+                cell: this.gridstack.current_cell
+            });
+            notes_dialog.open();
         }
 
 

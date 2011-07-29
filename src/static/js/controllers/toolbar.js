@@ -132,7 +132,8 @@ var Overview = Backbone.View.extend({
 
     events: {
         'click #done': 'done',
-        'click #go_back': 'go_back'
+        'click #go_back': 'go_back',
+        'click .notes': 'open_notes'
     },
 
     initialize: function() {
@@ -143,6 +144,11 @@ var Overview = Backbone.View.extend({
     done: function(e) {
         e.preventDefault();
         this.trigger('done');
+    },
+
+    open_notes: function(e) {
+        e.preventDefault();
+        this.trigger('open_notes');
     },
 
     go_back: function(e) {

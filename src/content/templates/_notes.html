@@ -1,0 +1,27 @@
+<article class="mamufas">
+  <div class="notes">
+    <a class="close" href="#">close</a>
+    <h3>3 Notes</h3>
+    <ul>
+    </ul>
+    <form>
+      <div class="left">
+        <textarea name="comment" id="comment"></textarea>
+        <a href="#close_notes" class="close_notes">close the notes</a>
+        <a href="#add_note" class="add_note">ADD NOTE</a>
+      </div>
+      <div class="right">
+        <h5>You</h5>
+      </div>
+    </form>
+  </div>
+</article>
+
+
+<script type="text/template" id="note-template">
+    <p class="comment_text"><%= text %></p>
+    <span class="comment_info">
+      <h5><%= author %></h5>
+      <p class="ago"><% print(prettyDate(new Date(date))); %></p>
+    </span>
+</script>
