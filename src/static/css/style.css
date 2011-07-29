@@ -881,7 +881,7 @@ body, html {
   left: 20px;
   width: 22px;
   height: 44px;
-  z-index: 100;
+  z-index: 10;
 }
 #workarea .map_container div.zoom_control a {
   display: block;
@@ -950,16 +950,27 @@ body, html {
 
 #loading {
   position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: none;
+  z-index: 10;
+}
+#loading span.loader {
+  position: absolute;
   top: 50%;
   left: 50%;
-  margin-left: -16px;
-  margin-top: -16px;
-  padding: 10px;
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 5px;
-  -moz-border-radius: 5px;
-  -webkit-radius: 5px;
-  display: none;
+  margin: -25px 0 0 -25px;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  padding: 9px;
+  border-radius: 7px;
+  -moz-border-radius: 7px;
+  -webkit-radius: 7px;
+  background: rgba(0, 0, 0, 0.6);
 }
 
 #compare_maps {

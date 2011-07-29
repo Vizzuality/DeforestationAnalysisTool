@@ -130,7 +130,9 @@
         </div>
         <div id="grid"></div>
         <div id="loading">
-            <img src="/static/img/loading.gif"></img>
+            <span class="loader">
+              <img src="/static/img/ajax-loader.gif"/>
+            </span>
         </div>
     </div>
 
@@ -145,7 +147,7 @@
         <span class="arrow"></span>
         <div class="content">
             <p>
-                <%= z %>/<%= x %>/<%= y %> 
+                <%= z %>/<%= x %>/<%= y %>
                 <span class="date">
                 <%
                     if(latest_change !== 0) {
