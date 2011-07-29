@@ -945,7 +945,7 @@ body, html {
 }
 #grid .cell .cell_wrapper_info p {
   display: block;
-  margin: 12px 0 0 9px;
+  margin: 9px 0 0 9px;
   font: normal 11px "Helvetica Neue", Arial, Sans-Serif;
   color: rgba(255, 255, 255, 0.6);
 }
