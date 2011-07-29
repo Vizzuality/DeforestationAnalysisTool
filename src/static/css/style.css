@@ -906,18 +906,48 @@ body, html {
   /*background-image: url('/static/img/bkg_cell.png');*/
 }
 #grid .cell .cell_wrapper_info {
+  display: none;
   position: absolute;
   top: -3px;
   left: 54px;
-  background-color: #333;
-  display: none;
+  width: 137px;
+  height: 49px;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
   font-size: 12px;
   color: white;
   z-index: 10;
-  width: 137px;
-  height: 49px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-bottomright: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+#grid .cell .cell_wrapper_info span.arrow {
+  position: absolute;
+  top: 50%;
+  left: -5px;
+  width: 5px;
+  height: 10px;
+  margin: -5px 0 0 0;
+  background: url("../img/cellinfo_arrow.png") no-repeat 0 0;
+}
+#grid .cell .cell_wrapper_info h3 {
+  display: block;
+  margin: 5px 0 0 9px;
+  font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: white;
+  text-shadow: 0 1px black;
+}
+#grid .cell .cell_wrapper_info p {
+  display: block;
+  margin: 12px 0 0 9px;
+  font: normal 11px "Helvetica Neue", Arial, Sans-Serif;
+  color: rgba(255, 255, 255, 0.6);
 }
 #grid .cell.hover {
+  cursor: pointer;
   border: 3px solid #333;
 }
 
