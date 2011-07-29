@@ -605,13 +605,85 @@ article .example .field {
   background: url("../img/icons/compare.png") no-repeat right 0;
 }
 #header #tools #maptools li a#compare.selected {
-  background-position: right -31px;
+  background-position: right -33px;
 }
 #header #tools #maptools li a#ndfirange {
   background: url("../img/icons/range.png") no-repeat right 0;
 }
 #header #tools #maptools li a#ndfirange.selected {
   background-position: right -31px;
+}
+#header #tools #maptools #compare_li {
+  position: relative;
+}
+#header #tools #maptools #compare_li:hover #compare_wrapper {
+  display: block;
+}
+#header #tools #maptools div#compare_wrapper {
+  display: none;
+  position: absolute;
+  top: -10px;
+  left: -11px;
+  width: 138px;
+  height: 75px;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-radius: 3px;
+  border: 1px solid black;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+}
+#header #tools #maptools div#compare_wrapper a.compare {
+  display: inline-block;
+  margin: 10px 0 0 10px;
+  font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: white;
+  text-shadow: 0 1px black;
+  padding: 0 25px 3px 0;
+  text-decoration: none;
+  background: url("../img/icons/compare.png") no-repeat right -23px;
+}
+#header #tools #maptools div#compare_wrapper ul {
+  display: block;
+  margin: 8px 0 0 10px;
+}
+#header #tools #maptools div#compare_wrapper ul li {
+  display: inline-block;
+  height: 28px;
+  width: 29px;
+  padding: 0;
+  margin: 0 13px 0 0;
+}
+#header #tools #maptools div#compare_wrapper ul li a {
+  display: block;
+  width: 27px;
+  height: 27px;
+  padding: 0;
+  margin: 0;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-radius: 3px;
+  text-indent: -9999px;
+}
+#header #tools #maptools div#compare_wrapper ul li a:hover {
+  border-color: black;
+  box-shadow: 0 1px #2A2C2E;
+  cursor: pointer;
+}
+#header #tools #maptools div#compare_wrapper ul li a.selected {
+  border-color: black;
+  box-shadow: 0 1px #2A2C2E;
+  cursor: default;
+}
+#header #tools #maptools div#compare_wrapper ul li a.one {
+  background: url("../img/icons/compare_single.png") center center no-repeat;
+}
+#header #tools #maptools div#compare_wrapper ul li a.two {
+  background: url("../img/icons/compare_two.png") center center no-repeat;
+}
+#header #tools #maptools div#compare_wrapper ul li a.four {
+  background: url("../img/icons/compare_four.png") center center no-repeat;
 }
 #header #tools #maptools #range:hover #slider_wrapper {
   display: block;
