@@ -19,7 +19,7 @@ var MapView = Backbone.View.extend({
     //el: $("#map"),
 
     initialize: function() {
-        _.bindAll(this, 'center_changed', 'ready', 'click', 'set_center', 'reoder_layers', 'change_layer', 'open_layer_editor', 'zoom_changed', 'zoom_in', 'zoom_out');
+        _.bindAll(this, 'center_changed', 'ready', 'click', 'set_center', 'reoder_layers', 'change_layer', 'open_layer_editor', 'zoom_changed', 'zoom_in', 'zoom_out', 'adjustSize', 'set_zoom_silence', 'set_center_silence');
        this.map_layers = {};
        this.map = new google.maps.Map(this.$('.map')[0], this.mapOptions);
        google.maps.event.addListener(this.map, 'center_changed', this.center_changed);
@@ -33,6 +33,7 @@ var MapView = Backbone.View.extend({
     },
 
     adjustSize: function() {
+        google.maps.event.trigger(this.map, "resize");
 
     },
     hide_controls: function() {
@@ -71,11 +72,19 @@ var MapView = Backbone.View.extend({
         this.map.setCenter(c);
         this.signals_on = true;
     },
+    
+    set_center_silence: function(c) {
+        this.set_center(c, false);
+    },
 
-    set_zoom: function(z) {
+    set_zoom: function(z, s) {
         this.signals_on = s === undefined? true: s;
         this.map.setZoom(z);
         this.signals_on = true;
+    },
+
+    set_zoom_silence: function(z) {
+        this.set_zoom(z, false);
     },
 
     click: function(e) {

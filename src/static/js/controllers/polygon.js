@@ -103,10 +103,10 @@ var CellPolygons = Backbone.View.extend({
     commit: function() {
         var finished = function () {
             console.log("finished");
-            window.loading.finished();
+            window.loading.finished('polygons:commit');
         };
         this.polygons.each(function(p) {
-            window.loading.loading();
+            window.loading.loading('polygons:commit');
             p.save(null, {
                 success: finished,
                 error: finished

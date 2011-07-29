@@ -61,9 +61,10 @@ $(function() {
         initialize: function() {
         },
 
-        loading: function() {
+        loading: function(where) {
             this.refcount++;
             this.el.fadeIn();
+            console.log(where);
         },
         finished: function() {
             --this.refcount;
@@ -98,8 +99,9 @@ $(function() {
         initialize:function() {
             _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view', 'update_map_layers', 'cell_done');
 
-            window.loading.loading();
+            window.loading.loading("Imazon:initialize");
             this.reports = new ReportCollection();
+            this.compare_layout = null;
 
             this.map = new MapView({el: this.$("#main_map")});
             this.map.hide_controls();
@@ -120,42 +122,73 @@ $(function() {
             this.ndfi_layer = new NDFILayer({mapview: this.map, report: this.active_report});
 
             this.polygon_tools.ndfi_range.bind('change', this.ndfi_layer.apply_filter);
-            this.polygon_tools.compare.bind('change', this.compare_view);
+            this.polygon_tools.compare.bind('state', this.compare_view);
 
         },
         update_map_layers: function() {
             //update here other maps
         },
 
-        compare_view: function(button, show) {
+        compare_four: function() {
+              this.map.el.css({width: '66.66%'});
+              this.map.adjustSize();
+              this.compare_layout = this.$("#compare_layout_1").show();
+              this.compare_maps = [];
+              this.compare_maps.push(new MapView({el: this.$("#map1")}));
+              this.compare_maps.push(new MapView({el: this.$("#map2")}));
+              this.compare_maps.push(new MapView({el: this.$("#map3")}));
+        },
+
+        compare_two: function() {
+              this.map.el.css({width: '50%'});
+              this.map.adjustSize();
+              this.compare_layout = this.$("#compare_layout_2").show();
+              this.compare_maps = [];
+              this.compare_maps.push(new MapView({el: this.$("#map_half")}));
+        },
+
+
+        compare_view: function(compare_type) {
             var self = this;
-            if(show) {
-                this.map.el.css({width: '66.66%'});
-                this.map.adjustSize();
-                this.$("#compare_layout_1").show();
-                this.compare_maps = [];
-                this.compare_maps.push(new MapView({el: this.$("#map1")}));
-                this.compare_maps.push(new MapView({el: this.$("#map2")}));
-                this.compare_maps.push(new MapView({el: this.$("#map3")}));
+            if(compare_type !== 'one') {
+                if(this.compare_layout !== null) {
+                    this.compare_view('one');
+                }
                 // el gran putiferio
+                if(compare_type === 'two') {
+                    this.compare_two();
+                } else {
+                    this.compare_four();
+                }
                 _.each(this.compare_maps, function(m) {
                     m.map.setZoom(self.map.map.getZoom());
                     m.map.setCenter(self.map.map.getCenter());
-                    self.map.bind('center_changed', function(c) {m.set_center(c, false);});
-                    m.bind('center_changed', function(c) { self.map.set_center(c, false);});
+                    self.map.bind('center_changed', m.set_center_silence);
+                    m.bind('center_changed', self.map.set_center_silence);
                     m.layers.reset(self.available_layers.toJSON());
                     _.each(self.compare_maps, function(other) {
                         if(other !== m) {
-                            m.bind('center_changed', function(c) { other.set_center(c, false);});
+                            m.bind('center_changed', other.set_center_silence);
                         }
                     });
                 });
             } else {
                 this.map.el.css({width: '100%'});
                 this.map.adjustSize();
-                this.$("#compare_layout_1").show();
-                this.$("#compare_layout_1").hide();
+                if(this.compare_layout !== null) {
+                    this.compare_layout.hide();
+                    this.compare_layout = null;
+                }
                 _.each(this.compare_maps, function(m) {
+                    // unbind!
+                    self.map.unbind('center_changed', m.set_center_silence);
+                    m.unbind('center_changed', self.map.set_center_silence);
+                    _.each(self.compare_maps, function(other) {
+                        if(other !== m) {
+                            m.unbind('center_changed', other.set_center_silence);
+                        }
+                    });
+                    // flybye!
                     delete m.map;
                     delete m;
                 });
@@ -201,7 +234,7 @@ $(function() {
 
         // entering on select_mode
         select_mode: function() {
-            this.compare_view(null, false);
+            this.compare_view('one');
             this.selection_toolbar.show();
             this.polygon_tools.hide();
             this.ndfi_layer.hide();
@@ -250,7 +283,7 @@ $(function() {
                 router.navigate('cell/0/0/0');
             }
             Backbone.history.start();
-            window.loading.finished();
+            window.loading.finished("Imazon: start");
             console.log(" === App started === ");
         },
 
