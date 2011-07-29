@@ -119,6 +119,9 @@ def ndfi_value_for_cells(cell_key):
                 ratio = count/s
             else:
                 ratio = 0.0
+            # normalize to 4 (this value is experimental)
+            ratio = min(ratio, 4.0)/4.0
+            ratio = ratio**0.6 # give more importance to smaller values 
             # asign to cell
             c = cell.child(row, col)
             c.ndfi_change_value = ratio

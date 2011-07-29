@@ -72,9 +72,9 @@ class Cell(db.Model):
     x = db.IntegerProperty(required=True)
     y = db.IntegerProperty(required=True)
     report = db.ReferenceProperty(Report)
-    ndfi_low = db.FloatProperty()
-    ndfi_high = db.FloatProperty()
-    ndfi_change_value = db.FloatProperty()
+    ndfi_low = db.FloatProperty(default=0.4)
+    ndfi_high = db.FloatProperty(default=0.6)
+    ndfi_change_value = db.FloatProperty(default=0.0)
     done = db.BooleanProperty(default=False);
 
     @staticmethod
@@ -116,6 +116,7 @@ class Cell(db.Model):
         for c in ch: 
             ndfi += c.ndfi_change_value
         self.ndfi_change_value = ndfi/len(ch)
+        self.put()
 
     @staticmethod
     def cell_id(id):
