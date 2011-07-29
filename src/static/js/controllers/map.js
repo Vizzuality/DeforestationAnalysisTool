@@ -12,28 +12,57 @@ var MapView = Backbone.View.extend({
     },
 
     events: {
-            'click .layer_editor': 'open_layer_editor'
+            'click .layer_editor': 'open_layer_editor',
+            'click .zoom_in': 'zoom_in',
+            'click .zoom_out': 'zoom_out'
     },
     //el: $("#map"),
 
     initialize: function() {
-        _.bindAll(this, 'center_changed', 'ready', 'click', 'set_center', 'reoder_layers', 'change_layer', 'open_layer_editor');
+        _.bindAll(this, 'center_changed', 'ready', 'click', 'set_center', 'reoder_layers', 'change_layer', 'open_layer_editor', 'zoom_changed', 'zoom_in', 'zoom_out');
        this.map_layers = {};
        this.map = new google.maps.Map(this.$('.map')[0], this.mapOptions);
        google.maps.event.addListener(this.map, 'center_changed', this.center_changed);
+       google.maps.event.addListener(this.map, 'zoom_changed', this.zoom_changed);
        google.maps.event.addListener(this.map, 'click', this.click);
        //google.maps.event.addListener(this.map, 'idle', this.tilesloaded);
        this.projector = new Projector(this.map);
        this.projector.draw = this.ready;
        this.layers = new LayerCollection();
+       this.signals_on = true;
     },
 
     center_changed: function() {
+        if(this.signals_on) {
             this.trigger('center_changed', this.map.getCenter());
+        }
     },
 
-    set_center: function(c) {
+    zoom_in: function(e) {
+        e.preventDefault();
+        this.map.setZoom(this.map.getZoom() + 1);
+    },
+
+    zoom_out: function(e) {
+        e.preventDefault();
+        this.map.setZoom(this.map.getZoom() - 1);
+    },
+    zoom_changed: function() {
+        if(this.signals_on) {
+            this.trigger('zoom_changed', this.map.getZoom());
+        }
+    },
+
+    set_center: function(c, s) {
+        this.signals_on = s === undefined? true: s;
         this.map.setCenter(c);
+        this.signals_on = true;
+    },
+
+    set_zoom: function(z) {
+        this.signals_on = s === undefined? true: s;
+        this.map.setZoom(z);
+        this.signals_on = true;
     },
 
     click: function(e) {

@@ -890,7 +890,7 @@ body, html {
   display: none;
 }
 
-#compare_maps {
+#compare_layout_1 {
   position: absolute;
   top: 0;
   width: 33.2%;
@@ -899,7 +899,8 @@ body, html {
   border-left: 1px solid #666666;
   display: none;
 }
-#compare_maps .compare_map {
+#compare_layout_1 .compare_map {
+  position: relative;
   width: 100%;
   height: 33.3%;
   border-bottom: 1px solid #333333;

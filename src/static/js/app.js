@@ -123,7 +123,6 @@ $(function() {
 
         },
         update_map_layers: function() {
-            
             //update here other maps
         },
 
@@ -131,20 +130,32 @@ $(function() {
             var self = this;
             if(show) {
                 this.map.el.css({width: '66.66%'});
-                this.$("#compare_maps").show();
+                this.$("#compare_layout_1").show();
                 this.compare_maps = [];
                 this.compare_maps.push(new MapView({el: this.$("#map1")}));
                 this.compare_maps.push(new MapView({el: this.$("#map2")}));
                 this.compare_maps.push(new MapView({el: this.$("#map3")}));
+                // el gran putiferio
                 _.each(this.compare_maps, function(m) {
                     m.map.setZoom(self.map.map.getZoom());
-                    self.map.bind('center_changed', m.set_center);
-
+                    m.map.setCenter(self.map.map.getCenter());
+                    self.map.bind('center_changed', function(c) {m.set_center(c, false);});
+                    m.bind('center_changed', function(c) { self.map.set_center(c, false);});
+                    m.layers.reset(self.available_layers.toJSON());
+                    _.each(self.compare_maps, function(other) {
+                        if(other !== m) {
+                            m.bind('center_changed', function(c) { other.set_center(c, false);});
+                        }
+                    });
                 });
             } else {
-                //TODO: remove maps
                 this.map.el.css({width: '100%'});
-                this.$("#compare_maps").hide();
+                this.$("#compare_layout_1").hide();
+                _.each(this.compare_maps, function(m) {
+                    delete m.map;
+                    delete m;
+                });
+                this.compare_maps = [];
             }
         },
 
@@ -186,6 +197,7 @@ $(function() {
 
         // entering on select_mode
         select_mode: function() {
+            this.compare_view(null, false);
             this.selection_toolbar.show();
             this.polygon_tools.hide();
             this.ndfi_layer.hide();
