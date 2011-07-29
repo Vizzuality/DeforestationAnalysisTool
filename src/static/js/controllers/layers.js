@@ -43,12 +43,16 @@ var LayerEditor = Backbone.View.extend({
 
     showing: false,
 
+    template: _.template($('#layer-editor').html()),
+
     initialize: function() {
         _.bindAll(this, 'show', 'addLayer', 'addLayers', 'sortLayers', 'addLayer');
         var self = this;
 
         this.item_view_map = {};
         this.layers = this.options.layers;
+        this.el = $(this.template());
+        this.options.parent.append(this.el);
         this.addLayers(this.layers);
         this.el.find('ul').jScrollPane({autoReinitialise:true});
 
