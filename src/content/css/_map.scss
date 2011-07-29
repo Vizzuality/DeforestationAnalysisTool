@@ -149,18 +149,51 @@ body, html {
     }
     .cell {
         .cell_wrapper_info {
+            display: none;
             position: absolute;
             top: -3px;
             left: 54px;
-            background-color: #333;
-            display: none;
+            width: 137px;
+            height: 49px;
+            background: -webkit-gradient(linear,50% 0%,50% 100%,from(#36383C),to(#232427));;
             font-size: 12px;
             color: white;
             z-index: 10;
-            width: 137px;
-            height: 49px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.6);
+            -webkit-border-top-right-radius: 3px;
+            -webkit-border-bottom-right-radius: 3px;
+            -moz-border-radius-topright: 3px;
+            -moz-border-radius-bottomright: 3px;
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+
+            span.arrow {
+              position:absolute;
+              top:50%;
+              left:-5px;
+              width:5px;
+              height:10px;
+              margin:-5px 0 0 0;
+              background:url('../img/cellinfo_arrow.png') no-repeat 0 0;
+            }
+
+            h3 {
+              display:block;
+              margin:5px 0 0 9px;
+              font:bold 13px $text_font;
+              color:white;
+              text-shadow:0 1px black;
+            }
+
+            p {
+              display:block;
+              margin:9px 0 0 9px;
+              font:normal 11px $text_font;
+              color:rgba(255,255,255,0.6);
+            }
         }
         &.hover {
+            cursor:pointer;
             border: 3px solid #333;
         }
     }
