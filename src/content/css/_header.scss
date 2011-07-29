@@ -203,12 +203,12 @@
 
         #maptools {
             float:right;
-            margin:0 280px 0 0;
+            margin:10px 280px 0 0;
 
             li {
               position:relative;
               width:116px;
-              margin:0 10px 0;
+              margin:0;
               padding:20px 24px;
 
 
@@ -225,12 +225,6 @@
 
                 &#ndfirange {
                   background:url('../img/icons/range.png') no-repeat right 0;
-                  &.selected {
-                    background-position:right -31px;
-                  }
-                  &:hover {
-
-                  }
                 }
               }
             }
@@ -240,7 +234,6 @@
             #compare_li {
               position:relative;
             }
-
             div#compare_wrapper {
               display:none;
               position:absolute;
@@ -296,7 +289,6 @@
                 }
               }
             }
-
             #compare_li:hover {
               background:url('../img/over_header_settings.png') no-repeat 0 0;
               #compare {
@@ -308,9 +300,15 @@
             }
 
 
+            #range:hover {
+              background:url('../img/over_header_settings.png') no-repeat 0 0;
+              #ndfirange {
+                background-position:right -30px;
+              }
+               #slider_wrapper {
+                  display:block;
+              }
 
-            #range:hover #slider_wrapper {
-                display:block;
             }
             #range {
                 position: relative;
@@ -318,23 +316,12 @@
             #slider_wrapper {
               position:absolute;
               display:none;
-              top:-22px;
-              right:-23px;
+              top:40px;
+              right:2px;
               width:273px;
-              height:101px;
-              background:url('../img/slider_bkg.png') no-repeat 0 0;
-
-              a.range {
-                position:absolute;
-                top:23px;
-                right:23px;
-                font:bold 13px $text_font;
-                color:white;
-                text-shadow:0 1px black;
-                padding:0 25px 3px 0;
-                text-decoration:none;
-                background:url('../img/icons/range.png') no-repeat right -31px;
-              }
+              height:61px;
+              background:url('../img/bottom_range_wrapper.png') no-repeat 0 0;
+              z-index:2;
 
               div#ndfi_slider {
                 position:absolute;
