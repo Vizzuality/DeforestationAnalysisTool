@@ -183,8 +183,7 @@ var GridStack = Backbone.View.extend({
     },
 
     cell_click: function(cell) {
-        this.current_cell = cell;
-        this.enter_cell(cell.get('x'), cell.get('y'), cell.get('z'));
+        this.enter_cell(cell.get('x'), cell.get('y'), cell.get('z'), cell);
     },
 
     set_visible_zone: function(bounds) {
@@ -213,10 +212,21 @@ var GridStack = Backbone.View.extend({
         this.oclusion_poly.setMap(null);
     },
 
+    to_parent: function() {
+
+    },
     // when user enter on a cell, this level cells need to be loaded
     // and map changed to this bounds
-    enter_cell: function(x, y, z) {
+    enter_cell: function(x, y, z, cell) {
         var self = this;
+
+        this.current_cell = cell || new Cell({
+            report_id: this.report.id,
+            x: x,
+            y: y,
+            z: z
+        });
+
         this.clear_visible_zone();
         //TODO: show loading
         var cell_bounds = window.mapper.cell_bounds(x, y, z);
@@ -236,13 +246,7 @@ var GridStack = Backbone.View.extend({
             this.trigger('select_mode');
         } else {
             this.el.hide();
-            if(this.current_cell === undefined) {
-                this.current_cell = new Cell({
-                    report_id: this.report.id,
-                    x: x,
-                    y: y,
-                    z: z
-                });
+            if(this.current_cell.isNew()){
                 this.current_cell.fetch({
                     success: function() {
                         self.trigger('work_mode', x, y, z);

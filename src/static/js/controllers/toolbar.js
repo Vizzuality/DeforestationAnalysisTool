@@ -131,11 +131,12 @@ var Overview = Backbone.View.extend({
     el: $("#overview"),
 
     events: {
-        'click #done': 'done'
+        'click #done': 'done',
+        'click #go_back': 'go_back'
     },
 
     initialize: function() {
-        _.bindAll(this, 'done', 'on_cell', 'select_mode');
+        _.bindAll(this, 'done', 'on_cell', 'select_mode', 'go_back');
         this.done = this.$('#done');
     },
 
@@ -144,8 +145,25 @@ var Overview = Backbone.View.extend({
         this.trigger('done');
     },
 
+    go_back: function(e) {
+        e.preventDefault();
+        this.trigger('go_back');
+    },
     on_cell: function(x, y, z) {
-        this.done.show();
+        if(z == 2) {
+            this.done.show();
+            this.$('.notes').show();
+        } else {
+            this.$('.notes').hide();
+        }
+        var text = "Global map";
+        if(z > 0) {
+            text = "Cell " + z + "/" + x + "/" + y + " - ";
+            this.$("#go_back").show();
+        } else {
+            this.$("#go_back").hide();
+        }
+        this.$("#current_cell").html(text);
     },
 
     select_mode: function() {

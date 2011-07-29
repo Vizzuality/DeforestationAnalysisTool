@@ -64,7 +64,7 @@ $(function() {
         loading: function(where) {
             this.refcount++;
             this.el.fadeIn();
-            console.log(where);
+            //console.log(where);
         },
         finished: function() {
             --this.refcount;
@@ -97,7 +97,7 @@ $(function() {
         ),
 
         initialize:function() {
-            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view', 'update_map_layers', 'cell_done');
+            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view', 'update_map_layers', 'cell_done', 'go_back');
 
             window.loading.loading("Imazon:initialize");
             this.reports = new ReportCollection();
@@ -123,6 +123,7 @@ $(function() {
 
             this.polygon_tools.ndfi_range.bind('change', this.ndfi_layer.apply_filter);
             this.polygon_tools.compare.bind('state', this.compare_view);
+            this.overview.bind('go_back', this.go_back);
 
         },
         update_map_layers: function() {
@@ -210,7 +211,6 @@ $(function() {
             this.polygon_tools.show();
             this.ndfi_layer.show();
 
-            this.overview.on_cell(x, y, z);
             //cell done!
             this.overview.bind('done', this.cell_done);
             this.cell_polygons.polygons.x = x;
@@ -227,6 +227,10 @@ $(function() {
             this.gridstack.current_cell.set({'done': true});
             this.gridstack.current_cell.save();
             // got to parent cell
+            this.go_back();
+        },
+        
+        go_back: function() {
             var p = this.gridstack.current_cell.parent_cell();
             this.to_cell(p.get('z'), p.get('x'), p.get('y'));
             router.navigate('cell/' +  p.get('z') + "/" + p.get('x') + "/" + p.get('y'));
@@ -252,6 +256,7 @@ $(function() {
         // do *NOT* perform any operation over map before this function
         // is called
         start: function() {
+            var self = this;
 
             this.create_polygon_tool = new  PolygonDrawTool({mapview: this.map});
 
@@ -265,6 +270,7 @@ $(function() {
 
             // bindings
             this.gridstack.grid.bind('enter_cell', function(cell) {
+                self.overview.on_cell(cell.get('x'), cell.get('y'), cell.get('z'));
                 router.navigate('cell/' +  cell.get('z') + "/" + cell.get('x') + "/" + cell.get('y'));
             });
             router.bind('route:cell', this.to_cell);
@@ -274,11 +280,13 @@ $(function() {
             // init interface elements
             this.init_ui();
 
+            // init the map
             this.map.map.setCenter(this.amazon_bounds.getCenter());
             this.map.layers.reset(this.available_layers.models);
-            // enable layer 0
+            // enable layer, amazonas bounds
             this.map.layers.models[0].enabled = true;
             this.map.change_layer(this.map.layers.models[0]);
+
             if(location.hash === '') {
                 router.navigate('cell/0/0/0');
             }
@@ -288,7 +296,7 @@ $(function() {
         },
 
         to_cell:function (z, x, y) {
-            console.log("t", z, x, y);
+            this.overview.on_cell(x, y, z);
             this.gridstack.enter_cell(parseInt(x, 10), parseInt(y, 10), parseInt(z, 10));
         }
 
