@@ -11,12 +11,15 @@ var MapView = Backbone.View.extend({
             draggableCursor:'default'
     },
 
+    events: {
+            'click .layer_editor': 'open_layer_editor'
+    },
     //el: $("#map"),
 
     initialize: function() {
-        _.bindAll(this, 'center_changed', 'ready', 'click', 'set_center', 'reoder_layers', 'change_layer');
+        _.bindAll(this, 'center_changed', 'ready', 'click', 'set_center', 'reoder_layers', 'change_layer', 'open_layer_editor');
        this.map_layers = {};
-       this.map = new google.maps.Map(this.el[0], this.mapOptions);
+       this.map = new google.maps.Map(this.$('.map')[0], this.mapOptions);
        google.maps.event.addListener(this.map, 'center_changed', this.center_changed);
        google.maps.event.addListener(this.map, 'click', this.click);
        //google.maps.event.addListener(this.map, 'idle', this.tilesloaded);
@@ -35,6 +38,22 @@ var MapView = Backbone.View.extend({
 
     click: function(e) {
             this.trigger('click', e);
+    },
+
+    open_layer_editor: function(e) {
+            e.preventDefault();
+            if(this.layer_editor === undefined) {
+                this.layer_editor = new LayerEditor({
+                    parent: this.el,
+                    layers: this.layers
+                });
+            }
+
+            if(this.layer_editor.showing) {
+                this.layer_editor.close();
+            } else {
+                this.layer_editor.show(this.$('.layer_editor').position());
+            }
     },
 
     // called when map is ready

@@ -111,14 +111,18 @@
 
     {% include "_header.html" %}
     <div id="workarea">
-        <div id="map"></div>
-        <!-- zoom-control -->
-        <div class="zoom_control">
-          <a href="#zoom_in" class="zoom_in">zoom_in</a>
-          <a href="#zoom_out" class="zoom_out">zoom_out</a>
+
+        <div class="map_container" id="main_map">
+            <div class="map"></div>
+            <!-- zoom-control -->
+            <div class="zoom_control">
+              <a href="#zoom_in" class="zoom_in">zoom_in</a>
+              <a href="#zoom_out" class="zoom_out">zoom_out</a>
+            </div>
+            <!-- end zoom control -->
+            <div class="layer_editor"><img src="/static/img/layers_editor.png"></img></div>
         </div>
-        <!-- end zoom control -->
-        <div id="layer_editor"><img src="/static/img/layers_editor.png"></img></div>
+
         <div id="compare_maps" class="hidden">
             <div id="map1" class="compare_map"> </div>
             <div id="map2" class="compare_map"> </div>
@@ -130,17 +134,19 @@
         </div>
     </div>
 
-    <div id="layer_editor_dialog" class="hidden">
-        <ul>
-            <li> Capa1 </li>
-            <li> Capa1 </li>
-            <li> Capa1 </li>
-            <li> Capa1 </li>
-            <li> Capa1 </li>
-            <li> Capa2 </li>
-            <li> Capa3 </li>
-        </ul>
-    </div>
+   <script type="text/template" id="layer-editor">
+        <div id="layer_editor_dialog" class="hidden">
+            <ul>
+                <li> Capa1 </li>
+                <li> Capa1 </li>
+                <li> Capa1 </li>
+                <li> Capa1 </li>
+                <li> Capa1 </li>
+                <li> Capa2 </li>
+                <li> Capa3 </li>
+            </ul>
+        </div>
+   </script>
    <script type="text/template" id="cell-template">
       <div class="cell_wrapper_info">
         <div class="content">
