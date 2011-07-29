@@ -61,7 +61,7 @@
     function initial_data() {
         window.app.reports.reset({{reports_json|safe}});
         console.log("=== Initial data loaded == ");
-        window.app.available_layers.reset([
+        var available_maps = [
             {
               id: '1',
               type: 'fusion_tables',
@@ -98,7 +98,17 @@
               description: 'Brazil State Conservation Unit Public'
             }
 
-        ]);
+        ];
+        {% for m in maps %}
+            available_maps.push({
+              id: '{{m.data.mapid}}',
+              type: 'xyz',
+              description: '{{m.info}}',
+              url: 'http://earthengine.googleapis.com/map/{{m.data.mapid}}/{Z}/{X}/{Y}?token={{m.data.token}}'
+        
+            });
+        {% endfor %}
+        window.app.available_layers.reset(available_maps);
 
     }
     $(document).ready(function() {

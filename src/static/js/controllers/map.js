@@ -32,6 +32,19 @@ var MapView = Backbone.View.extend({
        this.signals_on = true;
     },
 
+    adjustSize: function() {
+
+    },
+    hide_controls: function() {
+        this.$('.layer_editor').hide();
+        this.$('.zoom_control').hide();
+    },
+
+    show_controls: function() {
+        this.$('.layer_editor').show();
+        this.$('.zoom_control').show();
+    },
+
     center_changed: function() {
         if(this.signals_on) {
             this.trigger('center_changed', this.map.getCenter());
@@ -103,7 +116,8 @@ var MapView = Backbone.View.extend({
                 layer.map_layer.setMap(self.map);
             }
             else {
-                self.map.overlayMapTypes.setAt(layer.map_position, layer);
+                //self.map.overlayMapTypes.insertAt(layer.map_position, layer.map_layer);
+                self.map.overlayMapTypes.insertAt(0, layer.map_layer);
             }
         } else {
             if(layer.get('type') === 'fusion_tables') {
@@ -165,22 +179,23 @@ var MapView = Backbone.View.extend({
         } else { //xyz
             if (url && url.search('{X}') != -1 && url.search('{Z}') != -1 && url.search('{Y}') != -1) {
                   layer = new google.maps.ImageMapType({
-                  getTileUrl: function(tile, zoom) {
-                    var y = tile.y;
-                    var tileRange = 1 << zoom;
-                    if (y < 0 || y  >= tileRange) {
-                      return null;
-                    }
-                    var x = tile.x;
-                    if (x < 0 || x >= tileRange) {
-                      x = (x % tileRange + tileRange) % tileRange;
-                    }
-                    return this.urlPattern.replace("{X}",x).replace("{Y}",y).replace("{Z}",zoom);
-                  },
-                  tileSize: new google.maps.Size(256, 256),
-                  opacity: 1.0,
-                  isPng: true,
-                  urlPattern:url
+                      getTileUrl: function(tile, zoom) {
+                        var y = tile.y;
+                        console.log("TILINGGG");
+                        var tileRange = 1 << zoom;
+                        if (y < 0 || y  >= tileRange) {
+                          return null;
+                        }
+                        var x = tile.x;
+                        if (x < 0 || x >= tileRange) {
+                          x = (x % tileRange + tileRange) % tileRange;
+                        }
+                        return this.urlPattern.replace("{X}",x).replace("{Y}",y).replace("{Z}",zoom);
+                      },
+                      tileSize: new google.maps.Size(256, 256),
+                      opacity: 1.0,
+                      isPng: true,
+                      urlPattern:url
                });
             }
         }

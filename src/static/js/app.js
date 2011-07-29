@@ -102,6 +102,7 @@ $(function() {
             this.reports = new ReportCollection();
 
             this.map = new MapView({el: this.$("#main_map")});
+            this.map.hide_controls();
             this.cell_polygons = new CellPolygons({mapview: this.map});
 
             this.reports.bind('reset', this.change_report);
@@ -130,6 +131,7 @@ $(function() {
             var self = this;
             if(show) {
                 this.map.el.css({width: '66.66%'});
+                this.map.adjustSize();
                 this.$("#compare_layout_1").show();
                 this.compare_maps = [];
                 this.compare_maps.push(new MapView({el: this.$("#map1")}));
@@ -150,6 +152,8 @@ $(function() {
                 });
             } else {
                 this.map.el.css({width: '100%'});
+                this.map.adjustSize();
+                this.$("#compare_layout_1").show();
                 this.$("#compare_layout_1").hide();
                 _.each(this.compare_maps, function(m) {
                     delete m.map;
