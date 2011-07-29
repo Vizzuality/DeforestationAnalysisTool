@@ -54,11 +54,12 @@ var CellView = Backbone.View.extend({
         var popup = el.find('.cell_wrapper_info');
         popup.show();
         popup.css({left: el.width()});
+        popup.css({height: el.height() + 6});
         el.addClass('hover');
         var p = $(this.el).position();
         el.css({top: p.top - 3, left: p.left - 3});
         el.css({'z-index': 9});
-        
+
     },
 
     onmouseout: function() {
@@ -180,7 +181,7 @@ var GridStack = Backbone.View.extend({
         });
         this.current_cells.fetch();
     },
-    
+
     cell_click: function(cell) {
         this.current_cell = cell;
         this.enter_cell(cell.get('x'), cell.get('y'), cell.get('z'));
