@@ -203,10 +203,14 @@
 
         #maptools {
             float:right;
-            margin:9px 280px 0 0;
+            margin:10px 280px 0 0;
 
             li {
-              margin:0 10px 0;
+              position:relative;
+              width:116px;
+              margin:0;
+              padding:20px 24px;
+
 
               a {
                 font:bold 13px $text_font;
@@ -217,19 +221,10 @@
 
                 &#compare {
                   background:url('../img/icons/compare.png') no-repeat right 0;
-                  &.selected {
-                    background-position:right -33px;
-                  }
                 }
 
                 &#ndfirange {
                   background:url('../img/icons/range.png') no-repeat right 0;
-                  &.selected {
-                    background-position:right -31px;
-                  }
-                  &:hover {
-
-                  }
                 }
               }
             }
@@ -239,36 +234,18 @@
             #compare_li {
               position:relative;
             }
-            #compare_li:hover #compare_wrapper {
-                display:block;
-            }
-
             div#compare_wrapper {
               display:none;
               position:absolute;
-              top:-10px;
-              left:-11px;
-              width:138px;
-              height:75px;
-              background:-webkit-gradient(linear,50% 0%,50% 100%,from(#36383C),to(#232427));;
-              @include border-radius(3px);
-              border:1px solid black;
-              box-shadow:0 0 10px rgba(0,0,0,0.6);
-
-              a.compare {
-                display:inline-block;
-                margin:10px 0 0 10px;
-                font:bold 13px $text_font;
-                color:white;
-                text-shadow:0 1px black;
-                padding:0 25px 3px 0;
-                text-decoration:none;
-                background:url('../img/icons/compare.png') no-repeat right -23px;
-              }
+              top:40px;
+              left:-2px;
+              width:168px;
+              height:61px;
+              background:url('../img/bottom_compare_wrapper.png') no-repeat center bottom;
 
               ul {
                 display:block;
-                margin:8px 0 0 10px;
+                margin:8px 0 0 27px;
 
                 li {
                   display:inline-block;
@@ -312,11 +289,26 @@
                 }
               }
             }
-
-
-
-            #range:hover #slider_wrapper {
+            #compare_li:hover {
+              background:url('../img/over_header_settings.png') no-repeat 0 0;
+              #compare {
+                background-position:right -23px;
+              }
+              #compare_wrapper {
                 display:block;
+              }
+            }
+
+
+            #range:hover {
+              background:url('../img/over_header_settings2.png') no-repeat 0 0;
+              #ndfirange {
+                background-position:right -30px;
+              }
+               #slider_wrapper {
+                  display:block;
+              }
+
             }
             #range {
                 position: relative;
@@ -324,23 +316,12 @@
             #slider_wrapper {
               position:absolute;
               display:none;
-              top:-22px;
-              right:-23px;
+              top:40px;
+              right:2px;
               width:273px;
-              height:101px;
-              background:url('../img/slider_bkg.png') no-repeat 0 0;
-
-              a.range {
-                position:absolute;
-                top:23px;
-                right:23px;
-                font:bold 13px $text_font;
-                color:white;
-                text-shadow:0 1px black;
-                padding:0 25px 3px 0;
-                text-decoration:none;
-                background:url('../img/icons/range.png') no-repeat right -31px;
-              }
+              height:61px;
+              background:url('../img/bottom_range_wrapper.png') no-repeat 0 0;
+              z-index:2;
 
               div#ndfi_slider {
                 position:absolute;

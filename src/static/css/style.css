@@ -589,10 +589,13 @@ article .example .field {
 }
 #header #tools #maptools {
   float: right;
-  margin: 9px 280px 0 0;
+  margin: 10px 280px 0 0;
 }
 #header #tools #maptools li {
-  margin: 0 10px 0;
+  position: relative;
+  width: 116px;
+  margin: 0;
+  padding: 20px 24px;
 }
 #header #tools #maptools li a {
   font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
@@ -604,48 +607,24 @@ article .example .field {
 #header #tools #maptools li a#compare {
   background: url("../img/icons/compare.png") no-repeat right 0;
 }
-#header #tools #maptools li a#compare.selected {
-  background-position: right -33px;
-}
 #header #tools #maptools li a#ndfirange {
   background: url("../img/icons/range.png") no-repeat right 0;
-}
-#header #tools #maptools li a#ndfirange.selected {
-  background-position: right -31px;
 }
 #header #tools #maptools #compare_li {
   position: relative;
 }
-#header #tools #maptools #compare_li:hover #compare_wrapper {
-  display: block;
-}
 #header #tools #maptools div#compare_wrapper {
   display: none;
   position: absolute;
-  top: -10px;
-  left: -11px;
-  width: 138px;
-  height: 75px;
-  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-radius: 3px;
-  border: 1px solid black;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
-}
-#header #tools #maptools div#compare_wrapper a.compare {
-  display: inline-block;
-  margin: 10px 0 0 10px;
-  font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
-  color: white;
-  text-shadow: 0 1px black;
-  padding: 0 25px 3px 0;
-  text-decoration: none;
-  background: url("../img/icons/compare.png") no-repeat right -23px;
+  top: 40px;
+  left: -2px;
+  width: 168px;
+  height: 61px;
+  background: url("../img/bottom_compare_wrapper.png") no-repeat center bottom;
 }
 #header #tools #maptools div#compare_wrapper ul {
   display: block;
-  margin: 8px 0 0 10px;
+  margin: 8px 0 0 27px;
 }
 #header #tools #maptools div#compare_wrapper ul li {
   display: inline-block;
@@ -685,6 +664,21 @@ article .example .field {
 #header #tools #maptools div#compare_wrapper ul li a.four {
   background: url("../img/icons/compare_four.png") center center no-repeat;
 }
+#header #tools #maptools #compare_li:hover {
+  background: url("../img/over_header_settings.png") no-repeat 0 0;
+}
+#header #tools #maptools #compare_li:hover #compare {
+  background-position: right -23px;
+}
+#header #tools #maptools #compare_li:hover #compare_wrapper {
+  display: block;
+}
+#header #tools #maptools #range:hover {
+  background: url("../img/over_header_settings2.png") no-repeat 0 0;
+}
+#header #tools #maptools #range:hover #ndfirange {
+  background-position: right -30px;
+}
 #header #tools #maptools #range:hover #slider_wrapper {
   display: block;
 }
@@ -694,22 +688,12 @@ article .example .field {
 #header #tools #maptools #slider_wrapper {
   position: absolute;
   display: none;
-  top: -22px;
-  right: -23px;
+  top: 40px;
+  right: 2px;
   width: 273px;
-  height: 101px;
-  background: url("../img/slider_bkg.png") no-repeat 0 0;
-}
-#header #tools #maptools #slider_wrapper a.range {
-  position: absolute;
-  top: 23px;
-  right: 23px;
-  font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
-  color: white;
-  text-shadow: 0 1px black;
-  padding: 0 25px 3px 0;
-  text-decoration: none;
-  background: url("../img/icons/range.png") no-repeat right -31px;
+  height: 61px;
+  background: url("../img/bottom_range_wrapper.png") no-repeat 0 0;
+  z-index: 2;
 }
 #header #tools #maptools #slider_wrapper div#ndfi_slider {
   position: absolute;
