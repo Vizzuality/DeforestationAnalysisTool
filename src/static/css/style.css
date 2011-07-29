@@ -791,7 +791,7 @@ body, html {
 }
 #workarea .map_container {
   position: absolute;
-  width: 50%;
+  width: 100%;
   height: 100%;
 }
 #workarea .map_container .map {
