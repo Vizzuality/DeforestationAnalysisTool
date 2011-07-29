@@ -14,16 +14,23 @@ from application.constants import amazon_bounds
 from google.appengine.ext.db import Key
 from google.appengine.api import users
 
+from google.appengine.api import memcache
 
 class NDFIMapApi(Resource):
     """ resource to get ndfi map access data """
+
     def list(self, report_id):
-        r = Report.get(Key(report_id))
-        ee_resource = 'MOD09GA'
-        ndfi = NDFI(ee_resource,
-            past_month_range(r.start),
-            r.range())
-        return jsonify(ndfi.mapid()['data'])
+        cache_key = report_id + "_ndfi"
+        data = memcache.get(cache_key)
+        if not data:
+            r = Report.get(Key(report_id))
+            ee_resource = 'MOD09GA'
+            ndfi = NDFI(ee_resource,
+                past_month_range(r.start),
+                r.range())
+            data = ndfi.mapid()['data']
+            memcache.add(key=cache_key, value=data, time=3600)
+        return jsonify(data)
 
 
 class ReportAPI(Resource):
