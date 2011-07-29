@@ -46,7 +46,7 @@ var NDFILayer = Backbone.View.extend({
         if(!this.editing_state) {
             return;
         }
-        window.loading.loading();
+        window.loading.loading('ndfilayer: click');
 
         var c = this.layer.composed(this.mapview.el[0]);
         var point = this.mapview.projector.transformCoordinates(e.latLng);
@@ -66,7 +66,7 @@ var NDFILayer = Backbone.View.extend({
         var deg = is_color(color, this.DEFORESTATION_COLOR);
         var def = is_color(color, this.DEGRADATION_COLOR);
         if(!deg && !def) {
-            window.loading.finished();
+            window.loading.finished('ndfilayer: click');
             return;
         }
 
@@ -80,7 +80,7 @@ var NDFILayer = Backbone.View.extend({
         inners = _.select(inners, function(p){ return p.length > self.inner_poly_sensibility; });
 
         var newpoly = this.create_poly(poly, inners);
-        window.loading.finished();
+        window.loading.finished('ndfilayer: click');
 
         var type = Polygon.prototype.DEGRADATION;
         if(def) {
@@ -157,21 +157,23 @@ var NDFILayer = Backbone.View.extend({
       if (zoom != 12) {
         return;
       }
+      // ok, you are not going to believe but if you enable loading
+      // images will not be fecthed
+      //window.loading.loading("canvas_setup:");// " + image.src);
       var image = new Image();
-      var ctx = canvas.getContext('2d');
       image.src = "/ee/tiles/" + this.mapid + "/"+ zoom + "/"+ coord.x + "/" + coord.y +"?token=" + this.token;
+      var ctx = canvas.getContext('2d');
       canvas.image = image;
       canvas.coord = coord;
-      window.loading.loading();
       $(image).load(function() {
+            //window.loading.finished("canvas_setup");
             //ctx.globalAlpha = 0.5;
             ctx.drawImage(image, 0, 0);
             canvas.image_data = ctx.getImageData(0, 0, canvas.width, canvas.height);
             self.layer.filter_tile(canvas, [self.low, self.high]);
-            window.loading.finished();
       }).error(function() {
             console.log("server error loading image");
-            window.loading.finished();
+            //window.loading.finished("canvas_setup");
       });
     },
 

@@ -31,6 +31,7 @@ class NDFI(object):
                                end=work_period[1])
         self.earth_engine_resource = ee_res
         self.ee = EarthEngine(settings.EE_TOKEN)
+        self._image_cache = {}
 
     def mapid(self):
         """ return a dict with mapid and token to use in google maps tiles url
@@ -137,13 +138,18 @@ class NDFI(object):
 
 
     def _images_for_period(self, period):
-        reference_images = self.ee.get("/list?id=%s&starttime=%s&endtime=%s" % (
-            self.earth_engine_resource,
-            int(period['start']),
-            int(period['end'])
-        ))
-        logging.info(reference_images)
-        return [x['id'] for x in reference_images['data']]
+        if period in self._image_cache:
+            img = self._image_cache[period]
+        else:
+            reference_images = self.ee.get("/list?id=%s&starttime=%s&endtime=%s" % (
+                self.earth_engine_resource,
+                int(period['start']),
+                int(period['end'])
+            ))
+            logging.info(reference_images)
+            img = [x['id'] for x in reference_images['data']]
+            self._image_cache[period] = img
+        return img
 
     def _image_composition(self, image_list):
         """ create commands to compose images in google earth engine

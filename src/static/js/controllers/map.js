@@ -12,28 +12,79 @@ var MapView = Backbone.View.extend({
     },
 
     events: {
-            'click .layer_editor': 'open_layer_editor'
+            'click .layer_editor': 'open_layer_editor',
+            'click .zoom_in': 'zoom_in',
+            'click .zoom_out': 'zoom_out'
     },
     //el: $("#map"),
 
     initialize: function() {
-        _.bindAll(this, 'center_changed', 'ready', 'click', 'set_center', 'reoder_layers', 'change_layer', 'open_layer_editor');
+        _.bindAll(this, 'center_changed', 'ready', 'click', 'set_center', 'reoder_layers', 'change_layer', 'open_layer_editor', 'zoom_changed', 'zoom_in', 'zoom_out', 'adjustSize', 'set_zoom_silence', 'set_center_silence');
        this.map_layers = {};
        this.map = new google.maps.Map(this.$('.map')[0], this.mapOptions);
        google.maps.event.addListener(this.map, 'center_changed', this.center_changed);
+       google.maps.event.addListener(this.map, 'zoom_changed', this.zoom_changed);
        google.maps.event.addListener(this.map, 'click', this.click);
        //google.maps.event.addListener(this.map, 'idle', this.tilesloaded);
        this.projector = new Projector(this.map);
        this.projector.draw = this.ready;
        this.layers = new LayerCollection();
+       this.signals_on = true;
+    },
+
+    adjustSize: function() {
+        google.maps.event.trigger(this.map, "resize");
+
+    },
+    hide_controls: function() {
+        this.$('.layer_editor').hide();
+        this.$('.zoom_control').hide();
+    },
+
+    show_controls: function() {
+        this.$('.layer_editor').show();
+        this.$('.zoom_control').show();
     },
 
     center_changed: function() {
+        if(this.signals_on) {
             this.trigger('center_changed', this.map.getCenter());
+        }
     },
 
-    set_center: function(c) {
+    zoom_in: function(e) {
+        e.preventDefault();
+        this.map.setZoom(this.map.getZoom() + 1);
+    },
+
+    zoom_out: function(e) {
+        e.preventDefault();
+        this.map.setZoom(this.map.getZoom() - 1);
+    },
+    zoom_changed: function() {
+        if(this.signals_on) {
+            this.trigger('zoom_changed', this.map.getZoom());
+        }
+    },
+
+    set_center: function(c, s) {
+        this.signals_on = s === undefined? true: s;
         this.map.setCenter(c);
+        this.signals_on = true;
+    },
+    
+    set_center_silence: function(c) {
+        this.set_center(c, false);
+    },
+
+    set_zoom: function(z, s) {
+        this.signals_on = s === undefined? true: s;
+        this.map.setZoom(z);
+        this.signals_on = true;
+    },
+
+    set_zoom_silence: function(z) {
+        this.set_zoom(z, false);
     },
 
     click: function(e) {
@@ -74,7 +125,8 @@ var MapView = Backbone.View.extend({
                 layer.map_layer.setMap(self.map);
             }
             else {
-                self.map.overlayMapTypes.setAt(layer.map_position, layer);
+                //self.map.overlayMapTypes.insertAt(layer.map_position, layer.map_layer);
+                self.map.overlayMapTypes.insertAt(0, layer.map_layer);
             }
         } else {
             if(layer.get('type') === 'fusion_tables') {
@@ -136,22 +188,23 @@ var MapView = Backbone.View.extend({
         } else { //xyz
             if (url && url.search('{X}') != -1 && url.search('{Z}') != -1 && url.search('{Y}') != -1) {
                   layer = new google.maps.ImageMapType({
-                  getTileUrl: function(tile, zoom) {
-                    var y = tile.y;
-                    var tileRange = 1 << zoom;
-                    if (y < 0 || y  >= tileRange) {
-                      return null;
-                    }
-                    var x = tile.x;
-                    if (x < 0 || x >= tileRange) {
-                      x = (x % tileRange + tileRange) % tileRange;
-                    }
-                    return this.urlPattern.replace("{X}",x).replace("{Y}",y).replace("{Z}",zoom);
-                  },
-                  tileSize: new google.maps.Size(256, 256),
-                  opacity: 1.0,
-                  isPng: true,
-                  urlPattern:url
+                      getTileUrl: function(tile, zoom) {
+                        var y = tile.y;
+                        console.log("TILINGGG");
+                        var tileRange = 1 << zoom;
+                        if (y < 0 || y  >= tileRange) {
+                          return null;
+                        }
+                        var x = tile.x;
+                        if (x < 0 || x >= tileRange) {
+                          x = (x % tileRange + tileRange) % tileRange;
+                        }
+                        return this.urlPattern.replace("{X}",x).replace("{Y}",y).replace("{Z}",zoom);
+                      },
+                      tileSize: new google.maps.Size(256, 256),
+                      opacity: 1.0,
+                      isPng: true,
+                      urlPattern:url
                });
             }
         }

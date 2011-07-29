@@ -8,21 +8,46 @@ from google.appengine.api import urlfetch
 from google.appengine.api import users
 
 from flask import render_template, flash, url_for, redirect, abort, request, make_response 
+from application.time_utils import timestamp, past_month_range
 
 from decorators import login_required, admin_required
 from forms import ExampleForm
+from application.ee import NDFI
 
 from app import app
 
 from models import Report
+from google.appengine.api import memcache
+from google.appengine.ext.db import Key
+
+def default_maps():
+    maps = []
+    r = Report.current()
+    ee_resource = 'MOD09GA'
+    ndfi = NDFI(ee_resource,
+        past_month_range(r.start),
+        r.range())
+    maps.append({'data' :ndfi.mapid()['data'], 'info': 'ndfi difference'})
+    maps.append({'data' :ndfi.smaid()['data'], 'info': 'sma'})
+    maps.append({'data' :ndfi.rgbid()['data'], 'info': 'rgb'})
+    maps.append({'data' :ndfi.ndfi0id()['data'], 'info': 'NDFI t0'})
+    maps.append({'data' :ndfi.ndfi1id()['data'], 'info': 'NDFI t1'})
+    return maps
+
 
 @app.route('/')
-@app.route('/cell/<path:cell_path>')
 @login_required
 def home(cell_path=None):
+    maps = memcache.get('default_maps')
+    if maps:
+        maps = json.loads(maps)
+    else:
+        maps = default_maps()
+        memcache.add(key='default_maps', value=json.dumps(maps), time=3600*24)
+
     reports = json.dumps([x.as_dict() for x in Report.all()])
     user = users.get_current_user()
-    return render_template('home.html', reports_json=reports, user=user)
+    return render_template('home.html', reports_json=reports, user=user, maps=maps)
 
 @app.route('/login')
 def login():
