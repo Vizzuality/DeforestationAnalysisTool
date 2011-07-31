@@ -18,6 +18,19 @@ from application.resources.report import CellAPI
 
 from base import GoogleAuthMixin
 
+
+class CellTest(unittest.TestCase):
+
+    def setUp(self):
+        r = Report(start=date.today(), end=date.today()+timedelta(days=1), finished=False)
+        r.put()
+        self.r = r
+        self.cell = Cell(x=11, y=11, z=2, report=self.r, ndfi_high=1.0, ndfi_low=0.0)
+        self.cell.put()
+
+    def test_parent_id(self):
+        self.assertEquals('1_1_1', self.cell.parent_id)
+
 class ApiTestCase(unittest.TestCase, GoogleAuthMixin):
 
     def setUp(self):

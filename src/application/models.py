@@ -55,6 +55,8 @@ class Cell(db.Model):
     z = db.IntegerProperty(required=True)
     x = db.IntegerProperty(required=True)
     y = db.IntegerProperty(required=True)
+    # used for speedup queries
+    parent_id = db.TextProperty(required=True)
     report = db.ReferenceProperty(Report)
     ndfi_low = db.FloatProperty(default=0.4)
     ndfi_high = db.FloatProperty(default=0.6)
@@ -101,6 +103,13 @@ class Cell(db.Model):
             ndfi += c.ndfi_change_value
         self.ndfi_change_value = ndfi/len(ch)
         self.put()
+
+    def calc_parent_id(self):
+        return '_'.join((str(self.z - 1), str(self.x/SPLITS), str(self.y/SPLITS)))
+
+    def put(self):
+        self.parent_id = self.calc_parent_id()
+        super(Cell, self).put()
 
     @staticmethod
     def cell_id(id):
