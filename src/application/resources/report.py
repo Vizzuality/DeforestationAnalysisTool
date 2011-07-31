@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 import logging
-from application.models import Report, Cell, Area
+from application.models import Report, Cell, Area, Note
 from application.ee import NDFI
 from resource import Resource
 from flask import Response, request, jsonify, abort
@@ -157,4 +157,23 @@ class PolygonAPI(Resource):
             a.status_code = 204;
             return a
         abort(404)
+
+class NoteAPI(Resource):
+
+    def list(self, report_id, cell_pos):
+        r = Report.get(Key(report_id))
+        z, x, y = Cell.cell_id(cell_pos)
+        cell = Cell.get_cell(r, x, y, z)
+        return self._as_json([x.as_dict() for x in cell.note_set])
+
+    def create(self, report_id, cell_pos):
+        r = Report.get(Key(report_id))
+        z, x, y = Cell.cell_id(cell_pos)
+        cell = Cell.get_or_create(r, x, y, z)
+        data = json.loads(request.data)
+        a = Note(msg=data['msg'],
+                 added_by = users.get_current_user(),
+                 cell=cell)
+        a.save();
+        return Response(a.as_json(), mimetype='application/json')
 

@@ -19,22 +19,6 @@ from ft import FT
 from kml import path_to_kml
 
 
-class Note(db.Model):
-    """ user note on a cell """
-
-    msg = db.TextProperty(required=True)
-    #added_by = db.UserProperty()
-    added_on = db.DateTimeProperty(auto_now_add=True)
-    cell_z = db.IntegerProperty(required=True)
-    cell_x = db.IntegerProperty(required=True)
-    cell_y = db.IntegerProperty(required=True)
-
-    def as_dict(self):
-        return {'id': str(self.key()),
-            'msg': self.msg}
-
-    def as_json(self):
-        return json.dumps(self.as_dict())
 
 class Report(db.Model):
 
@@ -281,3 +265,18 @@ class Area(db.Model):
         self.fusion_tables_id = int(rowid.split('\n')[1])
         rowid = cl.sql("update %s set rowid_copy = '%s' where rowid = '%s'" % (table_id, self.fusion_tables_id, self.fusion_tables_id))
         self.put()
+
+class Note(db.Model):
+    """ user note on a cell """
+
+    msg = db.TextProperty(required=True)
+    added_by = db.UserProperty()
+    added_on = db.DateTimeProperty(auto_now_add=True)
+    cell = db.ReferenceProperty(Cell)
+
+    def as_dict(self):
+        return {'id': str(self.key()),
+            'msg': self.msg}
+
+    def as_json(self):
+        return json.dumps(self.as_dict())

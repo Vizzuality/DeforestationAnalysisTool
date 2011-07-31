@@ -14,12 +14,10 @@ import settings
 from models import Area, Note
 from ee import NDFI
 
-from resources.notes import NoteAPI
-from resources.report import ReportAPI, CellAPI, NDFIMapApi, PolygonAPI
+from resources.report import ReportAPI, CellAPI, NDFIMapApi, PolygonAPI, NoteAPI
 
 from application.constants import amazon_bounds
 
-NoteAPI.add_urls(app, '/api/test/note')
 ReportAPI.add_urls(app, '/api/v0/report')
 
 CellAPI.add_urls(app,       '/api/v0/report/<report_id>/cell')
@@ -29,6 +27,7 @@ CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/children', 'ch
 
 NDFIMapApi.add_urls(app, '/api/v0/report/<report_id>/map')
 PolygonAPI.add_urls(app, '/api/v0/report/<report_id>/cell/<cell_pos>/polygon')
+NoteAPI.add_urls(app, '/api/v0/report/<report_id>/cell/<cell_pos>/note')
 
 
 #TODO: add auth

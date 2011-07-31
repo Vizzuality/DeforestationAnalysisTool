@@ -44,31 +44,29 @@ class NotesApiTest(unittest.TestCase, GoogleAuthMixin):
     def setUp(self):
         app.config['TESTING'] = True
         self.app = app.test_client()
+        r = Report(start=date.today(), end=date.today()+timedelta(days=1), finished=False)
+        r.put()
+        self.r = r
+        self.cell = Cell(x=0, y=0, z=2, report=self.r, ndfi_high=1.0, ndfi_low=0.0)
+        self.cell.put()
         for x in Note.all():
             x.delete()
+        self.note = Note(msg='test', added_by=users.get_current_user(), cell=self.cell)
+        self.note.put()
 
-    def test_note_new(self):
-        rv = self.app.post('/api/v0/notes/new', data=dict(
-            note='{"msg": "test message", "cell": [1, 2, 3]}'
-        ))
+    def test_note_list(self):
+        rv = self.app.get('/api/v0/report/' + str(self.r.key()) + '/cell/2_0_0/note')
         self.assertEquals(200, rv.status_code)
         js = json.loads(rv.data)
-        self.assertTrue(js['ok'])
-        self.assertEquals(1, Note.all().count())
-
-    def test_notes_for_cell(self):
-        Note(msg="test", cell_z=1, cell_x=2, cell_y=3).put()
-        rv = self.app.get('/api/v0/notes/1/2/3')
-        self.assertEquals(200, rv.status_code)
-        js = json.loads(rv.data)['notes']
         self.assertEquals(1, len(js))
         self.assertEquals('test', js[0]['msg'])
+        self.assertEquals(1, Note.all().count())
 
-    def test_notes_for_non_existing_cell(self):
-        rv = self.app.get('/api/v0/notes/1/2/3')
+    def test_notes_create(self):
+        rv = self.app.post('/api/v0/report/' + str(self.r.key()) + '/cell/2_0_0/note', data='{"msg": "test"}')
         self.assertEquals(200, rv.status_code)
-        js = json.loads(rv.data)['notes']
-        self.assertEquals(0, len(js))
+        self.assertEquals(2, Note.all().count())
+        self.assertEquals(2, self.cell.note_set.count())
 
 class PolygonApi(unittest.TestCase, GoogleAuthMixin):
     def setUp(self):
@@ -183,6 +181,7 @@ class HomeTestCase(unittest.TestCase, GoogleAuthMixin):
         rv = self.app.get('/')
         assert 'imazon' in rv.data
 
+"""
 class FTTest(unittest.TestCase):
 
     def setUp(self):
@@ -205,6 +204,7 @@ class FTTest(unittest.TestCase):
         self.area.update_fusion_tables()
         self.area.delete()
         self.area.delete_fusion_tables()
+"""
 
 
 
