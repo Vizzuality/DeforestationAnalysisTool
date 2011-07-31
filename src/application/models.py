@@ -56,7 +56,7 @@ class Cell(db.Model):
     x = db.IntegerProperty(required=True)
     y = db.IntegerProperty(required=True)
     # used for speedup queries
-    parent_id = db.TextProperty(required=True)
+    parent_id = db.StringProperty()
     report = db.ReferenceProperty(Report)
     ndfi_low = db.FloatProperty(default=0.4)
     ndfi_high = db.FloatProperty(default=0.6)
@@ -83,6 +83,13 @@ class Cell(db.Model):
         
     def children(self):
         """ return child cells """
+        eid = self.external_id()
+        childs = Cell.all()
+        childs.filter('report =', self.report)
+        childs.filter('parent_id =', eid)
+
+        children_cells = dict((x.external_id(), x) for x in childs.fetch(SPLITS*SPLITS))
+
         cells = []
         for i in xrange(SPLITS):
             for j in xrange(SPLITS):
@@ -90,8 +97,10 @@ class Cell(db.Model):
                 xx = (SPLITS**self.z)*self.x + i
                 yy = (SPLITS**self.z)*self.y + j
 
-                cell = Cell.get_cell(self.report, xx, yy, zz)
-                if not cell:
+                cid= "_".join(map(str,(zz, xx, yy)))
+                if cid in children_cells:
+                    cell = children_cells[cid]
+                else:
                     cell = Cell.default_cell(self.report, xx, yy, zz)
                 cells.append(cell)
         return cells
