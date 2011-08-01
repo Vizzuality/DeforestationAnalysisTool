@@ -151,6 +151,7 @@ var Overview = Backbone.View.extend({
     initialize: function() {
         _.bindAll(this, 'done', 'on_cell', 'select_mode', 'go_back', 'set_note_count');
         this.analysed= this.$('#cell_analisys');
+        this.$("#analysed_global_final").hide();
     },
 
     set_note_count: function(c) {
