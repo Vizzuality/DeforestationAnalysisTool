@@ -12,6 +12,6 @@ var NoteCollection  = Backbone.Collection.extend({
     },
 
     url: function() {
-        return "/api/v0/report/" + this.cell.get('report_id') + "/cell/" + this.get('z') + "_" + this.get('x') + "_" + this.get('y') + "/note";
+        return "/api/v0/report/" + this.cell.get('report_id') + "/cell/" + this.cell.get('z') + "_" + this.cell.get('x') + "_" + this.cell.get('y') + "/note";
     }
 });

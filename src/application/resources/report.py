@@ -171,6 +171,8 @@ class NoteAPI(Resource):
         z, x, y = Cell.cell_id(cell_pos)
         cell = Cell.get_or_create(r, x, y, z)
         data = json.loads(request.data)
+        if 'msg' not in data:
+            abort(400)
         a = Note(msg=data['msg'],
                  added_by = users.get_current_user(),
                  cell=cell)

@@ -214,6 +214,7 @@ $(function() {
 
             //cell done!
             this.overview.bind('done', this.cell_done);
+            this.overview.set_note_count(this.gridstack.current_cell.get('note_count'));
             this.cell_polygons.polygons.x = x;
             this.cell_polygons.polygons.y = y;
             this.cell_polygons.polygons.z = z;

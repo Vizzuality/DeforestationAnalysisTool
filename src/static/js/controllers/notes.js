@@ -30,12 +30,16 @@ var NotesDialog = Backbone.View.extend({
         this.notes.bind('reset', this.addAll);
         this.notes.bind('add', this.add);
         var ul = this.$('ul');
+        this.ul = ul;
         ul.jScrollPane({autoReinitialise:true});
         this.contents = ul.data('jsp').getContentPane();
         this.count = 0;
    },
 
-   close: function() {
+   close: function(e) {
+        if (e !== undefined) {
+            e.preventDefault();
+        }
         this.el.hide();
    },
 
@@ -52,23 +56,28 @@ var NotesDialog = Backbone.View.extend({
         var note = new NoteView({model: m});
         this.contents.append(note.render().el);
         this.$("h3").html(this.count + " notes");
+        this.ul.data('jsp').scrollToPercentY(100);
+        this.trigger('note_count', this.count);
    },
 
    add_note: function(e) {
         e.preventDefault();
         var text = this.$("#comment").val();
+        this.$("#comment").val('');
         if(text.length > 0) {
-            this.notes.add({
-                'text': text,
-                'author': 'javi',
-                'date': new Date().getTime()
+            this.notes.create({
+                'msg': text
+                //'author': 'javi',
+                //'date': new Date().getTime()
             });
         }
    },
 
    open: function() {
-        //this.notes.fetch();
         window.loading.loading();
+        //TODO: manage error
+        this.notes.fetch();
+        /*
         this.notes.reset([
             {
                 'text': 'this is an example test, jajaja, jajaja, it could be better',
@@ -86,6 +95,7 @@ var NotesDialog = Backbone.View.extend({
                 'date': new Date().getTime() - 3600*24*7*1000
             }
         ]);
+        */
    }
 
 });

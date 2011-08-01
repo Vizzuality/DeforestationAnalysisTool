@@ -137,8 +137,12 @@ var Overview = Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'done', 'on_cell', 'select_mode', 'go_back');
+        _.bindAll(this, 'done', 'on_cell', 'select_mode', 'go_back', 'set_note_count');
         this.done = this.$('#done');
+    },
+
+    set_note_count: function(c) {
+        this.$('.notes').html( c + " NOTE" + (c==1?'':'S'));
     },
 
     done: function(e) {

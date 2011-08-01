@@ -15,6 +15,7 @@ from google.appengine.api import users
 from application.app import app
 from application.models import Area, Note, Cell, Report
 from application.resources.report import CellAPI
+from application.time_utils import timestamp
 
 from base import GoogleAuthMixin
 
@@ -57,6 +58,7 @@ class NotesApiTest(unittest.TestCase, GoogleAuthMixin):
     def setUp(self):
         app.config['TESTING'] = True
         self.app = app.test_client()
+        self.login('test@gmail.com', 'testuser')
         r = Report(start=date.today(), end=date.today()+timedelta(days=1), finished=False)
         r.put()
         self.r = r
@@ -64,7 +66,8 @@ class NotesApiTest(unittest.TestCase, GoogleAuthMixin):
         self.cell.put()
         for x in Note.all():
             x.delete()
-        self.note = Note(msg='test', added_by=users.get_current_user(), cell=self.cell)
+        self.when = datetime.now()
+        self.note = Note(msg='test msg', added_by=users.get_current_user(), cell=self.cell, added_on=self.when)
         self.note.put()
 
     def test_note_list(self):
@@ -72,7 +75,10 @@ class NotesApiTest(unittest.TestCase, GoogleAuthMixin):
         self.assertEquals(200, rv.status_code)
         js = json.loads(rv.data)
         self.assertEquals(1, len(js))
-        self.assertEquals('test', js[0]['msg'])
+        n = js[0]
+        self.assertEquals('test msg', n['msg'])
+        self.assertEquals('test', n['author'])
+        self.assertEquals(timestamp(self.when), n['date'])
         self.assertEquals(1, Note.all().count())
 
     def test_notes_create(self):

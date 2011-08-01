@@ -153,6 +153,13 @@ class Cell(db.Model):
         if latest:
             t = timestamp(latest.added_on)
             by = latest.added_by.nickname()
+
+        try:
+            self.key()
+            note_count = self.note_set.count()
+        except:
+            note_count = 0
+
         return {
                 #'key': str(self.key()),
                 'id': self.external_id(),
@@ -166,6 +173,7 @@ class Cell(db.Model):
                 'done': self.done,
                 'latest_change': t,
                 'added_by': by,
+                'note_count': note_count
         }
 
     def latest_polygon(self):
@@ -294,7 +302,9 @@ class Note(db.Model):
 
     def as_dict(self):
         return {'id': str(self.key()),
-            'msg': self.msg}
+                'msg': self.msg, 
+                'author': self.added_by.nickname(),
+                'date': timestamp(self.added_on)}
 
     def as_json(self):
         return json.dumps(self.as_dict())
