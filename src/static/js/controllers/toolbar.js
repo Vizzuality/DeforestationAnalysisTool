@@ -150,7 +150,7 @@ var Overview = Backbone.View.extend({
 
     initialize: function() {
         _.bindAll(this, 'done', 'on_cell', 'select_mode', 'go_back', 'set_note_count');
-        this.done = this.$('#done');
+        this.analysed= this.$('#cell_analisys');
     },
 
     set_note_count: function(c) {
@@ -173,7 +173,7 @@ var Overview = Backbone.View.extend({
     },
     on_cell: function(x, y, z) {
         if(z == 2) {
-            this.done.show();
+            this.analysed.show();
             this.$('.notes').show();
         } else {
             this.$('.notes').hide();
@@ -182,14 +182,16 @@ var Overview = Backbone.View.extend({
         if(z > 0) {
             text = "Cell " + z + "/" + x + "/" + y + " - ";
             this.$("#go_back").show();
+            this.$("#analysed_global_progress").hide();
         } else {
+            this.$("#analysed_global_progress").show();
             this.$("#go_back").hide();
         }
         this.$("#current_cell").html(text);
     },
 
     select_mode: function() {
-        this.done.hide();
+        this.analysed.hide();
     }
 
 

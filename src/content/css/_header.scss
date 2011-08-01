@@ -1,5 +1,8 @@
 @import "_mixins";
 
+.hidden {
+    display: none !important;
+}
 
 #header {
     z-index: 19;
@@ -16,9 +19,6 @@
         color: white;
     }
 
-    .hidden {
-        display: none;
-    }
 
     .content {
         position: relative;
@@ -431,11 +431,41 @@
           }
         }
 
+        #analysed_global_progress {
+          display:inline-block;
+          padding:10px 0 0 0!important;
+          #bar {
+              position: relative;
+              float:left;
+              width:200px;
+              height:35px;
+              border:1px solid #333333;
+              @include border-radius(5px);
+              box-shadow:0 1px #F3775E;
+              background: #8D2D19;
+              #progress {
+                position: absolute;
+                background-color: #CCC;
+                width: 20%;
+                height: 35px;
+                border-bottom-left-radius: 5px;
+                border-top-left-radius: 5px;
+              }
+              #progress_number {
+                position: relative;
+                padding: 10px 0 0 10px;
+                font:normal 13px $text_font;
+                color:#666666;
+                text-shadow:0 1px white;
+              }
+          }
+        }
+
         div.analysed {
           display:inline-block;
           padding:10px 0 0 0!important;
 
-          button#done {
+          button.finish_button {
             float:left;
             width:200px;
             height:35px;
@@ -465,6 +495,9 @@
               text-shadow:0 1px white;
               text-align:left;
             }
+            p.stats_progress {
+                width: 101px;
+            }
             p.done {
               float:right;
               width:58px;
@@ -473,6 +506,10 @@
               color:#333333;
               text-transform:uppercase;
               text-align:center;
+            }
+            p.generate {
+                width:70px;
+                text-align: left;
             }
           }
         }

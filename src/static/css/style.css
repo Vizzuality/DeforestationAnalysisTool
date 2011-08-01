@@ -358,6 +358,10 @@ article .example .field {
   height: 35px;
 }
 
+.hidden {
+  display: none !important;
+}
+
 #header {
   z-index: 19;
   position: absolute;
@@ -371,9 +375,6 @@ article .example .field {
 }
 #header a {
   color: white;
-}
-#header .hidden {
-  display: none;
 }
 #header .content {
   position: relative;
@@ -787,11 +788,42 @@ article .example .field {
 #header #overview div.info a.notes:hover {
   color: white;
 }
+#header #overview #analysed_global_progress {
+  display: inline-block;
+  padding: 10px 0 0 0!important;
+}
+#header #overview #analysed_global_progress #bar {
+  position: relative;
+  float: left;
+  width: 200px;
+  height: 35px;
+  border: 1px solid #333333;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-radius: 5px;
+  box-shadow: 0 1px #F3775E;
+  background: #8D2D19;
+}
+#header #overview #analysed_global_progress #bar #progress {
+  position: absolute;
+  background-color: #CCC;
+  width: 20%;
+  height: 35px;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+}
+#header #overview #analysed_global_progress #bar #progress_number {
+  position: relative;
+  padding: 10px 0 0 10px;
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: #666666;
+  text-shadow: 0 1px white;
+}
 #header #overview div.analysed {
   display: inline-block;
   padding: 10px 0 0 0!important;
 }
-#header #overview div.analysed button#done {
+#header #overview div.analysed button.finish_button {
   float: left;
   width: 200px;
   height: 35px;
@@ -803,16 +835,16 @@ article .example .field {
   box-shadow: 0 1px #F3775E;
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(#ebebeb), to(#cccccc));
 }
-#header #overview div.analysed button#done:hover {
+#header #overview div.analysed button.finish_button:hover {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(#cccccc), to(#ebebeb));
 }
-#header #overview div.analysed button#done span.separator {
+#header #overview div.analysed button.finish_button span.separator {
   float: left;
   height: 18px;
   width: 2px;
   background: url("../img/button_separator.png") no-repeat 0 0;
 }
-#header #overview div.analysed button#done p.stats {
+#header #overview div.analysed button.finish_button p.stats {
   float: left;
   width: 120px;
   padding: 1px 0 0 0;
@@ -821,7 +853,10 @@ article .example .field {
   text-shadow: 0 1px white;
   text-align: left;
 }
-#header #overview div.analysed button#done p.done {
+#header #overview div.analysed button.finish_button p.stats_progress {
+  width: 101px;
+}
+#header #overview div.analysed button.finish_button p.done {
   float: right;
   width: 58px;
   padding: 1px 0 0 0;
@@ -829,6 +864,10 @@ article .example .field {
   color: #333333;
   text-transform: uppercase;
   text-align: center;
+}
+#header #overview div.analysed button.finish_button p.generate {
+  width: 70px;
+  text-align: left;
 }
 
 body, html {

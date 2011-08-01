@@ -14,13 +14,31 @@
                 <p><span id="current_cell">Global map</span><a id="go_back" href="#go_back">go back</a></p>
                 <a href="#notes" class="notes">0 NOTES</a>
               </div>
-              <div class="analysed">
-                <button id="done">
+
+              <div id="cell_analisys" class="analysed hidden">
+                <button id="done" class="finish_button">
                   <p class="stats">65 km<sup>2</sup> analysed</p>
                   <span class="separator"></span>
                   <p class="done">done</p>
                 </button>
               </div>
+
+              <div id="analysed_global_progress">
+                <div id="bar">
+                    <div id="progress"></div>
+                    <div id="progress_number">11/252 (45%)</div>
+                </div>
+              </div>
+
+              <!-- next div is shown when all cells are analysed -->
+              <div id="analysed_global_final" class="analysed hidden">
+                <button id="report_done" class="finish_button">
+                  <p class="stats stats_progress">252/252 (100%)</p>
+                  <span class="separator"></span>
+                  <p class="done generate">generate</p>
+                </button>
+              </div>
+
            </div>
         </div>  <!-- content -->
     </div>
