@@ -51,10 +51,8 @@ var RangeSlider = Backbone.View.extend({
 										// Hack for handles tooltip
 										var size0 = $('a.ui-slider-handle:eq(0)').css('left');
 										$('p#ht0')
-											.css({left:size0})
 											.text(ui.values[0]);
 										$('p#ht1')
-											.css({left:size})
 											.text(ui.values[1]);
 											
                     var low = ui.values[0];
@@ -67,13 +65,9 @@ var RangeSlider = Backbone.View.extend({
                     $('span.hack_red').css('left',size);
 										// Hack for handles tooltip
 										var size0 = $('a.ui-slider-handle:eq(0)').css('left');
-										console.log(event);
-										$('p#ht0')
-											.css({left:size0})
-											.text(40);
-										$('p#ht1')
-											.css({left:size})
-											.text(60);
+										
+										$('a.ui-slider-handle:eq(0)').append('<p id="ht0" class="tooltip">40</p>');
+										$('a.ui-slider-handle:eq(1)').append('<p id="ht1" class="tooltip">60</p>');
                 }
          });
     },

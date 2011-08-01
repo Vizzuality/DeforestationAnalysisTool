@@ -327,18 +327,16 @@
 
                 p.tooltip {
                   position:absolute;
-                  top:-30px;
-                  width:20px;
+                  top:-26px;
+                  width:24px;
                   height:10px;
-                  margin:0 0 0 -12px;
-                  padding:3px 0 9px 1px;
+                  margin:0 0 0 -7px;
+                  padding:4px 0 10px 1px;
                   background:url('../img/slider_tooltip_bkg.png') no-repeat 0 0;
                   font:normal 10px $text_font;
                   color:#CCCCCC;
                   text-align:center;
                 }
-                //<p id="ht0" class="tooltip">000</p>
-                //                <p id="ht1" class="tooltip">000</p>
 
 
                 .ui-slider-handle {
