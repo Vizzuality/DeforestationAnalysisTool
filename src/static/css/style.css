@@ -359,7 +359,7 @@ article .example .field {
 }
 
 .hidden {
-  display: none !important;
+  display: none;
 }
 
 #header {
