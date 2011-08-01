@@ -1,12 +1,37 @@
 
+/*
+
+var PolygonEditTool = Backbone.View.extend({
+
+    initialize: function() {
+        _.bindAll(this, 'add_vertex', 'create_polygon', 'reset', 'editing_state', '_add_vertex');
+        this.mapview = this.options.mapview;
+        this.map = this.mapview.map;
+        this.reset();
+
+        this.image = new google.maps.MarkerImage('/static/img/sprite.png',
+                    new google.maps.Size(11, 11),
+                    new google.maps.Point(0,52),
+                    new google.maps.Point(5, 5)
+        );
+    },
+
+});
+*/
 
 var PolygonDrawTool = Backbone.View.extend({
 
     initialize: function() {
-        _.bindAll(this, 'add_vertex', 'create_polygon', 'reset', 'editing_state');
+        _.bindAll(this, 'add_vertex', 'create_polygon', 'reset', 'editing_state', '_add_vertex', 'edit_polygon');
         this.mapview = this.options.mapview;
         this.map = this.mapview.map;
         this.reset();
+
+        this.image = new google.maps.MarkerImage('/static/img/sprite.png',
+                    new google.maps.Size(11, 11),
+                    new google.maps.Point(0,52),
+                    new google.maps.Point(5, 5)
+        );
     },
 
     editing_state: function(editing) {
@@ -17,6 +42,7 @@ var PolygonDrawTool = Backbone.View.extend({
             this.mapview.unbind('click', this.add_vertex);
         }
     },
+
 
     reset: function() {
         if(this.polyline !== undefined) {
@@ -39,31 +65,59 @@ var PolygonDrawTool = Backbone.View.extend({
         });
     },
 
-    add_vertex: function(e) {
-        var latLng = e.latLng;
+    edit_polygon: function(polygon) {
         var self = this;
+        var paths = polygon.paths();
+        self.reset();
 
-        var image = new google.maps.MarkerImage('/static/img/sprite.png',
-                    new google.maps.Size(11, 11),
-                    new google.maps.Point(0,52),
-                    new google.maps.Point(5, 5)
-        );
+        _.each(paths, function(path, path_index) {
+            _.each(path, function(p, i) {
+                var marker = new google.maps.Marker({position:
+                    p,
+                    map: self.map,
+                    icon: self.image,
+                    draggable: true,
+                    flat : true
+                });
+                marker.path_index = path_index;
+                marker.index = i;
+                self.markers.push(marker);
+                google.maps.event.addListener(marker, "dragend", function(e) {
+                    polygon.update_pos(marker.path_index, 
+                        marker.index, [e.latLng.lat(), e.latLng.lng()]);
+                    polygon.save();
+                });
 
+            });
+        });
+
+    },
+
+    _add_vertex: function(latLng) {
         var marker = new google.maps.Marker({position:
                 latLng,
                 map: this.map,
-                icon: image});
+                icon: this.image,
+                draggable: true
+                });
 
+        marker.index = this.vertex.length;
         this.markers.push(marker);
+        this.vertex.push(latLng);
+        this.polyline.setPath(this.vertex);
+        return marker;
+    },
 
-        if (this.vertex.length === 0) {
+    add_vertex: function(e) {
+        var latLng = e.latLng;
+        var marker = this._add_vertex(latLng);
+        var self = this;
+        if (this.vertex.length === 1) {
             google.maps.event.addListener(marker, "dblclick", function() {
                 self.create_polygon(self.vertex);
                 self.reset();
             });
         }
-        this.vertex.push(latLng);
-        this.polyline.setPath(this.vertex);
     },
 
     create_polygon: function(vertex) {

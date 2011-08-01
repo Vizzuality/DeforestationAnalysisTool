@@ -91,6 +91,7 @@ class PolygonApi(unittest.TestCase, GoogleAuthMixin):
     def setUp(self):
         app.config['TESTING'] = True
         self.app = app.test_client()
+        self.login('test@gmail.com', 'testuser')
         for x in Area.all():
             x.delete()
         for x in Cell.all():
@@ -126,12 +127,15 @@ class PolygonApi(unittest.TestCase, GoogleAuthMixin):
 
     def test_update(self):
         rv = self.app.put('/api/v0/report/' + str(self.r.key()) + '/cell/2_0_0/polygon/' + str(self.area.key()),
-            data='{"paths": "[]", "type": 100}'
+            data='{"paths": "[[1, 2, 3]]", "type": 100}'
         )
         self.assertEquals(1, Area.all().count())
         a = Area.get(self.area.key())
         self.assertEquals(100, a.type)
-        self.assertEquals("[]", a.geo)
+        self.assertEquals("\"[[1, 2, 3]]\"", a.geo)
+        js = json.loads(rv.data)
+        self.assertEquals(100, js['type'])
+        self.assertEquals("[[1, 2, 3]]", js['paths'])
 
     def test_delete(self):
         rv = self.app.delete('/api/v0/report/' + str(self.r.key()) + '/cell/2_0_0/polygon/' + str(self.area.key()))

@@ -2,9 +2,10 @@
 var PolygonView = Backbone.View.extend({
 
     initialize: function() {
-        _.bindAll(this, 'click', 'remove');
+        _.bindAll(this, 'click', 'remove', 'update');
         this.mapview = this.options.mapview;
         this.model.bind('destroy', this.remove);
+        this.model.bind('change', this.update);
     },
 
     render: function() {
@@ -16,6 +17,11 @@ var PolygonView = Backbone.View.extend({
         poly.setMap(this.mapview.map);
         google.maps.event.addListener(poly, 'click', this.click);
         this.poly = poly;
+    },
+
+    update: function() {
+        this.poly.setPaths(this.model.paths());
+
     },
 
     click: function(event) {
@@ -84,12 +90,8 @@ var CellPolygons = Backbone.View.extend({
             // if is commited, remove it
             // or remove manually from collection
             p.destroy();
-            /*
-            if(!p.isNew()) {
-            } else {
-               this.polygons.remove(p);
-            }
-            */
+        } else {
+            this.trigger('click_on_polygon', poly.model);
         }
     },
 

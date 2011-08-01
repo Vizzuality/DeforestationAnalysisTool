@@ -142,8 +142,8 @@ class PolygonAPI(Resource):
         data = json.loads(request.data)
         a = Area.get(Key(id))
 
-        for prop in ('paths', 'type'):
-            setattr(a, prop, data[prop])
+        a.geo = json.dumps(data['paths'])
+        a.type = data['type']
 
         a.added_by = users.get_current_user()
         a.save();

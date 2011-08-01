@@ -24,6 +24,10 @@ $(function() {
             this.app.polygon_tools.polytype.hide();
         },
 
+        editing_mode: function() {
+            this.app.cell_polygons.bind('click_on_polygon', this.app.create_polygon_tool.edit_polygon);
+        },
+
         change_state: function(st) {
             if(st == this.state) {
                 return;
@@ -32,6 +36,7 @@ $(function() {
             this.reset();
             switch(st) {
                 case 'edit':
+                    this.editing_mode();
                     break;
                 case 'remove':
                     this.app.cell_polygons.editing_state = true;

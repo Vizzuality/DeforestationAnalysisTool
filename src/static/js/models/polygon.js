@@ -6,13 +6,24 @@ var Polygon = Backbone.Model.extend({
     DEFORESTATION: 1,
 
     initialize: function() {
+        _.bindAll(this, "update_pos");
     },
+
     paths: function() {
         return _.map(this.get('paths'), function(p) {
             return _.map(p, function(ll) {
                 return new google.maps.LatLng(ll[0], ll[1]);
             });
         });
+    },
+    
+    update_pos: function(path_index, vertex_index, latlng) {
+        var p = this.get('paths');
+        p[path_index][vertex_index] = latlng;
+        this.set({'paths': p});
+        // we're changing the internal reference so
+        // change signal will not be called. Call it manually
+        this.trigger('change');
     }
 
 
