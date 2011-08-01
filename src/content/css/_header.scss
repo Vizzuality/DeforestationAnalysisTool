@@ -445,7 +445,7 @@
               background: #8D2D19;
               #progress {
                 position: absolute;
-                background-color: #CCC;
+                background: -webkit-gradient(linear, left top, left bottom, from(#EBEBEB), to(#CCCCCC));
                 width: 20%;
                 height: 35px;
                 border-bottom-left-radius: 5px;
@@ -454,7 +454,7 @@
               #progress_number {
                 position: relative;
                 padding: 10px 0 0 10px;
-                font:normal 13px $text_font;
+                font:bold 13px $text_font;
                 color:#666666;
                 text-shadow:0 1px white;
               }
@@ -464,6 +464,10 @@
         div.analysed {
           display:inline-block;
           padding:10px 0 0 0!important;
+
+          &.hidden {
+            display:none;
+          }
 
           button.finish_button {
             float:left;
