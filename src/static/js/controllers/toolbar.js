@@ -45,9 +45,18 @@ var RangeSlider = Backbone.View.extend({
                 max: 200,
                 values: [40, 60], //TODO: load from model
                 slide: function(event, ui) {
-                   // Hack to get red bar resizing
+                  	// Hack to get red bar resizing
                     var size = $('a.ui-slider-handle:eq(1)').css('left');
                     $('span.hack_red').css('left',size);
+										// Hack for handles tooltip
+										var size0 = $('a.ui-slider-handle:eq(0)').css('left');
+										$('p#ht0')
+											.css({left:size0})
+											.text(ui.values[0]);
+										$('p#ht1')
+											.css({left:size})
+											.text(ui.values[1]);
+											
                     var low = ui.values[0];
                     var high= ui.values[1];
                     self.slide(low, high);
@@ -56,6 +65,15 @@ var RangeSlider = Backbone.View.extend({
                     // Hack to get red bar resizing
                     var size = $('a.ui-slider-handle:eq(1)').css('left');
                     $('span.hack_red').css('left',size);
+										// Hack for handles tooltip
+										var size0 = $('a.ui-slider-handle:eq(0)').css('left');
+										console.log(event);
+										$('p#ht0')
+											.css({left:size0})
+											.text(40);
+										$('p#ht1')
+											.css({left:size})
+											.text(60);
                 }
          });
     },
