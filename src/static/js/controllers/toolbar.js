@@ -149,9 +149,12 @@ var Overview = Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'done', 'on_cell', 'select_mode', 'go_back', 'set_note_count');
+        _.bindAll(this, 'done', 'on_cell', 'select_mode', 'go_back', 'set_note_count', 'report_changed');
+        this.report = this.options.report;
         this.analysed= this.$('#cell_analisys');
         this.$("#analysed_global_final").hide();
+        this.report.bind('change', this.report_changed);
+        this.report_changed();
     },
 
     set_note_count: function(c) {
@@ -172,6 +175,7 @@ var Overview = Backbone.View.extend({
         e.preventDefault();
         this.trigger('go_back');
     },
+
     on_cell: function(x, y, z) {
         if(z == 2) {
             this.analysed.show();
@@ -193,6 +197,15 @@ var Overview = Backbone.View.extend({
 
     select_mode: function() {
         this.analysed.hide();
+    },
+
+    report_changed: function() {
+        var total = this.report.get('total_cells');
+        var current = this.report.get('cells_finished');
+        var percent = Math.floor(current/total);
+        var text = current + '/' + total + " (" + percent + "%)";
+        this.$("#progress_number").html(text);
+        this.$("#progress").css({width: percent + "%"});
     }
 
 

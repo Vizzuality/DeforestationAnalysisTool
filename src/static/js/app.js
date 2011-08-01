@@ -121,7 +121,7 @@ $(function() {
         init_ui: function() {
             this.selection_toolbar = new ReportToolbar();
             this.polygon_tools = new PolygonToolbar();
-            this.overview = new Overview();
+            this.overview = new Overview({report: this.active_report});
 
 
             this.ndfi_layer = new NDFILayer({mapview: this.map, report: this.active_report});
@@ -204,7 +204,6 @@ $(function() {
         },
 
         change_report: function() {
-            //TODO: use comboxbox to select the active report
             this.active_report = this.reports.models[0];
             this.cell_polygons.polygons.report = this.active_report;
             this.cell_polygons.polygons.fetch();

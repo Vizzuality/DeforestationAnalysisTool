@@ -18,6 +18,10 @@ from ft import FT
 
 from kml import path_to_kml
 
+CELL_BLACK_LIST = ['1_0_0', '1_1_0', '1_0_1', '1_0_2', '1_0_3', '1_0_7', '1_0_8', '1_0_9',
+             '1_1_7', '1_1_8', '1_1_9', '1_2_8', '1_2_9', '1_3_8', '1_3_9',
+             '1_2_0', '1_5_0', '1_6_0', '1_8_0', '1_9_0','1_8_1', '1_9_1',
+             '1_8_8', '1_8_9', '1_9_8', '1_9_9']
 
 
 class Report(db.Model):
@@ -25,6 +29,8 @@ class Report(db.Model):
     start = db.DateProperty();
     end = db.DateProperty();
     finished = db.BooleanProperty();
+    cells_finished = db.IntegerProperty(default=0)
+    total_cells = db.IntegerProperty(default=(100-len(CELL_BLACK_LIST))*100)
 
     @staticmethod
     def current():
@@ -40,6 +46,9 @@ class Report(db.Model):
                 'start': timestamp(self.start),
                 'end': timestamp(self.end),
                 'finished': self.finished,
+                'cells_finished': Cell.all().filter('done =', True).count(),
+    #self.cells_finished,
+                'total_cells': self.total_cells,
                 'str': self.start.strftime("%B-%Y")
         }
 

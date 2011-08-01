@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 import logging
-from application.models import Report, Cell, Area, Note
+from application.models import Report, Cell, Area, Note, CELL_BLACK_LIST
 from application.ee import NDFI
 from resource import Resource
 from flask import Response, request, jsonify, abort
@@ -42,12 +42,8 @@ class ReportAPI(Resource):
 class CellAPI(Resource):
     """ api to access cell info """
 
-    BLACK_LIST = ['1_0_0', '1_1_0', '1_0_1', '1_0_2', '1_0_3', '1_0_7', '1_0_8', '1_0_9',
-             '1_1_7', '1_1_8', '1_1_9', '1_2_8', '1_2_9', '1_3_8', '1_3_9',
-             '1_2_0', '1_5_0', '1_6_0', '1_8_0', '1_9_0','1_8_1', '1_9_1',
-             '1_8_8', '1_8_9', '1_9_8', '1_9_9']
     def is_in_backlist(self, cell):
-        return cell.external_id() in CellAPI.BLACK_LIST
+        return cell.external_id() in CELL_BLACK_LIST
 
 
     def list(self, report_id):
