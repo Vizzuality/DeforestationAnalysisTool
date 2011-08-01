@@ -387,28 +387,13 @@ article .example .field {
   height: 84px;
 }
 #header #title h1 {
-  font: bold 17px "Droid Sans";
-  margin: 0;
-  padding: 0;
-}
-#header #title h2 {
-  font: normal 13px "Droid Sans";
-  color: white;
-  margin: 3px 0 0 0;
-  text-shadow: 0 1px black;
-}
-#header #title h2 small {
-  color: #59646D;
-  font: normal 11px "Droid Sans";
-  text-shadow: 0 1px #000000;
-}
-#header #title h2 a {
   display: inline-block;
-  width: 50px;
-  height: 20px;
-  margin: 0 0 0 1px;
-  background: url("../img/google.png") no-repeat 0 0;
-  text-indent: -9999px;
+  height: 13px;
+  margin: 0;
+  padding: 8px 0 8px  78px;
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  background: url("../img/logo.png") no-repeat 0 4px;
+  color: #999999;
 }
 #header #title #intro {
   padding-top: 27px;
@@ -1206,36 +1191,17 @@ article.login {
   box-shadow: 0 0 30px black;
 }
 article.login h1 {
-  display: block;
-  font: bold 17px "Droid Sans";
-  color: white;
-  text-shadow: 0 1px #8D2D19;
-  margin: 0;
-  padding: 0;
-}
-article.login h2 {
-  display: block;
-  font: normal 13px "Droid Sans";
-  color: white;
-  margin: 3px 0 0 0;
-  text-shadow: 0 -1px rgba(0, 0, 0, 0.3);
-}
-article.login h2 small {
-  color: #98331B;
-  font: normal 11px "Droid Sans";
-  text-shadow: none;
-}
-article.login h2 a {
   display: inline-block;
-  width: 50px;
-  height: 20px;
-  margin: 0 0 0 1px;
-  background: url("../img/google.png") no-repeat 0 0;
-  text-indent: -9999px;
+  height: 13px;
+  margin: 0;
+  padding: 8px 0 8px  78px;
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  background: url("../img/logo.png") no-repeat 0 5px;
+  color: #f0f0f0;
 }
 article.login p {
   display: block;
-  margin: 15px 0 0 0;
+  margin: 26px 0 0 0;
   font: normal 15px Helvetica;
   color: rgba(0, 0, 0, 0.4);
 }

@@ -20,39 +20,18 @@
     box-shadow:0 0 30px rgba(0,0,0,1);
 
     h1 {
-        display:block;
-        font:bold 17px $DroidSans;
-        color:white;
-        text-shadow: 0 1px #8D2D19;
-        margin: 0;
-        padding: 0;
-    }
-    h2 {
-        display:block;
-        font:normal 13px $DroidSans;
-        color:white;
-        margin:3px 0 0 0;
-        text-shadow:0 -1px rgba(0,0,0,0.3);
-
-
-        small {
-            color:#98331B;
-            font:normal 11px $DroidSans;
-            text-shadow:none;
-        }
-        a {
-          display:inline-block;
-          width:50px;
-          height:20px;
-          margin:0 0 0 1px;
-          background:url('../img/google.png') no-repeat 0 0;
-          text-indent:-9999px;
-        }
+        display:inline-block;
+        height:13px;
+        margin:0;
+        padding:8px 0 8px  78px;
+        font:normal 13px $text_font;
+        background:url('../img/logo.png') no-repeat 0 5px;
+        color:#f0f0f0;
     }
 
     p {
       display:block;
-      margin:15px 0 0 0;
+      margin:26px 0 0 0;
       font:normal 15px Helvetica;
       color:rgba(0,0,0,0.4);
       //text-shadow:0 -1px #FFBDA7;
