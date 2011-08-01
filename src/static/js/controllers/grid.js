@@ -19,16 +19,25 @@ var CellView = Backbone.View.extend({
         _.bindAll(this, 'onmouseover', 'onmouseout', 'onclick');
     },
 
-    render: function(topx, topy) {
+    render: function(topx, topy, x, y, w, h) {
         var cell = this.el;
         var border = 2;
+        /*
         var p = window.mapper.cell_position(this.model.get('x'),
             this.model.get('y'),
             this.model.get('z'));
+        */
+        /*
         cell.style.top = Math.floor(p.y - topy) + "px";
         cell.style.left = Math.floor(p.x - topx) + "px";
         cell.style.width = Math.ceil(p.width) - border + "px";
         cell.style.height = Math.ceil(p.height) - border+ "px";
+        */
+        cell.style.top = y +  "px";
+        cell.style.left =  x + "px";
+        cell.style.width = w - border + "px";
+        cell.style.height = h - border+ "px";
+
         cell.style.margin = border + "px" ;//"0 " + border + "px " + border + "px";
         cell.style.padding= 0;
         cell.style.display = "block";
@@ -93,10 +102,27 @@ var Grid = Backbone.View.extend({
         var that = this;
         this.el.html('');
         var p = window.mapper.cell_position(this.cells.x, this.cells.y, this.cells.z);
+        // normalize
+        var x = Math.floor(p.x);
+        var y = Math.floor(p.y);
+        var w = Math.floor((p.width/10))*10;
+        var h = Math.floor((p.height/10))*10;
+        var marginx = Math.floor((p.width - w)/2);
+        var marginy = Math.floor((p.height- h)/2);
+
+        console.log(p.width - w, p.height- h);
+        var wc = w/10;
+        var wh = h/10;
+        
+        console.log(x, y, w, h, wc, wh, marginx, marginy);
+
+        var srcx = this.cells.x*10;
+        var srcy = this.cells.y*10;
+
         this.cells.each(function(c) {
             var pos = that.el.position();
             var cellview = new CellView({model: c});
-            that.el.append(cellview.render(p.x, p.y).el);
+            that.el.append(cellview.render(p.x, p.y, marginx + (c.get('x') - srcx)*wc, marginy + (c.get('y') - srcy)*wh, wc, wh).el);
             cellview.bind('enter', that.cell_selected);
         });
         this.render();
@@ -115,10 +141,14 @@ var Grid = Backbone.View.extend({
     render: function() {
         if(this.cells) {
             var p = window.mapper.cell_position(this.cells.x, this.cells.y, this.cells.z);
-            this.el.css('top', p.y);
-            this.el.css('left', p.x);
-            this.el.css('width', p.width);
-            this.el.css('height', p.height);
+            var x = Math.floor(p.x);
+            var y = Math.floor(p.y);
+            var w = 10 + Math.floor((p.width/10)*10);
+            var h = 10 + Math.floor((p.height/10)*10);
+            this.el.css('top', y);
+            this.el.css('left', x);
+            this.el.css('width', w);
+            this.el.css('height', h);
         }
         //this.el.css('background', 'rgba(0,0,0,0.2)');
     }
