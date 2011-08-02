@@ -52,7 +52,7 @@ class Report(db.Model):
                 'finished': self.finished,
                 'cells_finished': Cell.all().filter('done =', True).count(),
                 'total_cells': self.total_cells,
-                'str': self.start.strftime("%B-%Y"),
+                'str': self.start.strftime("%m/%Y"),
                 'assetid': self.assetid
         }
 

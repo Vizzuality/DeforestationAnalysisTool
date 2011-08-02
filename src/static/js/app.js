@@ -119,7 +119,7 @@ $(function() {
         },
 
         init_ui: function() {
-            this.selection_toolbar = new ReportToolbar();
+            this.selection_toolbar = new ReportToolbar({report:this.active_report});
             this.polygon_tools = new PolygonToolbar();
             this.overview = new Overview({report: this.active_report});
 
