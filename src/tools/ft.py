@@ -7,10 +7,11 @@ original author: kbrisbin
 
 from fusiontables.authorization.clientlogin import ClientLogin
 from fusiontables.sql.sqlbuilder import SQL
-import ftclient
+from fusiontables import ftclient
 from cmd import Cmd
 import sys
 import getpass
+import urllib2
 
 
 class FTCmd(Cmd):
@@ -19,8 +20,12 @@ class FTCmd(Cmd):
         self.client = client
 
     def default(self, line):
-        rowid = self.client.query(line)
-        print rowid
+        try:
+            rowid = self.client.query(line)
+            print rowid
+        except urllib2.HTTPError as e:
+            print "ERROR: %s" % e.msg
+
 
 if __name__ == "__main__":
     username = raw_input("Enter your google id: ")

@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+import logging
 import os
 import simplejson as json
 from shutil import copyfile
@@ -23,6 +24,7 @@ from google.appengine.ext.db import Key
 def default_maps():
     maps = []
     r = Report.current()
+    logging.info("report " + unicode(r))
     ee_resource = 'MOD09GA'
     ndfi = NDFI(ee_resource,
         past_month_range(r.start),

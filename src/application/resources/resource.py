@@ -19,14 +19,14 @@ class Resource(object):
         abort(501)
 
     @classmethod
-    def add_custom_url(cls, app, url, method):
+    def add_custom_url(cls, app, url, method, methods=("GET",)):
         def _view(*args, **kwargs):
             r = cls()
             mth = getattr(r, method)
             return mth(*args, **kwargs)
 
-        _view.__name__ = "custom"
-        app.add_url_rule(url, view_func=_view, methods=("GET",))
+        _view.__name__ = cls.__name__ + "_" + method
+        app.add_url_rule(url, view_func=_view, methods=methods)
 
 
     @classmethod

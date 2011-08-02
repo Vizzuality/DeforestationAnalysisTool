@@ -5,9 +5,10 @@ from application.models import Report, Cell, Area, Note, CELL_BLACK_LIST
 from application.ee import NDFI
 from resource import Resource
 from flask import Response, request, jsonify, abort
+from datetime import date
 
 import simplejson as json
-from application.time_utils import timestamp, past_month_range
+from application.time_utils import timestamp
 
 from application.constants import amazon_bounds
 
@@ -19,24 +20,50 @@ from google.appengine.api import memcache
 class NDFIMapApi(Resource):
     """ resource to get ndfi map access data """
 
+    @staticmethod
+    def _cache_key(report_id):
+        return report_id + "_ndfi"
+
     def list(self, report_id):
-        cache_key = report_id + "_ndfi"
+        cache_key = self._cache_key(report_id)
         data = memcache.get(cache_key)
         if not data:
             r = Report.get(Key(report_id))
             ee_resource = 'MOD09GA'
             ndfi = NDFI(ee_resource,
-                past_month_range(r.start),
+                r.comparation_range(),
                 r.range())
             data = ndfi.mapid()['data']
             memcache.add(key=cache_key, value=data, time=3600)
         return jsonify(data)
 
 
+
 class ReportAPI(Resource):
 
     def list(self):
         return self._as_json([x.as_dict() for x in Report.all()])
+
+    def close(self, report_id):
+        """ close current and create new one """
+        r = Report.get(Key(report_id))
+        if not r.finished:
+            """
+            ee_resource = 'MOD09GA'
+            ndfi = NDFI(ee_resource,
+                    r.comparation_range(),
+                    r.range())
+            data = ndfi.tag()['data']['mapid']
+            """
+            data = "707e1890793104ed59956972c90e0fed"
+            r.close(data)
+            cache_key = NDFIMapApi._cache_key(report_id)
+            memcache.delete(cache_key)
+            new_report = Report(start=date.today())
+            new_report.put()
+            return str(new_report.key())
+        return "already finished"
+
 
 
 class CellAPI(Resource):
@@ -82,7 +109,7 @@ class CellAPI(Resource):
         z, x, y = Cell.cell_id(id)
         cell = Cell.get_or_default(r, x, y, z)
         ndfi = NDFI('MOD09GA',
-            past_month_range(r.start),
+            r.comparation_range(),
             r.range())
 
         bounds = cell.bounds(amazon_bounds)

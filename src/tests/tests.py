@@ -14,16 +14,27 @@ from google.appengine.api import users
 
 from application.app import app
 from application.models import Area, Note, Cell, Report
+from application import models
 from application.resources.report import CellAPI
 from application.time_utils import timestamp
 
 from base import GoogleAuthMixin
 
+class ReportTest(unittest.TestCase):
+
+    def setUp(self):
+        self.r = Report(start=date(year=2011, month=2, day=1), finished=False)
+        self.r.put()
+
+    def test_range(self):
+        r1 = self.r.comparation_range()
+        self.assertEquals(1, datetime.fromtimestamp(r1[0]/1000).month)
+        self.assertEquals(1, datetime.fromtimestamp(r1[0]/1000).day)
 
 class CellTest(unittest.TestCase):
 
     def setUp(self):
-        r = Report(start=date.today(), end=date.today()+timedelta(days=1), finished=False)
+        r = Report(start=date.today(), finished=False)
         r.put()
         self.r = r
         self.cell = Cell(x=11, y=11, z=2, report=self.r, ndfi_high=1.0, ndfi_low=0.0)
@@ -59,7 +70,7 @@ class NotesApiTest(unittest.TestCase, GoogleAuthMixin):
         app.config['TESTING'] = True
         self.app = app.test_client()
         self.login('test@gmail.com', 'testuser')
-        r = Report(start=date.today(), end=date.today()+timedelta(days=1), finished=False)
+        r = Report(start=date.today(), finished=False)
         r.put()
         self.r = r
         self.cell = Cell(x=0, y=0, z=2, report=self.r, ndfi_high=1.0, ndfi_low=0.0)
@@ -96,7 +107,7 @@ class PolygonApi(unittest.TestCase, GoogleAuthMixin):
             x.delete()
         for x in Cell.all():
             x.delete()
-        r = Report(start=date.today(), end=date.today()+timedelta(days=1), finished=False)
+        r = Report(start=date.today(), finished=False)
         r.put()
         self.r = r
         self.cell = Cell(x=0, y=0, z=2, report=self.r, ndfi_high=1.0, ndfi_low=0.0)
@@ -145,12 +156,13 @@ class PolygonApi(unittest.TestCase, GoogleAuthMixin):
 
 class CellApi(unittest.TestCase, GoogleAuthMixin):
     def setUp(self):
-        CellAPI.BLACK_LIST = []
+        for x in models.CELL_BLACK_LIST[:]:
+            models.CELL_BLACK_LIST.pop()
         app.config['TESTING'] = True
         self.app = app.test_client()
         for x in Cell.all():
             x.delete()
-        r = Report(start=date.today(), end=date.today()+timedelta(days=1), finished=False)
+        r = Report(start=date.today(), finished=False)
         r.put()
         self.r = r
 
@@ -193,6 +205,7 @@ class CellApi(unittest.TestCase, GoogleAuthMixin):
         self.assertAlmostEquals(1.0, cell.ndfi_high)
 
 
+"""
 class HomeTestCase(unittest.TestCase, GoogleAuthMixin):
 
     def setUp(self):
@@ -205,12 +218,13 @@ class HomeTestCase(unittest.TestCase, GoogleAuthMixin):
         assert 'imazon' in rv.data
 
 """
+
 class FTTest(unittest.TestCase):
 
     def setUp(self):
         app.config['TESTING'] = True
         self.app = app.test_client()
-        r = Report(start=date.today(), end=date.today()+timedelta(days=1), finished=False)
+        r = Report(start=date.today(), finished=False)
         r.put()
         self.r = r
         self.cell = Cell(x=0, y=0, z=2, report=self.r, ndfi_high=1.0, ndfi_low=0.0)
@@ -227,7 +241,6 @@ class FTTest(unittest.TestCase):
         self.area.update_fusion_tables()
         self.area.delete()
         self.area.delete_fusion_tables()
-"""
 
 
 
@@ -240,16 +253,13 @@ class CommandTest(unittest.TestCase, GoogleAuthMixin):
             x.delete()
 
     def test_create_report(self):
-        rv = self.app.post('/_ah/cmd/create_report?month=11&year=2010')
+        rv = self.app.post('/_ah/cmd/create_report?month=11&year=2010&day=2')
         self.assertEquals(200, rv.status_code)
         self.assertEquals(1, Report.all().count())
         r = Report.all().fetch(1)[0]
-        self.assertEquals(1, r.start.day)
+        self.assertEquals(2, r.start.day)
         self.assertEquals(11, r.start.month)
         self.assertEquals(2010, r.start.year)
-        self.assertEquals(30, r.end.day)
-        self.assertEquals(11, r.end.month)
-        self.assertEquals(2010, r.end.year)
 
 if __name__ == '__main__':
     unittest.main()

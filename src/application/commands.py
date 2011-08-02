@@ -2,9 +2,10 @@
 
 import logging
 import random
+from datetime import datetime, date
 from app import app
 from flask import render_template, flash, url_for, redirect, abort, request, make_response
-from application.time_utils import timestamp, past_month_range
+from application.time_utils import timestamp
 from google.appengine.ext import deferred
 from google.appengine.ext.db import Key
 
@@ -46,11 +47,12 @@ def show_tables():
 
     month = request.args.get('month','')
     year = request.args.get('year','')
+    day= request.args.get('day','')
 
     if not month or not year:
         abort(400)
-    start, end = month_range(int(month), int(year))
-    r = Report(start=start, end=end, finished=False)
+    start = date(year=int(year), month=int(month), day=int(day))
+    r = Report(start=start, finished=False)
     r.put()
     return 'created'
 
@@ -99,7 +101,7 @@ def ndfi_value_for_cells(cell_key):
     cell = Cell.get(Key(cell_key))
 
     ndfi = NDFI('MOD09GA',
-            past_month_range(cell.report.start),
+            cell.report.comparation_range(),
             cell.report.range())
 
     bounds = cell.bounds(amazon_bounds)

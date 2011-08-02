@@ -9,6 +9,9 @@ import logging
 from google.appengine.ext import db
 from google.appengine.ext import deferred
 
+from datetime import datetime, date
+from dateutil.relativedelta import relativedelta
+
 from application import settings
 import simplejson as json
 from time_utils import timestamp
@@ -27,10 +30,11 @@ CELL_BLACK_LIST = ['1_0_0', '1_1_0', '1_0_1', '1_0_2', '1_0_3', '1_0_7', '1_0_8'
 class Report(db.Model):
 
     start = db.DateProperty();
-    end = db.DateProperty();
-    finished = db.BooleanProperty();
+    #end = db.DateProperty();
+    finished = db.BooleanProperty(default=False);
     cells_finished = db.IntegerProperty(default=0)
     total_cells = db.IntegerProperty(default=(100-len(CELL_BLACK_LIST))*100)
+    assetid = db.StringProperty()
 
     @staticmethod
     def current():
@@ -44,19 +48,64 @@ class Report(db.Model):
         return {
                 'id': str(self.key()),
                 'start': timestamp(self.start),
-                'end': timestamp(self.end),
+                #'end': timestamp(self.end),
                 'finished': self.finished,
                 'cells_finished': Cell.all().filter('done =', True).count(),
-    #self.cells_finished,
                 'total_cells': self.total_cells,
-                'str': self.start.strftime("%B-%Y")
+                'str': self.start.strftime("%B-%Y"),
+                'assetid': self.assetid
         }
+
+    def close(self, assetid):
+        if not self.finished:
+            self.finished = True
+            self.assetid = assetid
+            self.put()
+            #deferred.defer(self.update_fusion_tables)
+
+    def update_fusion_tables(self):
+        raise Exception("THIS METHOD DOES NOT WORK, SORRY")
+        """
+        if not self.finished:
+            raise Exception("report must be finished in order to update fustion tables")
+
+        cl = Area._get_ft_client()
+        table_id = cl.table_id('areas')
+        # fusion tables doesn't allow to update using a column different than
+        # rowid as filter, so get all rows and execute one sql update statement
+        # per row
+        rows_id = cl.sql("select rowid from %s where asset_id = ''" % table_id)
+        rows_id = rows_id.split('\n')[1:] # remove header
+        sql = []
+        for row in rows_id:
+            query = "update %s set asset_id = '%s' where rowid = '%s'" % (table_id, self.assetid, row)
+            sql.append(query)
+            if len(sql) == 500:
+                cl.sql(';'.join(sql))
+                sql = []
+        if len(sql) > 0:
+            cl.sql(';'.join(sql))
+        """
 
     def as_json(self):
         return json.dumps(self.as_dict())
 
+    def comparation_range(self):
+        #TODO: this are going to change when we can make the
+        # compilation map from past range
+        st = date(self.start.year, self.start.month, self.start.day)
+        d = st - relativedelta(months=1)
+        return tuple(map(timestamp, (d, self.start)))
+
     def range(self):
-        return tuple(map(timestamp, (self.start, self.end)))
+        end = datetime.now()
+        return tuple(map(timestamp, (self.start, end)))
+
+    def __unicode__(self):
+        r1 = self.comparation_range()
+        return u"(%s, %s) -> %s" % (datetime.fromtimestamp(r1[0]/1000).isoformat(),
+                                   datetime.fromtimestamp(r1[1]/1000).isoformat(),
+                                   self.start.isoformat())
 
 SPLITS = 10
 class Cell(db.Model):
@@ -89,7 +138,7 @@ class Cell(db.Model):
         xx = (SPLITS**self.z)*self.x + i
         yy = (SPLITS**self.z)*self.y + j
         return Cell.get_or_create(self.report, xx, yy, zz)
-        
+
     def children(self):
         """ return child cells """
         eid = self.external_id()
@@ -117,7 +166,7 @@ class Cell(db.Model):
     def calculate_ndfi_change_from_childs(self):
         ndfi = 0.0
         ch = self.children()
-        for c in ch: 
+        for c in ch:
             ndfi += c.ndfi_change_value
         self.ndfi_change_value = ndfi/len(ch)
         self.put()
@@ -151,7 +200,7 @@ class Cell(db.Model):
     @staticmethod
     def default_cell(r, x, y, z):
         return Cell(z=z, x=x, y=y, ndfi_low=0.6, ndfi_high=0.8, report=r)
-    
+
     def external_id(self):
         return "_".join(map(str,(self.z, self.x, self.y)))
 
@@ -201,7 +250,7 @@ class Cell(db.Model):
         return json.dumps(self.as_dict())
 
     def bounds(self, top_level_bounds):
-        """ return lat,lon bounds given toplevel BB bounds 
+        """ return lat,lon bounds given toplevel BB bounds
             ``top_level_bounds`` is a tuple with (ne, sw) being
             ne and sw a (lat, lon) tuple
             return bounds in the same format
@@ -266,8 +315,9 @@ class Area(db.Model):
     def delete(self):
         super(Area, self).delete()
         deferred.defer(self.delete_fusion_tables)
-    
-    def _get_ft_client(self):
+
+    @staticmethod
+    def _get_ft_client():
         cl = FT(settings.FT_CONSUMER_KEY,
                 settings.FT_CONSUMER_SECRET,
                 settings.FT_TOKEN,
@@ -311,7 +361,7 @@ class Note(db.Model):
 
     def as_dict(self):
         return {'id': str(self.key()),
-                'msg': self.msg, 
+                'msg': self.msg,
                 'author': self.added_by.nickname(),
                 'date': timestamp(self.added_on)}
 

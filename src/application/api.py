@@ -19,6 +19,7 @@ from resources.report import ReportAPI, CellAPI, NDFIMapApi, PolygonAPI, NoteAPI
 from application.constants import amazon_bounds
 
 ReportAPI.add_urls(app, '/api/v0/report')
+ReportAPI.add_custom_url(app, '/api/v0/report/<report_id>/close', 'close', ("POST",))
 
 CellAPI.add_urls(app,       '/api/v0/report/<report_id>/cell')
 CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/children', 'children')

@@ -63,6 +63,18 @@ class NDFI(object):
         )
         return self._execute_cmd('/mapid', cmd)
 
+    def tag(self):
+        reference_images = self._images_for_period(self.last_perdiod)
+        work_images = self._images_for_period(self.work_period)
+
+        # get map id from EE
+        cmd = self._NDFI_map_command(
+            reference_images,
+            work_images
+        )
+        return self._execute_cmd('/create', cmd)
+
+
     def rgbid(self):
         """ return params to access NDFI rgb image """
         work_images = self._images_for_period(self.work_period)
