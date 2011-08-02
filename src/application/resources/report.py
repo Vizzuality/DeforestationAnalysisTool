@@ -187,7 +187,11 @@ class NoteAPI(Resource):
         r = Report.get(Key(report_id))
         z, x, y = Cell.cell_id(cell_pos)
         cell = Cell.get_cell(r, x, y, z)
-        return self._as_json([x.as_dict() for x in cell.note_set])
+        notes = []
+        if cell:
+            return self._as_json([x.as_dict() for x in cell.note_set])
+        return self._as_json([])
+        
 
     def create(self, report_id, cell_pos):
         r = Report.get(Key(report_id))
