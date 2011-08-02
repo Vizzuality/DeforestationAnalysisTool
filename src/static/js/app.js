@@ -253,6 +253,7 @@ $(function() {
             if(this.editing_router) {
                 //unbind all
                 this.editing_router.reset();
+                this.polygon_tools.reset();
                 delete this.editing_router;
             }
         },
