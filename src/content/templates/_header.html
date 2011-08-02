@@ -7,7 +7,7 @@
             <div id="intro">
                 <h1>Deforestation Validation Tool</h1>
             </div>
-            <div id="overview">
+            <div id="overview" class="hidden">
               <h3 id="name">{{ user.nickname() }}</h3>
               <p id="cells">12 cells this month</p>
               <div class="info">
@@ -26,20 +26,27 @@
               <div id="analysed_global_progress">
                 <div id="bar">
                     <div id="progress"></div>
-                    <div id="progress_number">11/252 (45%)</div>
+                    <div id="progress_number"></div>
                 </div>
               </div>
 
               <!-- next div is shown when all cells are analysed -->
-              <div id="analysed_global_final" class="analysed hidden">
+              <div id="analysed_global_final" class="analysed">
                 <button id="report_done" class="finish_button">
-                  <p class="stats stats_progress">252/252 (100%)</p>
+                  <p class="stats stats_progress"></p>
                   <span class="separator"></span>
                   <p class="done generate">generate</p>
                 </button>
               </div>
+        
+              <div id="confirmation_dialog">
+                <h3>Are you sure?</h3>
+                <p>Remember that once it has been published it can't be reopened</p>
+                <button>Confirm</button>
+                <a href="#cancel">cancel</a>
+              </div> <!-- confirmation_dialog -->
 
-           </div>
+           </div> <!-- overview -->
         </div>  <!-- content -->
     </div>
 

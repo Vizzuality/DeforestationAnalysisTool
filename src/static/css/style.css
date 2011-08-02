@@ -872,6 +872,53 @@ article .example .field {
   width: 70px;
   text-align: left;
 }
+#header #overview #confirmation_dialog {
+  width: 194px;
+  padding: 20px;
+  position: relative;
+  top: 40px;
+  left: -20px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-radius: 5px;
+  border: 3px solid rgba(0, 0, 0, 0.5);
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(white), to(#f3f3f3));
+}
+#header #overview #confirmation_dialog button {
+  padding: 8px 10px;
+  border: 1px solid #333333;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-radius: 5px;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(white), to(#cccccc));
+  font: bold 12px "Helvetica Neue", Arial, Sans-Serif;
+  color: #333333;
+  text-transform: uppercase;
+  text-align: center;
+}
+#header #overview #confirmation_dialog button:hover {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(#cccccc), to(#ebebeb));
+}
+#header #overview #confirmation_dialog a {
+  color: #EA462C;
+  float: right;
+  font: normal 13px "Arial", "Helvetica", Sans-Serif;
+  padding-top: 10px;
+  display: inline-block;
+}
+#header #overview #confirmation_dialog h3 {
+  width: 100%;
+  padding: 0 0 10px;
+  font: bold 13px "Droid Sans";
+  color: #333333;
+  background: none;
+  text-shadow: none;
+}
+#header #overview #confirmation_dialog p {
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: #333333;
+  padding: 0 0 15px;
+}
 
 body, html {
   height: 100%;

@@ -45,16 +45,16 @@ var RangeSlider = Backbone.View.extend({
                 max: 200,
                 values: [40, 60], //TODO: load from model
                 slide: function(event, ui) {
-                  	// Hack to get red bar resizing
+                    // Hack to get red bar resizing
                     var size = $('a.ui-slider-handle:eq(1)').css('left');
                     $('span.hack_red').css('left',size);
-										// Hack for handles tooltip
-										var size0 = $('a.ui-slider-handle:eq(0)').css('left');
-										$('p#ht0')
-											.text(ui.values[0]);
-										$('p#ht1')
-											.text(ui.values[1]);
-											
+                    // Hack for handles tooltip
+                    var size0 = $('a.ui-slider-handle:eq(0)').css('left');
+                    $('p#ht0')
+                    .text(ui.values[0]);
+                    $('p#ht1')
+                    .text(ui.values[1]);
+
                     var low = ui.values[0];
                     var high= ui.values[1];
                     self.slide(low, high);
@@ -63,11 +63,11 @@ var RangeSlider = Backbone.View.extend({
                     // Hack to get red bar resizing
                     var size = $('a.ui-slider-handle:eq(1)').css('left');
                     $('span.hack_red').css('left',size);
-										// Hack for handles tooltip
-										var size0 = $('a.ui-slider-handle:eq(0)').css('left');
-										
-										$('a.ui-slider-handle:eq(0)').append('<p id="ht0" class="tooltip">40</p>');
-										$('a.ui-slider-handle:eq(1)').append('<p id="ht1" class="tooltip">60</p>');
+                    // Hack for handles tooltip
+                    var size0 = $('a.ui-slider-handle:eq(0)').css('left');
+
+                    $('a.ui-slider-handle:eq(0)').append('<p id="ht0" class="tooltip">40</p>');
+                    $('a.ui-slider-handle:eq(1)').append('<p id="ht1" class="tooltip">60</p>');
                 }
          });
     },
@@ -142,10 +142,13 @@ var Overview = Backbone.View.extend({
 
     el: $("#overview"),
 
+    finished: false,
+
     events: {
         'click #done': 'done',
         'click #go_back': 'go_back',
-        'click .notes': 'open_notes'
+        'click .notes': 'open_notes',
+        'click .generate': 'confirm_generation'
     },
 
     initialize: function() {
@@ -155,6 +158,7 @@ var Overview = Backbone.View.extend({
         this.$("#analysed_global_final").hide();
         this.report.bind('change', this.report_changed);
         this.report_changed();
+        this.el.fadeIn();
     },
 
     set_note_count: function(c) {
@@ -188,8 +192,14 @@ var Overview = Backbone.View.extend({
             text = "Cell " + z + "/" + x + "/" + y + " - ";
             this.$("#go_back").show();
             this.$("#analysed_global_progress").hide();
+            this.$("#analysed_global_final").hide();
         } else {
-            this.$("#analysed_global_progress").show();
+            if(!this.finished) {
+                this.$("#analysed_global_progress").show();
+            } else {
+                this.$("#analysed_global_progress").hide();
+                this.$("#analysed_global_final").show();
+            }
             this.$("#go_back").hide();
         }
         this.$("#current_cell").html(text);
@@ -202,10 +212,21 @@ var Overview = Backbone.View.extend({
     report_changed: function() {
         var total = this.report.get('total_cells');
         var current = this.report.get('cells_finished');
-        var percent = Math.floor(current/total);
+        var percent = 100*Math.floor(current/total);
         var text = current + '/' + total + " (" + percent + "%)";
         this.$("#progress_number").html(text);
+        this.$(".stats_progress").html(text);
         this.$("#progress").css({width: percent + "%"});
+        if(percent == 100) {
+            this.finished = true;
+            //time to show generate button
+            this.$("#analysed_global_progress").hide();
+            this.$("#analysed_global_final").show();
+        }
+    },
+
+    confirm_generation: function(e) {
+        e.preventDefault();
     }
 
 
