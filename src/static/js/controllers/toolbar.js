@@ -148,14 +148,16 @@ var Overview = Backbone.View.extend({
         'click #done': 'done',
         'click #go_back': 'go_back',
         'click .notes': 'open_notes',
-        'click .generate': 'confirm_generation'
+        'click #report_done': 'confirm_generation',
+        'click #cancel': 'cancel_report'
     },
 
     initialize: function() {
-        _.bindAll(this, 'done', 'on_cell', 'select_mode', 'go_back', 'set_note_count', 'report_changed');
+        _.bindAll(this, 'done', 'on_cell', 'select_mode', 'go_back', 'set_note_count', 'report_changed', 'cancel_report');
         this.report = this.options.report;
         this.analysed= this.$('#cell_analisys');
         this.$("#analysed_global_final").hide();
+        this.$("#confirmation_dialog").hide();
         this.report.bind('change', this.report_changed);
         this.report_changed();
         this.el.fadeIn();
@@ -227,7 +229,14 @@ var Overview = Backbone.View.extend({
 
     confirm_generation: function(e) {
         e.preventDefault();
+        this.$("#confirmation_dialog").slideDown('fast');
+    },
+
+    cancel_report: function(e) {
+        e.preventDefault();
+        this.$("#confirmation_dialog").slideUp();
     }
+
 
 
 });
