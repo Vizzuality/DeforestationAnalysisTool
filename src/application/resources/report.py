@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 import logging
-from application.models import Report, Cell, Area, Note, CELL_BLACK_LIST
+from application.models import Report, Cell, Area, Note, CELL_BLACK_LIST, User
 from application.ee import NDFI
 from resource import Resource
 from flask import Response, request, jsonify, abort
@@ -38,6 +38,22 @@ class NDFIMapApi(Resource):
         return jsonify(data)
 
 
+class UserAPI(Resource):
+
+    def list(self):
+        return self._as_json([x.as_dict() for x in User.all()])
+
+    def get(self, id):
+        u = User.get(Key(id))
+        return Response(u.as_json(), mimetype='application/json')
+
+    def update(self, id):
+        data = json.loads(request.data)
+        u = User.get(Key(id))
+        if 'current_cells' in data:
+            u.current_cells = data['current_cells']
+            u.put()
+        return Response(u.as_json(), mimetype='application/json')
 
 class ReportAPI(Resource):
 

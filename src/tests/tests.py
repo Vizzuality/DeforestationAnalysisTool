@@ -13,7 +13,7 @@ from google.appengine.ext import db
 from google.appengine.api import users
 
 from application.app import app
-from application.models import Area, Note, Cell, Report
+from application.models import Area, Note, Cell, Report, User
 from application import models
 from application.resources.report import CellAPI
 from application.time_utils import timestamp
@@ -42,28 +42,6 @@ class CellTest(unittest.TestCase):
 
     def test_parent_id(self):
         self.assertEquals('1_1_1', self.cell.parent_id)
-
-class ApiTestCase(unittest.TestCase, GoogleAuthMixin):
-
-    def setUp(self):
-        app.config['TESTING'] = True
-        self.app = app.test_client()
-
-    def test_poly_new(self):
-        rv = self.app.post('/api/v0/poly/new', data=dict(
-            polys="""[
-                      {"type":1, "geom":"testkml"},
-                      {"type":0, "geom":"testkml2"}
-                  ]
-                  """
-        ))
-        self.assertEquals(200, rv.status_code)
-        js = json.loads(rv.data)
-        self.assertTrue(js['ok'])
-        self.assertEquals(2, Area.all().count())
-
-    def tearDown(self):
-        pass
 
 class NotesApiTest(unittest.TestCase, GoogleAuthMixin):
     def setUp(self):
@@ -153,6 +131,24 @@ class PolygonApi(unittest.TestCase, GoogleAuthMixin):
 
         self.assertEquals(0, Area.all().count())
 
+
+class UserApiTest(unittest.TestCase, GoogleAuthMixin):
+
+    def setUp(self):
+        for x in models.CELL_BLACK_LIST[:]:
+            models.CELL_BLACK_LIST.pop()
+        app.config['TESTING'] = True
+        self.login('test@gmail.com', 'testuser')
+        self.app = app.test_client()
+        self.user = User(user=users.get_current_user())
+        self.user.put()
+
+    def test_update(self):
+        rv = self.app.put('/api/v0/user/' + str(self.user.key()),
+            data=json.dumps({'current_cells': 2}))
+        self.assertEquals(200, rv.status_code)
+        js = json.loads(rv.data)
+        self.assertEquals(2, js['current_cells'])
 
 class CellApi(unittest.TestCase, GoogleAuthMixin):
     def setUp(self):

@@ -27,6 +27,38 @@ CELL_BLACK_LIST = ['1_0_0', '1_1_0', '1_0_1', '1_0_2', '1_0_3', '1_0_7', '1_0_8'
              '1_8_8', '1_8_9', '1_9_8', '1_9_9']
 
 
+class User(db.Model):
+
+    current_cells = db.IntegerProperty(default=0);
+    user = db.UserProperty()
+
+    @staticmethod
+    def reset():
+        """reset cell count """
+        for x in User.all():
+            x.current_cells = 0;
+            x.put()
+
+    @staticmethod
+    def get_or_create(user):
+        q = User.all().filter('user =', user)
+        u = q.fetch(1)
+        if u:
+            return u[0]
+        u = User(user=user)
+        u.put()
+        return u
+
+    def as_dict(self):
+        return {
+                'id': str(self.key()),
+                'current_cells': self.current_cells
+        }
+
+    def as_json(self):
+        return json.dumps(self.as_dict())
+
+    
 class Report(db.Model):
 
     start = db.DateProperty();
@@ -64,6 +96,7 @@ class Report(db.Model):
             self.finished = True
             self.assetid = assetid
             self.put()
+            User.reset()
             #deferred.defer(self.update_fusion_tables)
 
     def update_fusion_tables(self):

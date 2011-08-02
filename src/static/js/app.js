@@ -234,6 +234,7 @@ $(function() {
             this.gridstack.current_cell.save();
             // got to parent cell
             this.go_back();
+            this.user.inc_cells();
         },
         
         go_back: function() {

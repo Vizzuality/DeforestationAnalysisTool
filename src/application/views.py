@@ -17,7 +17,7 @@ from application.ee import NDFI
 
 from app import app
 
-from models import Report
+from models import Report, User
 from google.appengine.api import memcache
 from google.appengine.ext.db import Key
 
@@ -48,7 +48,8 @@ def home(cell_path=None):
         memcache.add(key='default_maps', value=json.dumps(maps), time=3600*24)
 
     reports = json.dumps([x.as_dict() for x in Report.all()])
-    user = users.get_current_user()
+    #user = users.get_current_user()
+    user = User.get_or_create(users.get_current_user())
     return render_template('home.html', reports_json=reports, user=user, maps=maps)
 
 @app.route('/login')
