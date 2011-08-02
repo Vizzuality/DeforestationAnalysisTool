@@ -44,13 +44,16 @@ class Report(db.Model):
             return r[0]
         return None
 
+    def cells_finished(self):
+        return Cell.all().filter('report =', self).filter('done =', True).count()
+
     def as_dict(self):
         return {
                 'id': str(self.key()),
                 'start': timestamp(self.start),
                 #'end': timestamp(self.end),
                 'finished': self.finished,
-                'cells_finished': Cell.all().filter('done =', True).count(),
+                'cells_finished': self.cells_finished(),
                 'total_cells': self.total_cells,
                 'str': self.start.strftime("%m/%Y"),
                 'assetid': self.assetid
