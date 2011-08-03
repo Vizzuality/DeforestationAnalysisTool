@@ -37,8 +37,17 @@ var MapView = Backbone.View.extend({
         google.maps.event.trigger(this.map, "resize");
 
     },
+
     hide_controls: function() {
         this.$('.layer_editor').hide();
+        this.$('.zoom_control').hide();
+    },
+    
+    show_zoom_control: function() {
+        this.$('.zoom_control').show();
+    },
+
+    hide_zoom_control: function() {
         this.$('.zoom_control').hide();
     },
 

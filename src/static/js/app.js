@@ -216,6 +216,7 @@ $(function() {
             this.selection_toolbar.hide();
             this.polygon_tools.show();
             this.ndfi_layer.show();
+            this.map.show_zoom_control();
 
             //cell done!
             this.overview.set_note_count(this.gridstack.current_cell.get('note_count'));
@@ -245,6 +246,7 @@ $(function() {
 
         // entering on select_mode
         select_mode: function() {
+            this.map.hide_zoom_control();
             this.compare_view('one');
             this.selection_toolbar.show();
             this.polygon_tools.hide();
