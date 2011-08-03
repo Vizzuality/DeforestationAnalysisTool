@@ -22,6 +22,7 @@ $(function() {
             this.app.cell_polygons.editing_state = false;
             this.app.create_polygon_tool.editing_state(false);
             this.app.polygon_tools.polytype.hide();
+            this.app.map.$("canvas").css('cursor','auto');
         },
 
         editing_mode: function() {
@@ -51,6 +52,7 @@ $(function() {
                 case 'auto':
                     this.app.ndfi_layer.bind('polygon', this.new_polygon);
                     this.app.ndfi_layer.editing_state = true;
+                    this.app.map.$("canvas").css('cursor','crosshair');
                     break;
             }
             console.log(st);

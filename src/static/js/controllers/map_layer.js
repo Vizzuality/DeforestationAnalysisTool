@@ -63,8 +63,8 @@ var NDFILayer = Backbone.View.extend({
         color[1] = image_data.data[pixel_pos + 1];
         color[2] = image_data.data[pixel_pos + 2];
         color[3] = image_data.data[pixel_pos + 3];
-        var deg = is_color(color, this.DEFORESTATION_COLOR);
-        var def = is_color(color, this.DEGRADATION_COLOR);
+        var def = is_color(color, this.DEFORESTATION_COLOR);
+        var deg = is_color(color, this.DEGRADATION_COLOR);
         if(!deg && !def) {
             window.loading.finished('ndfilayer: click');
             return;
