@@ -105,7 +105,7 @@ $(function() {
         ),
 
         initialize:function() {
-            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view', 'update_map_layers', 'cell_done', 'go_back', 'open_notes');
+            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view', 'update_map_layers', 'cell_done', 'go_back', 'open_notes', 'change_cell');
 
             window.loading.loading("Imazon:initialize");
             this.reports = new ReportCollection();
@@ -130,12 +130,24 @@ $(function() {
             this.ndfi_layer = new NDFILayer({mapview: this.map, report: this.active_report});
 
             this.polygon_tools.ndfi_range.bind('change', this.ndfi_layer.apply_filter);
+            // don't change cell model every slider movement, only when the it stops
+            this.polygon_tools.ndfi_range.bind('stop', this.change_cell);
             this.polygon_tools.compare.bind('state', this.compare_view);
             this.overview.bind('go_back', this.go_back);
             this.overview.bind('open_notes', this.open_notes);
             this.overview.bind('done', this.cell_done);
 
         },
+
+        change_cell: function(low, high) {
+            var cell = this.gridstack.current_cell;
+            cell.set({
+                'ndfi_low': low/200.0,
+                'ndfi_high': high/200.0
+            });
+            cell.save();
+        },
+
         update_map_layers: function() {
             //update here other maps
         },
@@ -221,6 +233,9 @@ $(function() {
             this.ndfi_layer.show();
             this.map.show_zoom_control();
 
+            //update slider with current cell values
+            var cell = this.gridstack.current_cell;
+            this.polygon_tools.ndfi_range.set_values(cell.get('ndfi_low'), cell.get('ndfi_high'));
             //cell done!
             this.overview.set_note_count(this.gridstack.current_cell.get('note_count'));
             this.cell_polygons.polygons.x = x;
@@ -240,7 +255,7 @@ $(function() {
             this.go_back();
             this.user.inc_cells();
         },
-        
+
         go_back: function() {
             var p = this.gridstack.current_cell.parent_cell();
             this.to_cell(p.get('z'), p.get('x'), p.get('y'));
@@ -312,7 +327,7 @@ $(function() {
             this.overview.on_cell(x, y, z);
             this.gridstack.enter_cell(parseInt(x, 10), parseInt(y, 10), parseInt(z, 10));
         },
-        
+
         open_notes: function() {
             var notes_dialog = new NotesDialog({
                 el: this.$(".mamufas"),
