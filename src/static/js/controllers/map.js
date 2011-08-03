@@ -8,7 +8,8 @@ var MapView = Backbone.View.extend({
             mapTypeId: google.maps.MapTypeId.TERRAIN,
             disableDefaultUI: true,
             disableDoubleClickZoom: true,
-            draggableCursor:'default'
+            draggableCursor:'default',
+            scrollwheel: false,
     },
 
     events: {
