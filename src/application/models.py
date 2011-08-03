@@ -392,6 +392,12 @@ class Area(db.Model):
             raise Exception("Create areas tables first")
         return cl
 
+    def fusion_tables_type(self):
+        """ custom type id for FT """
+        if self.type == self.DEGRADATION:
+            return 3
+        return 2
+
     def delete_fusion_tables(self):
         """ delete area from fusion tables. Do not use this method directly, call delete method"""
         cl = self._get_ft_client()
@@ -404,14 +410,14 @@ class Area(db.Model):
         cl = self._get_ft_client()
         table_id = cl.table_id('areas')
         geo_kml = path_to_kml(json.loads(self.geo))
-        cl.sql("update  %s set geo = '%s', type = '%s' where rowid = '%s'" % (table_id, geo_kml, self.type, self.fusion_tables_id))
+        cl.sql("update  %s set geo = '%s', type = '%s' where rowid = '%s'" % (table_id, geo_kml, self.fusion_tables_type(), self.fusion_tables_id))
 
     def create_fusion_tables(self):
         logging.info("saving to fusion tables %s" % self.key())
         cl = self._get_ft_client()
         table_id = cl.table_id('areas')
         geo_kml = path_to_kml(json.loads(self.geo))
-        rowid = cl.sql("insert into %s ('geo', 'added_on', 'type') VALUES ('%s', '%s', %d)" % (table_id, geo_kml, self.added_on, self.type))
+        rowid = cl.sql("insert into %s ('geo', 'added_on', 'type') VALUES ('%s', '%s', %d)" % (table_id, geo_kml, self.added_on, self.fusion_tables_type()))
         self.fusion_tables_id = int(rowid.split('\n')[1])
         rowid = cl.sql("update %s set rowid_copy = '%s' where rowid = '%s'" % (table_id, self.fusion_tables_id, self.fusion_tables_id))
         self.put()

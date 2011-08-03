@@ -20,6 +20,7 @@ $(function() {
         //reset to initial state
         reset: function() {
             this.app.ndfi_layer.unbind('polygon', this.new_polygon);
+            this.app.create_polygon_tool.unbind('polygon', this.new_polygon);
             this.app.ndfi_layer.editing_state = false;
             this.app.cell_polygons.editing_state = false;
             this.app.create_polygon_tool.editing_state(false);
