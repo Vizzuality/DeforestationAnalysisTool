@@ -11,8 +11,10 @@ $(function() {
         },
 
         new_polygon: function(data) {
-            this.app.cell_polygons.polygons.create(data);
-            //this.app.cell_polygons.polygons.add(data);
+            //this.app.cell_polygons.polygons.create(data);
+            var p = new Polygon(data);
+            this.app.cell_polygons.polygons.add(p);
+            p.save();
         },
 
         //reset to initial state
