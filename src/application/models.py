@@ -152,8 +152,8 @@ class Cell(db.Model):
     # used for speedup queries
     parent_id = db.StringProperty()
     report = db.ReferenceProperty(Report)
-    ndfi_low = db.FloatProperty(default=0.4)
-    ndfi_high = db.FloatProperty(default=0.6)
+    ndfi_low = db.FloatProperty(default=0.2)
+    ndfi_high = db.FloatProperty(default=0.3)
     ndfi_change_value = db.FloatProperty(default=0.0)
     done = db.BooleanProperty(default=False);
     last_change_by = db.UserProperty()
