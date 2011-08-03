@@ -22,7 +22,7 @@ var PolygonEditTool = Backbone.View.extend({
 var PolygonDrawTool = Backbone.View.extend({
 
     initialize: function() {
-        _.bindAll(this, 'add_vertex', 'create_polygon', 'reset', 'editing_state', '_add_vertex', 'edit_polygon');
+        _.bindAll(this, 'add_vertex', 'create_polygon', 'reset', 'editing_state', '_add_vertex', 'edit_polygon', 'poly_type');
         this.mapview = this.options.mapview;
         this.map = this.mapview.map;
         this.reset();
