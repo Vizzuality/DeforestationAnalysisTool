@@ -63,11 +63,22 @@ class NDFI(object):
         )
         return self._execute_cmd('/mapid', cmd)
 
-    def freeze_map(self):
-        #{"creator":"sad_test/com.google.earthengine.examples.sad.FreezeMap","args":[THE_CHANGE_DATA,1228540,0,4,"asset_id",1,"type"]}
-        pass
-        
+    def freeze_map(self, table, report_id):
+        reference_images = self._images_for_period(self.last_perdiod)
+        work_images = self._images_for_period(self.work_period)
+        ndfi_image_1 = self._NDFI_image(reference_images)
+        ndfi_image_2 = self._NDFI_image(work_images)
+        image = self._change_detection_data(reference_images, work_images)
+        cmd ={
+            "image": json.dumps({
+                "creator":"sad_test/com.google.earthengine.examples.sad.FreezeMap",
+                "args": [image, table, 0, 4, "report_id", 1, "type", report_id]
+             })
+        }
+        return self._execute_cmd('/mapid', cmd)
 
+
+    """
     def tag(self):
         reference_images = self._images_for_period(self.last_perdiod)
         work_images = self._images_for_period(self.work_period)
@@ -78,6 +89,7 @@ class NDFI(object):
             work_images
         )
         return self._execute_cmd('/create', cmd)
+    """
 
 
     def rgbid(self):

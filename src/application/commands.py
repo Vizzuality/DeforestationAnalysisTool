@@ -29,6 +29,7 @@ def create_table():
        'geo': 'LOCATION',
        'rowid_copy': 'NUMBER',
        'asset_id': 'NUMBER',
+       'report_id': 'NUMBER',
     }}
 
     return str(cl.create_table(table_desc))

@@ -111,30 +111,6 @@ class Report(db.Model):
             User.reset()
             #deferred.defer(self.update_fusion_tables)
 
-    def update_fusion_tables(self):
-        raise Exception("THIS METHOD DOES NOT WORK, SORRY")
-        """
-        if not self.finished:
-            raise Exception("report must be finished in order to update fustion tables")
-
-        cl = Area._get_ft_client()
-        table_id = cl.table_id('areas')
-        # fusion tables doesn't allow to update using a column different than
-        # rowid as filter, so get all rows and execute one sql update statement
-        # per row
-        rows_id = cl.sql("select rowid from %s where asset_id = ''" % table_id)
-        rows_id = rows_id.split('\n')[1:] # remove header
-        sql = []
-        for row in rows_id:
-            query = "update %s set asset_id = '%s' where rowid = '%s'" % (table_id, self.assetid, row)
-            sql.append(query)
-            if len(sql) == 500:
-                cl.sql(';'.join(sql))
-                sql = []
-        if len(sql) > 0:
-            cl.sql(';'.join(sql))
-        """
-
     def as_json(self):
         return json.dumps(self.as_dict())
 
@@ -440,7 +416,7 @@ class Area(db.Model):
         cl = self._get_ft_client()
         table_id = cl.table_id('areas')
         geo_kml = path_to_kml(json.loads(self.geo))
-        rowid = cl.sql("insert into %s ('geo', 'added_on', 'type') VALUES ('%s', '%s', %d)" % (table_id, geo_kml, self.added_on, self.fusion_tables_type()))
+        rowid = cl.sql("insert into %s ('geo', 'added_on', 'type', 'report_id') VALUES ('%s', '%s', %d, %d)" % (table_id, geo_kml, self.added_on, self.fusion_tables_type(), self.cell.report.key().id()))
         self.fusion_tables_id = int(rowid.split('\n')[1])
         rowid = cl.sql("update %s set rowid_copy = '%s' where rowid = '%s'" % (table_id, self.fusion_tables_id, self.fusion_tables_id))
         self.put()

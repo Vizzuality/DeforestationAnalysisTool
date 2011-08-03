@@ -47,7 +47,8 @@ def home(cell_path=None):
         maps = default_maps()
         memcache.add(key='default_maps', value=json.dumps(maps), time=3600*24)
 
-    reports = json.dumps([x.as_dict() for x in Report.all()])
+    # send only the active report
+    reports = json.dumps([Report.current().as_dict()])
     #user = users.get_current_user()
     user = User.get_user(users.get_current_user())
     if not user:

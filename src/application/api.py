@@ -11,7 +11,7 @@ from flask import jsonify, request
 from app import app
 import settings
 
-from models import Area, Note
+from models import Area, Note, Report
 from ee import NDFI
 
 from resources.report import ReportAPI, CellAPI, NDFIMapApi, PolygonAPI, NoteAPI, UserAPI
@@ -31,6 +31,15 @@ PolygonAPI.add_urls(app, '/api/v0/report/<report_id>/cell/<cell_pos>/polygon')
 NoteAPI.add_urls(app, '/api/v0/report/<report_id>/cell/<cell_pos>/note')
 UserAPI.add_urls(app, '/api/v0/user')
 
+@app.route('/api/v0/test')
+def testing():
+    r = Report.current()
+    logging.info("report " + unicode(r))
+    ee_resource = 'MOD09GA'
+    ndfi = NDFI(ee_resource,
+        past_month_range(r.start),
+        r.range())
+    return str(ndfi.freeze_map(1089491, r.key().id()))
 
 
 #TODO: add auth

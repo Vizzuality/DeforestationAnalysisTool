@@ -108,7 +108,7 @@ $(function() {
         ),
 
         initialize:function() {
-            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view', 'update_map_layers', 'cell_done', 'go_back', 'open_notes', 'change_cell');
+            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view', 'update_map_layers', 'cell_done', 'go_back', 'open_notes', 'change_cell', 'close_report');
 
             window.loading.loading("Imazon:initialize");
             this.reports = new ReportCollection();
@@ -139,6 +139,7 @@ $(function() {
             this.overview.bind('go_back', this.go_back);
             this.overview.bind('open_notes', this.open_notes);
             this.overview.bind('done', this.cell_done);
+            this.overview.bind('close_report', this.close_report);
             this.user.bind('change:current_cells', this.overview.change_user_cells);
             this.overview.change_user_cells(this.user, this.user.get('current_cells'));
 
@@ -343,6 +344,23 @@ $(function() {
                 cell: this.gridstack.current_cell
             });
             notes_dialog.open();
+        },
+
+        close_report: function() {
+            window.loading.loading();
+            $.ajax({
+              type: 'POST',
+              url: '/api/v0/report/' + this.active_report.get('id') + "/close",
+              success: function() {
+                window.location.reload();
+              },
+              error: function() {
+                //TODO: replace with a custom window
+                alert('there was a problem closing report, try it later');
+                window.loading.finish();
+              }
+            });
+
         }
 
 

@@ -177,11 +177,12 @@ var Overview = Backbone.View.extend({
         'click #go_back': 'go_back',
         'click .notes': 'open_notes',
         'click #report_done': 'confirm_generation',
-        'click #cancel': 'cancel_report'
+        'click #cancel': 'cancel_report',
+        'click #confirm': 'close_report'
     },
 
     initialize: function() {
-        _.bindAll(this, 'done', 'on_cell', 'select_mode', 'go_back', 'set_note_count', 'report_changed', 'cancel_report', 'change_user_cells');
+        _.bindAll(this, 'done', 'on_cell', 'select_mode', 'go_back', 'set_note_count', 'report_changed', 'cancel_report', 'change_user_cells', 'close_report');
         this.report = this.options.report;
         this.analysed= this.$('#cell_analisys');
         this.$("#analysed_global_final").hide();
@@ -267,6 +268,11 @@ var Overview = Backbone.View.extend({
 
     change_user_cells: function(user, count) {
         this.$("#cells").html(count + " cells closed");
+    },
+
+    close_report: function(e) {
+        this.trigger('close_report');
+        e.preventDefault();
     }
 
 

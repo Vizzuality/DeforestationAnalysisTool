@@ -64,17 +64,18 @@ class ReportAPI(Resource):
         """ close current and create new one """
         r = Report.get(Key(report_id))
         if not r.finished:
-            """
             ee_resource = 'MOD09GA'
             ndfi = NDFI(ee_resource,
                     r.comparation_range(),
                     r.range())
-            data = ndfi.tag()['data']['mapid']
-            """
-            data = "707e1890793104ed59956972c90e0fed"
+            data = ndfi.freeze_map(1089491, r.key().id())
+            if 'data' not in data:
+                abort(400)
+            data = data['data']['mapid']
             r.close(data)
             cache_key = NDFIMapApi._cache_key(report_id)
             memcache.delete(cache_key)
+            # open new report
             new_report = Report(start=date.today())
             new_report.put()
             return str(new_report.key())
