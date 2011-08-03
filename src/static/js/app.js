@@ -23,6 +23,7 @@ $(function() {
             this.app.create_polygon_tool.editing_state(false);
             this.app.polygon_tools.polytype.hide();
             this.app.map.$("canvas").css('cursor','auto');
+            this.app.cell_polygons.unbind('click_on_polygon', this.app.create_polygon_tool.edit_polygon);
         },
 
         editing_mode: function() {
