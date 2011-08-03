@@ -67,8 +67,6 @@ var NotesDialog = Backbone.View.extend({
         if(text.length > 0) {
             this.notes.create({
                 'msg': text
-                //'author': 'javi',
-                //'date': new Date().getTime()
             });
         }
    },
@@ -77,25 +75,6 @@ var NotesDialog = Backbone.View.extend({
         window.loading.loading();
         //TODO: manage error
         this.notes.fetch();
-        /*
-        this.notes.reset([
-            {
-                'text': 'this is an example test, jajaja, jajaja, it could be better',
-                'author': 'John Rambo',
-                'date': new Date().getTime()
-            },
-            {
-                'text': 'this is an example test, jajaja, jajaja, it could be better',
-                'author': 'John Rambo',
-                'date': new Date().getTime() - 3600*48*1000
-            },
-            {
-                'text': 'this is an example test, jajaja, jajaja, it could be better',
-                'author': 'John Rambo',
-                'date': new Date().getTime() - 3600*24*7*1000
-            }
-        ]);
-        */
    }
 
 });

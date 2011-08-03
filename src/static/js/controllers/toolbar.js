@@ -100,7 +100,7 @@ var ReportToolbar = Toolbar.extend({
 
     initialize: function() {
         this.report = this.options.report;
-       this.$("#report-date").html(this.report.get('str'));
+       this.$("#report-date").html(this.report.escape('str'));
     }
 
 });
@@ -240,8 +240,8 @@ var Overview = Backbone.View.extend({
     },
 
     report_changed: function() {
-        var total = this.report.get('total_cells');
-        var current = this.report.get('cells_finished');
+        var total = this.report.escape('total_cells');
+        var current = this.report.escape('cells_finished');
         var percent = 100*Math.floor(current/total);
         var text = current + '/' + total + " (" + percent + "%)";
         this.$("#progress_number").html(text);

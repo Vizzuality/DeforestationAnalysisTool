@@ -15,8 +15,8 @@ var LayerView = Backbone.View.extend({
 
     render: function() {
         var el = $(this.el);
-        this.id = 'layer_' + this.model.get('id');
-        el.html("<a href='#'>" + this.model.get('description') + "</a>");
+        this.id = 'layer_' + this.model.escape('id');
+        el.html("<a href='#'>" + this.model.escape('description') + "</a>");
         el.attr('id', this.id);
         if(this.model.enabled) {
             el.addClass('selected');
