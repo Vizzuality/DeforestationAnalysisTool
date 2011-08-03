@@ -20,7 +20,7 @@ var MapView = Backbone.View.extend({
     //el: $("#map"),
 
     initialize: function() {
-        _.bindAll(this, 'center_changed', 'ready', 'click', 'set_center', 'reoder_layers', 'change_layer', 'open_layer_editor', 'zoom_changed', 'zoom_in', 'zoom_out', 'adjustSize', 'set_zoom_silence', 'set_center_silence');
+        _.bindAll(this, 'center_changed', 'ready', 'click', 'set_center', 'reoder_layers', 'open_layer_editor', 'zoom_changed', 'zoom_in', 'zoom_out', 'adjustSize', 'set_zoom_silence', 'set_center_silence');
        this.map_layers = {};
        this.map = new google.maps.Map(this.$('.map')[0], this.mapOptions);
        google.maps.event.addListener(this.map, 'center_changed', this.center_changed);
@@ -49,6 +49,14 @@ var MapView = Backbone.View.extend({
 
     hide_zoom_control: function() {
         this.$('.zoom_control').hide();
+    },
+
+    show_layers_control: function() {
+        this.$('.layer_editor').show();
+    },
+
+    hide_layers_control: function() {
+        this.$('.layer_editor').hide();
     },
 
     show_controls: function() {
@@ -122,13 +130,15 @@ var MapView = Backbone.View.extend({
     ready: function() {
             this.projector.draw = function(){};
             this.layers.bind('reset', this.reoder_layers);
+            this.layers.bind('add', this.reoder_layers);
+            this.layers.bind('remove', this.reoder_layers);
             this.trigger('ready');
     },
 
     enable_layer: function(idx) {
     },
 
-    change_layer: function(layer) {
+    /*change_layer: function(layer) {
         var self = this;
         if(layer.enabled) {
             if(layer.get('type') === 'fusion_tables') {
@@ -145,18 +155,19 @@ var MapView = Backbone.View.extend({
                 self.map.overlayMapTypes.removeAt(layer.map_position);
             }
         }
-    },
+    },*/
 
     reoder_layers: function() {
         var self = this;
-        //self.map.overlayMapTypes.clear();
+        var idx = 0;
+        self.map.overlayMapTypes.clear();
         self.layers.each(function(layer, index) {
             var lyr;
             if(layer.map_layer === undefined) {
                 lyr = self.create_layer(layer.toJSON());
                 layer.map_layer = lyr;
-                layer.map_position = index;
-                layer.bind('changed', self.change_layer);
+                //layer.map_position = idx;
+                layer.bind('change', self.reoder_layers);
             }
             lyr = layer.map_layer;
             if(lyr) {
@@ -164,10 +175,13 @@ var MapView = Backbone.View.extend({
                     // fusion tables can't be added as overlayMapTypes
                     if(layer.enabled) {
                         lyr.setMap(self.map);
+                    } else {
+                        lyr.setMap(null);
                     }
                 } else {
                     if(layer.enabled) {
-                        self.map.overlayMapTypes.setAt(index, lyr);
+                        self.map.overlayMapTypes.setAt(idx, lyr);
+                        idx ++;
                     }
                 }
             }

@@ -234,6 +234,7 @@ $(function() {
             this.polygon_tools.show();
             this.ndfi_layer.show();
             this.map.show_zoom_control();
+            this.map.show_layers_control();
 
             //update slider with current cell values
             var cell = this.gridstack.current_cell;
@@ -317,8 +318,8 @@ $(function() {
             this.map.map.setCenter(this.amazon_bounds.getCenter());
             this.map.layers.reset(this.available_layers.models);
             // enable layer, amazonas bounds
-            this.map.layers.models[0].enabled = true;
-            this.map.change_layer(this.map.layers.models[0]);
+            this.map.layers.models[0].set_enabled(true);
+            //this.map.change_layer(this.map.layers.models[0]);
 
             if(location.hash === '') {
                 router.navigate('cell/0/0/0');

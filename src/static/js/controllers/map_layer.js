@@ -27,6 +27,13 @@ var NDFILayer = Backbone.View.extend({
         this.ndfimap.bind('change', this.map_auth);
         this.mapview.bind('click', this.click);
         this.ndfimap.fetch();
+        this.map_layer = new LayerModel({
+              id: 'NDFI',
+              type: 'dummy',
+              description: 'NDFI analysis'
+        });
+        this.map_layer.map_layer = this.layer;
+        this.map_layer.enabled = true;
         console.log(" === NDFI layer created === ");
     },
 
@@ -134,15 +141,16 @@ var NDFILayer = Backbone.View.extend({
     show: function() {
         this.showing = true;
         if(this.token) {
-            this.mapview.map.overlayMapTypes.insertAt(0, this.layer);
+            this.mapview.layers.add(this.map_layer);
+            //this.mapview.map.overlayMapTypes.insertAt(0, this.layer);
             console.log("showing NDFI");
         }
     },
 
     hide: function() {
         this.showing = false;
-        if(this.mapview.map.overlayMapTypes.get(0)) {
-            this.mapview.map.overlayMapTypes.removeAt(0);
+        if(this.map_layer.collection) {
+            this.mapview.layers.remove(this.map_layer);
         }
     },
 
