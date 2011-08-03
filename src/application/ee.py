@@ -63,6 +63,11 @@ class NDFI(object):
         )
         return self._execute_cmd('/mapid', cmd)
 
+    def freeze_map(self):
+        #{"creator":"sad_test/com.google.earthengine.examples.sad.FreezeMap","args":[THE_CHANGE_DATA,1228540,0,4,"asset_id",1,"type"]}
+        pass
+        
+
     def tag(self):
         reference_images = self._images_for_period(self.last_perdiod)
         work_images = self._images_for_period(self.work_period)
@@ -195,6 +200,20 @@ class NDFI(object):
             }]
          }
 
+    def _change_detection_data(self, reference_images, work_images, polygons=[], cols=10, rows=10):
+        ndfi_image_1 = self._NDFI_image(reference_images)
+        ndfi_image_2 = self._NDFI_image(work_images)
+        return {
+               "creator": 'sad_test/com.google.earthengine.examples.sad.ChangeDetectionData',
+               "args": [ndfi_image_1,
+                        ndfi_image_2,
+                        self.PRODES_IMAGE,
+                        polygons,
+                        rows,
+                        cols]
+        }
+
+
     def _NDFI_change_value(self, reference_images, work_images, polygons, cols=10, rows=10):
         """ calc the ndfi change value between two periods inside specified polys
 
@@ -206,24 +225,12 @@ class NDFI(object):
             ]
 
         """
-        ndfi_image_1 = self._NDFI_image(reference_images)
-        ndfi_image_2 = self._NDFI_image(work_images)
         POLY = []
         fields = []
 
+        image = self._change_detection_data(reference_images, work_images, [polygons], cols, rows)
         return {
-            "image": json.dumps({
-               "creator": 'sad_test/com.google.earthengine.examples.sad.ChangeDetectionData',
-
-               "args": [ndfi_image_1,
-                        ndfi_image_2,
-                        self.PRODES_IMAGE,
-                        [polygons],
-                        rows,
-                        cols]
-
-            }),
-
+            "image": json.dumps(image),
             "fields": 'ndfiSum'#','.join(fields)
         }
 
@@ -232,20 +239,9 @@ class NDFI(object):
         ndfi_image_1 = self._NDFI_image(reference_images)
         ndfi_image_2 = self._NDFI_image(work_images)
         dummy = 0
+        image = self._change_detection_data(reference_images, work_images)
         return {
-            "image": json.dumps({
-               "creator": 'sad_test/com.google.earthengine.examples.sad.ChangeDetectionData',
-
-               "args": [ndfi_image_1,
-                        ndfi_image_2,
-                        self.PRODES_IMAGE,
-                        self.THIS_POLY,
-                        10, #rows
-                        10  #columns
-                ]
-
-            }),
-
+            "image": json.dumps(image),
             "bands": 'ndfi_delta',
             "format": 'png',
             "gain": 1,

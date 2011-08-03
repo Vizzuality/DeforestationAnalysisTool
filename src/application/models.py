@@ -31,6 +31,8 @@ class User(db.Model):
 
     current_cells = db.IntegerProperty(default=0);
     user = db.UserProperty()
+    role = db.StringProperty(default='editor')
+    mail = db.StringProperty()
 
     @staticmethod
     def reset():
@@ -39,15 +41,25 @@ class User(db.Model):
             x.current_cells = 0;
             x.put()
 
+    
     @staticmethod
-    def get_or_create(user):
+    def get_user(user):
         q = User.all().filter('user =', user)
         u = q.fetch(1)
         if u:
             return u[0]
-        u = User(user=user)
-        u.put()
+        return None
+
+    @staticmethod
+    def get_or_create(user):
+        u = User.get_user(user)
+        if not u:
+            u = User(user=user)
+            u.put()
         return u
+
+    def is_admin(self):
+        return self.role == 'admin'
 
     def as_dict(self):
         return {

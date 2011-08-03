@@ -21,7 +21,8 @@ var Cell = Backbone.Model.extend({
     },
 
     has_changes: function() {
-         return this.get('latest_change') > 0;
+         return this.get('latest_change') > 0 && this.get('added_by') != 'Nobody';
+         //return this.get('polygon_count') > 0;
     },
 
     url: function() {

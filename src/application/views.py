@@ -49,7 +49,9 @@ def home(cell_path=None):
 
     reports = json.dumps([x.as_dict() for x in Report.all()])
     #user = users.get_current_user()
-    user = User.get_or_create(users.get_current_user())
+    user = User.get_user(users.get_current_user())
+    if not user:
+        abort(403)
     return render_template('home.html', reports_json=reports, user=user, maps=maps)
 
 @app.route('/login')
