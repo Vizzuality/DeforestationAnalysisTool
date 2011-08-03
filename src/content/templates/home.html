@@ -167,12 +167,19 @@
         <span class="arrow"></span>
         <div class="content">
             <p>
-                <%= z %>/<%= x %>/<%= y %>
+                <%
+                    if(z === 1) {
+                        print(children_done + "/100 - ");
+                    } else {
+                        print(polygon_count + " polygons");
+                    }
+                %>
                 <span class="date">
                 <%
+                    var month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                     if(latest_change !== 0) {
                         var d = new Date(latest_change);
-                        print(d.getUTCFullYear()+ '/' + (d.getUTCMonth()+1) + '/' + d.getUTCDate());
+                        print(month_names_short[d.getMonth()] + ' ' + d.getUTCDate() + ' ' + d.getUTCFullYear());
                     }
                 %>
                 </span>

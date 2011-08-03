@@ -282,9 +282,11 @@ class Cell(db.Model):
             t = timestamp(self.last_change_on)
             if self.last_change_by:
                 by = self.last_change_by.nickname()
+            children_done = self.children_done()
         except:
             note_count = 0
             t = 0
+            children_done = 0
 
         return {
                 #'key': str(self.key()),
@@ -300,7 +302,8 @@ class Cell(db.Model):
                 'latest_change': t,
                 'added_by': by,
                 'polygon_count': self.polygon_count(),
-                'note_count': note_count
+                'note_count': note_count,
+                'children_done': children_done
         }
 
     def polygon_count(self):
@@ -310,6 +313,14 @@ class Cell(db.Model):
             #not saved
             return 0
         return Area.all().filter('cell =', self).order('-added_on').count();
+
+    def children_done(self):
+        eid = self.external_id()
+        childs = Cell.all()
+        childs.filter('report =', self.report)
+        childs.filter('parent_id =', eid)
+        childs.filter('done =', True)
+        return childs.count()
 
     def latest_polygon(self):
         try:
