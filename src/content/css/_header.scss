@@ -520,9 +520,8 @@
         
         #confirmation_dialog {
             $padding: 20px;
-           
             width: 248px - 2*$padding;
-            height: 164px - 2*$padding;
+            height: 164px - 2*$padding - 10px;
             padding:   $padding + 10px $padding $padding $padding;
             position: relative;
             top: 30px;
