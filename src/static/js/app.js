@@ -136,6 +136,8 @@ $(function() {
             this.overview.bind('go_back', this.go_back);
             this.overview.bind('open_notes', this.open_notes);
             this.overview.bind('done', this.cell_done);
+            this.user.bind('change:current_cells', this.overview.change_user_cells);
+            this.overview.change_user_cells(this.user, this.user.get('current_cells'));
 
         },
 
@@ -249,11 +251,13 @@ $(function() {
         },
 
         cell_done: function() {
+            if(!cell.get('done')) {
+                this.user.inc_cells();
+            }
             this.gridstack.current_cell.set({'done': true});
             this.gridstack.current_cell.save();
             // got to parent cell
             this.go_back();
-            this.user.inc_cells();
         },
 
         go_back: function() {
