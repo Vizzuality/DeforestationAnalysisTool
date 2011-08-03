@@ -1,18 +1,28 @@
 
 var PolygonView = Backbone.View.extend({
 
+    DEGRADATION_COLOR: "#FFCC33",
+    DEFORESTATION_COLOR: "#FF3300",
+
     initialize: function() {
-        _.bindAll(this, 'click', 'remove', 'update');
+        _.bindAll(this, 'click', 'remove', 'update', 'render');
         this.mapview = this.options.mapview;
         this.model.bind('destroy', this.remove);
         this.model.bind('change', this.update);
     },
 
     render: function() {
+        var fillColor = this.DEFORESTATION_COLOR;
+        if(this.model.get('type') == this.model.DEGRADATION) {
+            fillColor = this.DEGRADATION_COLOR;
+        }
         // conversion
         var poly = new google.maps.Polygon({
                 paths: this.model.paths(),
-                strokeWeight: 1
+                fillOpacity: 1.0,
+                fillColor: fillColor,
+                strokeColor: "#000",
+                strokeWeight: 2
         });
         poly.setMap(this.mapview.map);
         google.maps.event.addListener(poly, 'click', this.click);
@@ -21,7 +31,6 @@ var PolygonView = Backbone.View.extend({
 
     update: function() {
         this.poly.setPaths(this.model.paths());
-
     },
 
     click: function(event) {
@@ -39,8 +48,7 @@ var PolygonView = Backbone.View.extend({
         this.view.poly_views.splice(this.view.poly_views.indexOf(this), 1);
     }
 
-});
-
+}); 
 
 var CellPolygons = Backbone.View.extend({
 

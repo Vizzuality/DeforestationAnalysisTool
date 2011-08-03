@@ -5,6 +5,8 @@ var Polygon = Backbone.Model.extend({
     DEGRADATION: 0,
     DEFORESTATION: 1,
 
+    editing: false, 
+
     initialize: function() {
         _.bindAll(this, "update_pos");
     },
