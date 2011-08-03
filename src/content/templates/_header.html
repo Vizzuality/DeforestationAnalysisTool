@@ -8,7 +8,7 @@
                 <h1>Deforestation Validation Tool</h1>
             </div>
             <div id="overview" class="hidden">
-              <h3 id="name">{{ user.user.nickname() }}</h3>
+              <h3 id="name">{{ user.user.nickname()[:26] }}</h3>
               <p id="cells"></p>
               <div class="info">
                 <p><span id="current_cell">Global map</span><a id="go_back" href="#go_back">go back</a></p>

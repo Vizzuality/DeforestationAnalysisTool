@@ -156,6 +156,8 @@ class Cell(db.Model):
     ndfi_high = db.FloatProperty(default=0.6)
     ndfi_change_value = db.FloatProperty(default=0.0)
     done = db.BooleanProperty(default=False);
+    last_change_by = db.UserProperty()
+    last_change_on = db.DateTimeProperty(auto_now=True)
 
     @staticmethod
     def get_cell(report, x, y, z):
@@ -209,9 +211,21 @@ class Cell(db.Model):
 
     def calc_parent_id(self):
         return '_'.join((str(self.z - 1), str(self.x/SPLITS), str(self.y/SPLITS)))
+    
+    def get_parent(self):
+        if self.z == 0:
+            return None
+        pid = self.calc_parent_id()
+        z, x, y = Cell.cell_id(pid)
+        return Cell.get_or_default(self.report, x, y, z)
 
     def put(self):
         self.parent_id = self.calc_parent_id()
+        p = self.get_parent()
+        # update parent
+        if p:
+            p.last_change_by = self.last_change_by
+            p.put()
         super(Cell, self).put()
 
     @staticmethod
@@ -241,18 +255,24 @@ class Cell(db.Model):
         return "_".join(map(str,(self.z, self.x, self.y)))
 
     def as_dict(self):
-        latest = self.latest_polygon()
+        #latest = self.latest_polygon()
         t = 0
         by = 'Nobody'
+        """
         if latest:
             t = timestamp(latest.added_on)
             by = latest.added_by.nickname()
+        """
 
         try:
             self.key()
             note_count = self.note_set.count()
+            t = timestamp(self.last_change_on)
+            if self.last_change_by:
+                by = self.last_change_by.nickname()
         except:
             note_count = 0
+            t = 0
 
         return {
                 #'key': str(self.key()),
@@ -267,8 +287,17 @@ class Cell(db.Model):
                 'done': self.done,
                 'latest_change': t,
                 'added_by': by,
+                'polygon_count': self.polygon_count(),
                 'note_count': note_count
         }
+
+    def polygon_count(self):
+        try:
+            self.key()
+        except:
+            #not saved
+            return 0
+        return Area.all().filter('cell =', self).order('-added_on').count();
 
     def latest_polygon(self):
         try:

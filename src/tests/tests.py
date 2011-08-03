@@ -103,7 +103,13 @@ class PolygonApi(unittest.TestCase, GoogleAuthMixin):
             data='{"paths": "test", "type": 1}'
         )
         self.assertEquals(2, Area.all().count())
-        self.assertEquals(2, Cell.all().count())
+        self.assertEquals(4, Cell.all().count())
+        # check parents exists
+        cell = Cell.all().filter('report =', self.r).filter('x =', 1).filter('y =', 0).filter('z =', 2).fetch(1)[0]
+        self.assertEquals('test', cell.get_parent().last_change_by.nickname())
+        self.assertEquals('test', cell.get_parent().get_parent().last_change_by.nickname())
+        self.assertNotEquals(0, cell.get_parent().last_change_on)
+        
 
     def test_create(self):
         rv = self.app.post('/api/v0/report/' + str(self.r.key()) + '/cell/2_0_0/polygon',
@@ -155,6 +161,7 @@ class CellApi(unittest.TestCase, GoogleAuthMixin):
         for x in models.CELL_BLACK_LIST[:]:
             models.CELL_BLACK_LIST.pop()
         app.config['TESTING'] = True
+        self.login('test@gmail.com', 'testuser')
         self.app = app.test_client()
         for x in Cell.all():
             x.delete()
@@ -199,6 +206,9 @@ class CellApi(unittest.TestCase, GoogleAuthMixin):
         cell = q.fetch(1)[0]
         self.assertAlmostEquals(0, cell.ndfi_low)
         self.assertAlmostEquals(1.0, cell.ndfi_high)
+        self.assertEquals('test', cell.get_parent().last_change_by.nickname())
+        self.assertEquals('test', cell.get_parent().get_parent().last_change_by.nickname())
+        self.assertNotEquals(0, cell.get_parent().last_change_on)
 
 
 """

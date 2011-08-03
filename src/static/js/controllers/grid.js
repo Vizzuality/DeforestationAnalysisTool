@@ -44,16 +44,16 @@ var CellView = Backbone.View.extend({
         cell.style.position = "absolute";
         if(this.model.get('done')) {
             $(cell).addClass('finished');
-            cell.style['background-color'] = "rgba(0, 0 ,0, 0.6)";
-
-        } else {
-            var t = this.model.get('ndfi_change_value');
-            t = t || 1;
-            var r = linear(t, 225, 224);
-            var g = linear(t, 125, 222);
-            var b = linear(t, 40, 122);
-            cell.style['background-color'] = "rgba(" + r + "," + g + "," + b +", 0.9)";
+            cell.style['background-image'] = "url('/static/img/cell_completed_pattern.png')";
+        } else if(this.model.has_changes()) {
+            cell.style['background-image'] = "url('/static/img/cell_stripes.png')";
         }
+        var t = this.model.get('ndfi_change_value');
+        t = t || 1;
+        var r = linear(t, 225, 224);
+        var g = linear(t, 125, 222);
+        var b = linear(t, 40, 122);
+        cell.style['background-color'] = "rgba(" + r + "," + g + "," + b +", 0.9)";
         $(cell).append(this.template(this.model.toJSON())).addClass('cell');
         return this;
     },

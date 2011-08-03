@@ -116,6 +116,7 @@ class CellAPI(Resource):
         data = json.loads(request.data)
         for prop in ('ndfi_high', 'ndfi_low', 'done'):
             setattr(cell, prop, data[prop])
+        cell.last_change_by = users.get_current_user()
         cell.put()
 
         return Response(cell.as_json(), mimetype='application/json')
@@ -175,6 +176,8 @@ class PolygonAPI(Resource):
             added_by = users.get_current_user(),
             cell=cell)
         a.save();
+        cell.last_change_by = users.get_current_user()
+        cell.put()
         return Response(a.as_json(), mimetype='application/json')
 
     def update(self, report_id, cell_pos, id):

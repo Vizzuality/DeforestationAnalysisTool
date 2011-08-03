@@ -20,6 +20,10 @@ var Cell = Backbone.Model.extend({
         });
     },
 
+    has_changes: function() {
+         return this.get('latest_change') > 0;
+    },
+
     url: function() {
         return "/api/v0/report/" + this.get('report_id') + "/cell/" + this.get('z') + "_" + this.get('x') + "_" + this.get('y');
     }

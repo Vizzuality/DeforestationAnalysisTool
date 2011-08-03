@@ -251,11 +251,12 @@ $(function() {
         },
 
         cell_done: function() {
+            var cell = this.gridstack.current_cell;
             if(!cell.get('done')) {
                 this.user.inc_cells();
             }
-            this.gridstack.current_cell.set({'done': true});
-            this.gridstack.current_cell.save();
+            cell.set({'done': true});
+            cell.save();
             // got to parent cell
             this.go_back();
         },
