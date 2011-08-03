@@ -48,6 +48,8 @@ var PolygonDrawTool = Backbone.View.extend({
         if(this.polyline !== undefined) {
             this.polyline.setMap(null);
             delete this.polyline;
+            this.polygon.setMap(null);
+            delete this.polygon;
         }
         if(this.markers !== undefined) {
             _.each(this.markers, function(m) {
@@ -61,6 +63,13 @@ var PolygonDrawTool = Backbone.View.extend({
           strokeColor: "#DC143C",
           strokeOpacity: 0.8,
           strokeWeight: 2,
+          map: this.map
+        });
+        this.polygon = new google.maps.Polygon({
+          path:[],
+          strokeColor: "#DC143C",
+          strokeOpacity: 0.8,
+          strokeWeight: 0,
           map: this.map
         });
     },
@@ -105,6 +114,7 @@ var PolygonDrawTool = Backbone.View.extend({
         this.markers.push(marker);
         this.vertex.push(latLng);
         this.polyline.setPath(this.vertex);
+        this.polygon.setPath(this.vertex);
         return marker;
     },
 
@@ -113,7 +123,7 @@ var PolygonDrawTool = Backbone.View.extend({
         var marker = this._add_vertex(latLng);
         var self = this;
         if (this.vertex.length === 1) {
-            google.maps.event.addListener(marker, "dblclick", function() {
+            google.maps.event.addListener(marker, "click", function() {
                 self.create_polygon(self.vertex);
                 self.reset();
             });
