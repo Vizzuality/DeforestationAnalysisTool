@@ -53,6 +53,11 @@ def home(cell_path=None):
     user = User.get_user(users.get_current_user())
     if not user:
         abort(403)
+
+    if not user.is_admin() and users.is_current_user_admin():
+        user.role = "admin"
+        user.put()
+
     return render_template('home.html', reports_json=reports, user=user, maps=maps)
 
 @app.route('/login')

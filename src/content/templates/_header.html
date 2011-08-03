@@ -40,10 +40,16 @@
               </div>
 
               <div id="confirmation_dialog">
+                {% if user.is_admin() %}
                 <h3>Are you sure?</h3>
                 <p>Remember that once it has been published it can't be reopened</p>
                 <button id="confirm">Confirm</button>
                 <a id="cancel" href="#cancel">cancel</a>
+                {% else %}
+                <h3>Report generation</h3>
+                <p>Only administrators can publish deforestation maps, please contact one.</p>
+                <a id="cancel" href="#cancel">cancel</a>
+                {% endif %}
               </div> <!-- confirmation_dialog -->
 
            </div> <!-- overview -->
