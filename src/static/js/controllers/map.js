@@ -209,6 +209,8 @@ var MapView = Backbone.View.extend({
                 from: model_layer.table
               }
             });
+        } else if(type === 'custom') {
+            layer = model_layer.layer;
         } else { //xyz
             if (url && url.search('{X}') != -1 && url.search('{Z}') != -1 && url.search('{Y}') != -1) {
                   layer = new google.maps.ImageMapType({
