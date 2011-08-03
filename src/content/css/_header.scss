@@ -520,18 +520,18 @@
         
         #confirmation_dialog {
             $padding: 20px;
-            $border: 3px;
-            width: 240px - 2*$padding - $border*2;
-            padding: $padding;
+           
+            width: 248px - 2*$padding;
+            height: 164px - 2*$padding;
+            padding:   $padding + 10px $padding $padding $padding;
             position: relative;
-            top: 40px;
-            left: -$padding;
+            top: 30px;
+            left: -$padding - 3px;
             @include border-radius(5px);
-            border:$border solid rgba(0,0,0,0.5);
-            background:-webkit-gradient(linear,50% 0%,50% 100%,from(#FFFFFF),to(#F3F3F3));
+            background: url('/static/img/confirmation_bkg.png');
 
             button {
-                padding:8px 10px;
+                padding:10px 10px;
                 border:1px solid #333333;
                 @include border-radius(5px);
                 background:-webkit-gradient(linear,50% 0%,50% 100%,from(#FFFFFF),to(#CCC));

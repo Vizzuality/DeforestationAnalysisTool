@@ -186,6 +186,7 @@ var Overview = Backbone.View.extend({
         this.analysed= this.$('#cell_analisys');
         this.$("#analysed_global_final").hide();
         this.$("#confirmation_dialog").hide();
+        this.$("#analysed_global_progress").hide();
         this.report.bind('change', this.report_changed);
         this.report_changed();
         this.el.fadeIn();
@@ -221,15 +222,14 @@ var Overview = Backbone.View.extend({
         if(z > 0) {
             text = "Cell " + z + "/" + x + "/" + y + " - ";
             this.$("#go_back").show();
-            this.$("#analysed_global_progress").hide();
             this.$("#analysed_global_final").hide();
         } else {
             if(!this.finished) {
-                this.$("#analysed_global_progress").show();
+                //this.$("#analysed_global_progress").show();
             } else {
-                this.$("#analysed_global_progress").hide();
-                this.$("#analysed_global_final").show();
+                //this.$("#analysed_global_progress").hide();
             }
+            this.$("#analysed_global_final").show();
             this.$("#go_back").hide();
         }
         this.$("#current_cell").html(text);
@@ -250,8 +250,8 @@ var Overview = Backbone.View.extend({
         if(percent == 100) {
             this.finished = true;
             //time to show generate button
-            this.$("#analysed_global_progress").hide();
-            this.$("#analysed_global_final").show();
+            //this.$("#analysed_global_progress").hide();
+            //this.$("#analysed_global_final").show();
         }
     },
 
