@@ -195,28 +195,31 @@ var NDFILayer = Backbone.View.extend({
             for(var j=0; j < h; ++j) {
                 pixel_pos = (j*w + i) * components;
                 var p = image_data[pixel_pos];
+                var a = image_data[pixel_pos + 3];
                 // there is a better way to do this but this is fastest
-                if(p < low) {
-                    image_data[pixel_pos + 0] = FOREST_COLOR[0];
-                    image_data[pixel_pos + 1] = FOREST_COLOR[1];
-                    image_data[pixel_pos + 2] = FOREST_COLOR[2];
-                } else if(p > high) {
-                    image_data[pixel_pos + 0] = DEFORESTATION_COLOR[0];
-                    image_data[pixel_pos + 1] = DEFORESTATION_COLOR[1];
-                    image_data[pixel_pos + 2] = DEFORESTATION_COLOR[2];
-                } else {
-                    image_data[pixel_pos + 0] = DEGRADATION_COLOR[0];
-                    image_data[pixel_pos + 1] = DEGRADATION_COLOR[1];
-                    image_data[pixel_pos + 2] = DEGRADATION_COLOR[2];
-                }
+                if(a > 0) {
+                    if(p < low) {
+                        image_data[pixel_pos + 0] = FOREST_COLOR[0];
+                        image_data[pixel_pos + 1] = FOREST_COLOR[1];
+                        image_data[pixel_pos + 2] = FOREST_COLOR[2];
+                    } else if(p > high) {
+                        image_data[pixel_pos + 0] = DEFORESTATION_COLOR[0];
+                        image_data[pixel_pos + 1] = DEFORESTATION_COLOR[1];
+                        image_data[pixel_pos + 2] = DEFORESTATION_COLOR[2];
+                    } else {
+                        image_data[pixel_pos + 0] = DEGRADATION_COLOR[0];
+                        image_data[pixel_pos + 1] = DEGRADATION_COLOR[1];
+                        image_data[pixel_pos + 2] = DEGRADATION_COLOR[2];
+                    }
 
-                if(p > NDFI_ENCODING_LIMIT) {
-                    image_data[pixel_pos + 0] = 0;
-                    image_data[pixel_pos + 1] = 0;
-                    image_data[pixel_pos + 2] = 0;
-                    image_data[pixel_pos + 3] = 150;
-                } else {
-                    image_data[pixel_pos + 3] = 255;
+                    if(p > NDFI_ENCODING_LIMIT) {
+                        image_data[pixel_pos + 0] = 0;
+                        image_data[pixel_pos + 1] = 0;
+                        image_data[pixel_pos + 2] = 0;
+                        image_data[pixel_pos + 3] = 150;
+                    } else {
+                        image_data[pixel_pos + 3] = 255;
+                    }
                 }
             }
         }
