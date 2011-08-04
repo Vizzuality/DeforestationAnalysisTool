@@ -90,7 +90,7 @@ var RangeSlider = Backbone.View.extend({
         this.el.slider( "values" , 0, low);
         this.el.slider( "values" , 1, high);
         //launch an event
-        this.slide(low, high, true);
+        this.slide(low, high, false);//true);
     }
 });
 

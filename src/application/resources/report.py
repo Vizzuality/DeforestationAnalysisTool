@@ -122,8 +122,9 @@ class CellAPI(Resource):
         cell.report = r
 
         data = json.loads(request.data)
-        for prop in ('ndfi_high', 'ndfi_low', 'done'):
-            setattr(cell, prop, data[prop])
+        cell.ndfi_low = float(data['ndfi_low'])
+        cell.ndfi_high = float(data['ndfi_high'])
+        cell.done = data['done']
         cell.last_change_by = users.get_current_user()
         cell.put()
 
