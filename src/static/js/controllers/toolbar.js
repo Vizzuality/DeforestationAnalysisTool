@@ -240,6 +240,10 @@ var Overview = Backbone.View.extend({
         this.analysed.hide();
     },
 
+    set_ndfi: function(n) {
+        this.$('#ndfi_change_value').html("ndfi change: " + n);
+    },
+
     report_changed: function() {
         var total = this.report.escape('total_cells');
         var current = this.report.escape('cells_finished');

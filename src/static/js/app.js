@@ -235,6 +235,7 @@ $(function() {
             this.polygon_tools.ndfi_range.set_values(cell.get('ndfi_low'), cell.get('ndfi_high'));
             //cell done!
             this.overview.set_note_count(this.gridstack.current_cell.get('note_count'));
+            this.overview.set_ndfi(this.gridstack.current_cell.get('ndfi_change_value'));
             this.cell_polygons.polygons.x = x;
             this.cell_polygons.polygons.y = y;
             this.cell_polygons.polygons.z = z;
