@@ -63,6 +63,10 @@ class ReportAPI(Resource):
     def list(self):
         return self._as_json([x.as_dict() for x in Report.all()])
 
+    def get(self, id):
+        r = Report.get(Key(id))
+        return Response(r.as_json(), mimetype='application/json')
+
     def close(self, report_id):
         """ close current and create new one """
         r = Report.get(Key(report_id))

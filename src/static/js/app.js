@@ -254,6 +254,8 @@ $(function() {
             cell.save();
             // got to parent cell
             this.go_back();
+            // cells count must be updated
+            this.active_report.fetch();
         },
 
         go_back: function() {
@@ -329,11 +331,19 @@ $(function() {
         },
 
         open_notes: function() {
-            var notes_dialog = new NotesDialog({
-                el: this.$(".mamufas"),
-                cell: this.gridstack.current_cell
-            });
-            notes_dialog.open();
+            var self = this;
+            if(self.notes_dialog === undefined) {
+                self.notes_dialog = new NotesDialog({
+                    el: this.$(".mamufas"),
+                    cell: this.gridstack.current_cell
+                });
+                self.notes_dialog.notes.bind('add', function(note, notes) {
+                    self.overview.set_note_count(notes.models.length);
+                });
+            } else {
+                self.notes_dialog.set_cell(this.gridstack.current_cell);
+            }
+            self.notes_dialog.open();
         },
 
         close_report: function() {
@@ -355,12 +365,33 @@ $(function() {
 
     });
 
+    window.loading = new Loading();
+    window.loading_small = new LoadingSmall();
+    var bb_sync = Backbone.sync;
     // avoid cached GET
+    /*Backbone.sync = function(method, model, options) {
+        window.loading_small.loading();
+        var s = options.success;
+        var e = options.error;
+        var success = function(resp, status, xhr) {
+            window.loading_small.finished();
+            if(s) {
+                s(resp, status, xhr);
+            }
+        };
+        var error = function(resp, status, xhr) {
+            window.loading_small.finished();
+            if(e) {
+                e.error(resp, status, xhr);
+            }
+        };
+        options.success = success;
+        options.error = error;
+        bb_sync(method, model, options);
+    };*/
     $.ajaxSetup({ cache: false });
     //setup global object to centralize all projection operations
     window.mapper = new Mapper();
-    window.loading = new Loading();
-    window.loading_small = new LoadingSmall();
     window.app = new IMazon();
 
 

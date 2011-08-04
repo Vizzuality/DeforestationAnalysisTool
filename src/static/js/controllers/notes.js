@@ -34,13 +34,22 @@ var NotesDialog = Backbone.View.extend({
         ul.jScrollPane({autoReinitialise:true});
         this.contents = ul.data('jsp').getContentPane();
         this.count = 0;
+        this.$("h3").html("There aren't any notes");
    },
+
+    set_cell: function(cell) {
+        this.cell = cell;
+        this.notes.cell = cell;
+    },
 
    close: function(e) {
         if (e !== undefined) {
             e.preventDefault();
         }
         this.el.hide();
+        //this.notes.unbind('reset', this.addAll);
+        //this.notes.unbind('add', this.add);
+        this.trigger('close', this.notes);
    },
 
    addAll: function() {
