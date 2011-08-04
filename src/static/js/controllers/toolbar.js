@@ -241,7 +241,7 @@ var Overview = Backbone.View.extend({
     },
 
     set_ndfi: function(n) {
-        this.$('#ndfi_change_value').html("ndfi change: " + n);
+        this.$('#ndfi_change_value').html("ndfi change: " + n.toFixed(2));
     },
 
     report_changed: function() {
