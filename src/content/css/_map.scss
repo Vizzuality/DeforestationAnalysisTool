@@ -152,21 +152,36 @@ body, html {
     bottom:0;
     top:0;
 
-    background-color: rgba(0, 0, 0, 0.4);
+    background:rgba(0,0,0,0.4);
     display: none;
     z-index:10;
 
     span.loader {
+      $w: 221px;
+      $h: 97px;
       position:absolute;
       top:50%;
       left:50%;
-      margin:-25px 0 0 -25px;
-      padding:0;
-      width:32px;
-      height:32px;
-      padding:9px;
-      @include border-radius(7px);
-      background:rgba(0,0,0,0.6);
+      margin:-$h 0 0 (-$w/2);
+      width: $w;
+      height: $h;
+      @include border-radius(2px);
+      background-color: #FFF;
+      box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.1);
+      h1 {
+        text-transform: uppercase;
+        margin: 16px 0 0 20px;
+        font:bold 13px $DroidSans;
+        color: #333333;
+      }
+      p {
+        font:normal 13px $text_font;
+        margin: 4px 0 0 20px;
+        color: #333333;
+      }
+      img {
+        margin: 10px 0 0 20px;
+      }
     }
 }
 
