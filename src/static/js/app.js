@@ -389,7 +389,17 @@ $(function() {
         options.error = error;
         bb_sync(method, model, options);
     };*/
+
     $.ajaxSetup({ cache: false });
+    // some error tracking
+    window.onerror = function(m, u, l) {
+        $.post("/error_track", { 
+            msg: m,
+            url: u,
+            line: l
+        });
+    };
+
     //setup global object to centralize all projection operations
     window.mapper = new Mapper();
     window.app = new IMazon();

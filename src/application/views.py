@@ -17,7 +17,7 @@ from application.ee import NDFI
 
 from app import app
 
-from models import Report, User
+from models import Report, User, Error
 from google.appengine.api import memcache
 from google.appengine.ext.db import Key
 
@@ -74,6 +74,13 @@ def home(cell_path=None):
 @app.route('/login')
 def login():
     return render_template('login.html')
+
+@app.route('/error_track',  methods=['GET', 'POST'])
+def error_track():
+    d = request.form
+    logging.info(request.form)
+    Error(msg=d['msg'], url=d['url'], line=d['line'], user=users.get_current_user()).put()
+    return 'thanks'
 
 @app.route('/tiles/<path:tile_path>')
 def tiles(tile_path):

@@ -437,3 +437,10 @@ class Note(db.Model):
 
     def as_json(self):
         return json.dumps(self.as_dict())
+
+class Error(db.Model):
+    msg = db.TextProperty(required=True)
+    url = db.StringProperty(required=True)
+    line= db.StringProperty(required=True)
+    user = db.UserProperty()
+    
