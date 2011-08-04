@@ -97,7 +97,13 @@ var CellPolygons = Backbone.View.extend({
             var p = poly.model;
             // if is commited, remove it
             // or remove manually from collection
-            p.destroy();
+            window.loading_small.loading('removing polygon');
+            p.destroy({
+                success: function(model, response) {
+                    window.loading_small.finished();
+                }
+            });
+
         } else {
             this.trigger('click_on_polygon', poly.model);
         }
