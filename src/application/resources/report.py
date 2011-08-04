@@ -33,7 +33,7 @@ class NDFIMapApi(Resource):
             ndfi = NDFI(ee_resource,
                 r.comparation_range(),
                 r.range())
-            data = ndfi.mapid()
+            data = ndfi.mapid2()
             if 'data' not in data:
                 abort(404)
             data = data['data']

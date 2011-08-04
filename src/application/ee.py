@@ -33,6 +33,23 @@ class NDFI(object):
         self.ee = EarthEngine(settings.EE_TOKEN)
         self._image_cache = {}
 
+    def mapid2(self, asset_id="PRODES_2009"):
+        cmd = {
+            "image": json.dumps({"creator":"thau_sad/com.google.earthengine.examples.sad.GetNDFIDelta","args":
+               [self.last_perdiod['start'],
+                self.last_perdiod['end'],
+                self.work_period['start'],
+                self.work_period['end'],
+                "MODIS/MOD09GA",
+                "MODIS/MOD09GQ",
+                {"creator":"thau_sad/com.google.earthengine.examples.sad.ProdesImage","args":[asset_id]},
+                None,
+                10,
+                10]
+            })
+        }
+        return self._execute_cmd('/mapid', cmd)
+
     def mapid(self):
         """ return a dict with mapid and token to use in google maps tiles url
 

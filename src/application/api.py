@@ -39,7 +39,7 @@ def testing():
     ndfi = NDFI(ee_resource,
         past_month_range(r.start),
         r.range())
-    return str(ndfi.freeze_map(1089491, r.key().id()))
+    return str(ndfi.mapid2())
 
 
 #TODO: add auth
