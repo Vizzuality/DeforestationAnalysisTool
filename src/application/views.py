@@ -29,11 +29,22 @@ def default_maps():
     ndfi = NDFI(ee_resource,
         past_month_range(r.start),
         r.range())
-    maps.append({'data' :ndfi.mapid()['data'], 'info': 'ndfi difference'})
-    maps.append({'data' :ndfi.smaid()['data'], 'info': 'sma'})
-    maps.append({'data' :ndfi.rgbid()['data'], 'info': 'rgb'})
-    maps.append({'data' :ndfi.ndfi0id()['data'], 'info': 'NDFI t0'})
-    maps.append({'data' :ndfi.ndfi1id()['data'], 'info': 'NDFI t1'})
+
+    d = ndfi.mapid()
+    if 'data' in d:
+        maps.append({'data' :d['data'], 'info': 'ndfi difference'})
+    d = ndfi.smaid()
+    if 'data' in d:
+        maps.append({'data': d['data'], 'info': 'sma'})
+    d = ndfi.rgbid()
+    if 'data' in d:
+        maps.append({'data': d['data'], 'info': 'rgb'})
+    d = ndfi.ndfi0id()
+    if 'data' in d:
+        maps.append({'data': d['data'], 'info': 'NDFI t0'})
+    d = ndfi.ndfi1id()
+    if 'data' in d:
+        maps.append({'data' :d['data'], 'info': 'NDFI t1'})
     return maps
 
 

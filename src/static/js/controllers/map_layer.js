@@ -14,6 +14,7 @@ var NDFILayer = Backbone.View.extend({
 
     initialize: function() {
         _.bindAll(this, 'canvas_setup', 'filter', 'apply_filter', 'map_auth', 'click');
+        var self = this;
         this.editing_state = false;
         this.mapview = this.options.mapview;
         this.report = this.options.report;
@@ -26,7 +27,11 @@ var NDFILayer = Backbone.View.extend({
         this.ndfimap = new NDFIMap({report_id: this.report.id});
         this.ndfimap.bind('change', this.map_auth);
         this.mapview.bind('click', this.click);
-        this.ndfimap.fetch();
+        this.ndfimap.fetch({
+            error: function() {
+                self.trigger('map_error');
+            }
+        });
         this.map_layer = new LayerModel({
               id: 'NDFI',
               type: 'custom',

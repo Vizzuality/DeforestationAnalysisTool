@@ -115,6 +115,7 @@ $(function() {
 
 
             this.ndfi_layer = new NDFILayer({mapview: this.map, report: this.active_report});
+    
 
             this.polygon_tools.ndfi_range.bind('change', this.ndfi_layer.apply_filter);
             // don't change cell model every slider movement, only when the it stops
@@ -126,6 +127,9 @@ $(function() {
             this.overview.bind('close_report', this.close_report);
             this.user.bind('change:current_cells', this.overview.change_user_cells);
             this.overview.change_user_cells(this.user, this.user.get('current_cells'));
+            this.ndfi_layer.bind('map_error', function() {
+                alert("no enought data yet to generate map for this report");
+            });
 
         },
 
