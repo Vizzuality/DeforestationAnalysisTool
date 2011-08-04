@@ -14,7 +14,12 @@ $(function() {
             //this.app.cell_polygons.polygons.create(data);
             var p = new Polygon(data);
             this.app.cell_polygons.polygons.add(p);
-            p.save();
+            window.loading_small.loading('saving poly');
+            p.save(null, {
+                success: function() {
+                    window.loading_small.finished('saving poly');
+                }
+            });
         },
 
         //reset to initial state
@@ -64,27 +69,6 @@ $(function() {
 
     });
 
-    var Loading = Backbone.View.extend({
-        el: $("#loading"),
-
-        refcount: 0,
-
-        initialize: function() {
-        },
-
-        loading: function(where) {
-            this.refcount++;
-            this.el.fadeIn();
-            //console.log(where);
-        },
-        finished: function() {
-            --this.refcount;
-            if(this.refcount === 0) {
-                this.el.hide();
-            }
-        }
-
-    });
     var Rutes = Backbone.Router.extend({
       routes: {
         "cell/:z/:x/:y":   "cell"
@@ -371,6 +355,7 @@ $(function() {
     //setup global object to centralize all projection operations
     window.mapper = new Mapper();
     window.loading = new Loading();
+    window.loading_small = new LoadingSmall();
     window.app = new IMazon();
 
 

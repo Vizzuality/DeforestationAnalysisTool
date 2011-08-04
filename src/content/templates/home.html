@@ -58,9 +58,12 @@
   <script src="{{url_for('static',filename='js/models/notes.js')}}"></script>
   <script src="{{url_for('static',filename='js/controllers/notes.js')}}"></script>
 
-    
   <!-- user -->
   <script src="{{url_for('static',filename='js/models/user.js')}}"></script>
+
+  <!-- loading -->
+  <script src="{{url_for('static',filename='js/controllers/loader.js')}}"></script>
+
   <!-- app -->
   <script src="{{url_for('static',filename='js/app.js')}}"></script>
 
@@ -151,6 +154,12 @@
             <span class="loader">
               <img src="/static/img/ajax-loader.gif"/>
             </span>
+        </div>
+        <div id="loading_small">
+           <span class="loader">
+              <img src="/static/img/ajax-loader-small.gif"/>
+              <p>performing operation</p>
+           </span>
         </div>
     </div>
 

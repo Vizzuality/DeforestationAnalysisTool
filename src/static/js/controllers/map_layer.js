@@ -53,7 +53,7 @@ var NDFILayer = Backbone.View.extend({
         if(!this.editing_state) {
             return;
         }
-        window.loading.loading('ndfilayer: click');
+        window.loading_small.loading('ndfilayer: click');
 
         var c = this.layer.composed(this.mapview.el[0]);
         var point = this.mapview.projector.transformCoordinates(e.latLng);
@@ -73,7 +73,7 @@ var NDFILayer = Backbone.View.extend({
         var def = is_color(color, this.DEFORESTATION_COLOR);
         var deg = is_color(color, this.DEGRADATION_COLOR);
         if(!deg && !def) {
-            window.loading.finished('ndfilayer: click');
+            window.loading_small.finished('ndfilayer: click');
             return;
         }
 
