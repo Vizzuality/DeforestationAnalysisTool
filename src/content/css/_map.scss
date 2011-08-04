@@ -185,6 +185,60 @@ body, html {
     }
 }
 
+#error_dialog {
+    position: absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    top:0;
+
+    background:rgba(0,0,0,0.4);
+    display: none;
+    z-index:10;
+
+    span.error_desc{
+      $w: 340px - 20px;
+      $h: 170px;
+      position:absolute;
+      top:50%;
+      left:50%;
+      margin:-$h 0 0 (-$w/2);
+      width: $w;
+      /*height: $h;*/
+      @include border-radius(2px);
+      background-color: #FFF;
+      box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      h1 {
+        text-transform: uppercase;
+        margin: 0px 0 0 0px;
+        font:bold 13px $DroidSans;
+        color: #333333;
+      }
+      p {
+        font:normal 13px $text_font;
+        margin: 4px 0 0 0px;
+        color: #333333;
+      }
+      button {
+            float: right;
+            margin: 15px 0 0 0px;
+            padding:10px 10px;
+            border:1px solid #333333;
+            @include border-radius(5px);
+            background:-webkit-gradient(linear,50% 0%,50% 100%,from(#FFFFFF),to(#CCC));
+            font:bold 12px $text_font;
+            color:#333333;
+            text-transform:uppercase;
+            text-align:center;
+
+            &:hover {
+              background:-webkit-gradient(linear,50% 0%,50% 100%,from(#CCCCCC),to(#EBEBEB));
+            }
+        }
+    }
+}
+
 #compare_layout_1 {
     position: absolute;
     top: 0;

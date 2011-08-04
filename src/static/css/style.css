@@ -1087,6 +1087,59 @@ body, html {
   margin: 10px 0 0 20px;
 }
 
+#error_dialog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  z-index: 10;
+}
+#error_dialog span.error_desc {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -170px 0 0 -160px;
+  width: 320px;
+  /*height: $h;*/
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-radius: 2px;
+  background-color: #FFF;
+  box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+#error_dialog span.error_desc h1 {
+  text-transform: uppercase;
+  margin: 0px 0 0 0px;
+  font: bold 13px "Droid Sans";
+  color: #333333;
+}
+#error_dialog span.error_desc p {
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  margin: 4px 0 0 0px;
+  color: #333333;
+}
+#error_dialog span.error_desc button {
+  float: right;
+  margin: 15px 0 0 0px;
+  padding: 10px 10px;
+  border: 1px solid #333333;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-radius: 5px;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(white), to(#cccccc));
+  font: bold 12px "Helvetica Neue", Arial, Sans-Serif;
+  color: #333333;
+  text-transform: uppercase;
+  text-align: center;
+}
+#error_dialog span.error_desc button:hover {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(#cccccc), to(#ebebeb));
+}
+
 #compare_layout_1 {
   position: absolute;
   top: 0;

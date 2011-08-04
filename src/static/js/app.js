@@ -128,7 +128,7 @@ $(function() {
             this.user.bind('change:current_cells', this.overview.change_user_cells);
             this.overview.change_user_cells(this.user, this.user.get('current_cells'));
             this.ndfi_layer.bind('map_error', function() {
-                alert("no enought data yet to generate map for this report");
+                show_error("Not enough data available to generate map for this report. After the latest report is generated, map images can take some time to appear.");
             });
 
         },
@@ -343,8 +343,7 @@ $(function() {
                 window.location.reload();
               },
               error: function() {
-                //TODO: replace with a custom window
-                alert('there was a problem closing report, try it later');
+                show_error('There was a problem closing report, try it later');
                 window.loading.finish();
               }
             });

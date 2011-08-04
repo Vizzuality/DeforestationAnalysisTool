@@ -28,7 +28,9 @@
 
   <!-- projection helper -->
   <script src="{{url_for('static',filename='js/models/mapper.js')}}"></script>
-
+   
+  <!-- error dialog -->
+  <script src="{{url_for('static',filename='js/controllers/error.js')}}"></script>
   <!-- report -->
   <script src="{{url_for("static", filename="js/models/report.js")}}"></script>
 
@@ -150,6 +152,7 @@
         {% include "_layout_half.html" %}
 
         <div id="grid"></div>
+
         <div id="loading">
             <span class="loader">
                <h1>preparing workspace</h1>
@@ -157,11 +160,23 @@
                <img src="/static/img/loading.gif"/>
             </span>
         </div>
+
         <div id="loading_small">
            <span class="loader">
               <img src="/static/img/ajax-loader-small.gif"/>
               <p>performing operation</p>
            </span>
+        </div>
+
+        <div id="error_dialog">
+            <span class="error_desc">
+               <h1>There has been a problem</h1>
+               <p id="error_text">
+                    Some problem has occurred sorry.
+                </p>
+               <button id="ok">ok</button>
+               <!--<a id="cancel" href="#cancel">cancel</a>-->
+            </span>
         </div>
     </div>
 
