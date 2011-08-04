@@ -92,7 +92,7 @@ var NDFILayer = Backbone.View.extend({
         inners = _.select(inners, function(p){ return p.length > self.inner_poly_sensibility; });
 
         var newpoly = this.create_poly(poly, inners);
-        window.loading.finished('ndfilayer: click');
+        window.loading_small.finished('ndfilayer: click');
 
         var type = Polygon.prototype.DEGRADATION;
         if(def) {
@@ -170,23 +170,27 @@ var NDFILayer = Backbone.View.extend({
       if (zoom < 12) {
         return;
       }
-      // ok, you are not going to believe but if you enable loading
-      // images will not be fecthed
-      //window.loading.loading("canvas_setup:");// " + image.src);
+      function load_finished() {
+        window.loading_small.finished("canvas_setup:");
+      }
+      window.loading_small.loading("canvas_setup:");// " + image.src);
+      // sometimes due to browser limitation to get images from the same domain
+      // images are not loaded, so start a timeout to finished the loading
+      setTimeout(load_finished, 20*1000);
       var image = new Image();
       image.src = "/ee/tiles/" + this.mapid + "/"+ zoom + "/"+ coord.x + "/" + coord.y +"?token=" + this.token;
       var ctx = canvas.getContext('2d');
       canvas.image = image;
       canvas.coord = coord;
       $(image).load(function() {
-            //window.loading.finished("canvas_setup");
+            load_finished();
             //ctx.globalAlpha = 0.5;
             ctx.drawImage(image, 0, 0);
             canvas.image_data = ctx.getImageData(0, 0, canvas.width, canvas.height);
             self.layer.filter_tile(canvas, [self.low, self.high]);
       }).error(function() {
             console.log("server error loading image");
-            //window.loading.finished("canvas_setup");
+            load_finished();
       });
     },
 

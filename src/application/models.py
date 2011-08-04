@@ -237,7 +237,7 @@ class Cell(db.Model):
 
     @staticmethod
     def default_cell(r, x, y, z):
-        return Cell(z=z, x=x, y=y, ndfi_low=0.6, ndfi_high=0.8, report=r)
+        return Cell(z=z, x=x, y=y, ndfi_low=0.2, ndfi_high=0.3, report=r)
 
     def external_id(self):
         return "_".join(map(str,(self.z, self.x, self.y)))
