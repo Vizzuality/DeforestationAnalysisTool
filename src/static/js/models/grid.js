@@ -25,6 +25,12 @@ var Cell = Backbone.Model.extend({
          //return this.get('polygon_count') > 0;
     },
 
+    ndfi_change: function() {
+        var t = this.get('ndfi_change_value');
+        t = Math.min(1.0, t);
+        return t;
+    },
+
     url: function() {
         return "/api/v0/report/" + this.get('report_id') + "/cell/" + this.get('z') + "_" + this.get('x') + "_" + this.get('y');
     }

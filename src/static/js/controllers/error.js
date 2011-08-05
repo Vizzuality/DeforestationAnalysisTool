@@ -1,6 +1,6 @@
 
 var ErrorDialog = Backbone.View.extend({
-    el: $("error_dialog"),
+    el: $("#error_dialog"),
 
     events: {
         'click #ok': 'close'

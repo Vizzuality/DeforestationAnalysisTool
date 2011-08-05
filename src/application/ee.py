@@ -6,7 +6,35 @@ import simplejson as json
 
 from earthengine.connector import EarthEngine
 
+class EELandsat(object):
 
+    def __init__(self, resource):
+        self.resource = resource
+        self.ee = EarthEngine(settings.EE_TOKEN)
+
+    def list(self, params={}):
+        images = self.ee.get("/list?id=%s&bbox=72.6,18.8,73.1,19.18&fields=ACQUISITION_DATE" % self.resource)
+        logging.info(images)
+        if 'data' in images:
+            return [x['id'] for x in images['data']]
+        return []
+
+    def mapid(self):
+        images = self.list()
+        cmd = {
+            'image': json.dumps(images[-1]), #json.dumps(lanstat),
+            'bands': '30,20,10',
+            'gain': 127
+        }
+        return self._execute_cmd("/mapid", cmd)
+
+    def _execute_cmd(self, url, cmd):
+        params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
+        return self.ee.post(url, params)
+
+
+
+#http://earthengine.googleapis.com/api/list?id=LANDSAT/L5_L1T&bbox=72.6,18.8,73.1,19.18
 class NDFI(object):
     """ ndfi info for a period of time
     """
@@ -33,7 +61,7 @@ class NDFI(object):
         self.ee = EarthEngine(settings.EE_TOKEN)
         self._image_cache = {}
 
-    def mapid2(self, asset_id="PRODES_2009"):
+    def mapid2(self, asset_id):
         cmd = {
             "image": json.dumps({"creator":"thau_sad/com.google.earthengine.examples.sad.GetNDFIDelta","args":
                [self.last_perdiod['start'],

@@ -6,13 +6,14 @@ import logging
 import simplejson as json
 from time_utils import timestamp, first_of_current_month, past_month_range
 from dateutil.parser import parse
+from google.appengine.ext.db import Key
 
 from flask import jsonify, request
 from app import app
 import settings
 
 from models import Area, Note, Report
-from ee import NDFI
+from ee import NDFI, EELandsat
 
 from resources.report import ReportAPI, CellAPI, NDFIMapApi, PolygonAPI, NoteAPI, UserAPI
 
@@ -23,7 +24,7 @@ ReportAPI.add_custom_url(app, '/api/v0/report/<report_id>/close', 'close', ("POS
 
 CellAPI.add_urls(app,       '/api/v0/report/<report_id>/cell')
 CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/children', 'children')
-#CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/ndfi_change', 'ndfi_change')
+CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/ndfi_change', 'ndfi_change')
 #CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/bounds', 'bounds')
 
 NDFIMapApi.add_urls(app, '/api/v0/report/<report_id>/map')
@@ -31,15 +32,6 @@ PolygonAPI.add_urls(app, '/api/v0/report/<report_id>/cell/<cell_pos>/polygon')
 NoteAPI.add_urls(app, '/api/v0/report/<report_id>/cell/<cell_pos>/note')
 UserAPI.add_urls(app, '/api/v0/user')
 
-@app.route('/api/v0/test')
-def testing():
-    r = Report.current()
-    logging.info("report " + unicode(r))
-    ee_resource = 'MOD09GA'
-    ndfi = NDFI(ee_resource,
-        past_month_range(r.start),
-        r.range())
-    return str(ndfi.mapid2())
 
 
 #TODO: add auth
@@ -83,3 +75,20 @@ def ndfi_map():
     #params = { "image": json.dumps({"creator":"sad_test/com.google.earthengine.examples.sad.ChangeDetectionData","args":[{"creator":"sad_test/com.google.earthengine.examples.sad.NDFIImage","args":[{"creator":"sad_test/com.google.earthengine.examples.sad.UnmixModis","args":[{"creator":"sad_test/com.google.earthengine.examples.sad.KrigingStub","args":[{"creator":"sad_test/com.google.earthengine.examples.sad.ModisCombiner","args": ["MOD09GA_005_2010_04_30","MOD09GQ_005_2010_04_30"]}]}]}]},{"creator": "sad_test/com.google.earthengine.examples.sad.NDFIImage","args":[{"creator": "sad_test/com.google.earthengine.examples.sad.UnmixModis","args": [{"creator":"sad_test/com.google.earthengine.examples.sad.KrigingStub", "args":[{"creator":"sad_test/com.google.earthengine.examples.sad.ModisCombiner","args":["MOD09GA_005_2010_05_14", "MOD09GQ_005_2010_05_14"]}]}]}]},{"creator":"sad_test/com.google.earthengine.examples.sad.ProdesImage","args":["PRODES_2009"]},[[[[-61.5,- 11],[-61.5,-10.95],[-61.3,-10.95],[-61.3,-11]]]],10,10]}), 'fields':'ndfiSum'}
     #return jsonify(ndfi._execute_cmd('/value', params))
 
+@app.route('/api/v0/landstat')
+def landstat():
+    e = EELandsat('LANDSAT/L7_L1T')
+    #return jsonify(images=e.list())
+    return jsonify(map=e.mapid())
+
+@app.route('/api/v0/test')
+def testing():
+    r = Report.current()
+    r = Report.get(Key('ahBpbWF6b24tcHJvdG90eXBlcg4LEgZSZXBvcnQYiaECDA'))
+    logging.info("report " + unicode(r))
+    ee_resource = 'MOD09GA'
+    ndfi = NDFI(ee_resource,
+            r.comparation_range(),
+            r.range())
+    #return str(ndfi.mapid2())
+    return str(ndfi.freeze_map(1089491, r.key().id()))

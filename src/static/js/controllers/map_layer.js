@@ -168,7 +168,7 @@ var NDFILayer = Backbone.View.extend({
     canvas_setup: function (canvas, coord, zoom) {
       var self = this;
       if (zoom < 12) {
-        return;
+        //return;
       }
       function load_finished() {
         window.loading_small.finished("canvas_setup:");

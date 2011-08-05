@@ -33,7 +33,8 @@ class NDFIMapApi(Resource):
             ndfi = NDFI(ee_resource,
                 r.comparation_range(),
                 r.range())
-            data = ndfi.mapid2()
+            data = ndfi.mapid2(r.base_map())
+            logging.info(data)
             if 'data' not in data:
                 abort(404)
             data = data['data']
@@ -143,7 +144,11 @@ class CellAPI(Resource):
         sw = bounds[1]
         # spcify lon, lat FUCK, MONKEY BALLS
         polygons = [[ (sw[1], sw[0]), (sw[1], ne[0]), (ne[1], ne[0]), (ne[1], sw[0]) ]]
-        data = ndfi.ndfi_change_value(polygons, 1, 1)
+        cols = 1
+        rows = 1
+        if z < 2:
+            cols = rows = 10
+        data = ndfi.ndfi_change_value(polygons, rows, cols)
         ndfi = data['data'] #data['data']['properties']['ndfiSum']['values']
         return Response(json.dumps(ndfi), mimetype='application/json')
 

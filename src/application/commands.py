@@ -58,16 +58,6 @@ def show_tables():
     return 'created'
 
 
-@app.route('/_ah/cmd/update_cells_dummy', methods=('GET',))
-def update_cells_ndfi_dummy():
-    r = Report.current()
-    if not r:
-        return 'create a report first'
-    cell = Cell.get_or_default(r, 0, 0, 0)
-    for c in iter(cell.children()):
-        c.put()
-        deferred.defer(ndfi_value_for_cells_dummy, str(c.key()), _queue="ndfichangevalue")
-    return 'working DUMMY'
 
 @app.route('/_ah/cmd/cron/update_cells_ndfi', methods=('GET',))
 def update_cells_ndfi():
@@ -79,23 +69,12 @@ def update_cells_ndfi():
     return 'working'
 
 
-def ndfi_value_for_cells_dummy(cell_key):
-
-    cell = Cell.get(Key(cell_key))
-    bounds = cell.bounds(amazon_bounds)
-    logging.info(bounds)
-    ne = bounds[0]
-    sw = bounds[1]
-    polygons = [[ sw, (sw[0], ne[1]), ne, (ne[0], sw[1]) ]]
-    for row in xrange(10):
-        for col in xrange(10):
-            c = cell.child(row, col)
-            c.ndfi_change_value = random.random()
-            c.put()
-
-    cell.calculate_ndfi_change_from_childs()
-
-
+@app.route('/_ah/cmd/cron/update_cell/<int:z>/<int:x>/<int:y>', methods=('GET',))
+def update_main_cell_ndfi(z, x, y):
+    r = Report.current()
+    cell = Cell.get_or_default(r, x, y, z)
+    deferred.defer(ndfi_value_for_cells, str(cell.key()), _queue="ndfichangevalue")
+    return 'working'
 
 def ndfi_value_for_cells(cell_key):
 
@@ -112,35 +91,49 @@ def ndfi_value_for_cells(cell_key):
     polygons = [[ (sw[1], sw[0]), (sw[1], ne[0]), (ne[1], ne[0]), (ne[1], sw[0]) ]]
     data = ndfi.ndfi_change_value(polygons)
     ndfi = data['data']['properties']['ndfiSum']['values']
-    logging.info(ndfi)
     for row in xrange(10):
         for col in xrange(10):
-            idx = row*10 + col
+            idx = row*10 + col 
             count = float(ndfi['count'][idx])
             s = float(ndfi['sum'][idx])
-            if s > 0.0:
-                ratio = count/s
+            if count > 0.0:
+                ratio = s/count
             else:
                 ratio = 0.0
-            # normalize to 4 (this value is experimental)
-            ratio = min(ratio, 4.0)/4.0
-            ratio = ratio**0.6 # give more importance to smaller values 
+            ratio = ratio/10.0 #10 value is experimental
             # asign to cell
+            logging.info('cell ndfi (%d, %d): %f' % (row, col, ratio))
             c = cell.child(row, col)
             c.ndfi_change_value = ratio
             c.put()
 
+    #cell.calculate_ndfi_change_from_childs()
+
+
+# only for development
+@app.route('/_ah/cmd/update_cells_dummy', methods=('GET',))
+def update_cells_ndfi_dummy():
+    r = Report.current()
+    if not r:
+        return 'create a report first'
+    cell = Cell.get_or_default(r, 0, 0, 0)
+    for c in iter(cell.children()):
+        c.put()
+        deferred.defer(ndfi_value_for_cells_dummy, str(c.key()), _queue="ndfichangevalue")
+    return 'working DUMMY'
+
+def ndfi_value_for_cells_dummy(cell_key):
+
+    cell = Cell.get(Key(cell_key))
+    bounds = cell.bounds(amazon_bounds)
+    logging.info(bounds)
+    ne = bounds[0]
+    sw = bounds[1]
+    polygons = [[ sw, (sw[0], ne[1]), ne, (ne[0], sw[1]) ]]
+    for row in xrange(10):
+        for col in xrange(10):
+            c = cell.child(row, col)
+            c.ndfi_change_value = random.random()
+            c.put()
+
     cell.calculate_ndfi_change_from_childs()
-
-
-
-
-
-
-
-
-
-
-
-
-

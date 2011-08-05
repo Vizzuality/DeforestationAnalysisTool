@@ -48,12 +48,11 @@ var CellView = Backbone.View.extend({
         } else if(this.model.has_changes()) {
             cell.style['background-image'] = "url('/static/img/cell_stripes.png')";
         }
-        var t = this.model.get('ndfi_change_value');
-        t = t || 1;
+        var t = 1.0 - this.model.ndfi_change();
         var r = linear(t, 225, 224);
         var g = linear(t, 125, 222);
         var b = linear(t, 40, 122);
-        cell.style['background-color'] = "rgba(" + r + "," + g + "," + b +", 0.9)";
+        cell.style['background-color'] = "rgba(" + r + "," + g + "," + b +", 0.8)";
         $(cell).append(this.template(this.model.toJSON())).addClass('cell');
         return this;
     },
@@ -166,8 +165,25 @@ var GridStack = Backbone.View.extend({
 
     WORKING_ZOOM: 2,
 
+    events:  {
+        //'mouseover': 'onmouseover',
+        //'mouseout': 'onmouseout'
+    },
+
+    onmouseover: function() {
+        var el = $(this.el);
+        el.css({opacity: 1.0});
+
+    },
+
+    onmouseout: function() {
+        var el = $(this.el);
+        el.css({opacity: 0.1});
+    },
+
+
     initialize: function(options) {
-        _.bindAll(this, 'map_ready', 'enter_cell', 'cell_click', 'set_visible_zone');
+        _.bindAll(this, 'map_ready', 'enter_cell', 'cell_click', 'set_visible_zone','onmouseout', 'onmouseover');
         this.mapview = options.mapview;
         this.bounds = options.initial_bounds;
         this.report = options.report;

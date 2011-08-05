@@ -35,6 +35,9 @@ var MapView = Backbone.View.extend({
 
     adjustSize: function() {
         google.maps.event.trigger(this.map, "resize");
+        if(this.layer_editor) {
+            this.layer_editor.close();
+        }
 
     },
 
@@ -216,7 +219,6 @@ var MapView = Backbone.View.extend({
                   layer = new google.maps.ImageMapType({
                       getTileUrl: function(tile, zoom) {
                         var y = tile.y;
-                        console.log("TILINGGG");
                         var tileRange = 1 << zoom;
                         if (y < 0 || y  >= tileRange) {
                           return null;

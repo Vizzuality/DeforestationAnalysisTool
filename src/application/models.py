@@ -99,7 +99,7 @@ class Report(db.Model):
                 'finished': self.finished,
                 'cells_finished': self.cells_finished(),
                 'total_cells': self.total_cells,
-                'str': self.start.strftime("%m/%Y"),
+                'str': self.start.strftime("%Y-%b-%d"),
                 'assetid': self.assetid
         }
 
@@ -115,12 +115,28 @@ class Report(db.Model):
         return json.dumps(self.as_dict())
 
     def comparation_range(self):
-        #TODO: this are going to change when we can make the
-        # compilation map from past range
-        st = date(self.start.year, self.start.month, self.start.day)
-        d = st - relativedelta(months=1)
+        r = self.previous()
+        if r:
+            d = r.start
+        else:
+            st = date(self.start.year, self.start.month, self.start.day)
+            d = st - relativedelta(months=1)
         return tuple(map(timestamp, (d, self.start)))
 
+    def base_map(self):
+        """
+        r = self.previous()
+        if r:
+            return r.assetid
+        """
+        return "PRODES_2009"
+
+    def previous(self):
+        r = Report.all().filter('start <', self.start).order('-start').fetch(1)
+        if r:
+            return r[0]
+        return None
+        
     def range(self):
         end = datetime.now()
         return tuple(map(timestamp, (self.start, end)))

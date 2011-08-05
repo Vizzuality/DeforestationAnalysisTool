@@ -21,6 +21,7 @@ var LayerView = Backbone.View.extend({
         if(this.model.enabled) {
             el.addClass('selected');
         }
+        this.enabled = this.model.enabled;
         return this;
     },
 
