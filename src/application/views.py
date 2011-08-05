@@ -64,16 +64,16 @@ def home(cell_path=None):
 
     # send only the active report
     reports = json.dumps([Report.current().as_dict()])
-    #user = users.get_current_user()
-    user = User.get_user(users.get_current_user())
-    if not user:
+    user = users.get_current_user()
+    u = User.get_user(user)
+    if not u and users.is_current_user_admin():
+        u = User(user=user, role='admin')
+        u.put()
+
+    if not u:
         abort(403)
 
-    if not user.is_admin() and users.is_current_user_admin():
-        user.role = "admin"
-        user.put()
-
-    return render_template('home.html', reports_json=reports, user=user, maps=maps)
+    return render_template('home.html', reports_json=reports, user=u, maps=maps)
 
 @app.route('/login')
 def login():
