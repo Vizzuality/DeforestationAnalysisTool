@@ -171,6 +171,13 @@ var MapView = Backbone.View.extend({
                 layer.map_layer = lyr;
                 //layer.map_position = idx;
                 layer.bind('change', self.reoder_layers);
+            } else if(layer.get('type') === 'custom') {
+                //custom layers has map_layer created so
+                //we need to bind.
+                //as bacbone doesn't have a bind_once unbind first 
+                //and the bind to no bond twice
+                layer.unbind('change', self.reoder_layers);
+                layer.bind('change', self.reoder_layers);
             }
             lyr = layer.map_layer;
             if(lyr) {
