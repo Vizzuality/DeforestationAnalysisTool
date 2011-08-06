@@ -72,7 +72,7 @@ def update_cells_ndfi():
 @app.route('/_ah/cmd/cron/update_cell/<int:z>/<int:x>/<int:y>', methods=('GET',))
 def update_main_cell_ndfi(z, x, y):
     r = Report.current()
-    cell = Cell.get_or_default(r, x, y, z)
+    cell = Cell.get_or_create(r, x, y, z)
     deferred.defer(ndfi_value_for_cells, str(cell.key()), _queue="ndfichangevalue")
     return 'working'
 
@@ -89,7 +89,11 @@ def ndfi_value_for_cells(cell_key):
     ne = bounds[0]
     sw = bounds[1]
     polygons = [[ (sw[1], sw[0]), (sw[1], ne[0]), (ne[1], ne[0]), (ne[1], sw[0]) ]]
-    data = ndfi.ndfi_change_value(polygons)
+    data = ndfi.ndfi_change_value(cell.report.base_map(), [polygons])
+    logging.info(data)
+    if 'data' not in data:
+        logging.error("can't get ndfi change value")
+        return
     ndfi = data['data']['properties']['ndfiSum']['values']
     for row in xrange(10):
         for col in xrange(10):

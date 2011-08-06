@@ -13,6 +13,7 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
   <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
   <script src="{{url_for("static", filename="js/projector.js")}}"></script>
+  <script src="{{url_for("static", filename="js/libs/jquery.mousewheel.js")}}"></script>
   <script src="{{url_for("static", filename="js/libs/jquery.scrollpane.js")}}"></script>
   <!--<script src="{{url_for("static", filename="js/libs/ahpi.imgload.js")}}"></script>-->
   <script src="{{url_for("static", filename="js/libs/pretty.js")}}"></script> <!-- for dates -->
@@ -78,13 +79,6 @@
         console.log("=== Initial data loaded == ");
         var available_maps = [
             {
-              id: '1',
-              type: 'fusion_tables',
-              table: '1205151',
-              select: 'geometry',
-              description: 'Brazil Legal Amazon'
-            },
-            {
               id: '2',
               type: 'fusion_tables',
               table: '304837',
@@ -115,7 +109,7 @@
 
         ];
         {% for m in maps %}
-            available_maps.push({
+           available_maps.splice(0, 0, {
               id: '{{m.data.mapid}}',
               type: 'xyz',
               description: '{{m.info}}',
@@ -123,6 +117,17 @@
         
             });
         {% endfor %}
+        // this layer must be the first
+        available_maps.splice(0, 0,
+            {
+              id: '1',
+              type: 'fusion_tables',
+              table: '1205151',
+              select: 'geometry',
+              description: 'Brazil Legal Amazon'
+            }
+        );
+
         window.app.available_layers.reset(available_maps);
 
     }
@@ -210,7 +215,9 @@
                 %>
                 </span>
             </p>
-            <h3><%= added_by %></h3>
+            <h3><% 
+                    print(added_by.split('@')[0]);
+            %></h3>
         </div>
       </div>
     </script>

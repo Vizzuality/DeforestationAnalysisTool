@@ -148,7 +148,8 @@ class CellAPI(Resource):
         rows = 1
         if z < 2:
             cols = rows = 10
-        data = ndfi.ndfi_change_value(polygons, rows, cols)
+        data = ndfi.ndfi_change_value(r.base_map(), [polygons])
+        logging.info(data)
         ndfi = data['data'] #data['data']['properties']['ndfiSum']['values']
         return Response(json.dumps(ndfi), mimetype='application/json')
 

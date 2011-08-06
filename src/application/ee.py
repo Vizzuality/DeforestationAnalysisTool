@@ -24,7 +24,7 @@ class EELandsat(object):
         cmd = {
             'image': json.dumps(images[-1]), #json.dumps(lanstat),
             'bands': '30,20,10',
-            'gain': 127
+            'gain': 1
         }
         return self._execute_cmd("/mapid", cmd)
 
@@ -61,9 +61,8 @@ class NDFI(object):
         self.ee = EarthEngine(settings.EE_TOKEN)
         self._image_cache = {}
 
-    def mapid2(self, asset_id):
-        cmd = {
-            "image": json.dumps({"creator":"thau_sad/com.google.earthengine.examples.sad.GetNDFIDelta","args":
+    def mapid2_cmd(self, asset_id, polygon=None):
+            return {"creator":"thau_sad/com.google.earthengine.examples.sad.GetNDFIDelta","args":
                [self.last_perdiod['start'],
                 self.last_perdiod['end'],
                 self.work_period['start'],
@@ -71,10 +70,14 @@ class NDFI(object):
                 "MODIS/MOD09GA",
                 "MODIS/MOD09GQ",
                 {"creator":"thau_sad/com.google.earthengine.examples.sad.ProdesImage","args":[asset_id]},
-                None,
+                polygon,
                 10,
                 10]
-            })
+            }
+        
+    def mapid2(self, asset_id):
+        cmd = {
+            "image": json.dumps(self.mapid2_cmd(asset_id))
         }
         return self._execute_cmd('/mapid', cmd)
 
@@ -108,12 +111,15 @@ class NDFI(object):
         )
         return self._execute_cmd('/mapid', cmd)
 
-    def freeze_map(self, table, report_id):
+    def freeze_map(self, asset_id, table, report_id):
+        """
         reference_images = self._images_for_period(self.last_perdiod)
         work_images = self._images_for_period(self.work_period)
         ndfi_image_1 = self._NDFI_image(reference_images)
         ndfi_image_2 = self._NDFI_image(work_images)
         image = self._change_detection_data(reference_images, work_images)
+        """
+        image = self.mapid2_cmd(asset_id)
         cmd ={
             "image": json.dumps({
                 "creator":"sad_test/com.google.earthengine.examples.sad.FreezeMap",
@@ -176,7 +182,15 @@ class NDFI(object):
         params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
         return self.ee.post(url, params)
 
-    def ndfi_change_value(self, polygons, rows=10, cols=10):
+    def ndfi_change_value(self, asset_id, polygon):
+        img = self.mapid2_cmd(asset_id, polygon)
+        cmd = {
+            "image": json.dumps(img),
+            "fields": 'ndfiSum'#','.join(fields)
+        }
+        return self._execute_cmd('/value', cmd)
+    
+    def ndfi_change_value_old(self, polygons, rows=10, cols=10):
         """ return how much NDFI has changed in the time period
             ``polygons`` are a list of closed polygons defined by lat, lon::
 

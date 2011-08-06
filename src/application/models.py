@@ -130,6 +130,7 @@ class Report(db.Model):
             return r.assetid
         """
         return "PRODES_2009"
+        #return "PRODES_IMAZON_2011a"
 
     def previous(self):
         r = Report.all().filter('start <', self.start).order('-start').fetch(1)

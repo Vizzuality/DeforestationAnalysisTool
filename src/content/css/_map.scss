@@ -66,6 +66,18 @@ body, html {
     display: none;
     border: 1px solid #8B8B8B;
     background:#E7E7E7;
+    box-shadow: 0 0 7px 1px rgba(0, 0, 0, 0.1);
+
+    .jspVerticalBar{
+        right: 8px;
+    }
+    .arrow {
+        position: relative;
+        left: 216px;
+        width: 13px;
+        height: 18px;
+        background: url('/static/img/arrow_layer_dialog.png');
+    }
 
     ul {
         height: 254px;
