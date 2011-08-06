@@ -8,7 +8,7 @@ The tool works on Appengine together with Google Earth Engine (GEE) and Fusion T
 How to run the application
 ---------------------
 
-The tool is intended to be use directly online (still pending the final URL) so the following instructions only apply for developers on the project. The instructions are specific for development under Mac OS X Lion, but shouldnt be complicate to make it run in other unix systems.
+The tool is intended to be use directly online (still pending the final URL) so the following instructions only apply for developers on the project. The instructions are specific for development under Mac OS X Lion and Snow Leopard, but shouldnt be complicate to make it run in other unix systems.
 
 
 1. Install [Appengine](http://code.google.com/intl/en/appengine/)
@@ -27,7 +27,7 @@ The tool is intended to be use directly online (still pending the final URL) so 
    * Go to the src folder cd `src`
    * Run it using the following script: `tools/start`. Leave the window open, the application should be running.
 6. Create an initial report
-   * Open a new Terminal window, leaving the other open, and run `curl -d '' "http://localhost:8080/_ah/cmd/create_report?year=2011&month=7&day=15`
+   * Open a new Terminal window, leaving the other open, and run `curl -d '' "http://localhost:8080/_ah/cmd/create_report?year=2011&month=7&day=15"`
 7. Start using the app.
    * You should now be able to go to http://localhost:8080 and start using the application locally.
    * When loggin in dont forget to set yourself as admin.
