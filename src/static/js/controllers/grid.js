@@ -22,6 +22,9 @@ var CellView = Backbone.View.extend({
     render: function(topx, topy, x, y, w, h) {
         var cell = this.el;
         var border = 2;
+        if(this.model.get('blocked')) {
+            border = 0;
+        }
         /*
         var p = window.mapper.cell_position(this.model.get('x'),
             this.model.get('y'),
@@ -33,31 +36,39 @@ var CellView = Backbone.View.extend({
         cell.style.width = Math.ceil(p.width) - border + "px";
         cell.style.height = Math.ceil(p.height) - border+ "px";
         */
-        cell.style.top = y +  "px";
-        cell.style.left =  x + "px";
-        cell.style.width = w - border + "px";
-        cell.style.height = h - border+ "px";
+        cell.style.top = (y +  border) + "px";
+        cell.style.left =  (x + border) + "px";
+        cell.style.width = (w - border) + "px";
+        cell.style.height = (h - border) + "px";
 
-        cell.style.margin = border + "px" ;//"0 " + border + "px " + border + "px";
+        cell.style.margin = 0;//(border/2) + "px" ;//"0 " + border + "px " + border + "px";
         cell.style.padding= 0;
         cell.style.display = "block";
         cell.style.position = "absolute";
-        if(this.model.get('done')) {
-            $(cell).addClass('finished');
-            cell.style['background-image'] = "url('/static/img/cell_completed_pattern.png')";
-        } else if(this.model.has_changes()) {
-            cell.style['background-image'] = "url('/static/img/cell_stripes.png')";
+
+        if(!this.model.get('blocked')) {
+            if(this.model.get('done')) {
+                $(cell).addClass('finished');
+                cell.style['background-image'] = "url('/static/img/cell_completed_pattern.png')";
+            } else if(this.model.has_changes()) {
+                cell.style['background-image'] = "url('/static/img/cell_stripes.png')";
+            }
+            var t = 1.0 - this.model.ndfi_change();
+            var r = linear(t, 225, 224);
+            var g = linear(t, 125, 222);
+            var b = linear(t, 40, 122);
+            cell.style['background-color'] = "rgba(" + r + "," + g + "," + b +", 0.8)";
+        } else {
+            cell.style['background-color'] = "rgba(0, 0, 0, 0.8)";
         }
-        var t = 1.0 - this.model.ndfi_change();
-        var r = linear(t, 225, 224);
-        var g = linear(t, 125, 222);
-        var b = linear(t, 40, 122);
-        cell.style['background-color'] = "rgba(" + r + "," + g + "," + b +", 0.8)";
         $(cell).append(this.template(this.model.toJSON())).addClass('cell');
         return this;
     },
 
     onmouseover: function() {
+        if(this.model.get('blocked')) {
+            return;
+        }
         var el = $(this.el);
         var popup = el.find('.cell_wrapper_info');
         popup.show();
@@ -71,6 +82,9 @@ var CellView = Backbone.View.extend({
     },
 
     onmouseout: function() {
+        if(this.model.get('blocked')) {
+            return;
+        }
         var el = $(this.el);
         var popup = el.find('.cell_wrapper_info');
         popup.hide();
@@ -95,11 +109,18 @@ var CellView = Backbone.View.extend({
 var Grid = Backbone.View.extend({
 
     initialize: function() {
-        _.bindAll(this, 'render', 'add_cells', 'cell_selected', 'populate_cells');
+        _.bindAll(this, 'render', 'add_cells', 'cell_selected', 'populate_cells','set_visible_zone', 'clear_visible_zone');
         if(this.options.mapview === undefined) {
             throw "you should specify MapView in constructor";
         }
+        this.mapview = this.options.mapview;
         this.el.css('position', 'absolute');
+        this.oclusion_poly = new google.maps.Polygon({
+          paths: [],
+          strokeWeight: 0,
+          fillColor: '#000',
+          fillOpacity: 0.8
+        });
 
     },
 
@@ -112,14 +133,16 @@ var Grid = Backbone.View.extend({
         var y = Math.floor(p.y);
         var w = Math.floor((p.width/10))*10;
         var h = Math.floor((p.height/10))*10;
-        var marginx = Math.floor((p.width - w)/2);
-        var marginy = Math.floor((p.height- h)/2);
+        var marginx = 0;//Math.floor((p.width - w)/2);
+        var marginy = 0;//Math.floor((p.height- h)/2);
 
-        console.log(p.width - w, p.height- h);
         var wc = w/10;
         var wh = h/10;
         
-        console.log(x, y, w, h, wc, wh, marginx, marginy);
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
 
         var srcx = this.cells.x*10;
         var srcy = this.cells.y*10;
@@ -130,6 +153,8 @@ var Grid = Backbone.View.extend({
             that.el.append(cellview.render(p.x, p.y, marginx + (c.get('x') - srcx)*wc, marginy + (c.get('y') - srcy)*wh, wc, wh).el);
             cellview.bind('enter', that.cell_selected);
         });
+        var cell_bounds = this.bounds();
+        this.set_visible_zone(cell_bounds);
         this.render();
     },
 
@@ -146,16 +171,51 @@ var Grid = Backbone.View.extend({
     render: function() {
         if(this.cells) {
             var p = window.mapper.cell_position(this.cells.x, this.cells.y, this.cells.z);
-            var x = Math.floor(p.x);
-            var y = Math.floor(p.y);
-            var w = 10 + Math.floor((p.width/10)*10);
-            var h = 10 + Math.floor((p.height/10)*10);
+            x =  Math.floor(p.x);
+            y =  Math.floor(p.y);
+            w =  10 + Math.floor((p.width/10)*10);
+            h =  10 + Math.floor((p.height/10)*10);
             this.el.css('top', y);
             this.el.css('left', x);
             this.el.css('width', w);
             this.el.css('height', h);
         }
-        //this.el.css('background', 'rgba(0,0,0,0.2)');
+        //this.el.css('background', 'rgba(0,255,0,0.2)');
+    },
+
+    bounds: function() {
+        var prj = this.mapview.projector;
+        bounds = new google.maps.LatLngBounds(
+            prj.untransformCoordinates(new google.maps.Point(this.x, this.y + this.h)),
+            prj.untransformCoordinates(new google.maps.Point(this.x + this.w, this.y))
+        );
+        return bounds;
+    },
+
+    set_visible_zone: function(bounds) {
+        // calculate outer and inner polygon
+        var X = 179.5;
+        var Y = 85;
+        var sw = bounds.getSouthWest();
+        var ne = bounds.getNorthEast();
+        var paths = [[
+            new google.maps.LatLng(-X, -Y),
+                new google.maps.LatLng(-X, Y),
+                new google.maps.LatLng(X, Y),
+                new google.maps.LatLng(X, -Y)
+        ], [
+            sw,
+            new google.maps.LatLng(ne.lat(), sw.lng()),
+            ne,
+            new google.maps.LatLng(sw.lat(), ne.lng())
+        ]];
+
+        this.oclusion_poly.setPaths(paths);
+        this.oclusion_poly.setMap(this.mapview.map);
+    },
+
+    clear_visible_zone: function() {
+        this.oclusion_poly.setMap(null);
     }
 
 });
@@ -189,18 +249,12 @@ var GridStack = Backbone.View.extend({
 
 
     initialize: function(options) {
-        _.bindAll(this, 'map_ready', 'enter_cell', 'cell_click', 'set_visible_zone','onmouseout', 'onmouseover');
+        _.bindAll(this, 'map_ready', 'enter_cell', 'cell_click', 'onmouseout', 'onmouseover');
         this.mapview = options.mapview;
         this.bounds = options.initial_bounds;
         this.report = options.report;
         this.level = 0;
 
-        this.oclusion_poly = new google.maps.Polygon({
-          paths: [],
-          strokeWeight: 0,
-          fillColor: '#000',
-          fillOpacity: 0.5
-        });
 
         this.grid = new Grid({
             mapview: this.mapview,
@@ -238,31 +292,6 @@ var GridStack = Backbone.View.extend({
         this.enter_cell(cell.get('x'), cell.get('y'), cell.get('z'), cell);
     },
 
-    set_visible_zone: function(bounds) {
-        // calculate outer and inner polygon
-        var X = 179.5;
-        var Y = 85;
-        var sw = bounds.getSouthWest();
-        var ne = bounds.getNorthEast();
-        var paths = [[
-            new google.maps.LatLng(-X, -Y),
-                new google.maps.LatLng(-X, Y),
-                new google.maps.LatLng(X, Y),
-                new google.maps.LatLng(X, -Y)
-        ], [
-            sw,
-            new google.maps.LatLng(ne.lat(), sw.lng()),
-            ne,
-            new google.maps.LatLng(sw.lat(), ne.lng())
-        ]];
-
-        this.oclusion_poly.setPaths(paths);
-        this.oclusion_poly.setMap(this.mapview.map);
-    },
-
-    clear_visible_zone: function() {
-        this.oclusion_poly.setMap(null);
-    },
 
     to_parent: function() {
 
@@ -279,13 +308,12 @@ var GridStack = Backbone.View.extend({
             z: z
         });
 
-        this.clear_visible_zone();
         //TODO: show loading
         var cell_bounds = window.mapper.cell_bounds(x, y, z);
         this.mapview.map.fitBounds(cell_bounds);
         this.mapview.map.setZoom(this.zoom_mapping[z]);
-        if(z > 0) {
-            this.set_visible_zone(cell_bounds);
+        if(true || z > 0) {
+            //var cell_bounds = window.mapper.cell_bounds(x, y, z);
         }
         if(z < this.WORKING_ZOOM) {
             var cells = new Cells(undefined, {
@@ -297,6 +325,7 @@ var GridStack = Backbone.View.extend({
             this.set_cells(cells);
             this.trigger('select_mode');
         } else {
+            this.grid.set_visible_zone(cell_bounds);
             this.el.hide();
             if(this.current_cell.isNew()){
                 this.current_cell.fetch({

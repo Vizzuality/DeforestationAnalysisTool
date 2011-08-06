@@ -8,11 +8,12 @@ var Loading = Backbone.View.extend({
     },
 
     loading: function(where) {
-        console.log(where);
+        console.log("s:" + where);
         this.refcount++;
         this.el.fadeIn();
     },
-    finished: function() {
+    finished: function(where) {
+        console.log("f:" + where);
         --this.refcount;
         if(this.refcount === 0) {
             this.el.hide();

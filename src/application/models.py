@@ -296,7 +296,8 @@ class Cell(db.Model):
                 'added_by': by,
                 'polygon_count': self.polygon_count(),
                 'note_count': note_count,
-                'children_done': children_done
+                'children_done': children_done,
+                'blocked': self.external_id() in CELL_BLACK_LIST
         }
 
     def polygon_count(self):

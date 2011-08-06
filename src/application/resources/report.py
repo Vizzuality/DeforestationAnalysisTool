@@ -95,6 +95,7 @@ class CellAPI(Resource):
     """ api to access cell info """
 
     def is_in_backlist(self, cell):
+        return False
         return cell.external_id() in CELL_BLACK_LIST
 
 
