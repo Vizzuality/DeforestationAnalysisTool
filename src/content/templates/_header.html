@@ -39,7 +39,7 @@
                 </button>
               </div>
 
-              <div id="confirmation_dialog">
+              <div id="confirmation_dialog" class="conf_dialog">
                 {% if user.is_admin() %}
                 <h3>Are you sure?</h3>
                 <p>Remember that once it has been published it can't be reopened</p>
@@ -51,6 +51,13 @@
                 <a id="cancel" href="#cancel">cancel</a>
                 {% endif %}
               </div> <!-- confirmation_dialog -->
+
+              <div id="done_confirmation_dialog" class="conf_dialog">
+                <h3>Are you sure?</h3>
+                <p>Remember that once it has been set as done it can't be reopened</p>
+                <button id="confirm_done">Confirm</button>
+                <a id="cancel_done" href="#cancel">cancel</a>
+              </div> <!-- done_confirmation_dialog -->
 
            </div> <!-- overview -->
         </div>  <!-- content -->

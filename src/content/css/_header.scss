@@ -518,7 +518,8 @@
           }
         }
         
-        #confirmation_dialog {
+        .conf_dialog {
+        /*#confirmation_dialog {*/
             $padding: 20px;
             width: 248px - 2*$padding;
             height: 164px - 2*$padding - 10px;

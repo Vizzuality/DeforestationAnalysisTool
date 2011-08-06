@@ -178,15 +178,18 @@ var Overview = Backbone.View.extend({
         'click .notes': 'open_notes',
         'click #report_done': 'confirm_generation',
         'click #cancel': 'cancel_report',
-        'click #confirm': 'close_report'
+        'click #confirm': 'close_report',
+        'click #cancel_done': 'cancel_done',
+        'click #confirm_done': 'cell_done'
     },
 
     initialize: function() {
-        _.bindAll(this, 'done', 'on_cell', 'select_mode', 'go_back', 'set_note_count', 'report_changed', 'cancel_report', 'change_user_cells', 'close_report');
+        _.bindAll(this, 'done', 'on_cell', 'select_mode', 'go_back', 'set_note_count', 'report_changed', 'cancel_report', 'change_user_cells', 'close_report', 'cancel_done', 'cell_done');
         this.report = this.options.report;
         this.analysed= this.$('#cell_analisys');
         this.$("#analysed_global_final").hide();
         this.$("#confirmation_dialog").hide();
+        this.$("#done_confirmation_dialog").hide();
         this.$("#analysed_global_progress").hide();
         this.report.bind('change', this.report_changed);
         this.report_changed();
@@ -199,7 +202,8 @@ var Overview = Backbone.View.extend({
 
     done: function(e) {
         e.preventDefault();
-        this.trigger('done');
+        this.$("#done_confirmation_dialog").slideDown();
+        //this.trigger('done');
     },
 
     open_notes: function(e) {
@@ -276,6 +280,17 @@ var Overview = Backbone.View.extend({
 
     close_report: function(e) {
         this.trigger('close_report');
+        e.preventDefault();
+    }, 
+
+    cancel_done: function(e) {
+        this.$("#done_confirmation_dialog").slideUp();
+        e.preventDefault();
+    }, 
+
+    cell_done: function(e) {
+        this.$("#done_confirmation_dialog").hide();
+        this.trigger('done');
         e.preventDefault();
     }
 
