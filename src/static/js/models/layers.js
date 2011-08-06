@@ -20,6 +20,16 @@ var LayerCollection = Backbone.Collection.extend({
         model: LayerModel,
 
         initialize: function()  {
+        },
+        
+        get_by_name: function(name) {
+            var lay;
+            this.each(function(m) {
+                if(m.get('description') === name) {
+                    lay = m;
+                }
+            });
+            return lay;
         }
 
 });

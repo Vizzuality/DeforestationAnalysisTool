@@ -318,7 +318,10 @@ $(function() {
             // enable layer, amazonas bounds
             this.map.layers.models[0].set_enabled(true);
             // enable layer, rgb
-            this.map.layers.models[2].set_enabled(true);
+            var lay = this.map.layers.get_by_name('rgb');
+            if(lay) {
+                lay.set_enabled(true);
+            }
             //this.map.change_layer(this.map.layers.models[0]);
 
             if(location.hash === '') {
