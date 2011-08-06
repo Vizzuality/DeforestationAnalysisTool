@@ -67,7 +67,7 @@ var CellView = Backbone.View.extend({
         var p = $(this.el).position();
         el.css({top: p.top - 3, left: p.left - 3});
         el.css({'z-index': 9});
-
+        el[0].style['background-color'] = "rgba(0, 0, 0, 0)";
     },
 
     onmouseout: function() {
@@ -78,6 +78,12 @@ var CellView = Backbone.View.extend({
         var p = $(this.el).position();
         el.css({top: p.top + 3, left: p.left + 3});
         el.css({'z-index': 1});
+
+        var t = 1.0 - this.model.ndfi_change();
+        var r = linear(t, 225, 224);
+        var g = linear(t, 125, 222);
+        var b = linear(t, 40, 122);
+        el[0].style['background-color'] = "rgba(" + r + "," + g + "," + b +", 0.8)";
     },
 
     onclick: function(e) {
