@@ -203,8 +203,10 @@ var NDFILayer = Backbone.View.extend({
         // this is because javascript looks like optimize if
         // variables are local and a constant
         var NDFI_ENCODING_LIMIT = this.NDFI_ENCODING_LIMIT;
-        var DEFORESTATION_COLOR= [248, 8, 8];
-        var DEGRADATION_COLOR= [247, 119, 87];
+        //var DEFORESTATION_COLOR= [248, 8, 8];
+        var DEFORESTATION_COLOR= [255, 46, 0];
+        var DEGRADATION_COLOR= [255, 199, 44];
+        //var DEGRADATION_COLOR= [247, 119, 87];
         var FOREST_COLOR= [32, 224, 32];
 
         var pixel_pos;
