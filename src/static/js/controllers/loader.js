@@ -8,6 +8,7 @@ var Loading = Backbone.View.extend({
     },
 
     loading: function(where) {
+        console.log(where);
         this.refcount++;
         this.el.fadeIn();
     },

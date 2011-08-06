@@ -317,6 +317,8 @@ $(function() {
             this.map.layers.reset(this.available_layers.models);
             // enable layer, amazonas bounds
             this.map.layers.models[0].set_enabled(true);
+            // enable layer, rgb
+            this.map.layers.models[2].set_enabled(true);
             //this.map.change_layer(this.map.layers.models[0]);
 
             if(location.hash === '') {

@@ -219,6 +219,7 @@ var NDFILayer = Backbone.View.extend({
                         image_data[pixel_pos + 0] = FOREST_COLOR[0];
                         image_data[pixel_pos + 1] = FOREST_COLOR[1];
                         image_data[pixel_pos + 2] = FOREST_COLOR[2];
+                        image_data[pixel_pos + 3] = 0;
                     } else if(p > high) {
                         image_data[pixel_pos + 0] = DEFORESTATION_COLOR[0];
                         image_data[pixel_pos + 1] = DEFORESTATION_COLOR[1];
@@ -235,7 +236,7 @@ var NDFILayer = Backbone.View.extend({
                         image_data[pixel_pos + 2] = 0;
                         image_data[pixel_pos + 3] = 150;
                     } else {
-                        image_data[pixel_pos + 3] = 255;
+                        //image_data[pixel_pos + 3] = 255;
                     }
                 }
             }
