@@ -13,10 +13,11 @@ The tool is intended to be use directly online (still pending the final URL) so 
 
 1. Install [Appengine](http://code.google.com/intl/en/appengine/)
 2. Modify appengine to use python 2.5
-3. Copy and modify secret_keys.py.example
-4. Run the application
-5. Create an initial report
-6. Start using the app.
+3. Checkout the project from GitHub
+4. Copy and modify secret_keys.py.example
+5. Run the application
+6. Create an initial report
+7. Start using the app.
 
 Tips for development
 ---------------------
