@@ -21,8 +21,8 @@ var PolygonView = Backbone.View.extend({
                 paths: this.model.paths(),
                 fillOpacity: 1.0,
                 fillColor: fillColor,
-                strokeColor: "#000",
-                strokeWeight: 2
+                strokeColor: "#fff",
+                strokeWeight: 1.5
         });
         poly.setMap(this.mapview.map);
         google.maps.event.addListener(poly, 'click', this.click);
