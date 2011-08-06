@@ -77,7 +77,9 @@ class NDFI(object):
         
     def mapid2(self, asset_id):
         cmd = {
-            "image": json.dumps(self.mapid2_cmd(asset_id))
+            "image": json.dumps(self.mapid2_cmd(asset_id)),
+            "format": 'png'
+            
         }
         return self._execute_cmd('/mapid', cmd)
 
