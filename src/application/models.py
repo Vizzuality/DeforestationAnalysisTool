@@ -124,11 +124,9 @@ class Report(db.Model):
         return tuple(map(timestamp, (d, self.start)))
 
     def base_map(self):
-        """
         r = self.previous()
         if r:
             return r.assetid
-        """
         #return "PRODES_2009"
         return "PRODES_IMAZON_2011a"
 

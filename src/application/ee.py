@@ -61,7 +61,7 @@ class NDFI(object):
         self.ee = EarthEngine(settings.EE_TOKEN)
         self._image_cache = {}
 
-    def mapid2_cmd(self, asset_id, polygon=None):
+    def mapid2_cmd(self, asset_id, polygon=None, rows=10, cols=10):
             return {"creator":"thau_sad/com.google.earthengine.examples.sad.GetNDFIDelta","args":
                [self.last_perdiod['start'],
                 self.last_perdiod['end'],
@@ -71,8 +71,8 @@ class NDFI(object):
                 "MODIS/MOD09GQ",
                 {"creator":"thau_sad/com.google.earthengine.examples.sad.ProdesImage","args":[asset_id]},
                 polygon,
-                10,
-                10]
+                rows,
+                cols]
             }
         
     def mapid2(self, asset_id):
@@ -184,8 +184,8 @@ class NDFI(object):
         params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
         return self.ee.post(url, params)
 
-    def ndfi_change_value(self, asset_id, polygon):
-        img = self.mapid2_cmd(asset_id, polygon)
+    def ndfi_change_value(self, asset_id, polygon, rows=10, cols=10):
+        img = self.mapid2_cmd(asset_id, polygon, rows, cols)
         cmd = {
             "image": json.dumps(img),
             "fields": 'ndfiSum'#','.join(fields)
