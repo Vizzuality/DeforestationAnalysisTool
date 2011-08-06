@@ -238,7 +238,7 @@ var NDFILayer = Backbone.View.extend({
                         image_data[pixel_pos + 0] = 0;
                         image_data[pixel_pos + 1] = 0;
                         image_data[pixel_pos + 2] = 0;
-                        image_data[pixel_pos + 3] = 150;
+                        image_data[pixel_pos + 3] = 200;
                     } else {
                         //image_data[pixel_pos + 3] = 255;
                     }
