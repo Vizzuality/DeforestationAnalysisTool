@@ -1,8 +1,8 @@
 
 var PolygonView = Backbone.View.extend({
 
-    DEGRADATION_COLOR: "rgba(255, 46, 0)", //"#fff700", //"#FFCC33",
-    DEFORESTATION_COLOR: "rgba(255, 199, 44)", //"#ff0055", //"#FF3300",
+    DEGRADATION_COLOR: "rgb(255, 46, 0)", //"#fff700", //"#FFCC33",
+    DEFORESTATION_COLOR: "rgb(255, 199, 44)", //"#ff0055", //"#FF3300",
 
     initialize: function() {
         _.bindAll(this, 'click', 'remove', 'update', 'render');

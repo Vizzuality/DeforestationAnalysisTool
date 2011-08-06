@@ -7,8 +7,10 @@ function is_color(col1, col2) {
 
 var NDFILayer = Backbone.View.extend({
 
-    DEFORESTATION_COLOR: [248, 8, 8],
-    DEGRADATION_COLOR: [247, 119, 87],
+    //DEFORESTATION_COLOR: [248, 8, 8],
+    //DEGRADATION_COLOR: [247, 119, 87],
+    DEFORESTATION_COLOR: [255, 46, 0],
+    DEGRADATION_COLOR: [255, 199, 44],
     FOREST_COLOR: [32, 224, 32],
     NDFI_ENCODING_LIMIT: 200,
 
