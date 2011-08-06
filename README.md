@@ -12,6 +12,7 @@ The tool is intended to be use directly online (still pending the final URL) so 
 
 
 1. Install [Appengine](http://code.google.com/intl/en/appengine/)
+   * Specifically use the [Python SDK](http://code.google.com/intl/en/appengine/downloads.html#Google_App_Engine_SDK_for_Python)
 2. Modify appengine to use python 2.5
 3. Checkout the project from GitHub
 4. Copy and modify secret_keys.py.example
