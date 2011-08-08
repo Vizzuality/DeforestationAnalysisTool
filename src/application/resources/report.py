@@ -76,7 +76,7 @@ class ReportAPI(Resource):
             ndfi = NDFI(ee_resource,
                     r.comparation_range(),
                     r.range())
-            data = ndfi.freeze_map(1089491, r.key().id())
+            data = ndfi.freeze_map(1089491, r.key().id(), r.base_map())
             if 'data' not in data:
                 abort(400)
             data = data['data']['mapid']

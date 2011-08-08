@@ -363,7 +363,7 @@ $(function() {
               },
               error: function() {
                 show_error('There was a problem closing report, try it later');
-                window.loading.finish();
+                window.loading.finished();
               }
             });
 
