@@ -35,3 +35,14 @@ The tool is intended to be use directly online (still pending the final URL) so 
 Tips for development
 ---------------------
 We will be adding here some tips when developing the application. The development can be very slow if using AppEngine as default so some tricks might be neccesary. To be done by Santana.
+
+Some screenshots
+---------------------
+![Alt text](http://vizzuality.s3.amazonaws.com/blogImages/imazon/1.png)
+![Alt text](http://vizzuality.s3.amazonaws.com/blogImages/imazon/2.png)
+![Alt text](http://vizzuality.s3.amazonaws.com/blogImages/imazon/3.png)
+![Alt text](http://vizzuality.s3.amazonaws.com/blogImages/imazon/4.png)
+![Alt text](http://vizzuality.s3.amazonaws.com/blogImages/imazon/5.png)
+![Alt text](http://vizzuality.s3.amazonaws.com/blogImages/imazon/6.png)
+![Alt text](http://vizzuality.s3.amazonaws.com/blogImages/imazon/8.png)
+![Alt text](http://vizzuality.s3.amazonaws.com/blogImages/imazon/9.png)
