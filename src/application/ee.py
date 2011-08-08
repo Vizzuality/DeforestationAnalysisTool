@@ -123,12 +123,14 @@ class NDFI(object):
         """
         image = self.mapid2_cmd(asset_id)
         cmd ={
-            "image": json.dumps({
+            "value": json.dumps({
                 "creator":"sad_test/com.google.earthengine.examples.sad.FreezeMap",
-                "args": [image, table, 0, 4, "report_id", 1, "type", report_id]
-             })
+                "args": [image, table, 0, 4, "report_id", 1, "type", report_id],
+                "type":"image"
+             }), 
+            "type":"image"
         }
-        return self._execute_cmd('/mapid', cmd)
+        return self._execute_cmd('/create', cmd)
 
 
     """

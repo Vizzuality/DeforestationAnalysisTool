@@ -76,10 +76,11 @@ class ReportAPI(Resource):
             ndfi = NDFI(ee_resource,
                     r.comparation_range(),
                     r.range())
-            data = ndfi.freeze_map(1089491, r.key().id(), r.base_map())
+            data = ndfi.freeze_map(r.base_map(), 1089491, r.key().id())
+            logging.info(data)
             if 'data' not in data:
                 abort(400)
-            data = data['data']['mapid']
+            data = data['data']['id']
             r.close(data)
             cache_key = NDFIMapApi._cache_key(report_id)
             memcache.delete(cache_key)
