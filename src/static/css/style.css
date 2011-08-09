@@ -379,8 +379,8 @@ article .example .field {
 #header .content {
   position: relative;
   text-align: left;
-  width: 1024px;
-  margin: 0 auto;
+  /*width: 1024px;*/
+  margin: 0 30px;
 }
 #header #title {
   border-bottom: 1px solid #000;
@@ -731,7 +731,7 @@ article .example .field {
 }
 #header #overview {
   position: absolute;
-  right: 30px;
+  right: 0;
   top: 0;
   width: 200px;
   height: 113px;

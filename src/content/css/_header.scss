@@ -23,8 +23,8 @@
     .content {
         position: relative;
         text-align: left;
-        width: 1024px;
-        margin:0 auto;
+        /*width: 1024px;*/
+        margin:0 30px;
     }
 
     #title {
@@ -367,7 +367,7 @@
     }
     #overview {
         position: absolute;
-        right: 30px;
+        right: 0;
         top: 0;
         $padding: 20px;
         width: 240px - 2*$padding;
