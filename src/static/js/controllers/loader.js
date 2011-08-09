@@ -5,10 +5,14 @@ var Loading = Backbone.View.extend({
     refcount: 0,
 
     initialize: function() {
+        this.msg = this.$('p');
     },
 
-    loading: function(where) {
+    loading: function(where, msg) {
         console.log("s:" + where);
+        if(msg) {
+            this.msg.html(msg);
+        }
         this.refcount++;
         this.el.fadeIn();
     },

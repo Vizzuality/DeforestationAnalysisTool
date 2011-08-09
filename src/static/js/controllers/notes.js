@@ -81,7 +81,7 @@ var NotesDialog = Backbone.View.extend({
    },
 
    open: function() {
-        window.loading.loading();
+        window.loading.loading('notes', 'Loading notes...');
         //TODO: manage error
         this.notes.fetch();
    }

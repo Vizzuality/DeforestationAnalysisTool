@@ -278,7 +278,7 @@ var GridStack = Backbone.View.extend({
     set_cells: function(cells) {
         var self = this;
         this.el.hide();
-        window.loading.loading('set_cells');
+        window.loading.loading('set_cells', 'Loading cells...');
         this.current_cells = cells;
         this.grid.populate_cells(this.current_cells);
         this.current_cells.bind('reset', function() {
