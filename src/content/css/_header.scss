@@ -525,7 +525,7 @@
             height: 164px - 2*$padding - 10px;
             padding:   $padding + 10px $padding $padding $padding;
             position: relative;
-            top: 30px;
+            top: -0px;
             left: -$padding - 3px;
             @include border-radius(5px);
             background: url('/static/img/confirmation_bkg.png');

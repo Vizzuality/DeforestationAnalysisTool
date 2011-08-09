@@ -202,7 +202,7 @@ var Overview = Backbone.View.extend({
 
     done: function(e) {
         e.preventDefault();
-        this.$("#done_confirmation_dialog").slideDown();
+        this.$("#done_confirmation_dialog").fadeIn();
         //this.trigger('done');
     },
 
@@ -266,12 +266,12 @@ var Overview = Backbone.View.extend({
 
     confirm_generation: function(e) {
         e.preventDefault();
-        this.$("#confirmation_dialog").slideDown('fast');
+        this.$("#confirmation_dialog").fadeIn();
     },
 
     cancel_report: function(e) {
         e.preventDefault();
-        this.$("#confirmation_dialog").slideUp();
+        this.$("#confirmation_dialog").fadeOut(0.2);
     },
 
     change_user_cells: function(user, count) {
@@ -284,12 +284,12 @@ var Overview = Backbone.View.extend({
     }, 
 
     cancel_done: function(e) {
-        this.$("#done_confirmation_dialog").slideUp();
+        this.$("#done_confirmation_dialog").fadeOut(0.2);
         e.preventDefault();
     }, 
 
     cell_done: function(e) {
-        this.$("#done_confirmation_dialog").hide();
+        this.$("#done_confirmation_dialog").fadeOut(0.2);
         this.trigger('done');
         e.preventDefault();
     }
