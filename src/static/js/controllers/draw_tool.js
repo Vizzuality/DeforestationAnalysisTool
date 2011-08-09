@@ -58,11 +58,13 @@ var PolygonDrawTool = Backbone.View.extend({
         }
         this.markers = [];
         this.vertex = [];
-        this.polyline = new google.maps.Polyline({
+        this.polyline = new google.maps.Polygon({
           path:[],
-          strokeColor: "#DC143C",
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
+          //strokeColor: "#DC143C",
+          strokeColor: "#FFF",
+          strokeOpacity: 1.0,
+          fillOpacity: 0.0,
+          strokeWeight: 1,
           map: this.map
         });
         this.polygon = new google.maps.Polygon({
@@ -86,14 +88,22 @@ var PolygonDrawTool = Backbone.View.extend({
                     map: self.map,
                     icon: self.image,
                     draggable: true,
-                    flat : true
+                    flat : true,
+                    raiseOnDrag: false
                 });
                 marker.path_index = path_index;
                 marker.index = i;
                 self.markers.push(marker);
+                google.maps.event.addListener(marker, "dragstart", function(e) {
+                    self.polyline.setPaths(paths);
+                    self.polyline.setMap(self.map);
+                });
+                google.maps.event.addListener(marker, "drag", function(e) {
+                    self.polyline.getPath(this.path_index).setAt(this.index, e.latLng);
+                });
                 google.maps.event.addListener(marker, "dragend", function(e) {
-                    polygon.update_pos(marker.path_index, 
-                        marker.index, [e.latLng.lat(), e.latLng.lng()]);
+                    polygon.update_pos(this.path_index, 
+                        this.index, [e.latLng.lat(), e.latLng.lng()]);
                     polygon.save();
                 });
 
