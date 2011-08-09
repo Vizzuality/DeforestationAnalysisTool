@@ -187,14 +187,13 @@
 
         #maptools {
             float:right;
-            margin:10px 280px 0 0;
+            margin:10px 263px 0 0;
 
             li {
               position:relative;
               width:116px;
               margin:0;
-              padding:20px 24px;
-
+              padding:20px 11px;
 
               a {
                 font:bold 13px $text_font;
@@ -211,6 +210,19 @@
                   background:url('../img/icons/range.png') no-repeat right 0;
                 }
               }
+
+              &.sep {
+                padding: 0;
+                width: 8px;
+                img{
+                    margin-top: -20px;
+                    position: relative; 
+                    top: 10px;
+                    padding: 0 3px;
+                }
+                   
+              }
+                
             }
 
             $bkg_slider: #232427;
@@ -222,7 +234,7 @@
               display:none;
               position:absolute;
               top:40px;
-              left:-2px;
+              left:-13px;
               width:168px;
               height:61px;
               background:url('../img/bottom_compare_wrapper.png') no-repeat center bottom;
@@ -274,7 +286,7 @@
               }
             }
             #compare_li:hover {
-              background:url('../img/over_header_settings.png') no-repeat 0 0;
+              background:url('../img/over_header_settings.png') no-repeat -11px 0;
               #compare {
                 background-position:right -23px;
               }
@@ -285,7 +297,7 @@
 
 
             #range:hover {
-              background:url('../img/over_header_settings2.png') no-repeat 0 0;
+              background:url('../img/over_header_settings2.png') no-repeat -11px 0;
               #ndfirange {
                 background-position:right -30px;
               }
@@ -301,7 +313,7 @@
               position:absolute;
               display:none;
               top:40px;
-              right:2px;
+              right:-13px;
               width:273px;
               height:61px;
               background:url('../img/bottom_range_wrapper.png') no-repeat 0 0;

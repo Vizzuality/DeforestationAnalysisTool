@@ -144,6 +144,10 @@ var PolygonToolbar = Toolbar.extend({
 
     el: $("#work_toolbar"),
 
+    events: {
+        'click #compare': 'none',
+        'click #range': 'none'
+    },
 
     initialize: function() {
         _.bindAll(this, 'change_state', 'reset');
@@ -154,6 +158,8 @@ var PolygonToolbar = Toolbar.extend({
         this.polytype.hide();
         this.buttons.bind('state', this.change_state);
     },
+
+    none: function(e) { e.preventDefault(); },
 
     change_state: function(st) {
         this.trigger('state', st);
@@ -195,6 +201,7 @@ var Overview = Backbone.View.extend({
         this.report_changed();
         this.el.fadeIn();
     },
+    
 
     set_note_count: function(c) {
         this.$('.notes').html( c + " NOTE" + (c==1?'':'S'));
