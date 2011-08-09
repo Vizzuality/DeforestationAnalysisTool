@@ -23,6 +23,8 @@ from base import GoogleAuthMixin
 class ReportTest(unittest.TestCase):
 
     def setUp(self):
+        for x in Report.all():
+            x.delete()
         self.r = Report(start=date(year=2011, month=2, day=1), finished=False)
         self.r.put()
 
