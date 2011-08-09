@@ -112,7 +112,7 @@ var LayerEditor = Backbone.View.extend({
     },
 
     close: function() {
-        this.el.fadeOut();
+        this.el.fadeOut(0.1);
         this.showing = false;
     }
 

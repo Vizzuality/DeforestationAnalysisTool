@@ -25,7 +25,7 @@ var MapView = Backbone.View.extend({
     //el: $("#map"),
 
     initialize: function() {
-        _.bindAll(this, 'center_changed', 'ready', 'click', 'set_center', 'reoder_layers', 'open_layer_editor', 'zoom_changed', 'zoom_in', 'zoom_out', 'adjustSize', 'set_zoom_silence', 'set_center_silence');
+        _.bindAll(this, 'center_changed', 'ready', 'click', 'set_center', 'reoder_layers', 'open_layer_editor', 'zoom_changed', 'zoom_in', 'zoom_out', 'adjustSize', 'set_zoom_silence', 'set_center_silence', 'close_layer_editor');
        this.map_layers = {};
        this.map = new google.maps.Map(this.$('.map')[0], this.mapOptions);
        google.maps.event.addListener(this.map, 'center_changed', this.center_changed);
@@ -114,7 +114,15 @@ var MapView = Backbone.View.extend({
     },
 
     click: function(e) {
+            this.close_layer_editor();
             this.trigger('click', e);
+    },
+
+    //close layer editor if it's opened
+    close_layer_editor: function() {
+        if(this.layer_editor !== undefined && this.layer_editor.showing) {
+            this.layer_editor.close();
+        }
     },
 
     open_layer_editor: function(e) {
@@ -129,6 +137,7 @@ var MapView = Backbone.View.extend({
             if(this.layer_editor.showing) {
                 this.layer_editor.close();
             } else {
+                this.trigger('open_layer_editor');
                 this.layer_editor.show(this.$('.layer_editor').position());
             }
     },

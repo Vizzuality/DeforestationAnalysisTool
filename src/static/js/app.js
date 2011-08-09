@@ -184,11 +184,17 @@ $(function() {
                     m.map.setZoom(self.map.map.getZoom());
                     m.map.setCenter(self.map.map.getCenter());
                     self.map.bind('center_changed', m.set_center_silence);
+                    self.map.bind('click', m.close_layer_editor);
+                    self.map.bind('open_layer_editor', m.close_layer_editor);
                     m.bind('center_changed', self.map.set_center_silence);
+                    m.bind('click', self.map.close_layer_editor);
+                    m.bind('open_layer_editor', self.map.close_layer_editor);
                     m.layers.reset(self.available_layers.toJSON());
                     _.each(self.compare_maps, function(other) {
                         if(other !== m) {
                             m.bind('center_changed', other.set_center_silence);
+                            m.bind('click', other.close_layer_editor);
+                            m.bind('open_layer_editor', other.close_layer_editor);
                         }
                     });
                 });
@@ -203,9 +209,15 @@ $(function() {
                     // unbind!
                     self.map.unbind('center_changed', m.set_center_silence);
                     m.unbind('center_changed', self.map.set_center_silence);
+                    self.map.unbind('click', m.close_layer_editor);
+                    m.unbind('click', self.map.close_layer_editor);
+                    self.map.unbind('open_layer_editor', m.close_layer_editor);
+                    m.unbind('open_layer_editor', self.map.close_layer_editor);
                     _.each(self.compare_maps, function(other) {
                         if(other !== m) {
                             m.unbind('center_changed', other.set_center_silence);
+                            m.unbind('click', other.close_layer_editor);
+                            m.unbind('open_layer_editor', other.close_layer_editor);
                         }
                     });
                     // flybye!
