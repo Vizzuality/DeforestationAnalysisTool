@@ -292,9 +292,9 @@ body, html {
         .cell_wrapper_info {
             display: none;
             position: absolute;
-            top: -3px;
-            left: 54px;
-            width: 137px;
+            top: -4px;
+            left: 56px;
+            width: 142px;
             height: 49px;
             background: -webkit-gradient(linear,50% 0%,50% 100%,from(#36383C),to(#232427));;
             font-size: 12px;
@@ -335,7 +335,7 @@ body, html {
         }
         &.hover {
             cursor:pointer;
-            border: 3px solid #333;
+            border: 4px solid #333;
         }
     }
 }

@@ -65,7 +65,9 @@ var CellView = Backbone.View.extend({
         return this;
     },
 
+    border_size: 8,
     onmouseover: function() {
+        var border_size = this.border_size;
         if(this.model.get('blocked')) {
             return;
         }
@@ -73,15 +75,17 @@ var CellView = Backbone.View.extend({
         var popup = el.find('.cell_wrapper_info');
         popup.show();
         popup.css({left: el.width()});
-        popup.css({height: el.height() + 6});
+        popup.css({height: el.height() + border_size});
         el.addClass('hover');
         var p = $(this.el).position();
-        el.css({top: p.top - 3, left: p.left - 3});
+        el.css({top: p.top - border_size/2, left: p.left - border_size/2});
         el.css({'z-index': 9});
+        el.css({'border-size': border_size/2});
         el[0].style['background-color'] = "rgba(0, 0, 0, 0)";
     },
 
     onmouseout: function() {
+        var border_size = this.border_size;
         if(this.model.get('blocked')) {
             return;
         }
@@ -90,7 +94,7 @@ var CellView = Backbone.View.extend({
         popup.hide();
         el.removeClass('hover');
         var p = $(this.el).position();
-        el.css({top: p.top + 3, left: p.left + 3});
+        el.css({top: p.top + border_size/2, left: p.left + border_size/2});
         el.css({'z-index': 1});
 
         var t = 1.0 - this.model.ndfi_change();
