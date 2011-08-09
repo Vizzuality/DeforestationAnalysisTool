@@ -752,7 +752,7 @@ article .example .field {
   padding: 2px 0 0 0;
   color: #AC3722;
   font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
-  text-shadow: 0 1px #FA8B73;
+  text-shadow: 0 1px #EE6A50;
 }
 #header #overview div.info {
   display: block;
@@ -886,8 +886,8 @@ article .example .field {
   background: url("/static/img/confirmation_bkg.png");
 }
 #header #overview .conf_dialog button {
-  padding: 10px 10px;
-  border: 1px solid #333333;
+  padding: 11px 12px;
+  border: 1px solid #999999;
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-radius: 5px;

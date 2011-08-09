@@ -391,7 +391,7 @@
           padding:2px 0 0 0;
           color:#AC3722;
           font:normal 13px $text_font;
-          text-shadow:0 1px #FA8B73;
+          text-shadow:0 1px #EE6A50;
         }
 
         div.info {
@@ -531,8 +531,8 @@
             background: url('/static/img/confirmation_bkg.png');
 
             button {
-                padding:10px 10px;
-                border:1px solid #333333;
+                padding:11px 12px;
+                border:1px solid #999999;
                 @include border-radius(5px);
                 background:-webkit-gradient(linear,50% 0%,50% 100%,from(#FFFFFF),to(#CCC));
                 font:bold 12px $text_font;
