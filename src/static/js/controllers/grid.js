@@ -21,7 +21,7 @@ var CellView = Backbone.View.extend({
 
     render: function(topx, topy, x, y, w, h) {
         var cell = this.el;
-        var border = 2;
+        var border = 1;
         if(this.model.get('blocked')) {
             border = 0;
         }
