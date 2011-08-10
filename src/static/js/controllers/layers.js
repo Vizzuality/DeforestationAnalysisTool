@@ -101,10 +101,11 @@ var LayerEditor = Backbone.View.extend({
     },
 
     show: function(pos, side) {
-        if(side == 'right') {
-            this.el.css({top: pos.top, left: pos.left});
-        } else {
+        if(side == 'center') {
             this.el.css({top: pos.top - 110, left: pos.left - this.el.width()});
+            this.el.css({'background-image': "url('/static/img/bkg_layer_editor.png')"});
+        } else {
+            this.el.css({top: pos.top - 23, left: pos.left - this.el.width()});
         }
         this.el.fadeIn();
         this.showing = true;

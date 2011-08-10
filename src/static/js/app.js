@@ -155,8 +155,14 @@ $(function() {
               this.compare_layout = this.$("#compare_layout_1").show();
               this.compare_maps = [];
               this.compare_maps.push(new MapView({el: this.$("#map1")}));
-              this.compare_maps.push(new MapView({el: this.$("#map2")}));
-              this.compare_maps.push(new MapView({el: this.$("#map3")}));
+              this.compare_maps.push(new MapView({
+                el: this.$("#map2"),
+                layer_dialog_pos: 'center'
+              }));
+              this.compare_maps.push(new MapView({
+                el: this.$("#map3"),
+                layer_dialog_pos: 'center'
+              }));
         },
 
         compare_two: function() {

@@ -36,6 +36,7 @@ var MapView = Backbone.View.extend({
        this.projector.draw = this.ready;
        this.layers = new LayerCollection();
        this.signals_on = true;
+       this.layer_dialog_pos= this.options.layer_dialog_pos || 'top';
     },
 
     adjustSize: function() {
@@ -138,7 +139,7 @@ var MapView = Backbone.View.extend({
                 this.layer_editor.close();
             } else {
                 this.trigger('open_layer_editor');
-                this.layer_editor.show(this.$('.layer_editor').position());
+                this.layer_editor.show(this.$('.layer_editor').position(), this.layer_dialog_pos);
             }
     },
 
