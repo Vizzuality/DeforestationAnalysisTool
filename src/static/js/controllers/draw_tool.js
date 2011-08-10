@@ -117,8 +117,8 @@ var PolygonDrawTool = Backbone.View.extend({
                 latLng,
                 map: this.map,
                 icon: this.image,
-                draggable: true
-                });
+                draggable: false
+        });
 
         marker.index = this.vertex.length;
         this.markers.push(marker);

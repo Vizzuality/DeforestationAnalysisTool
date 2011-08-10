@@ -12,6 +12,7 @@ var PolygonView = Backbone.View.extend({
     },
 
     render: function() {
+        var self = this;
         var fillColor = this.DEFORESTATION_COLOR;
         if(this.model.get('type') == this.model.DEGRADATION) {
             fillColor = this.DEGRADATION_COLOR;
@@ -26,6 +27,12 @@ var PolygonView = Backbone.View.extend({
         });
         poly.setMap(this.mapview.map);
         google.maps.event.addListener(poly, 'click', this.click);
+        google.maps.event.addListener(poly, 'mouseover', function(e) {
+            self.trigger('mouseover', this, e);
+        });
+        google.maps.event.addListener(poly, 'mouseout', function(e) {
+            self.trigger('mouseout', this, e);
+        });
         this.poly = poly;
     },
 
@@ -34,11 +41,6 @@ var PolygonView = Backbone.View.extend({
     },
 
     click: function(event) {
-        /*var infowindow = new google.maps.InfoWindow();
-        infowindow.setContent(this.model.get('type') == 1 ? "deforestation":"degradation");
-        infowindow.setPosition(event.latLng);
-        infowindow.open(this.mapview.map);
-        */
         this.trigger('click', this);
     },
 
@@ -53,7 +55,8 @@ var PolygonView = Backbone.View.extend({
 var CellPolygons = Backbone.View.extend({
 
     initialize: function() {
-        _.bindAll(this, 'remove', 'add', 'addAll', 'commit', 'click_on_polygon', 'remove_poly');
+        _.bindAll(this, 'remove', 'add', 'addAll', 'commit', 'click_on_polygon', 'remove_poly',
+        'mouseout', 'mouseover');
         this.mapview = this.options.mapview;
         this.report = this.options.report;
         this.poly_views = [];
@@ -76,7 +79,17 @@ var CellPolygons = Backbone.View.extend({
         p.view = this;
         p.render();
         p.bind('click', this.click_on_polygon);
+        p.bind('mouseover', this.mouseover);
+        p.bind('mouseout', this.mouseout);
         this.poly_views.push(p);
+    },
+
+    mouseout: function(poly, e) {
+        this.trigger('mouseout', poly, e);
+    },
+
+    mouseover: function(poly, e) {
+        this.trigger('mouseover', poly, e);
     },
 
     create: function() {

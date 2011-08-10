@@ -4,7 +4,7 @@ $(function() {
     var EditingToolsRuoter = Backbone.View.extend({
 
         initialize: function() {
-            _.bindAll(this, 'change_state', 'new_polygon', 'reset');
+            _.bindAll(this, 'change_state', 'new_polygon', 'reset', 'polygon_mouseout', 'polygon_mouseover');
             this.state = 'move';
             this.app = this.options.app;
             this.app.polygon_tools.bind('state', this.change_state);
@@ -32,11 +32,37 @@ $(function() {
             this.app.polygon_tools.polytype.hide();
             //this.app.map.$("canvas").css('cursor','auto');
             this.app.cell_polygons.unbind('click_on_polygon', this.app.create_polygon_tool.edit_polygon);
+            this.app.cell_polygons.unbind('mouseover', this.polygon_mouseover);
+            this.app.cell_polygons.unbind('mouseout', this.polygon_mouseout);
             this.app.map.map.setOptions({draggableCursor: 'default'});
         },
 
         editing_mode: function() {
             this.app.cell_polygons.bind('click_on_polygon', this.app.create_polygon_tool.edit_polygon);
+        },
+
+        polygon_mouseout: function() {
+            var st = this.state;
+            var cursors_pos = {
+                'edit': '4 4',
+                'auto': '7 7',
+                'remove': '6 6',
+                'draw': '4 16'
+            };
+            this.app.map.map.setOptions({draggableCursor: 'url(/static/img/cursor_' + st +'.png) ' + cursors_pos[st] + ', default'});
+        },
+
+        polygon_mouseover: function() {
+            var st = this.state;
+            var cursors_pos = {
+                'edit': '4 4',
+                'auto': '7 7',
+                'remove': '6 6',
+                'draw': '4 16'
+            };
+            ///$('path').css({cursor: 'url(/static/img/cursor_' + st +'_out.png) ' + cursors_pos[st] + ', default !important'});
+            $('path').css({cursor: 'url("http://maps.gstatic.com/intl/en_us/mapfiles/openhand_8_8.cur"), default !important'});
+            //this.app.map.map.setOptions({draggableCursor: 'url(/static/img/cursor_' + st +'_out.png) ' + cursors_pos[st] + ', default'});
         },
 
         change_state: function(st) {
@@ -45,13 +71,17 @@ $(function() {
             }
             this.state = st;
             this.reset();
-            this.app.map.map.setOptions({draggableCursor: 'url(/static/img/cursor_' + st +'.png) 0 15, default'});
+            this.polygon_mouseout();
             switch(st) {
                 case 'edit':
                     this.editing_mode();
+                    this.app.cell_polygons.bind('mouseover', this.polygon_mouseover);
+                    this.app.cell_polygons.bind('mouseout', this.polygon_mouseout);
                     break;
                 case 'remove':
                     this.app.cell_polygons.editing_state = true;
+                    this.app.cell_polygons.bind('mouseover', this.polygon_mouseover);
+                    this.app.cell_polygons.bind('mouseout', this.polygon_mouseout);
                     break;
                 case 'draw':
                     this.app.create_polygon_tool.editing_state(true);
