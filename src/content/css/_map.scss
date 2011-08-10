@@ -59,40 +59,56 @@ body, html {
 
 
 #layer_editor_dialog {
+    $h: 254px;
     position: absolute;
-    width: 217px;
-    height: 254px;
+    width: 187px;
+    height: $h;
     z-index: 20;
     display: none;
-    border: 1px solid #8B8B8B;
-    background:#E7E7E7;
-    box-shadow: 0 0 7px 1px rgba(0, 0, 0, 0.1);
+    background:url('../img/bkg_layer_editor.png') no-repeat 0 0;
 
     .jspVerticalBar{
-        right: 8px;
-    }
-    .arrow {
-        position: relative;
-        left: 216px;
-        width: 13px;
-        height: 18px;
-        background: url('/static/img/arrow_layer_dialog.png');
+        right: 13px;
     }
 
+    #layer_top {
+        position: absolute;
+        top: 11px;
+        left: 11px;
+        z-index: 20;
+        -webkit-border-top-right-radius: 3px;
+        -webkit-border-top-left-radius: 3px;
+        -moz-border-radius-topright: 3px;
+        -moz-border-radius-topleft: 3px;
+    }
+    #layer_bottom {
+        position: absolute;
+        top: 229px;
+        left: 11px;
+        z-index: 20;
+        -webkit-border-bottom-right-radius: 3px;
+        -webkit-border-bottom-left-radius: 3px;
+        -moz-border-radius-bottomright: 3px;
+        -moz-border-radius-bottomleft: 3px;
+    }
     ul {
-        height: 254px;
-        width: 100%;
+        position: relative;
+        top: (254px - 232px)/2;
+        left: (187px - 165px)/2;
+        height: 232px;
+        width: 165px;
         overflow:hidden;
+
         li {
-            width: 217px - 25px;
+            width: 133px;
             $fontsize: 13px;
             font-size: $fontsize;
             color: #626262;
-            padding: 20 - $fontsize/2  0 20 - $fontsize/2 25px;
+            padding: 20 - $fontsize/2  0 20 - $fontsize/2 23px;
             /*margin-left: 18px;*/
             border-top: 1px solid #FBFBFB;
             border-bottom: 1px solid #CFCFCF;
-            background: #E7E7E7 url('/static/img/tick_unselected.png') no-repeat 12px 16px;
+            background: url('/static/img/tick_unselected.png') no-repeat 10px 16px;
 
             &:first-child {
                 border-top: none;
@@ -103,7 +119,12 @@ body, html {
             }
 
             &.selected {
-                background:#E7E7E7 url('/static/img/tick_selected.png') no-repeat 12px 16px;
+               background:url('/static/img/tick_selected.png') no-repeat 10px 16px;
+            }
+
+            &.moving {
+                background-color: #E7E7E7;
+                box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.1);
             }
 
             &:hover a {
@@ -112,11 +133,13 @@ body, html {
 
             a {
               display:block;
-              width:175px;
+              width:100px;
+              padding-right: 20px;
               font:normal 13px "Helvetica Neue";
               color:#666666;
               text-shadow:0 1px white;
               text-decoration:none;
+              background:url('/static/img/bkg_layers_drag.png') no-repeat 111px 5px;
 
               &:hover {
                 color:#333333;

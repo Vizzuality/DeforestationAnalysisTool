@@ -104,7 +104,7 @@ var LayerEditor = Backbone.View.extend({
         if(side == 'right') {
             this.el.css({top: pos.top, left: pos.left});
         } else {
-            this.el.css({top: pos.top, left: pos.left - this.el.width() - 10});
+            this.el.css({top: pos.top - 110, left: pos.left - this.el.width()});
         }
         this.el.fadeIn();
         this.showing = true;
