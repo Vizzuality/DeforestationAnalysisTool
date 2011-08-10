@@ -8,6 +8,19 @@
                 <h1>Deforestation Validation Tool</h1>
             </div>
             <div id="overview" class="hidden">
+              <div id="settings">
+                  <img id="settings" src="/static/img/arrow_login.png"></img>
+                  <div id="settings_popup">
+                      <h3 id="name">{{ user.user.nickname()[:26] }}</h3>
+                      <p id="cells"></p>
+                      <div id="sep"></div>
+                      {% if user.is_admin() %}
+                      <a id="go_setting" href="#">Settings</a>
+                      {% endif %}
+                      <a id="logout" href="{{logout_url}}">Log out</a>
+                  </div>
+              </div>
+              <img id="settings_sep" src="/static/img/settings_separator.png"></img>
               <h3 id="name">{{ user.user.nickname()[:26] }}</h3>
               <p id="cells"></p>
               <div class="info">

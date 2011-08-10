@@ -73,7 +73,12 @@ def home(cell_path=None):
     if not u:
         abort(403)
 
-    return render_template('home.html', reports_json=reports, user=u, maps=maps)
+    logout_url = users.create_logout_url('/')
+    return render_template('home.html',
+            reports_json=reports,
+            user=u,
+            maps=maps,
+            logout_url=logout_url)
 
 @app.route('/login')
 def login():

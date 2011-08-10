@@ -529,6 +529,47 @@
             }
           }
         }
+        #settings {
+            float: right;
+            padding: 2px 0 20px 3px;
+
+            &:hover #settings_popup {
+                display: block;
+            }
+            #settings_popup {
+                background-color:#CCC;
+                display: none;
+                top: 10px;
+                position: absolute;
+                left: 10px;
+                padding: 10px;
+                width:223px - 20px;
+                height: 97px - 20px;
+                background: url('/static/img/bkg_settings_popup.png');
+            }
+            a {
+                font:normal 13px $text_font;
+                color: rgba(255, 255, 255, 0.7);
+                text-shadow:0 1px #812B19;
+                margin-top: 23px;
+                display: inline-block;
+                text-decoration: none;
+                padding-left: 14px;
+            }
+            #logout {
+                float: right;
+                margin-right: 27px;
+                background: url('/static/img/icons/logout.png') no-repeat 0px 1px;
+            }
+            #go_setting {
+                margin-left: 17px;
+                background: url('/static/img/icons/settings.png') no-repeat 0px 3px;
+            }
+        }
+        #settings_sep {
+            float: right;
+        }
+
         
         .conf_dialog {
         /*#confirmation_dialog {*/
