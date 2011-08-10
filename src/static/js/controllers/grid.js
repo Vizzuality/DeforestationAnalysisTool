@@ -25,17 +25,6 @@ var CellView = Backbone.View.extend({
         if(this.model.get('blocked')) {
             border = 0;
         }
-        /*
-        var p = window.mapper.cell_position(this.model.get('x'),
-            this.model.get('y'),
-            this.model.get('z'));
-        */
-        /*
-        cell.style.top = Math.floor(p.y - topy) + "px";
-        cell.style.left = Math.floor(p.x - topx) + "px";
-        cell.style.width = Math.ceil(p.width) - border + "px";
-        cell.style.height = Math.ceil(p.height) - border+ "px";
-        */
         cell.style.top = (y +  border) + "px";
         cell.style.left =  (x + border) + "px";
         cell.style.width = (w - border) + "px";
