@@ -106,19 +106,19 @@
                   a {
                     display:block;
 
-                    &#auto {
+                    &#edit{
                       @include tools_button(url(../img/icons/tool_icons.png) no-repeat 3px 4px,true,false);
                     }
 
-                    &#draw {
+                    &#auto{
                       @include tools_button(url(../img/icons/tool_icons.png) no-repeat -27px 6px,false,false);
                     }
 
-                    &#remove {
+                    &#draw{
                       @include tools_button(url(../img/icons/tool_icons.png) no-repeat -57px 6px,false,false);
                     }
 
-                    &#edit {
+                    &#remove{
                       @include tools_button(url(../img/icons/tool_icons.png) no-repeat -87px 6px,false,true);
                     }
                   }

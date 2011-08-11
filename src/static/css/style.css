@@ -456,7 +456,7 @@ article .example .field {
 #header #tools #work_toolbar #selection li a {
   display: block;
 }
-#header #tools #work_toolbar #selection li a#auto {
+#header #tools #work_toolbar #selection li a#edit {
   width: 28px;
   height: 29px;
   text-indent: -9999px;
@@ -468,13 +468,13 @@ article .example .field {
   border-left: none;
   background: url(../img/icons/tool_icons.png) no-repeat 3px 4px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
 }
-#header #tools #work_toolbar #selection li a#auto:hover {
+#header #tools #work_toolbar #selection li a#edit:hover {
   background: url(../img/icons/tool_icons.png) no-repeat 3px 4px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
 }
-#header #tools #work_toolbar #selection li a#auto.selected {
+#header #tools #work_toolbar #selection li a#edit.selected {
   background: url(../img/icons/tool_icons.png) no-repeat 3px 4px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
 }
-#header #tools #work_toolbar #selection li a#draw {
+#header #tools #work_toolbar #selection li a#auto {
   width: 28px;
   height: 29px;
   text-indent: -9999px;
@@ -482,13 +482,13 @@ article .example .field {
   border-left: 1px solid #1c1d20;
   background: url(../img/icons/tool_icons.png) no-repeat -27px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
 }
-#header #tools #work_toolbar #selection li a#draw:hover {
+#header #tools #work_toolbar #selection li a#auto:hover {
   background: url(../img/icons/tool_icons.png) no-repeat -27px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
 }
-#header #tools #work_toolbar #selection li a#draw.selected {
+#header #tools #work_toolbar #selection li a#auto.selected {
   background: url(../img/icons/tool_icons.png) no-repeat -27px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
 }
-#header #tools #work_toolbar #selection li a#remove {
+#header #tools #work_toolbar #selection li a#draw {
   width: 28px;
   height: 29px;
   text-indent: -9999px;
@@ -496,13 +496,13 @@ article .example .field {
   border-left: 1px solid #1c1d20;
   background: url(../img/icons/tool_icons.png) no-repeat -57px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
 }
-#header #tools #work_toolbar #selection li a#remove:hover {
+#header #tools #work_toolbar #selection li a#draw:hover {
   background: url(../img/icons/tool_icons.png) no-repeat -57px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
 }
-#header #tools #work_toolbar #selection li a#remove.selected {
+#header #tools #work_toolbar #selection li a#draw.selected {
   background: url(../img/icons/tool_icons.png) no-repeat -57px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
 }
-#header #tools #work_toolbar #selection li a#edit {
+#header #tools #work_toolbar #selection li a#remove {
   width: 28px;
   height: 29px;
   text-indent: -9999px;
@@ -514,10 +514,10 @@ article .example .field {
   border-right: none;
   background: url(../img/icons/tool_icons.png) no-repeat -87px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
 }
-#header #tools #work_toolbar #selection li a#edit:hover {
+#header #tools #work_toolbar #selection li a#remove:hover {
   background: url(../img/icons/tool_icons.png) no-repeat -87px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
 }
-#header #tools #work_toolbar #selection li a#edit.selected {
+#header #tools #work_toolbar #selection li a#remove.selected {
   background: url(../img/icons/tool_icons.png) no-repeat -87px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
 }
 #header #tools #work_toolbar #polytype {
