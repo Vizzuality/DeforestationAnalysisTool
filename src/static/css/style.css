@@ -387,6 +387,10 @@ article .example .field {
   color: white;
   height: 84px;
 }
+#header #title a {
+  color: #999999;
+  text-decoration: none;
+}
 #header #title h1 {
   display: inline-block;
   height: 13px;
