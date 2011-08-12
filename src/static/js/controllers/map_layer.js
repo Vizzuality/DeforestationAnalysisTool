@@ -168,6 +168,7 @@ var NDFILayer = Backbone.View.extend({
     },
 
     canvas_setup: function (canvas, coord, zoom) {
+      var EARTH_ENGINE_TILE_SERVER = 'http://earthengine.googleapis.com/map/';
       var self = this;
       if (zoom < 12) {
         //return;
@@ -180,7 +181,15 @@ var NDFILayer = Backbone.View.extend({
       // images are not loaded, so start a timeout to finished the loading
       setTimeout(load_finished, 20*1000);
       var image = new Image();
-      image.src = "/ee/tiles/" + this.mapid + "/"+ zoom + "/"+ coord.x + "/" + coord.y +"?token=" + this.token;
+
+      //check if thereis support for corssOrigin images and use proxy if isn't available
+      if(image.crossOrigin !== undefined) {
+          image.crossOrigin = '';
+          image.src = EARTH_ENGINE_TILE_SERVER + this.mapid + "/"+ zoom + "/"+ coord.x + "/" + coord.y +"?token=" + this.token;
+      } else {
+        image.src = "/ee/tiles/" + this.mapid + "/"+ zoom + "/"+ coord.x + "/" + coord.y +"?token=" + this.token;
+      }
+
       var ctx = canvas.getContext('2d');
       canvas.image = image;
       canvas.coord = coord;
