@@ -10,11 +10,11 @@ var MapView = Backbone.View.extend({
             disableDoubleClickZoom: true,
             draggableCursor:'default',
             scrollwheel: false,
-            mapTypeControl:true,
-            mapTypeControlOptions: {
+            mapTypeControl:false
+            /*mapTypeControlOptions: {
                 style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
                 position: google.maps.ControlPosition.BOTTOM_LEFT
-            }
+            }*/
     },
 
     events: {
