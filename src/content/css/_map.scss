@@ -131,6 +131,10 @@ body, html {
               color:#333333;
             }
 
+            &.sortable a {
+              background:url('/static/img/bkg_layers_drag.png') no-repeat 111px 5px;
+            }
+
             a {
               display:block;
               width:100px;
@@ -139,7 +143,6 @@ body, html {
               color:#666666;
               text-shadow:0 1px white;
               text-decoration:none;
-              background:url('/static/img/bkg_layers_drag.png') no-repeat 111px 5px;
 
               &:hover {
                 color:#333333;

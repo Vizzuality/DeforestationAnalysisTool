@@ -2,14 +2,23 @@
 var LayerModel = Backbone.Model.extend({
 
     hidden: false,
+    _static: false,
 
     initialize: function() {
         _.bindAll(this, 'set_enabled');
+        if(this.get('static') === true) {
+            this._static = true;
+            this.enabled = true;
+        } else {
+            this.enabled = false;
+        }
     },
 
     set_enabled: function(b) {
-        this.enabled = b;
-        this.trigger('change');
+        if(!this._static) {
+            this.enabled = b;
+            this.trigger('change');
+        }
     }
 
 });

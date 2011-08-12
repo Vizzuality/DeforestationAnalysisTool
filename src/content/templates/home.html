@@ -127,6 +127,31 @@
               description: 'Brazil Legal Amazon'
             }
         );
+        available_maps.splice(0, 0, {
+              id: '6',
+              type: 'google_maps',
+              map_id: 'TERRAIN',
+              description: 'Terrain'
+        });
+        available_maps.splice(0, 0, {
+              id: '7',
+              type: 'google_maps',
+              map_id: 'SATELLITE',
+              description: 'Satellite'
+        });
+        available_maps.splice(0, 0, {
+              id: '9',
+              type: 'google_maps',
+              map_id: 'ROADMAP',
+              description: 'Roadmap'
+        });
+        available_maps.splice(0, 0, {
+              id: '8',
+              type: 'google_maps',
+              map_id: 'HYBRID',
+              description: 'Hybrid',
+              static : true
+        });
 
         window.app.available_layers.reset(available_maps);
 

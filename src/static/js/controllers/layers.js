@@ -3,14 +3,13 @@ var LayerView = Backbone.View.extend({
 
     tagName: 'li',
 
-    enabled: false,
-
     events: {
         'click': 'click'
     },
 
     initialize: function() {
-        _.bindAll(this, 'render', 'click');
+        _.bindAll(this, 'render', 'click', 'changed');
+        this.model.bind('change', this.changed);
     },
 
     render: function() {
@@ -18,24 +17,27 @@ var LayerView = Backbone.View.extend({
         this.id = 'layer_' + this.model.escape('id');
         el.html("<a href='#'>" + this.model.escape('description') + "</a>");
         el.attr('id', this.id);
-        if(this.model.enabled) {
-            el.addClass('selected');
+        this.changed();
+        if(this.model.get('type') !== 'google_maps') {
+            el.addClass('sortable');
         }
-        this.enabled = this.model.enabled;
         return this;
     },
 
     click: function(e) {
         e.preventDefault();
-        this.enabled = !this.enabled;
-        if(!this.enabled) {
-            this.trigger('disable', this);
+        this.model.set_enabled(!this.model.enabled);
+    },
+    
+    changed: function() {
+        var enabled = this.model.enabled;
+        if(!enabled) {
+            //this.trigger('disable', this);
             $(this.el).removeClass('selected');
         } else {
             $(this.el).addClass('selected');
-            this.trigger('enable', this);
+            //this.trigger('enable', this);
         }
-        this.model.set_enabled(this.enabled);
     }
 });
 
@@ -58,7 +60,8 @@ var LayerEditor = Backbone.View.extend({
 
         this.el.find('ul, div.jspPane').sortable({
           revert: false,
-          items: 'li',
+          items: '.sortable',
+          axis: 'y',
           cursor: 'pointer',
           stop:function(event,ui){
             $(ui.item).removeClass('moving');
@@ -71,6 +74,7 @@ var LayerEditor = Backbone.View.extend({
             $(ui.item).addClass('moving');
           }
         });
+        this.layers.trigger('reset');
     },
 
     // reorder layers in map
@@ -109,7 +113,6 @@ var LayerEditor = Backbone.View.extend({
         }
         this.el.fadeIn();
         this.showing = true;
-        this.layers.trigger('reset');
     },
 
     close: function() {

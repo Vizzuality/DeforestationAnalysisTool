@@ -181,7 +181,15 @@ var MapView = Backbone.View.extend({
         self.map.overlayMapTypes.clear();
         self.layers.each(function(layer, index) {
             var lyr;
-            if(layer.map_layer === undefined) {
+            if(layer.get('type') === 'google_maps') {
+                if(layer.enabled) {
+                    var id = google.maps.MapTypeId[layer.get('map_id')];
+                    self.map.setOptions({mapTypeId: id});
+                }
+                layer.unbind('change', self.reoder_layers);
+                layer.bind('change', self.reoder_layers);
+            }
+            else if(layer.map_layer === undefined) {
                 lyr = self.create_layer(layer.toJSON());
                 layer.map_layer = lyr;
                 //layer.map_position = idx;
