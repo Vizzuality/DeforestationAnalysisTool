@@ -27,6 +27,8 @@ var MapView = Backbone.View.extend({
     initialize: function() {
         _.bindAll(this, 'center_changed', 'ready', 'click', 'set_center', 'reoder_layers', 'open_layer_editor', 'zoom_changed', 'zoom_in', 'zoom_out', 'adjustSize', 'set_zoom_silence', 'set_center_silence', 'close_layer_editor');
        this.map_layers = {};
+       // hide controls until map is ready
+       this.hide_controls();
        this.map = new google.maps.Map(this.$('.map')[0], this.mapOptions);
        google.maps.event.addListener(this.map, 'center_changed', this.center_changed);
        google.maps.event.addListener(this.map, 'zoom_changed', this.zoom_changed);
@@ -37,6 +39,7 @@ var MapView = Backbone.View.extend({
        this.layers = new LayerCollection();
        this.signals_on = true;
        this.layer_dialog_pos= this.options.layer_dialog_pos || 'top';
+
     },
 
     adjustSize: function() {
@@ -150,6 +153,7 @@ var MapView = Backbone.View.extend({
             this.layers.bind('reset', this.reoder_layers);
             this.layers.bind('add', this.reoder_layers);
             this.layers.bind('remove', this.reoder_layers);
+            this.show_controls();
             this.trigger('ready');
     },
 

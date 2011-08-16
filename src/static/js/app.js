@@ -131,8 +131,6 @@ $(function() {
             this.compare_layout = null;
 
             this.map = new MapView({el: this.$("#main_map")});
-            this.map.hide_controls();
-            this.map.show_layers_control();
             this.cell_polygons = new CellPolygons({mapview: this.map});
 
             this.reports.bind('reset', this.change_report);
@@ -337,6 +335,9 @@ $(function() {
         // is called
         start: function() {
             var self = this;
+
+            this.map.hide_controls();
+            this.map.show_layers_control();
 
             this.create_polygon_tool = new  PolygonDrawTool({mapview: this.map});
 
