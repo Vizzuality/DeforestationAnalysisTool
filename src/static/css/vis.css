@@ -1,0 +1,723 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+body {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+q, blockquote {
+  quotes: none;
+}
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+a img {
+  border: none;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+  display: block;
+}
+
+/*
+ * CSS Styles that are needed by jScrollPane for it to operate correctly.
+ *
+ * Include this stylesheet in your site or copy and paste the styles below into your stylesheet - jScrollPane
+ * may not operate correctly without them.
+ */
+.jspContainer {
+  overflow: hidden;
+  position: relative;
+}
+
+.jspPane {
+  position: absolute;
+}
+
+.jspVerticalBar {
+  position: absolute;
+  top: 0;
+  right: 18px;
+  width: 5px;
+  height: 100%;
+  background: red;
+}
+
+.jspHorizontalBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 16px;
+  background: red;
+}
+
+.jspVerticalBar *,
+.jspHorizontalBar * {
+  margin: 0;
+  padding: 0;
+}
+
+.jspCap {
+  display: none;
+}
+
+.jspHorizontalBar .jspCap {
+  float: left;
+}
+
+.jspTrack {
+  background: #dde;
+  position: relative;
+}
+
+.jspDrag {
+  background: #bbd;
+  position: relative;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+}
+
+.jspHorizontalBar .jspTrack,
+.jspHorizontalBar .jspDrag {
+  float: left;
+  height: 100%;
+}
+
+.jspArrow {
+  background: #50506d;
+  text-indent: -20000px;
+  display: block;
+  cursor: pointer;
+}
+
+.jspArrow.jspDisabled {
+  cursor: default;
+  background: #80808d;
+}
+
+.jspVerticalBar .jspArrow {
+  height: 16px;
+}
+
+.jspHorizontalBar .jspArrow {
+  width: 16px;
+  float: left;
+  height: 100%;
+}
+
+.jspVerticalBar .jspArrow:focus {
+  outline: none;
+}
+
+.jspCorner {
+  background: #eeeef4;
+  float: left;
+  height: 100%;
+}
+
+/* Yuk! CSS Hack for IE6 3 pixel bug :( */
+* html .jspCorner {
+  margin: 0 -3px 0 0;
+}
+
+.jspHorizontalBar,
+.jspVerticalBar,
+.jspTrack {
+  background: none;
+}
+
+.jspDrag {
+  background: #ccc;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+.jspTrack .jspActive,
+.jspTrack .jspHover,
+.jspDrag:hover {
+  background: #8B8B9F;
+}
+
+.jspArrow {
+  background: url(../image/ui-icons_222222_256x240.png) no-repeat;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+.jspVerticalBar > .jspActive,
+.jspArrow:hover {
+  background-image: url("../image/ui-icons_cd0a0a_256x240.png");
+}
+
+.jspVerticalBar > .jspDisabled,
+.jspVerticalBar > .jspDisabled:hover,
+.jspHorizontalBar > .jspDisabled,
+.jspHorizontalBar > .jspDisabled:hover {
+  background-color: transparent;
+  background-image: url("../image/ui-icons_888888_256x240.png");
+}
+
+.jspVerticalBar .jspArrow {
+  height: 15px;
+}
+
+.jspHorizontalBar .jspArrow {
+  width: 5px;
+}
+
+.jspArrowUp {
+  background-position: 0 0;
+}
+
+.jspArrowDown {
+  background-position: -64px 0 !important;
+}
+
+.jspArrowLeft {
+  background-position: -96px 0 !important;
+}
+
+.jspArrowRight {
+  background-position: -32px 0 !important;
+}
+
+/* Set sub, sup without affecting line-height: gist.github.com/413930 */
+sub, sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+.ie6 legend, .ie7 legend {
+  margin-left: -7px;
+}
+
+/* Align checkboxes, radios, text inputs with their label by: Thierry Koblentz tjkdesign.com/ez-css/css/base.css  */
+input[type="radio"] {
+  vertical-align: text-bottom;
+}
+
+input[type="checkbox"] {
+  vertical-align: bottom;
+}
+
+.ie7 input[type="checkbox"] {
+  vertical-align: baseline;
+}
+
+.ie6 input {
+  vertical-align: text-bottom;
+}
+
+button:focus {
+  outline-width: 1px;
+  outline-style: dotted;
+}
+
+button::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+.ie7 article span.input_text input, .ie8 article span.input_text input {
+  line-height: 30px;
+}
+
+.ie7 span.input_text input, .ie8 span.input_text input {
+  line-height: 32px;
+}
+
+/* Hand cursor on clickable input elements */
+label, input[type="button"], input[type="submit"], input[type="image"], button {
+  cursor: pointer;
+}
+
+/* Webkit browsers add a 2px margin outside the chrome of form elements */
+button, input, select, textarea {
+  margin: 0;
+}
+
+input::-webkit-input-placeholder {
+  color: #cccccc;
+}
+
+input:-moz-placeholder {
+  color: #cccccc;
+}
+
+.ie6 h1, .ie6 h2, .ie6 h3, .ie6 h4, .ie6 h5, .ie6 h6, .ie6 #tabs ul li a, .ie6 nav ul li a, .ie7 h1, .ie7 h2, .ie7 h3, .ie7 h4, .ie7 h5, .ie7 h6, .ie7 #tabs ul li a, .ie7 nav ul li a, .ie8 h1, .ie8 h2, .ie8 h3, .ie8 h4, .ie8 h5, .ie8 h6, .ie8 #tabs ul li a, .ie8 nav ul li a {
+  letter-spacing: 0!important;
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=hIEfix.png,sizingMethod=crop) !important;
+  zoom: 1!important;
+}
+
+body.reference header {
+  height: 226px;
+}
+body.reference header #infoband {
+  border-bottom: 1px solid #4b8741;
+  height: 96px;
+}
+body.reference header #infoband .content h3 {
+  background: none;
+}
+
+article .header .right h4 {
+  margin-top: 22px;
+}
+article div.download {
+  position: absolute;
+  bottom: 0;
+  z-index: 1000;
+}
+article ul li ul {
+  margin-top: 10px!important;
+  margin-bottom: 0!important;
+}
+article strong {
+  color: #333333;
+}
+article .color {
+  float: left;
+  margin-right: 5px;
+  margin-top: 4px;
+  height: 10px;
+  width: 10px;
+  background: #000;
+  border: 1px solid #000;
+}
+article span.code {
+  color: #999999;
+  font-size: 11px;
+}
+article .example {
+  overflow: hidden;
+  clear: both;
+  margin-bottom: 10px;
+}
+article .example.big {
+  height: 100px;
+}
+article .example ul {
+  padding: 0;
+  margin: 0;
+}
+article .example ul li {
+  background: none!important;
+  padding: 0!important;
+  margin: 0!important;
+}
+article .example .field {
+  height: 35px;
+}
+
+body, html {
+  height: 100%;
+  overflow: hidden;
+}
+
+#workarea {
+  position: absolute;
+  width: 100%;
+  top: 144px;
+  bottom: 0;
+}
+#workarea .map_container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+#workarea .map_container .map {
+  width: 100%;
+  height: 100%;
+}
+#workarea .map_container div.layer_editor {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+#workarea .map_container div.zoom_control {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 22px;
+  height: 44px;
+  z-index: 10;
+}
+#workarea .map_container div.zoom_control a {
+  display: block;
+  width: 22px;
+  height: 22px;
+  text-indent: -9999px;
+  background: url("../img/icons/zoom.png") no-repeat 0 0;
+}
+#workarea .map_container div.zoom_control a.zoom_in:hover {
+  background-position: 0 -22px;
+}
+#workarea .map_container div.zoom_control a.zoom_out {
+  background-position: -22px 0;
+}
+#workarea .map_container div.zoom_control a.zoom_out:hover {
+  background-position: -22px -22px;
+}
+
+#layer_editor_dialog {
+  position: absolute;
+  width: 187px;
+  height: 254px;
+  z-index: 20;
+  display: none;
+  background: url("../img/bkg_layer_editor_top.png") no-repeat 0 0;
+}
+#layer_editor_dialog .jspVerticalBar {
+  right: 13px;
+}
+#layer_editor_dialog #layer_top {
+  position: absolute;
+  top: 11px;
+  left: 11px;
+  z-index: 20;
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-top-left-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-topleft: 3px;
+}
+#layer_editor_dialog #layer_bottom {
+  position: absolute;
+  top: 229px;
+  left: 11px;
+  z-index: 20;
+  -webkit-border-bottom-right-radius: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  -moz-border-radius-bottomright: 3px;
+  -moz-border-radius-bottomleft: 3px;
+}
+#layer_editor_dialog ul {
+  position: relative;
+  top: 11px;
+  left: 11px;
+  height: 232px;
+  width: 165px;
+  overflow: hidden;
+}
+#layer_editor_dialog ul li {
+  width: 133px;
+  font-size: 13px;
+  color: #626262;
+  padding: 13.5px 0 13.5px 23px;
+  /*margin-left: 18px;*/
+  border-top: 1px solid #FBFBFB;
+  border-bottom: 1px solid #CFCFCF;
+  background: url("/static/img/tick_unselected.png") no-repeat 10px 16px;
+}
+#layer_editor_dialog ul li:first-child {
+  border-top: none;
+}
+#layer_editor_dialog ul li:last-child {
+  border-bottom: none;
+}
+#layer_editor_dialog ul li.selected {
+  background: url("/static/img/tick_selected.png") no-repeat 10px 16px;
+}
+#layer_editor_dialog ul li.moving {
+  background-color: #E7E7E7;
+  box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.1);
+}
+#layer_editor_dialog ul li:hover a {
+  color: #333333;
+}
+#layer_editor_dialog ul li.sortable a {
+  background: url("/static/img/bkg_layers_drag.png") no-repeat 111px 5px;
+}
+#layer_editor_dialog ul li a {
+  display: block;
+  width: 100px;
+  padding-right: 20px;
+  font: normal 13px "Helvetica Neue";
+  color: #666666;
+  text-shadow: 0 1px white;
+  text-decoration: none;
+}
+#layer_editor_dialog ul li a:hover {
+  color: #333333;
+}
+
+#loading_small {
+  position: absolute;
+  left: 100px;
+  bottom: -171px;
+  width: 168px;
+  height: 30px;
+  background-color: #FFF;
+  /*border: 3px solid rgba(0, 0, 0, 0.4);*/
+  box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.1);
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-top-left-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-topleft: 3px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+  /*display: none;*/
+  z-index: 10;
+}
+#loading_small span.loader {
+  display: block;
+  font: normal 13px "Arial", "Helvetica", Sans-Serif;
+}
+#loading_small span.loader img {
+  float: left;
+  padding: 5px 0 0  5px;
+}
+#loading_small span.loader p {
+  padding: 5px 0 0 8px;
+  display: inline-block;
+}
+
+#loading {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  z-index: 10;
+}
+#loading span.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -97px 0 0 -110.5px;
+  width: 221px;
+  height: 97px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-radius: 2px;
+  background-color: #FFF;
+  box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.1);
+}
+#loading span.loader h1 {
+  text-transform: uppercase;
+  margin: 16px 0 0 20px;
+  font: bold 13px "Droid Sans";
+  color: #333333;
+}
+#loading span.loader p {
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  margin: 4px 0 0 20px;
+  color: #333333;
+}
+#loading span.loader img {
+  margin: 10px 0 0 20px;
+}
+
+#error_dialog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  z-index: 10;
+}
+#error_dialog span.error_desc {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -170px 0 0 -160px;
+  width: 320px;
+  /*height: $h;*/
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-radius: 2px;
+  background-color: #FFF;
+  box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+#error_dialog span.error_desc h1 {
+  text-transform: uppercase;
+  margin: 0px 0 0 0px;
+  font: bold 13px "Droid Sans";
+  color: #333333;
+}
+#error_dialog span.error_desc p {
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  margin: 4px 0 0 0px;
+  color: #333333;
+}
+#error_dialog span.error_desc button {
+  float: right;
+  margin: 15px 0 0 0px;
+  padding: 10px 10px;
+  border: 1px solid #333333;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-radius: 5px;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(white), to(#cccccc));
+  font: bold 12px "Helvetica Neue", Arial, Sans-Serif;
+  color: #333333;
+  text-transform: uppercase;
+  text-align: center;
+}
+#error_dialog span.error_desc button:hover {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(#cccccc), to(#ebebeb));
+}
+
+#compare_layout_1 {
+  position: absolute;
+  top: 0;
+  width: 33.2%;
+  right: 0;
+  bottom: 0;
+  border-left: 1px solid #666666;
+  display: none;
+}
+#compare_layout_1 .compare_map {
+  position: relative;
+  width: 100%;
+  height: 33.3%;
+  border-bottom: 1px solid #333333;
+}
+
+#compare_layout_2 {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  right: 0;
+  bottom: 0;
+  border-left: 1px solid #666666;
+  display: none;
+}
+#compare_layout_2 .compare_map {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+#grid .finished {
+  /*background-image: url('/static/img/bkg_cell.png');*/
+}
+#grid .cell .cell_wrapper_info {
+  display: none;
+  position: absolute;
+  top: -4px;
+  left: 56px;
+  width: 142px;
+  height: 49px;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
+  font-size: 12px;
+  color: white;
+  z-index: 10;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-bottomright: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+#grid .cell .cell_wrapper_info span.arrow {
+  position: absolute;
+  top: 50%;
+  left: -5px;
+  width: 5px;
+  height: 10px;
+  margin: -5px 0 0 0;
+  background: url("../img/cellinfo_arrow.png") no-repeat 0 0;
+}
+#grid .cell .cell_wrapper_info h3 {
+  display: block;
+  margin: 5px 0 0 9px;
+  font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: white;
+  text-shadow: 0 1px black;
+}
+#grid .cell .cell_wrapper_info p {
+  display: block;
+  margin: 9px 0 0 9px;
+  font: normal 11px "Helvetica Neue", Arial, Sans-Serif;
+  color: rgba(255, 255, 255, 0.6);
+}
+#grid .cell.hover {
+  cursor: pointer;
+  border: 4px solid #333;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+#control {
+  position: absolute;
+  bottom: 100px;
+  left: 100px;
+  z-index: 10;
+  width: 420px;
+  padding: 10px 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+#control #play {
+  display: inline-block;
+  margin-right: 20px;
+  background-color: #06c;
+  padding: 5px 8px;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+}
+#control #timeline {
+  display: inline-block;
+  width: 250px;
+}
+#control #time {
+  display: inline-block;
+}

@@ -1,0 +1,33 @@
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+#control {
+    position: absolute;
+    bottom: 100px;
+    left: 100px;
+    z-index: 10;
+    width: 420px;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+     
+    #play {
+        display: inline-block;
+        margin-right: 20px;
+        background-color: #06c;
+        padding: 5px 8px;
+        color: white;
+        font-weight: bold;
+        text-decoration: none;
+    }
+    #timeline {
+        display: inline-block;
+        width: 250px;
+    }
+    #time {
+        display: inline-block;
+    }
+}
+

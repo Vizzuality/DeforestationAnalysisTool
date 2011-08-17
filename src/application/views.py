@@ -80,6 +80,13 @@ def home(cell_path=None):
             maps=maps,
             logout_url=logout_url)
 
+@app.route('/vis')
+@login_required
+def vis():
+    user = users.get_current_user()
+    u = User.get_user(user)
+    return render_template('vis/index.html', user=u)
+
 @app.route('/login')
 def login():
     return render_template('login.html')
@@ -106,6 +113,7 @@ def tiles(tile_path):
     #return redirect('/static/maps/%s' % tile_path)
 
 
+
 EARTH_ENGINE_TILE_SERVER = 'http://earthengine.googleapis.com/map/'
 @app.route('/ee/tiles/<path:tile_path>')
 def earth_engine_tile_proyx(tile_path):
@@ -118,6 +126,13 @@ def earth_engine_tile_proyx(tile_path):
     response.headers['Content-Type'] = result.headers['Content-Type']
     return response
 
+@app.route('/proxy/<path:tile_path>')
+def proxy(tile_path):
+    result = urlfetch.fetch('http://'+ tile_path, deadline=10)
+    response = make_response(result.content)
+    response.headers['Content-Type'] = result.headers['Content-Type']
+    response.headers['Expires'] = 'Thu, 15 Apr 2020 20:00:00 GMT'
+    return response
 
 @app.route('/admin_only')
 @admin_required
