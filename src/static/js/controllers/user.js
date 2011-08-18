@@ -3,15 +3,25 @@ var UserView = Backbone.View.extend({
 
     tagName: 'li',
 
+    events: {
+        'change input': 'changed'
+    },
+
     template: _.template($("#user-template").html()),
 
     initialize: function() {
-        _.bindAll(this, 'render');
+        _.bindAll(this, 'render', 'changed');
     },
 
     render: function() {
         $(this.el).html(this.template(this.model.toJSON()));
         return this;
+    },
+
+    changed: function() {
+        var is_admin = this.$("input").attr("checked");
+        this.model.set({'is_admin': is_admin !== undefined});
+        this.model.save();
     }
 });
 

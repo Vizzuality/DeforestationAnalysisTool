@@ -1506,6 +1506,8 @@ article.mamufas div.notes form div.right h5 {
   border-bottom: 1px solid #e5e5e5;
 }
 #user_dialog div.notes ul li {
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: #333333;
   display: inline-block;
   width: 100%;
   padding: 20px 0;
@@ -1521,12 +1523,6 @@ article.mamufas div.notes form div.right h5 {
   width: 300px;
   display: inline-block;
 }
-#user_dialog div.notes ul li p.comment_text {
-  float: left;
-  width: 334px;
-  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
-  color: #333333;
-}
 #user_dialog div.notes form {
   width: 100%;
   padding: 22px 0 0 0;
@@ -1535,10 +1531,13 @@ article.mamufas div.notes form div.right h5 {
   float: left;
   width: 334px;
 }
-#user_dialog div.notes form div.left textarea {
+#user_dialog div.notes form div.left label {
+  font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
+}
+#user_dialog div.notes form div.left input {
   width: 322px;
-  height: 39px;
   padding: 5px;
+  margin-top: 5px;
   border: 1px solid #CCCCCC;
   border-radius: 4px;
   -moz-border-radius: 4px;
@@ -1548,7 +1547,7 @@ article.mamufas div.notes form div.right h5 {
   font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
   color: #333333;
 }
-#user_dialog div.notes form div.left textarea:focus {
+#user_dialog div.notes form div.left input:focus {
   outline: none;
   border-color: #999999;
 }

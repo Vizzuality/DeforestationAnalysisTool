@@ -56,7 +56,12 @@ class UserAPI(Resource):
         u = User.get(Key(id))
         if 'current_cells' in data:
             u.current_cells = data['current_cells']
-            u.put()
+        if 'is_admin' in data:
+            if data['is_admin']:
+                u.role = "admin"
+            else:
+                u.role = "editor"
+        u.put()
         return Response(u.as_json(), mimetype='application/json')
 
     def create(self):

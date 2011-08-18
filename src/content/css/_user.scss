@@ -49,6 +49,8 @@
         border-bottom:1px solid #e5e5e5;
 
         li {
+          font:normal 13px $text_font;
+          color:#333333;
           display:inline-block;
           width:100%;
           padding:20px 0;
@@ -67,12 +69,6 @@
             display: inline-block;
           }
 
-          p.comment_text {
-            float:left;
-            width:334px;
-            font:normal 13px $text_font;
-            color:#333333;
-          }
         }
       }
 
@@ -84,10 +80,13 @@
           float:left;
           width:334px;
 
-          textarea {
+          label {
+            font: bold 13px $text_font;
+          }
+          input {
             width:322px;
-            height:39px;
             padding:5px;
+            margin-top: 5px;
             border:1px solid #CCCCCC;
             @include border-radius(4px);
             background:#F3F3F3;
