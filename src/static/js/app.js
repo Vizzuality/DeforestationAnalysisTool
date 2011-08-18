@@ -124,7 +124,7 @@ $(function() {
         ),
 
         initialize:function() {
-            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view', 'update_map_layers', 'cell_done', 'go_back', 'open_notes', 'change_cell', 'close_report');
+            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view', 'update_map_layers', 'cell_done', 'go_back', 'open_notes', 'change_cell', 'close_report', 'open_settings');
 
             window.loading.loading("Imazon:initialize");
             this.reports = new ReportCollection();
@@ -154,6 +154,7 @@ $(function() {
             this.polygon_tools.compare.bind('state', this.compare_view);
             this.overview.bind('go_back', this.go_back);
             this.overview.bind('open_notes', this.open_notes);
+            this.overview.bind('open_settings', this.open_settings);
             this.overview.bind('done', this.cell_done);
             this.overview.bind('close_report', this.close_report);
             this.user.bind('change:current_cells', this.overview.change_user_cells);
@@ -400,6 +401,14 @@ $(function() {
                 self.notes_dialog.set_cell(this.gridstack.current_cell);
             }
             self.notes_dialog.open();
+        },
+
+        open_settings: function() {
+            var self = this;
+            if(self.settings_dialog === undefined) {
+                self.settings_dialog = new UsersDialog();
+            }
+            self.settings_dialog.open();
         },
 
         close_report: function() {

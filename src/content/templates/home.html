@@ -63,6 +63,9 @@
 
   <!-- user -->
   <script src="{{url_for('static',filename='js/models/user.js')}}"></script>
+  {% if user.is_admin() %}
+  <script src="{{url_for('static',filename='js/controllers/user.js')}}"></script>
+  {% endif %}
 
   <!-- loading -->
   <script src="{{url_for('static',filename='js/controllers/loader.js')}}"></script>
@@ -211,6 +214,9 @@
     </div>
 
    {% include "_notes.html" %}
+   {% if user.is_admin() %}
+   {% include "_user_admin.html" %}
+   {% endif %}
 
    <script type="text/template" id="layer-editor">
         <div id="layer_editor_dialog" class="hidden">

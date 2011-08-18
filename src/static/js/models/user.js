@@ -3,7 +3,7 @@
 var User = Backbone.Model.extend({
 
     url: function() {
-        return '/api/v0/user/' + this.get('id');
+        return '/api/v0/user';
     },
 
     inc_cells: function() {
@@ -11,5 +11,9 @@ var User = Backbone.Model.extend({
         this.save();
     }
 
+});
 
+var UserCollection = Backbone.Collection.extend({
+    model: User,
+    url : '/api/v0/user'
 });

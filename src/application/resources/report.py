@@ -59,6 +59,16 @@ class UserAPI(Resource):
             u.put()
         return Response(u.as_json(), mimetype='application/json')
 
+    def create(self):
+        data = json.loads(request.data)
+        if 'mail' not in data:
+            abort(400)
+        u = users.User(data['mail'])
+        a = User(role='editor',
+                 user=u)
+        a.save();
+        return Response(a.as_json(), mimetype='application/json')
+
 class ReportAPI(Resource):
 
     def list(self):
