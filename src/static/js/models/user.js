@@ -16,7 +16,7 @@ var User = Backbone.Model.extend({
         this.save();
     },
     validate: function(attrs) {
-        if (!validateEmail(attrs.mail)) {
+        if (attrs.mail && !validateEmail(attrs.mail)) {
           return "email is not valid";
         }
     }
