@@ -1,5 +1,5 @@
 application: imazon-prototype
-version: phase2_0
+version: vis 
 runtime: python
 api_version: 1
 
