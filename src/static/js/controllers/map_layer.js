@@ -244,10 +244,17 @@ var NDFILayer = Backbone.View.extend({
                     }
 
                     if(p > NDFI_ENCODING_LIMIT) {
-                        image_data[pixel_pos + 0] = 0;
-                        image_data[pixel_pos + 1] = 0;
-                        image_data[pixel_pos + 2] = 0;
-                        image_data[pixel_pos + 3] = 200;
+                        if (p == 205) { //CLOUD
+                            image_data[pixel_pos + 0] = 255;
+                            image_data[pixel_pos + 1] = 255;
+                            image_data[pixel_pos + 2] = 255;
+                            image_data[pixel_pos + 3] = 255;
+                        } else {
+                            image_data[pixel_pos + 0] = 0;
+                            image_data[pixel_pos + 1] = 0;
+                            image_data[pixel_pos + 2] = 0;
+                            image_data[pixel_pos + 3] = 200;
+                        }
                     } else {
                         //image_data[pixel_pos + 3] = 255;
                     }
