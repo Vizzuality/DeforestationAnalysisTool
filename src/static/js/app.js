@@ -60,9 +60,7 @@ $(function() {
                 'remove': '6 6',
                 'draw': '4 16'
             };
-            ///$('path').css({cursor: 'url(/static/img/cursor_' + st +'_out.png) ' + cursors_pos[st] + ', default !important'});
             $('path').css({cursor: 'url("http://maps.gstatic.com/intl/en_us/mapfiles/openhand_8_8.cur"), default !important'});
-            //this.app.map.map.setOptions({draggableCursor: 'url(/static/img/cursor_' + st +'_out.png) ' + cursors_pos[st] + ', default'});
         },
 
         change_state: function(st) {
@@ -159,6 +157,7 @@ $(function() {
             this.overview.bind('close_report', this.close_report);
             this.user.bind('change:current_cells', this.overview.change_user_cells);
             this.overview.change_user_cells(this.user, this.user.get('current_cells'));
+            this.polygon_tools.bind('polygon_visibility', this.cell_polygons.show_polygons);
             this.ndfi_layer.bind('map_error', function() {
                 show_error("Not enough data available to generate map for this report. After the latest report is generated, map images can take some time to appear.");
             });

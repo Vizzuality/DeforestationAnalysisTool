@@ -691,13 +691,18 @@ article .example .field {
   top: 40px;
   right: -13px;
   width: 273px;
-  height: 61px;
-  background: url("../img/bottom_range_wrapper.png") no-repeat 0 0;
+  height: 261px;
+  background: #cccccc url("../img/bottom_range_wrapper.png") no-repeat 0 0;
   z-index: 2;
+}
+#header #tools #maptools #slider_wrapper div#display_options {
+  position: absolute;
+  top: 100px;
+  left: 27px;
 }
 #header #tools #maptools #slider_wrapper div#ndfi_slider {
   position: absolute;
-  bottom: 31px;
+  top: 29px;
   left: 27px;
   border: none;
   width: 218px;

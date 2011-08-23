@@ -146,11 +146,12 @@ var PolygonToolbar = Toolbar.extend({
 
     events: {
         'click #compare': 'none',
-        'click #range': 'none'
+        'click #ndfirange': 'none',
+        'change #polygon_on_off': 'polygon_on_off'
     },
 
     initialize: function() {
-        _.bindAll(this, 'change_state', 'reset');
+        _.bindAll(this, 'change_state', 'reset', 'polygon_on_off');
         this.buttons = new ButtonGroup({el: this.$('#selection')});
         this.polytype = new ButtonGroup({el: this.$('#polytype')});
         this.ndfi_range = new RangeSlider({el: this.$("#ndfi_slider")});
@@ -159,7 +160,12 @@ var PolygonToolbar = Toolbar.extend({
         this.buttons.bind('state', this.change_state);
     },
 
-    none: function(e) { e.preventDefault(); },
+    polygon_on_off: function(e) {
+        var enabled = $(e.target).attr('checked');
+        this.trigger('polygon_visibility', enabled);
+    },
+
+    none: function(e) { e.preventDefault();},
 
     change_state: function(st) {
         this.trigger('state', st);
