@@ -691,8 +691,8 @@ article .example .field {
   top: 40px;
   right: -13px;
   width: 273px;
-  height: 261px;
-  background: #cccccc url("../img/bottom_range_wrapper.png") no-repeat 0 0;
+  height: 61px;
+  background: url("../img/bottom_range_wrapper.png") no-repeat 0 0;
   z-index: 2;
 }
 #header #tools #maptools #slider_wrapper div#display_options {

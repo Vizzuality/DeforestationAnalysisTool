@@ -185,7 +185,9 @@ var MapView = Backbone.View.extend({
         self.map.overlayMapTypes.clear();
         self.layers.each(function(layer, index) {
             var lyr;
-            if(layer.get('type') === 'google_maps') {
+            if(layer.get('type') === 'fake') {
+                //i'm very sorry
+            } else if(layer.get('type') === 'google_maps') {
                 if(layer.enabled) {
                     var id = google.maps.MapTypeId[layer.get('map_id')];
                     self.map.setOptions({mapTypeId: id});

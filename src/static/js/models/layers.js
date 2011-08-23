@@ -17,7 +17,7 @@ var LayerModel = Backbone.Model.extend({
     set_enabled: function(b) {
         if(!this._static) {
             this.enabled = b;
-            this.trigger('change');
+            this.trigger('change', this);
         }
     }
 
@@ -30,7 +30,7 @@ var LayerCollection = Backbone.Collection.extend({
 
         initialize: function()  {
         },
-        
+
         get_by_name: function(name) {
             var lay;
             this.each(function(m) {

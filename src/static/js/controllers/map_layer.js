@@ -15,7 +15,7 @@ var NDFILayer = Backbone.View.extend({
     NDFI_ENCODING_LIMIT: 200,
 
     initialize: function() {
-        _.bindAll(this, 'canvas_setup', 'filter', 'apply_filter', 'map_auth', 'click');
+        _.bindAll(this, 'canvas_setup', 'filter', 'apply_filter', 'map_auth', 'click', 'class_visibility');
         var self = this;
         this.editing_state = false;
         this.mapview = this.options.mapview;
@@ -25,6 +25,7 @@ var NDFILayer = Backbone.View.extend({
         this.high = 60;
         this.showing = false;
         this.inner_poly_sensibility = 10;
+        this.show_deforestation = 255;
 
         this.ndfimap = new NDFIMap({report_id: this.report.id});
         this.ndfimap.bind('change', this.map_auth);
@@ -40,13 +41,36 @@ var NDFILayer = Backbone.View.extend({
               description: 'NDFI analysis',
               layer: this.layer
         });
+        this.sub_map_layer = [];
+        this.add_class_control_layers();
         console.log(" === NDFI layer created === ");
     },
 
+    add_class_control_layers: function() {
+        var self = this;
+        var classes = ['deforestation', 'degradation'];
+        _.each(classes, function(name) {
+            var var_name = 'show_' + name;
+            self[var_name] = 255;
+            var def = new LayerModel({
+                  id: var_name,
+                  type: 'fake',
+                  description: 'NDFI/' + name
+            });
+            def.set_enabled(true);
+            self.sub_map_layer.push(def);
+        });
+    },
+
     map_auth: function() {
+        var self = this;
         this.token = this.ndfimap.get('token');
         this.mapid = this.ndfimap.get('mapid');
         this.mapview.layers.add(this.map_layer);
+        _.each(this.sub_map_layer, function(l) {
+            l.bind('change', self.class_visibility);
+            self.mapview.layers.add(l);
+        });
         // reload tiles
         if(this.showing) {
             this.hide();
@@ -54,6 +78,16 @@ var NDFILayer = Backbone.View.extend({
         }
     },
 
+    class_visibility: function(layer) {
+        this[layer.id] = layer.enabled?255:0;
+        this.refrest();
+    },
+
+    refrest: function() {
+        if(this.showing) {
+            this.apply_filter(this.low, this.high);
+        }
+    },
 
     click: function(e) {
         var self = this;
@@ -220,6 +254,9 @@ var NDFILayer = Backbone.View.extend({
         //var DEGRADATION_COLOR= [247, 119, 87];
         var FOREST_COLOR= [32, 224, 32];
 
+        var show_deforestation = this.show_deforestation;
+        var show_degradation = this.show_degradation;
+
         var pixel_pos;
         for(var i=0; i < w; ++i) {
             for(var j=0; j < h; ++j) {
@@ -237,10 +274,12 @@ var NDFILayer = Backbone.View.extend({
                         image_data[pixel_pos + 0] = DEFORESTATION_COLOR[0];
                         image_data[pixel_pos + 1] = DEFORESTATION_COLOR[1];
                         image_data[pixel_pos + 2] = DEFORESTATION_COLOR[2];
+                        image_data[pixel_pos + 3] = show_deforestation;
                     } else {
                         image_data[pixel_pos + 0] = DEGRADATION_COLOR[0];
                         image_data[pixel_pos + 1] = DEGRADATION_COLOR[1];
                         image_data[pixel_pos + 2] = DEGRADATION_COLOR[2];
+                        image_data[pixel_pos + 3] = show_degradation;
                     }
 
                     if(p > NDFI_ENCODING_LIMIT) {

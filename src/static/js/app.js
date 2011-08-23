@@ -364,18 +364,33 @@ $(function() {
             // init the map
             this.map.map.setCenter(this.amazon_bounds.getCenter());
             this.map.layers.reset(this.available_layers.models);
+
             // enable layer, amazonas bounds
-            this.map.layers.models[0].set_enabled(true);
-            // enable layer, rgb
-            var lay = this.map.layers.get_by_name('rgb');
+            var lay = this.map.layers.get_by_name('Brazil Legal Amazon');
             if(lay) {
                 lay.set_enabled(true);
             }
-            //this.map.change_layer(this.map.layers.models[0]);
+            // enable layer, rgb
+            lay = this.map.layers.get_by_name('rgb');
+            if(lay) {
+                lay.set_enabled(true);
+            }
+            // add a layer to control polygon showing
+            var polygons = new LayerModel({
+                  id: 'polygons',
+                  type: 'fake',
+                  description: 'polygons'
+            });
+            polygons.set_enabled(true);
+            polygons.bind('change', function(layer) {
+                self.cell_polygons.show_polygons(layer.enabled);
+            });
+            this.map.layers.add(polygons);
 
             if(location.hash === '') {
                 router.navigate('cell/0/0/0');
             }
+
             Backbone.history.start();
             window.loading.finished("Imazon: start");
             console.log(" === App started === ");
