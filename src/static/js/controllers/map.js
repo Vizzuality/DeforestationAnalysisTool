@@ -54,7 +54,7 @@ var MapView = Backbone.View.extend({
         this.$('.layer_editor').hide();
         this.$('.zoom_control').hide();
     },
-    
+
     show_zoom_control: function() {
         this.$('.zoom_control').show();
     },
@@ -102,7 +102,7 @@ var MapView = Backbone.View.extend({
         this.map.setCenter(c);
         this.signals_on = true;
     },
-    
+
     set_center_silence: function(c) {
         this.set_center(c, false);
     },
@@ -144,6 +144,16 @@ var MapView = Backbone.View.extend({
                 this.trigger('open_layer_editor');
                 this.layer_editor.show(this.$('.layer_editor').position(), this.layer_dialog_pos);
             }
+    },
+
+    tile_info: function(info) {
+        var nfo = this.$('.tiles_info');
+        if(info.length > 0) {
+            nfo.animate({ bottom: 0});
+            nfo.find('span').html(info);
+        } else {
+            nfo.animate({bottom: -171});
+        }
     },
 
     // called when map is ready
@@ -203,7 +213,7 @@ var MapView = Backbone.View.extend({
             } else if(layer.get('type') === 'custom') {
                 //custom layers has map_layer created so
                 //we need to bind.
-                //as bacbone doesn't have a bind_once unbind first 
+                //as bacbone doesn't have a bind_once unbind first
                 //and the bind to no bond twice
                 layer.unbind('change', self.reoder_layers);
                 layer.bind('change', self.reoder_layers);

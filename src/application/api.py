@@ -25,7 +25,8 @@ ReportAPI.add_custom_url(app, '/api/v0/report/<report_id>/close', 'close', ("POS
 CellAPI.add_urls(app,       '/api/v0/report/<report_id>/cell')
 CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/children', 'children')
 CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/ndfi_change', 'ndfi_change')
-#CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/bounds', 'bounds')
+CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/bounds', 'bounds')
+CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/landsat', 'landsat')
 
 NDFIMapApi.add_urls(app, '/api/v0/report/<report_id>/map')
 PolygonAPI.add_urls(app, '/api/v0/report/<report_id>/cell/<cell_pos>/polygon')

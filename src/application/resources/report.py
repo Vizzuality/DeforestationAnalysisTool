@@ -2,15 +2,16 @@
 
 import logging
 from application.models import Report, Cell, Area, Note, CELL_BLACK_LIST, User
-from application.ee import NDFI
+from application.ee import NDFI, EELandsat
 from resource import Resource
 from flask import Response, request, jsonify, abort
 from datetime import date
+from application.time_utils import date_from_julian
 
 import simplejson as json
 from application.time_utils import timestamp
 
-from application.constants import amazon_bounds
+from application.constants import amazon_bounds, LANDSAT7
 
 from google.appengine.ext.db import Key
 from google.appengine.api import users
@@ -175,6 +176,34 @@ class CellAPI(Resource):
         z, x, y = Cell.cell_id(id)
         cell = Cell.get_or_default(r, x, y, z)
         return Response(json.dumps(cell.bounds(amazon_bounds)), mimetype='application/json')
+
+    def landsat(self, report_id, id):
+        r = Report.get(Key(report_id))
+        z, x, y = Cell.cell_id(id)
+        cell = Cell.get_or_default(r, x, y, z)
+        bounds = cell.bounds(amazon_bounds)
+        bounds = "%f,%f,%f,%f" % (bounds[0][1], bounds[0][0], bounds[1][1], bounds[1][0])
+        ee = EELandsat(LANDSAT7)
+        d = ee.list(bounds=bounds)
+        data = {}
+        if len(d) >= 1:
+            x = d[-1]
+            img_info = x.split('/')[2][3:]
+            path = img_info[:3]
+            row = img_info[3:6]
+            year = int(img_info[6: 10])
+            julian_date =  img_info[10: 13]
+            date = date_from_julian(int(julian_date), year)
+            data = {
+                'info': img_info,
+                'path': path,
+                'row': row,
+                'year': year,
+                'timestamp': timestamp(date),
+                'date': date.isoformat()
+            }
+        return Response(json.dumps(data), mimetype='application/json')
+
 
 
 

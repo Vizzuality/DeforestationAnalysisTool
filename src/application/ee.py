@@ -12,8 +12,8 @@ class EELandsat(object):
         self.resource = resource
         self.ee = EarthEngine(settings.EE_TOKEN)
 
-    def list(self, params={}):
-        images = self.ee.get("/list?id=%s&bbox=72.6,18.8,73.1,19.18&fields=ACQUISITION_DATE" % self.resource)
+    def list(self, bounds, params={}):
+        images = self.ee.get("/list?id=%s&bbox=%s&fields=ACQUISITION_DATE" % (self.resource, bounds))
         logging.info(images)
         if 'data' in images:
             return [x['id'] for x in images['data']]
