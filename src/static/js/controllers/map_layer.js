@@ -48,7 +48,7 @@ var NDFILayer = Backbone.View.extend({
 
     add_class_control_layers: function() {
         var self = this;
-        var classes = ['deforestation', 'degradation'];
+        var classes = ['deforestation', 'degradation', 'forest'];
         _.each(classes, function(name) {
             var var_name = 'show_' + name;
             self[var_name] = 255;
@@ -256,6 +256,7 @@ var NDFILayer = Backbone.View.extend({
 
         var show_deforestation = this.show_deforestation;
         var show_degradation = this.show_degradation;
+        var show_forest = this.show_forest;
 
         var pixel_pos;
         for(var i=0; i < w; ++i) {
@@ -269,7 +270,7 @@ var NDFILayer = Backbone.View.extend({
                         image_data[pixel_pos + 0] = FOREST_COLOR[0];
                         image_data[pixel_pos + 1] = FOREST_COLOR[1];
                         image_data[pixel_pos + 2] = FOREST_COLOR[2];
-                        image_data[pixel_pos + 3] = 0;
+                        image_data[pixel_pos + 3] = show_forest;
                     } else if(p > high) {
                         image_data[pixel_pos + 0] = DEFORESTATION_COLOR[0];
                         image_data[pixel_pos + 1] = DEFORESTATION_COLOR[1];
