@@ -60,9 +60,7 @@ $(function() {
                 'remove': '6 6',
                 'draw': '4 16'
             };
-            ///$('path').css({cursor: 'url(/static/img/cursor_' + st +'_out.png) ' + cursors_pos[st] + ', default !important'});
             $('path').css({cursor: 'url("http://maps.gstatic.com/intl/en_us/mapfiles/openhand_8_8.cur"), default !important'});
-            //this.app.map.map.setOptions({draggableCursor: 'url(/static/img/cursor_' + st +'_out.png) ' + cursors_pos[st] + ', default'});
         },
 
         change_state: function(st) {
@@ -124,7 +122,7 @@ $(function() {
         ),
 
         initialize:function() {
-            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view', 'update_map_layers', 'cell_done', 'go_back', 'open_notes', 'change_cell', 'close_report');
+            _.bindAll(this, 'to_cell', 'start', 'select_mode', 'work_mode', 'change_report', 'compare_view', 'update_map_layers', 'cell_done', 'go_back', 'open_notes', 'change_cell', 'close_report', 'open_settings');
 
             window.loading.loading("Imazon:initialize");
             this.reports = new ReportCollection();
@@ -154,10 +152,12 @@ $(function() {
             this.polygon_tools.compare.bind('state', this.compare_view);
             this.overview.bind('go_back', this.go_back);
             this.overview.bind('open_notes', this.open_notes);
+            this.overview.bind('open_settings', this.open_settings);
             this.overview.bind('done', this.cell_done);
             this.overview.bind('close_report', this.close_report);
             this.user.bind('change:current_cells', this.overview.change_user_cells);
             this.overview.change_user_cells(this.user, this.user.get('current_cells'));
+            this.polygon_tools.bind('polygon_visibility', this.cell_polygons.show_polygons);
             this.ndfi_layer.bind('map_error', function() {
                 show_error("Not enough data available to generate map for this report. After the latest report is generated, map images can take some time to appear.");
             });
@@ -364,18 +364,33 @@ $(function() {
             // init the map
             this.map.map.setCenter(this.amazon_bounds.getCenter());
             this.map.layers.reset(this.available_layers.models);
+
             // enable layer, amazonas bounds
-            this.map.layers.models[0].set_enabled(true);
-            // enable layer, rgb
-            var lay = this.map.layers.get_by_name('rgb');
+            var lay = this.map.layers.get_by_name('Brazil Legal Amazon');
             if(lay) {
                 lay.set_enabled(true);
             }
-            //this.map.change_layer(this.map.layers.models[0]);
+            // enable layer, rgb
+            lay = this.map.layers.get_by_name('rgb');
+            if(lay) {
+                lay.set_enabled(true);
+            }
+            // add a layer to control polygon showing
+            var polygons = new LayerModel({
+                  id: 'polygons',
+                  type: 'fake',
+                  description: 'polygons'
+            });
+            polygons.set_enabled(true);
+            polygons.bind('change', function(layer) {
+                self.cell_polygons.show_polygons(layer.enabled);
+            });
+            this.map.layers.add(polygons);
 
             if(location.hash === '') {
                 router.navigate('cell/0/0/0');
             }
+
             Backbone.history.start();
             window.loading.finished("Imazon: start");
             console.log(" === App started === ");
@@ -400,6 +415,14 @@ $(function() {
                 self.notes_dialog.set_cell(this.gridstack.current_cell);
             }
             self.notes_dialog.open();
+        },
+
+        open_settings: function() {
+            var self = this;
+            if(self.settings_dialog === undefined) {
+                self.settings_dialog = new UsersDialog();
+            }
+            self.settings_dialog.open();
         },
 
         close_report: function() {

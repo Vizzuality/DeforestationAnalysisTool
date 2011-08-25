@@ -1,0 +1,28 @@
+<article id="user_dialog">
+  <div class="notes">
+    <a class="close" href="#">close</a>
+    <h3>Users</h3>
+    <ul>
+    </ul>
+    <form>
+      <div class="left">
+        <label for="user_mail">user mail</label>
+        <input name="user_mail" id="user_mail"></input>
+        <a href="#add_note" class="add_note">ADD USER</a>
+      </div>
+    </form>
+  </div>
+</article>
+
+
+<script type="text/template" id="user-template">
+    <span class="user_name"><%= mail %></span>
+    <% 
+       if (is_admin) {
+        print('<input id="admin_' + id + '" type="checkbox" checked="true" />');
+       } else {
+        print('<input id="admin_' + id + '" type="checkbox" />');
+       }
+    %>
+    <label for="admin_<%= id %>">admin</label>
+</script>

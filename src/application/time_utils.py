@@ -29,3 +29,6 @@ def month_range(month, year):
     end = start + relativedelta(months=1)
     end = date(end.year, end.month, 1) - relativedelta(days=1)
     return (start, end)
+
+def date_from_julian(n, year):
+    return date(year, 1, 1) + relativedelta(days=n)

@@ -317,6 +317,7 @@ var GridStack = Backbone.View.extend({
             });
             this.set_cells(cells);
             this.trigger('select_mode');
+            self.mapview.tile_info('');
         } else {
             this.grid.set_visible_zone(cell_bounds);
             this.el.hide();
@@ -329,7 +330,12 @@ var GridStack = Backbone.View.extend({
             } else {
                 this.trigger('work_mode', x, y, z);
             }
-        }
+            this.current_cell.landstat_info(function(data) {
+                var d = new Date(data.timestamp);
+                var dstr =  d.getUTCFullYear()+'-' + (d.getUTCMonth()+1)+'-' + (d.getUTCDate());
+                self.mapview.tile_info("LANDSAT · path/row: " + data.path + "/" + data.row + " date: " + dstr);
+            });
+         }
     }
 
 });

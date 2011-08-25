@@ -33,7 +33,29 @@ var Cell = Backbone.Model.extend({
 
     url: function() {
         return "/api/v0/report/" + this.get('report_id') + "/cell/" + this.get('z') + "_" + this.get('x') + "_" + this.get('y');
+    },
+
+    // ok, sorry, i'm not going to use backbone sync stuff
+    // only get this information when its needed
+    landstat_info: function(callback) {
+        var self = this;
+        if(self._landstat_info === undefined) {
+            var url = this.url() + "/landsat";
+            $.get(url, function(data) {
+                self._landstat_info = data;
+                self.trigger('landsat_info', self._landsat_info);
+                if(callback) {
+                    callback(data);
+                }
+            });
+        } else {
+            self.trigger('landsat_info', self._landsat_info);
+            if(callback) {
+                callback(self._landstat_info);
+            }
+        }
     }
+
 });
 
 

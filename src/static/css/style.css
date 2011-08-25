@@ -695,9 +695,14 @@ article .example .field {
   background: url("../img/bottom_range_wrapper.png") no-repeat 0 0;
   z-index: 2;
 }
+#header #tools #maptools #slider_wrapper div#display_options {
+  position: absolute;
+  top: 100px;
+  left: 27px;
+}
 #header #tools #maptools #slider_wrapper div#ndfi_slider {
   position: absolute;
-  bottom: 31px;
+  top: 29px;
   left: 27px;
   border: none;
   width: 218px;
@@ -998,6 +1003,31 @@ body, html {
   position: absolute;
   top: 20px;
   right: 20px;
+}
+#workarea .map_container div.tiles_info {
+  font: normal 13px "Arial", "Helvetica", Sans-Serif;
+  bottom: 0;
+  right: 100px;
+  position: absolute;
+  bottom: 0;
+  bottom: -171px;
+  width: 300px;
+  height: 30px;
+  background-color: #FFF;
+  /*border: 3px solid rgba(0, 0, 0, 0.4);*/
+  box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.1);
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-top-left-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-topleft: 3px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+  /*display: none;*/
+  z-index: 10;
+}
+#workarea .map_container div.tiles_info span {
+  padding: 8px 0 0 8px;
+  display: inline-block;
 }
 #workarea .map_container div.zoom_control {
   position: absolute;
@@ -1450,6 +1480,143 @@ article.mamufas div.notes form div.right {
   width: 128px;
 }
 article.mamufas div.notes form div.right h5 {
+  display: block;
+  padding: 0;
+  font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: #333333;
+}
+
+#user_dialog {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}
+#user_dialog div.notes {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 485px;
+  height: 380px;
+  margin: -215px 0 0 -267px;
+  padding: 25px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-radius: 5px;
+  /*border:3px solid rgba(0,0,0,0.5);*/
+  box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.1);
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(white), to(#f3f3f3));
+}
+#user_dialog div.notes a.close {
+  position: absolute;
+  right: 26px;
+  top: 26px;
+  width: 11px;
+  height: 11px;
+  text-indent: -9999px;
+  background: url("../img/close_notes.png") no-repeat 0 0;
+}
+#user_dialog div.notes a.close:hover {
+  background-position: 0 -12px;
+}
+#user_dialog div.notes h3 {
+  width: 100%;
+  padding: 0 0 15px;
+  border-bottom: 1px solid #e5e5e5;
+  font: bold 13px "Droid Sans";
+  color: #333333;
+}
+#user_dialog div.notes ul {
+  width: 100%;
+  height: 219px;
+  border-bottom: 1px solid #e5e5e5;
+}
+#user_dialog div.notes ul li {
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: #333333;
+  display: inline-block;
+  width: 100%;
+  padding: 20px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+#user_dialog div.notes ul li:last-child {
+  border-bottom: none;
+}
+#user_dialog div.notes ul li:first-child {
+  border-bottom: 1px solid #e5e5e5;
+}
+#user_dialog div.notes ul li span.user_name {
+  width: 300px;
+  display: inline-block;
+}
+#user_dialog div.notes form {
+  width: 100%;
+  padding: 22px 0 0 0;
+}
+#user_dialog div.notes form div.left {
+  float: left;
+  width: 334px;
+}
+#user_dialog div.notes form div.left label {
+  font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
+}
+#user_dialog div.notes form div.left input {
+  width: 322px;
+  padding: 5px;
+  margin-top: 5px;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-radius: 4px;
+  background: #F3F3F3;
+  resize: none;
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: #333333;
+}
+#user_dialog div.notes form div.left input:focus {
+  outline: none;
+  border-color: #999999;
+}
+#user_dialog div.notes form div.left a.close_notes {
+  float: left;
+  padding: 29px 0 0 0;
+  font: normal 13px Arial;
+  text-decoration: underline;
+  color: #EA482E;
+}
+#user_dialog div.notes form div.left a.close_notes:hover {
+  color: #B33522;
+}
+#user_dialog div.notes form div.left a.add_note {
+  float: right;
+  height: 12px;
+  width: 93px;
+  margin: 17px 0 0 0;
+  padding: 11px 0 12px;
+  border: 1px solid #999999;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-radius: 3px;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(white), to(#cccccc));
+  font: bold 12px "Helvetica Neue", Arial, Sans-Serif;
+  color: #333333;
+  text-align: center;
+  text-shadow: 0 1px white;
+  text-decoration: none;
+}
+#user_dialog div.notes form div.left a.add_note:hover {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(#cccccc), to(white));
+  color: black;
+}
+#user_dialog div.notes form div.right {
+  float: right;
+  width: 128px;
+}
+#user_dialog div.notes form div.right h5 {
   display: block;
   padding: 0;
   font: bold 13px "Helvetica Neue", Arial, Sans-Serif;

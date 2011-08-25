@@ -146,11 +146,12 @@ var PolygonToolbar = Toolbar.extend({
 
     events: {
         'click #compare': 'none',
-        'click #range': 'none'
+        'click #ndfirange': 'none',
+        'change #polygon_on_off': 'polygon_on_off'
     },
 
     initialize: function() {
-        _.bindAll(this, 'change_state', 'reset');
+        _.bindAll(this, 'change_state', 'reset', 'polygon_on_off');
         this.buttons = new ButtonGroup({el: this.$('#selection')});
         this.polytype = new ButtonGroup({el: this.$('#polytype')});
         this.ndfi_range = new RangeSlider({el: this.$("#ndfi_slider")});
@@ -159,7 +160,12 @@ var PolygonToolbar = Toolbar.extend({
         this.buttons.bind('state', this.change_state);
     },
 
-    none: function(e) { e.preventDefault(); },
+    polygon_on_off: function(e) {
+        var enabled = $(e.target).attr('checked');
+        this.trigger('polygon_visibility', enabled);
+    },
+
+    none: function(e) { e.preventDefault();},
 
     change_state: function(st) {
         this.trigger('state', st);
@@ -186,11 +192,12 @@ var Overview = Backbone.View.extend({
         'click #cancel': 'cancel_report',
         'click #confirm': 'close_report',
         'click #cancel_done': 'cancel_done',
-        'click #confirm_done': 'cell_done'
+        'click #confirm_done': 'cell_done',
+        'click #go_setting': 'open_settings'
     },
 
     initialize: function() {
-        _.bindAll(this, 'done', 'on_cell', 'select_mode', 'go_back', 'set_note_count', 'report_changed', 'cancel_report', 'change_user_cells', 'close_report', 'cancel_done', 'cell_done');
+        _.bindAll(this, 'done', 'on_cell', 'select_mode', 'go_back', 'set_note_count', 'report_changed', 'cancel_report', 'change_user_cells', 'close_report', 'cancel_done', 'cell_done', 'open_settings');
         this.report = this.options.report;
         this.analysed= this.$('#cell_analisys');
         this.$("#analysed_global_final").hide();
@@ -216,6 +223,11 @@ var Overview = Backbone.View.extend({
     open_notes: function(e) {
         e.preventDefault();
         this.trigger('open_notes');
+    },
+
+    open_settings: function(e) {
+        e.preventDefault();
+        this.trigger('open_settings');
     },
 
     go_back: function(e) {

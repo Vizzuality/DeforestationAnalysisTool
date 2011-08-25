@@ -56,7 +56,7 @@ var CellPolygons = Backbone.View.extend({
 
     initialize: function() {
         _.bindAll(this, 'remove', 'add', 'addAll', 'commit', 'click_on_polygon', 'remove_poly',
-        'mouseout', 'mouseover');
+        'mouseout', 'mouseover', 'show_polygons');
         this.mapview = this.options.mapview;
         this.report = this.options.report;
         this.poly_views = [];
@@ -102,6 +102,14 @@ var CellPolygons = Backbone.View.extend({
 
     addAll: function() {
         this.polygons.each(this.add);
+    },
+
+    show_polygons: function(show) {
+        if(show) {
+            this.addAll();
+        } else {
+            this.remove();
+        }
     },
 
     // called when user clicks on polygon

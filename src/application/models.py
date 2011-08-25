@@ -64,7 +64,9 @@ class User(db.Model):
     def as_dict(self):
         return {
                 'id': str(self.key()),
-                'current_cells': self.current_cells
+                'current_cells': self.current_cells,
+                'mail': self.user.email(),
+                'is_admin': self.is_admin()
         }
 
     def as_json(self):
@@ -138,6 +140,7 @@ class Report(db.Model):
         
     def range(self):
         end = datetime.now()
+        end = datetime(2011, 8, 2)
         return tuple(map(timestamp, (self.start, end)))
 
     def __unicode__(self):

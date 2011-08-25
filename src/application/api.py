@@ -25,7 +25,8 @@ ReportAPI.add_custom_url(app, '/api/v0/report/<report_id>/close', 'close', ("POS
 CellAPI.add_urls(app,       '/api/v0/report/<report_id>/cell')
 CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/children', 'children')
 CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/ndfi_change', 'ndfi_change')
-#CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/bounds', 'bounds')
+CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/bounds', 'bounds')
+CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/landsat', 'landsat')
 
 NDFIMapApi.add_urls(app, '/api/v0/report/<report_id>/map')
 PolygonAPI.add_urls(app, '/api/v0/report/<report_id>/cell/<cell_pos>/polygon')
@@ -78,8 +79,8 @@ def ndfi_map():
 @app.route('/api/v0/landstat')
 def landstat():
     e = EELandsat('LANDSAT/L7_L1T')
-    #return jsonify(images=e.list())
-    return jsonify(map=e.mapid())
+    return jsonify(images=e.list())
+    #return jsonify(map=e.mapid())
 
 @app.route('/api/v0/test')
 def testing():
