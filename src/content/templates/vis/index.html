@@ -37,14 +37,14 @@
 
   <!-- map layers -->
   <!--<script src="{{url_for("static", filename="js/controllers/draw_tool.js")}}"></script>-->
-  <!--<script src="{{url_for("static", filename="js/models/layers.js")}}"></script>-->
-  <!--<script src="{{url_for("static", filename="js/controllers/layers.js")}}"></script>-->
+  <script src="{{url_for("static", filename="js/models/layers.js")}}"></script>
+  <script src="{{url_for("static", filename="js/controllers/layers.js")}}"></script>
   <script src="{{url_for("static", filename="js/canvas_tile_layer.js")}}"></script>
   <!--<script src="{{url_for('static',filename='js/models/map_layer.js')}}"></script>-->
   <!--<script src="{{url_for('static',filename='js/controllers/map_layer.js')}}"></script>-->
 
   <!-- map -->
-  <!--<script src="{{url_for('static',filename='js/controllers/map.js')}}"></script>-->
+  <script src="{{url_for('static',filename='js/controllers/map.js')}}"></script>
 
   <!-- polygon -->
   <!--<script src="{{url_for('static',filename='js/models/polygon.js')}}"></script>-->
@@ -62,7 +62,7 @@
   <!--<script src="{{url_for('static',filename='js/controllers/notes.js')}}"></script>-->
 
   <!-- user -->
-  <!--<script src="{{url_for('static',filename='js/models/user.js')}}"></script>-->
+  <script src="{{url_for('static',filename='js/models/user.js')}}"></script>
 
   <!-- loading -->
   <script src="{{url_for('static',filename='js/controllers/loader.js')}}"></script>
@@ -73,38 +73,58 @@
 {% endblock %}
 
 {% block js %}
+    {% include "vis/_initial_data.html" %}
     $(document).ready(function() {
-        window.vis = new Vizzualization();
+        window.app = new Vizzualization();
+        initial_data();
     });
 {% endblock %}
 
 {% block body %}
 
-    <div id="control">
-        <a href='#' id="play">play</a>
-        <div id="timeline"></div>
-        <div id="time">10/2011</div>
-    </div>
+    {% include "vis/_header.html" %}
 
-    <div id="map"></div>
+    <div id="workarea">
+        <!-- map -->
+        <div class="map_container" id="main_map">
+            <div class="map"></div>
+            <!-- zoom-control -->
+            <div class="zoom_control">
+              <a href="#zoom_in" class="zoom_in">zoom_in</a>
+              <a href="#zoom_out" class="zoom_out">zoom_out</a>
+            </div>
+            <!-- end zoom control -->
+            <div class="layer_editor"><img src="/static/img/layers_editor.png"></img></div>
+            <div class="tiles_info"><span></span></div>
+        </div>
 
-    <div id="loading">
-        <span class="loader">
-           <h1>preparing workspace</h1>
-           <p>Loading cells...</p>
-           <img src="/static/img/loading.gif"/>
-        </span>
-    </div>
+        <div id="loading">
+            <span class="loader">
+               <h1>preparing workspace</h1>
+               <p>Loading cells...</p>
+               <img src="/static/img/loading.gif"/>
+            </span>
+        </div>
 
-    <div id="error_dialog">
-        <span class="error_desc">
-           <h1>There has been a problem</h1>
-           <p id="error_text">
-                Some problem has occurred sorry.
-            </p>
-           <button id="ok">ok</button>
-           <!--<a id="cancel" href="#cancel">cancel</a>-->
-        </span>
-    </div>
+        <div id="loading_small">
+            <span class="loader">
+                <img src="/static/img/ajax-loader-small.gif"/>
+                <p>performing operation</p>
+            </span>
+        </div>
+
+        <div id="error_dialog">
+            <span class="error_desc">
+               <h1>There has been a problem</h1>
+               <p id="error_text">
+                    Some problem has occurred sorry.
+                </p>
+               <button id="ok">ok</button>
+               <!--<a id="cancel" href="#cancel">cancel</a>-->
+            </span>
+        </div>
+     </div> <!-- workarea -->
+
+       {% include "vis/_templates.html" %}
 
 {% endblock %}

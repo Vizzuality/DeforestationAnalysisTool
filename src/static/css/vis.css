@@ -358,6 +358,627 @@ article .example .field {
   height: 35px;
 }
 
+.hidden {
+  display: none;
+}
+
+#header {
+  z-index: 19;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background: url("../img/title_bkg.png");
+  -webkit-box-shadow: 0px 0px 5px #000;
+  text-align: center;
+}
+#header a {
+  color: white;
+}
+#header .content {
+  position: relative;
+  text-align: left;
+  /*width: 1024px;*/
+  margin: 0 30px;
+}
+#header #title {
+  border-bottom: 1px solid #000;
+  color: white;
+  height: 84px;
+}
+#header #title a {
+  color: #999999;
+  text-decoration: none;
+}
+#header #title h1 {
+  display: inline-block;
+  height: 13px;
+  margin: 0;
+  padding: 8px 0 8px  78px;
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  background: url("../img/logo.png") no-repeat 0 4px;
+  color: #999999;
+}
+#header #title #intro {
+  padding-top: 27px;
+}
+#header #tools {
+  border-top: 1px solid rgba(51, 51, 51, 0.5);
+  border-bottom: 1px solid #202021;
+  background: rgba(0, 0, 0, 0.5);
+  height: 58px;
+  color: white;
+}
+#header #tools #range_select {
+  padding-top: 20px;
+}
+#header #tools #range_select p {
+  display: inline-block;
+  vertical-align: top;
+  padding: 1px 0 0;
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: #4D575F;
+  text-shadow: 0 1px black;
+}
+#header #tools #range_select p strong {
+  font-weight: bold;
+  color: white;
+}
+#header #tools #range_select a#select_range {
+  display: inline-block;
+  vertical-align: top;
+  width: 19px;
+  height: 19px;
+  text-indent: -9999px;
+  background: url("../img/icons/report.png") no-repeat 0 0;
+}
+#header #tools #range_select a#select_range:hover {
+  background-position: 0 -19px;
+}
+#header #tools #work_toolbar {
+  padding-top: 13px;
+}
+#header #tools #work_toolbar ul, #header #tools #work_toolbar li {
+  display: inline;
+}
+#header #tools #work_toolbar #selection {
+  display: inline-block;
+  width: 120px;
+  height: 29px;
+  padding: 0;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-radius: 3px;
+  box-shadow: 0 1px #2A2C2E;
+  border: 1px solid #000000;
+}
+#header #tools #work_toolbar #selection li {
+  float: left;
+  width: 30px;
+}
+#header #tools #work_toolbar #selection li a {
+  display: block;
+}
+#header #tools #work_toolbar #selection li a#edit {
+  width: 28px;
+  height: 29px;
+  text-indent: -9999px;
+  border-right: 1px solid #3f3d43;
+  border-left: 1px solid #1c1d20;
+  width: 29px;
+  -webkit-border-top-left-radius: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  border-left: none;
+  background: url(../img/icons/tool_icons.png) no-repeat 3px 4px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
+}
+#header #tools #work_toolbar #selection li a#edit:hover {
+  background: url(../img/icons/tool_icons.png) no-repeat 3px 4px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #selection li a#edit.selected {
+  background: url(../img/icons/tool_icons.png) no-repeat 3px 4px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #selection li a#auto {
+  width: 28px;
+  height: 29px;
+  text-indent: -9999px;
+  border-right: 1px solid #3f3d43;
+  border-left: 1px solid #1c1d20;
+  background: url(../img/icons/tool_icons.png) no-repeat -27px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
+}
+#header #tools #work_toolbar #selection li a#auto:hover {
+  background: url(../img/icons/tool_icons.png) no-repeat -27px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #selection li a#auto.selected {
+  background: url(../img/icons/tool_icons.png) no-repeat -27px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #selection li a#draw {
+  width: 28px;
+  height: 29px;
+  text-indent: -9999px;
+  border-right: 1px solid #3f3d43;
+  border-left: 1px solid #1c1d20;
+  background: url(../img/icons/tool_icons.png) no-repeat -57px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
+}
+#header #tools #work_toolbar #selection li a#draw:hover {
+  background: url(../img/icons/tool_icons.png) no-repeat -57px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #selection li a#draw.selected {
+  background: url(../img/icons/tool_icons.png) no-repeat -57px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #selection li a#remove {
+  width: 28px;
+  height: 29px;
+  text-indent: -9999px;
+  border-right: 1px solid #3f3d43;
+  border-left: 1px solid #1c1d20;
+  width: 29px;
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  border-right: none;
+  background: url(../img/icons/tool_icons.png) no-repeat -87px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
+}
+#header #tools #work_toolbar #selection li a#remove:hover {
+  background: url(../img/icons/tool_icons.png) no-repeat -87px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #selection li a#remove.selected {
+  background: url(../img/icons/tool_icons.png) no-repeat -87px 6px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #polytype {
+  display: inline-block;
+  width: 128px;
+  height: 29px;
+  padding: 0;
+  margin: 0 0 0 10px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-radius: 3px;
+  box-shadow: 0 1px #2A2C2E;
+  border: 1px solid #000000;
+}
+#header #tools #work_toolbar #polytype li {
+  float: left;
+  width: 64px;
+}
+#header #tools #work_toolbar #polytype li a {
+  display: block;
+  font: bold 11px "Helvetica Neue","Helvetica",Arial;
+  color: white;
+  text-transform: uppercase;
+  text-shadow: 0 1px #000000;
+  text-decoration: none;
+}
+#header #tools #work_toolbar #polytype li a#def {
+  width: 29px;
+  height: 11px;
+  padding: 9px 9px 9px 24px;
+  -webkit-border-top-left-radius: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  border-right: 1px solid #3f3d43;
+  background: url("../img/icons/color_circles.png") no-repeat 10px 12px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
+}
+#header #tools #work_toolbar #polytype li a#def:hover {
+  background: url("../img/icons/color_circles.png") no-repeat 10px 12px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #polytype li a#def.selected {
+  background: url("../img/icons/color_circles.png") no-repeat 10px 12px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #polytype li a#deg {
+  width: 30px;
+  height: 11px;
+  padding: 9px 9px 9px 24px;
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  background: url("../img/icons/color_circles.png") no-repeat 10px -9px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
+}
+#header #tools #work_toolbar #polytype li a#deg:hover {
+  background: url("../img/icons/color_circles.png") no-repeat 10px -9px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #polytype li a#deg.selected {
+  background: url("../img/icons/color_circles.png") no-repeat 10px -9px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #maptools {
+  float: right;
+  margin: 10px 263px 0 0;
+}
+#header #tools #maptools li {
+  position: relative;
+  width: 116px;
+  margin: 0;
+  padding: 20px 11px;
+}
+#header #tools #maptools li a {
+  font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: white;
+  text-shadow: 0 1px black;
+  padding: 0 25px 3px 0;
+  text-decoration: none;
+}
+#header #tools #maptools li a#compare {
+  background: url("../img/icons/compare.png") no-repeat right 0;
+}
+#header #tools #maptools li a#ndfirange {
+  background: url("../img/icons/range.png") no-repeat right 0;
+}
+#header #tools #maptools li.sep {
+  padding: 0;
+  width: 8px;
+}
+#header #tools #maptools li.sep img {
+  margin-top: -20px;
+  position: relative;
+  top: 10px;
+  padding: 0 3px;
+}
+#header #tools #maptools #compare_li {
+  position: relative;
+}
+#header #tools #maptools div#compare_wrapper {
+  display: none;
+  position: absolute;
+  top: 40px;
+  left: -13px;
+  width: 168px;
+  height: 61px;
+  background: url("../img/bottom_compare_wrapper.png") no-repeat center bottom;
+}
+#header #tools #maptools div#compare_wrapper ul {
+  display: block;
+  margin: 8px 0 0 27px;
+}
+#header #tools #maptools div#compare_wrapper ul li {
+  display: inline-block;
+  height: 28px;
+  width: 29px;
+  padding: 0;
+  margin: 0 13px 0 0;
+}
+#header #tools #maptools div#compare_wrapper ul li a {
+  display: block;
+  width: 27px;
+  height: 27px;
+  padding: 0;
+  margin: 0;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-radius: 3px;
+  text-indent: -9999px;
+}
+#header #tools #maptools div#compare_wrapper ul li a:hover {
+  border-color: black;
+  box-shadow: 0 1px #2A2C2E;
+  cursor: pointer;
+}
+#header #tools #maptools div#compare_wrapper ul li a.selected {
+  border-color: black;
+  box-shadow: 0 1px #2A2C2E;
+  cursor: default;
+}
+#header #tools #maptools div#compare_wrapper ul li a.one {
+  background: url("../img/icons/compare_single.png") center center no-repeat;
+}
+#header #tools #maptools div#compare_wrapper ul li a.two {
+  background: url("../img/icons/compare_two.png") center center no-repeat;
+}
+#header #tools #maptools div#compare_wrapper ul li a.four {
+  background: url("../img/icons/compare_four.png") center center no-repeat;
+}
+#header #tools #maptools #compare_li:hover {
+  background: url("../img/over_header_settings.png") no-repeat -11px 0;
+}
+#header #tools #maptools #compare_li:hover #compare {
+  background-position: right -23px;
+}
+#header #tools #maptools #compare_li:hover #compare_wrapper {
+  display: block;
+}
+#header #tools #maptools #range:hover {
+  background: url("../img/over_header_settings2.png") no-repeat -11px 0;
+}
+#header #tools #maptools #range:hover #ndfirange {
+  background-position: right -30px;
+}
+#header #tools #maptools #range:hover #slider_wrapper {
+  display: block;
+}
+#header #tools #maptools #range {
+  position: relative;
+}
+#header #tools #maptools #slider_wrapper {
+  position: absolute;
+  display: none;
+  top: 40px;
+  right: -13px;
+  width: 273px;
+  height: 61px;
+  background: url("../img/bottom_range_wrapper.png") no-repeat 0 0;
+  z-index: 2;
+}
+#header #tools #maptools #slider_wrapper div#display_options {
+  position: absolute;
+  top: 100px;
+  left: 27px;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_slider {
+  position: absolute;
+  top: 29px;
+  left: 27px;
+  border: none;
+  width: 218px;
+  height: 1px;
+  background: none;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_slider span.hack_red {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  height: 1px;
+  background: red;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_slider p.tooltip {
+  position: absolute;
+  top: -26px;
+  width: 24px;
+  height: 10px;
+  margin: 0 0 0 -7px;
+  padding: 4px 0 10px 1px;
+  background: url("../img/slider_tooltip_bkg.png") no-repeat 0 0;
+  font: normal 10px "Helvetica Neue", Arial, Sans-Serif;
+  color: #CCCCCC;
+  text-align: center;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_slider .ui-slider-handle {
+  top: -6px;
+  width: 13px;
+  height: 14px;
+  background: url("../img/icons/slider_handle.png") no-repeat 0 0;
+  padding: 0;
+  outline: none;
+  border: none;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_slider .ui-slider-handle:focus {
+  outline: none;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_slider .ui-state-focus, #header #tools #maptools #slider_wrapper div#ndfi_slider .ui-state-hover {
+  background-position: 0 -14px;
+  cursor: pointer;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_slider .ui-slider-range {
+  background: #FDCC8A;
+}
+#header #overview {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 200px;
+  height: 113px;
+  padding: 20px;
+  z-index: 10;
+  background: -webkit-gradient(linear, left top, left bottom, from(#f14a30), to(#d14529));
+}
+#header #overview h3 {
+  display: block;
+  padding: 0 0 0 15px;
+  background: url("../img/icons/padlock.png") no-repeat 0 2px;
+  color: #F7C8C0;
+  font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
+  text-shadow: #A03420 0px 1px 0px;
+}
+#header #overview p#cells {
+  display: block;
+  padding: 2px 0 0 0;
+  color: #AC3722;
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  text-shadow: 0 1px #EE6A50;
+}
+#header #overview div.info {
+  display: block;
+  margin: 15px 0 0 0;
+}
+#header #overview div.info p {
+  float: left;
+  width: auto;
+  padding: 0 0 0 12px!important;
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: #96301C;
+  text-shadow: 0 1px #E67F6A;
+  background: url("../img/icons/marker_overview.png") no-repeat 0 2px;
+}
+#header #overview div.info p a {
+  color: #96301C;
+  text-decoration: none;
+}
+#header #overview div.info p a:hover {
+  text-decoration: underline;
+}
+#header #overview div.info a.notes {
+  float: right;
+  padding: 2px 5px 3px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-radius: 3px;
+  background: #C74027;
+  font: normal 10px "Helvetica Neue", Arial, Sans-Serif;
+  color: #FF8873;
+  text-decoration: none;
+}
+#header #overview div.info a.notes:hover {
+  color: white;
+}
+#header #overview #analysed_global_progress {
+  display: inline-block;
+  padding: 10px 0 0 0!important;
+}
+#header #overview #analysed_global_progress #bar {
+  position: relative;
+  float: left;
+  width: 200px;
+  height: 35px;
+  border: 1px solid #333333;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-radius: 5px;
+  box-shadow: 0 1px #F3775E;
+  background: #8D2D19;
+}
+#header #overview #analysed_global_progress #bar #progress {
+  position: absolute;
+  background: -webkit-gradient(linear, left top, left bottom, from(#ebebeb), to(#cccccc));
+  width: 20%;
+  height: 35px;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+}
+#header #overview #analysed_global_progress #bar #progress_number {
+  position: relative;
+  padding: 10px 0 0 10px;
+  font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: #666666;
+  text-shadow: 0 1px white;
+}
+#header #overview div.analysed {
+  display: inline-block;
+  padding: 10px 0 0 0!important;
+}
+#header #overview div.analysed.hidden {
+  display: none;
+}
+#header #overview div.analysed button.finish_button {
+  float: left;
+  width: 200px;
+  height: 35px;
+  padding: 8px 5px 9px 10px;
+  border: 1px solid #333333;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-radius: 5px;
+  box-shadow: 0 1px #F3775E;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(#ebebeb), to(#cccccc));
+}
+#header #overview div.analysed button.finish_button:hover {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(#cccccc), to(#ebebeb));
+}
+#header #overview div.analysed button.finish_button span.separator {
+  float: left;
+  height: 18px;
+  width: 2px;
+  background: url("../img/button_separator.png") no-repeat 0 0;
+}
+#header #overview div.analysed button.finish_button p.stats {
+  float: left;
+  width: 120px;
+  padding: 1px 0 0 0;
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: #666666;
+  text-shadow: 0 1px white;
+  text-align: left;
+}
+#header #overview div.analysed button.finish_button p.stats_progress {
+  width: 101px;
+}
+#header #overview div.analysed button.finish_button p.done {
+  float: right;
+  width: 58px;
+  padding: 1px 0 0 0;
+  font: bold 12px "Helvetica Neue", Arial, Sans-Serif;
+  color: #333333;
+  text-transform: uppercase;
+  text-align: center;
+}
+#header #overview div.analysed button.finish_button p.generate {
+  width: 70px;
+  text-align: left;
+}
+#header #overview #settings {
+  float: right;
+  padding: 2px 0 20px 3px;
+}
+#header #overview #settings:hover #settings_popup {
+  display: block;
+}
+#header #overview #settings #settings_popup {
+  background-color: #CCC;
+  display: none;
+  top: 10px;
+  position: absolute;
+  left: 10px;
+  padding: 10px;
+  width: 203px;
+  height: 77px;
+  background: url("/static/img/bkg_settings_popup.png");
+}
+#header #overview #settings a {
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: 0 1px #812B19;
+  margin-top: 23px;
+  display: inline-block;
+  text-decoration: none;
+  padding-left: 14px;
+}
+#header #overview #settings #logout {
+  float: right;
+  margin-right: 27px;
+  background: url("/static/img/icons/logout.png") no-repeat 0px 1px;
+}
+#header #overview #settings #go_setting {
+  margin-left: 17px;
+  background: url("/static/img/icons/settings.png") no-repeat 0px 3px;
+}
+#header #overview #settings_sep {
+  float: right;
+}
+#header #overview .conf_dialog {
+  /*#confirmation_dialog {*/
+  width: 208px;
+  height: 114px;
+  padding: 30px 20px 20px 20px;
+  position: relative;
+  top: 0px;
+  left: -23px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-radius: 5px;
+  background: url("/static/img/confirmation_bkg.png");
+}
+#header #overview .conf_dialog button {
+  padding: 11px 12px;
+  border: 1px solid #999999;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-radius: 5px;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(white), to(#cccccc));
+  font: bold 12px "Helvetica Neue", Arial, Sans-Serif;
+  color: #333333;
+  text-transform: uppercase;
+  text-align: center;
+}
+#header #overview .conf_dialog button:hover {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(#cccccc), to(#ebebeb));
+}
+#header #overview .conf_dialog a {
+  color: #EA462C;
+  float: right;
+  font: normal 13px "Arial", "Helvetica", Sans-Serif;
+  padding-top: 10px;
+  display: inline-block;
+}
+#header #overview .conf_dialog h3 {
+  width: 100%;
+  padding: 0 0 10px;
+  font: bold 13px "Droid Sans";
+  color: #333333;
+  background: none;
+  text-shadow: none;
+}
+#header #overview .conf_dialog p {
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: #333333;
+  padding: 0 0 15px;
+}
+
 body, html {
   height: 100%;
   overflow: hidden;
@@ -382,6 +1003,31 @@ body, html {
   position: absolute;
   top: 20px;
   right: 20px;
+}
+#workarea .map_container div.tiles_info {
+  font: normal 13px "Arial", "Helvetica", Sans-Serif;
+  bottom: 0;
+  right: 100px;
+  position: absolute;
+  bottom: 0;
+  bottom: -171px;
+  width: 300px;
+  height: 30px;
+  background-color: #FFF;
+  /*border: 3px solid rgba(0, 0, 0, 0.4);*/
+  box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.1);
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-top-left-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-topleft: 3px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+  /*display: none;*/
+  z-index: 10;
+}
+#workarea .map_container div.tiles_info span {
+  padding: 8px 0 0 8px;
+  display: inline-block;
 }
 #workarea .map_container div.zoom_control {
   position: absolute;
@@ -689,35 +1335,4 @@ body, html {
 #grid .cell.hover {
   cursor: pointer;
   border: 4px solid #333;
-}
-
-#map {
-  width: 100%;
-  height: 100%;
-}
-
-#control {
-  position: absolute;
-  bottom: 100px;
-  left: 100px;
-  z-index: 10;
-  width: 420px;
-  padding: 10px 20px;
-  background-color: rgba(255, 255, 255, 0.8);
-}
-#control #play {
-  display: inline-block;
-  margin-right: 20px;
-  background-color: #06c;
-  padding: 5px 8px;
-  color: white;
-  font-weight: bold;
-  text-decoration: none;
-}
-#control #timeline {
-  display: inline-block;
-  width: 250px;
-}
-#control #time {
-  display: inline-block;
 }

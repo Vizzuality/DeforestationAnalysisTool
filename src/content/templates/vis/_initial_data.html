@@ -1,0 +1,53 @@
+ function initial_data() {
+    window.app.user = new User({{user.as_json()|safe}});
+    console.log("=== Initial data loaded == ");
+    var available_maps = [
+        {
+          id: '2',
+          type: 'fusion_tables',
+          table: '304837',
+          select: 'geometry',
+          description: 'Brazil Municipalities Public'
+        },
+        {
+          id: '3',
+          type: 'fusion_tables',
+          table: '304268',
+          select: 'geometry',
+          description: 'Brazil States Public'
+        },
+        {
+          id: '4',
+          type: 'fusion_tables',
+          table: '322554',
+          select: 'geometry',
+          description: 'Brazil Federal Conservation Unit Public'
+        },
+        {
+          id: '5',
+          type: 'fusion_tables',
+          table: '322660',
+          select: 'geometry',
+          description: 'Brazil State Conservation Unit Public'
+        },
+        {
+          id: '1',
+          type: 'fusion_tables',
+          table: '1205151',
+          select: 'geometry',
+          description: 'Brazil Legal Amazon'
+        },
+        {
+          id: '6',
+          type: 'fusion_tables',
+          table: '1089491',
+          select: 'geometry',
+          description: 'polygons'
+        }
+
+     ];
+
+     window.app.available_layers.reset(available_maps);
+
+    }
+
