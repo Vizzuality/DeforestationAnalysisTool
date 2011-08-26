@@ -1,5 +1,5 @@
 application: imazon-prototype
-version: dev
+version: v02
 runtime: python
 api_version: 1
 
