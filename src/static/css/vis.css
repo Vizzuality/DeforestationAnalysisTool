@@ -1336,3 +1336,28 @@ body, html {
   cursor: pointer;
   border: 4px solid #333;
 }
+
+#header #tools #work_toolbar {
+  display: inline-block;
+  width: 200px;
+}
+#header #tools #work_toolbar #selection {
+  width: 90px;
+}
+#header #date_range_select {
+  display: inline-block;
+  width: 200px;
+  float: right;
+  margin: 10px 263px 0 0;
+  position: relative;
+}
+#header #date_range_select:hover #range_selector {
+  display: block;
+}
+#header #date_range_select #range_selector {
+  width: 200px;
+  height: 100px;
+  background: #ccc;
+  display: none;
+  position: absolute;
+}

@@ -52,6 +52,21 @@ var StatiticsInfo = Backbone.View.extend({
     }
 });
 
+var Toolbar = Backbone.View.extend({
+
+    el: $('#tools'),
+    
+    initialize: function() {
+        this.el.show();
+        this.$('#work_toolbar').show();
+    }
+
+});
+
+var MapPopup = Backbone.View.extend({
+
+});
+
 var Vizzualization = Backbone.View.extend({
 
     el: $('body'),
@@ -66,8 +81,11 @@ var Vizzualization = Backbone.View.extend({
     load_map: function() {
         this.map = new MapView({el: this.$("#main_map")});
         this.map.map.setCenter(new google.maps.LatLng(-10.131116841540678,  -51.954345703125));
-        this.stats = new StatiticsInfo();
         this.map.bind('ready', this.start);
+
+        this.stats = new StatiticsInfo();
+
+        this.tools = new Toolbar();
         loader.finished('Vizzualization::initialize');
     },
 

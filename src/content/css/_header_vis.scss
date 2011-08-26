@@ -1,0 +1,37 @@
+
+
+
+
+#header {
+    #tools {
+        #work_toolbar {
+           display: inline-block;
+           width: 200px;
+           #selection {
+              width: 90px;
+           }
+        }
+    }
+    #date_range_select {
+       display: inline-block;
+       width: 200px;
+       float: right;
+       margin:10px 263px 0 0;
+       position: relative;
+
+       #select { }
+       &:hover {
+           #range_selector {
+              display: block;
+           }
+       }
+       #range_selector {
+           width: 200px;
+           height: 100px;
+           background:#ccc;
+           display:none;
+           position: absolute;
+       }
+
+    }
+}
