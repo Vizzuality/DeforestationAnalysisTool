@@ -4,6 +4,6 @@ queue:
 - name: ndfichangevalue
   rate: 5/m
   bucket_size: 100
-  max_concurrent_requests:1
+  max_concurrent_requests:5
   retry_parameters:
     task_age_limit: 1h
