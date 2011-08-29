@@ -79,8 +79,8 @@ def ndfi_map():
 @app.route('/api/v0/landstat')
 def landstat():
     e = EELandsat('LANDSAT/L7_L1T')
-    return jsonify(images=e.list())
-    #return jsonify(map=e.mapid())
+    #return jsonify(images=e.list())
+    return jsonify(map=e.mapid())
 
 @app.route('/api/v0/test')
 def testing():

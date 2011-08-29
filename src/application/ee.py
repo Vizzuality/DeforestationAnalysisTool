@@ -19,12 +19,24 @@ class EELandsat(object):
             return [x['id'] for x in images['data']]
         return []
 
-    def mapid(self):
-        images = self.list()
+    def mapid(self, start, end):
+        MAP_IMAGE1 = {
+            'creator':'LANDSAT/LandsatTOA',
+            'input':'LANDSAT/L7_L1T',
+            'bands':[{'id':'10','data_type':'float'},{'id':'20','data_type':'float'},{'id':'30','data_type':'float'}],
+            'start_time': start,
+            'end_time': end
+        };
+        MAP_IMAGE = {
+             "creator": "SimpleMosaic",
+             "args": [MAP_IMAGE1]
+        }
+        PREVIEW_GAIN = 500;
+        MAP_IMAGE_BANDS = ['30','20','10'];
         cmd = {
-            'image': json.dumps(images[-1]), #json.dumps(lanstat),
-            'bands': '30,20,10',
-            'gain': 1
+            'image': json.dumps(MAP_IMAGE), #json.dumps(lanstat),
+            'bands': ','.join(MAP_IMAGE_BANDS), #'30,20,10',
+            'gain': PREVIEW_GAIN
         }
         return self._execute_cmd("/mapid", cmd)
 
