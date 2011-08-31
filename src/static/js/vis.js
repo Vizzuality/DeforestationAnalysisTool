@@ -1,6 +1,8 @@
 
 var loader = new Loading();
-
+/*
+  =================================
+*/
 var FusionTablesLayer = Backbone.View.extend({
 
     initialize: function() {
@@ -55,7 +57,7 @@ var StatiticsInfo = Backbone.View.extend({
 var Toolbar = Backbone.View.extend({
 
     el: $('#tools'),
-    
+
     initialize: function() {
         this.el.show();
         this.$('#work_toolbar').show();
