@@ -18,7 +18,8 @@ var MapView = Backbone.View.extend({
     },
 
     events: {
-            'click .layer_editor': 'open_layer_editor',
+            'click .layer_raster': 'open_layer_editor',
+            'click .layer_google_maps': 'open_layer_editor',
             'click .zoom_in': 'zoom_in',
             'click .zoom_out': 'zoom_out'
     },
@@ -129,6 +130,31 @@ var MapView = Backbone.View.extend({
         }
     },
 
+    open_google_maps_base_layer_editor: function(e) {
+            e.preventDefault();
+            if(this.layer_editor === undefined) {
+                this.layer_editor = new LayerEditor({
+                    parent: this.el,
+                    layers: this.layers
+                });
+            }
+
+            if(this.layer_editor.showing) {
+                this.layer_editor.close();
+            //'click .layer_google_maps': 'open_layer_editor',
+                var view_bkg = {'background-image': "url('/static/img/layers_editor.png')"};
+                this.$(".layer_raster").css(view_bkg);
+                this.$(".layer_google_maps").css(view_bkg);
+            } else {
+                var view_bkg = {'background-image': "url('/static/img/layer_editor_raster_selected.png')"};
+                this.$(".layer_raster").css(view_bkg);
+                this.$(".layer_google_maps").css(view_bkg);
+                this.trigger('open_layer_editor');
+                this.layer_editor.show(this.$('.layer_editor').position(), this.layer_dialog_pos);
+    
+            }
+    },
+
     open_layer_editor: function(e) {
             e.preventDefault();
             if(this.layer_editor === undefined) {
@@ -140,9 +166,17 @@ var MapView = Backbone.View.extend({
 
             if(this.layer_editor.showing) {
                 this.layer_editor.close();
+            //'click .layer_google_maps': 'open_layer_editor',
+                var view_bkg = {'background-image': "url('/static/img/layers_editor.png')"};
+                this.$(".layer_raster").css(view_bkg);
+                this.$(".layer_google_maps").css(view_bkg);
             } else {
+                var view_bkg = {'background-image': "url('/static/img/layer_editor_raster_selected.png')"};
+                this.$(".layer_raster").css(view_bkg);
+                this.$(".layer_google_maps").css(view_bkg);
                 this.trigger('open_layer_editor');
                 this.layer_editor.show(this.$('.layer_editor').position(), this.layer_dialog_pos);
+    
             }
     },
 

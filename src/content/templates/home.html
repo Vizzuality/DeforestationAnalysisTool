@@ -130,7 +130,7 @@
               description: 'Brazil Legal Amazon'
             }
         );
-        available_maps.splice(0, 0, {
+        /*available_maps.splice(0, 0, {
               id: '6',
               type: 'google_maps',
               map_id: 'TERRAIN',
@@ -156,6 +156,7 @@
               static : true
         });
 
+        */
         window.app.available_layers.reset(available_maps);
 
     }
@@ -178,7 +179,11 @@
               <a href="#zoom_out" class="zoom_out">zoom_out</a>
             </div>
             <!-- end zoom control -->
-            <div class="layer_editor"><img src="/static/img/layers_editor.png"></img></div>
+            <div class="layer_editor">
+                <a href="#" class="layer_raster"></a>
+                <a href="#" class="layer_google_maps"></a>
+                <!--<img src="/static/img/layers_editor.png"></img>-->
+            </div>
             <div class="tiles_info"><span></span></div>
         </div>
 

@@ -1039,7 +1039,20 @@ body, html {
 #workarea .map_container div.layer_editor {
   position: absolute;
   top: 20px;
-  right: 20px;
+  right: 30px;
+  z-index: 21;
+}
+#workarea .map_container div.layer_editor .layer_raster {
+  display: block;
+  width: 22px;
+  height: 23px;
+  background: url("../img/layers_editor.png") no-repeat 0 0;
+}
+#workarea .map_container div.layer_editor .layer_google_maps {
+  display: block;
+  width: 22px;
+  height: 22px;
+  background: url("../img/layers_editor.png") no-repeat 0 -23px;
 }
 #workarea .map_container div.tiles_info {
   font: normal 13px "Arial", "Helvetica", Sans-Serif;
@@ -1093,11 +1106,11 @@ body, html {
 
 #layer_editor_dialog {
   position: absolute;
-  width: 187px;
+  width: 253px;
   height: 254px;
   z-index: 20;
   display: none;
-  background: url("../img/bkg_layer_editor_top.png") no-repeat 0 0;
+  background: url("../img/bkg_layer_editor_raster.png") no-repeat 0 0;
 }
 #layer_editor_dialog .jspVerticalBar {
   right: 13px;
@@ -1114,7 +1127,7 @@ body, html {
 }
 #layer_editor_dialog #layer_bottom {
   position: absolute;
-  top: 229px;
+  top: 225px;
   left: 11px;
   z-index: 20;
   -webkit-border-bottom-right-radius: 3px;
@@ -1126,19 +1139,19 @@ body, html {
   position: relative;
   top: 11px;
   left: 11px;
-  height: 232px;
-  width: 165px;
+  height: 228px;
+  width: 220px;
   overflow: hidden;
 }
 #layer_editor_dialog ul li {
-  width: 133px;
+  width: 188px;
   font-size: 13px;
   color: #626262;
   padding: 13.5px 0 13.5px 23px;
   /*margin-left: 18px;*/
   border-top: 1px solid #FBFBFB;
   border-bottom: 1px solid #CFCFCF;
-  background: url("/static/img/tick_unselected.png") no-repeat 10px 16px;
+  background: url("/static/img/tick_white.png") no-repeat 6px 16px;
 }
 #layer_editor_dialog ul li:first-child {
   border-top: none;
@@ -1147,7 +1160,7 @@ body, html {
   border-bottom: none;
 }
 #layer_editor_dialog ul li.selected {
-  background: url("/static/img/tick_selected.png") no-repeat 10px 16px;
+  background: url("/static/img/tick_white_selected.png") no-repeat 6px 16px;
 }
 #layer_editor_dialog ul li.moving {
   background-color: #E7E7E7;
@@ -1157,11 +1170,11 @@ body, html {
   color: #333333;
 }
 #layer_editor_dialog ul li.sortable a {
-  background: url("/static/img/bkg_layers_drag.png") no-repeat 111px 5px;
+  background: url("/static/img/bkg_layers_drag.png") no-repeat 160px 5px;
 }
 #layer_editor_dialog ul li a {
   display: block;
-  width: 100px;
+  width: 160px;
   padding-right: 20px;
   font: normal 13px "Helvetica Neue";
   color: #666666;
