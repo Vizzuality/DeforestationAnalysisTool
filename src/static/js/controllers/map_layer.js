@@ -25,7 +25,6 @@ var NDFILayer = Backbone.View.extend({
         this.high = 60;
         this.showing = false;
         this.inner_poly_sensibility = 10;
-        this.show_deforestation = 255;
 
         this.ndfimap = new NDFIMap({report_id: this.report.id});
         this.ndfimap.bind('change', this.map_auth);
@@ -52,13 +51,6 @@ var NDFILayer = Backbone.View.extend({
         _.each(classes, function(name) {
             var var_name = 'show_' + name;
             self[var_name] = 255;
-            var def = new LayerModel({
-                  id: var_name,
-                  type: 'fake',
-                  description: 'NDFI/' + name
-            });
-            def.set_enabled(true);
-            self.sub_map_layer.push(def);
         });
     },
 
@@ -67,10 +59,10 @@ var NDFILayer = Backbone.View.extend({
         this.token = this.ndfimap.get('token');
         this.mapid = this.ndfimap.get('mapid');
         this.mapview.layers.add(this.map_layer);
-        _.each(this.sub_map_layer, function(l) {
+        /*_.each(this.sub_map_layer, function(l) {
             l.bind('change', self.class_visibility);
             self.mapview.layers.add(l);
-        });
+        });*/
         // reload tiles
         if(this.showing) {
             this.hide();
@@ -78,8 +70,8 @@ var NDFILayer = Backbone.View.extend({
         }
     },
 
-    class_visibility: function(layer) {
-        this[layer.id] = layer.enabled?255:0;
+    class_visibility: function(layer_id, enabled) {
+        this['show_' + layer_id] = enabled?255:0;
         this.refrest();
     },
 

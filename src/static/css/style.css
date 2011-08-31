@@ -591,7 +591,7 @@ article .example .field {
   font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
   color: white;
   text-shadow: 0 1px black;
-  padding: 0 25px 3px 0;
+  padding: 0 30px 3px 4px;
   text-decoration: none;
 }
 #header #tools #maptools li a#compare {
@@ -608,7 +608,7 @@ article .example .field {
   margin-top: -20px;
   position: relative;
   top: 10px;
-  padding: 0 3px;
+  padding: 0 0px;
 }
 #header #tools #maptools #compare_li {
   position: relative;
@@ -674,7 +674,7 @@ article .example .field {
   display: block;
 }
 #header #tools #maptools #range:hover {
-  background: url("../img/over_header_settings2.png") no-repeat -11px 0;
+  background: url("../img/over_header_settings2.png") no-repeat -12px -4px;
 }
 #header #tools #maptools #range:hover #ndfirange {
   background-position: right -30px;
@@ -690,22 +690,59 @@ article .example .field {
   display: none;
   top: 40px;
   right: -13px;
-  width: 273px;
-  height: 61px;
+  width: 320px;
+  height: 164px;
   background: url("../img/bottom_range_wrapper.png") no-repeat 0 0;
   z-index: 2;
 }
-#header #tools #maptools #slider_wrapper div#display_options {
+#header #tools #maptools #slider_wrapper h3 {
+  font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: rgba(153, 153, 153, 0.9);
+  text-shadow: #000000 0px 1px 0px;
+}
+#header #tools #maptools #slider_wrapper h3#ndfi_text {
   position: absolute;
-  top: 100px;
   left: 27px;
+  top: 13px;
+}
+#header #tools #maptools #slider_wrapper h3#ndfi_visibility_text {
+  position: absolute;
+  left: 27px;
+  top: 60px;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_visibility {
+  position: absolute;
+  top: 80px;
+  left: 27px;
+  width: 265px;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_visibility .class_selector {
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: #777;
+  text-shadow: #000000 0px 1px 0px;
+  padding: 0 0 5px 20px;
+  background: url("../img/check.png") no-repeat 0 3px;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_visibility .class_selector:hover {
+  color: #FFF;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_visibility .check_selected {
+  background: url("../img/check_selected.png") no-repeat 0 3px;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_visibility .left {
+  width: 50%;
+  float: left;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_visibility .right {
+  width: 50%;
+  float: right;
 }
 #header #tools #maptools #slider_wrapper div#ndfi_slider {
   position: absolute;
-  top: 29px;
+  top: 43px;
   left: 27px;
   border: none;
-  width: 218px;
+  width: 266px;
   height: 1px;
   background: none;
 }
