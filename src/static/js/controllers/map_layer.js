@@ -296,6 +296,8 @@ var NDFILayer = Backbone.View.extend({
                             image_data[pixel_pos + 1] = 0;
                             image_data[pixel_pos + 2] = 0;
                             image_data[pixel_pos + 3] = show_deforested;
+                        } else {
+                            image_data[pixel_pos + 3] = 0;
                         }
                     } else {
                         //image_data[pixel_pos + 3] = 255;
