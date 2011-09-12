@@ -205,6 +205,7 @@ $(function() {
 
         compare_view: function(compare_type) {
             var self = this;
+            this.map.close_layer_editor();
             if(compare_type !== 'one') {
                 if(this.compare_layout !== null) {
                     this.compare_view('one');

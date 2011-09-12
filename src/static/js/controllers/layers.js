@@ -28,7 +28,7 @@ var LayerView = Backbone.View.extend({
         e.preventDefault();
         this.model.set_enabled(!this.model.enabled);
     },
-    
+
     changed: function() {
         var enabled = this.model.enabled;
         if(!enabled) {
@@ -38,6 +38,13 @@ var LayerView = Backbone.View.extend({
             $(this.el).addClass('selected');
             //this.trigger('enable', this);
         }
+    }
+});
+
+var GoogleMapsLayerView = LayerView.extend({
+    click: function(e) {
+        e.preventDefault();
+        this.model.set_enabled(true);
     }
 });
 
@@ -117,6 +124,64 @@ var LayerEditor = Backbone.View.extend({
 
     close: function() {
         this.el.hide();//fadeOut(0.1);
+        this.showing = false;
+    }
+
+});
+
+var LayerEditorGoogleMaps = Backbone.View.extend({
+
+    showing: false,
+
+    template: _.template($('#layer-editor-base').html()),
+
+    initialize: function() {
+        _.bindAll(this, 'show', 'addLayer', 'addLayers', 'deselect_layers');
+        var self = this;
+
+        this.item_view_map = {};
+        this.layers = this.options.layers;
+        this.el = $(this.template());
+        this.options.parent.append(this.el);
+        this.addLayers(this.layers);
+        this.layers.trigger('reset');
+    },
+
+    addLayer: function(layer) {
+        if(!layer.hidden) {
+            var ul = this.el.find('ul');
+            layer.bind('change', this.deselect_layers);
+            var view = new GoogleMapsLayerView({model: layer});
+            ul.append(view.render().el);
+            this.item_view_map[view.id] = view;
+        }
+    },
+
+    deselect_layers: function(changed) {
+        //console.log("CHANING" + changed.get('description'));
+        if(changed.enabled) {
+            this.layers.each(function(layer) {
+                if(layer.enabled && layer !== changed) {
+                    //console.log("disabling " + layer.get('description'));
+                    layer.set_enabled(false);
+                }
+            });
+        }
+    },
+
+    addLayers: function(layers) {
+         this.el.find('ul').html('');
+         layers.each(this.addLayer);
+    },
+
+    show: function(pos, side) {
+        this.el.css({top: pos.top - 6 , left: pos.left - this.el.width() + 28});
+        this.el.show();
+        this.showing = true;
+    },
+
+    close: function() {
+        this.el.hide();
         this.showing = false;
     }
 

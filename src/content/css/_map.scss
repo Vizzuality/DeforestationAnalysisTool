@@ -192,6 +192,20 @@ body, html {
     }
 }
 
+#layer_editor_dialog_base {
+    @extend #layer_editor_dialog;
+    background:url('../img/bkg_layer_editor_gmaps.png') no-repeat 0 0;
+    ul {
+        top: 7px;
+        li {
+            background: url('/static/img/tick_unselected.png') no-repeat 6px 16px;
+            &.selected {
+               background:url('/static/img/tick_selected.png') no-repeat 6px 16px;
+            }
+        }
+    }
+}
+
 #loading_small {
     position: absolute;
     left:100px;
@@ -405,3 +419,4 @@ body, html {
         }
     }
 }
+

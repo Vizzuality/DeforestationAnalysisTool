@@ -12,6 +12,9 @@ var LayerModel = Backbone.Model.extend({
         } else {
             this.enabled = false;
         }
+        if(this.get('enabled') === true) {
+            this.set_enabled(true);
+        }
     },
 
     set_enabled: function(b) {
@@ -39,6 +42,21 @@ var LayerCollection = Backbone.Collection.extend({
                 }
             });
             return lay;
+        },
+        // return a new collection 
+        filter_by_type: function(callback) {
+            return new LayerCollection(
+                this.filter(function(layer) {
+                    return callback(layer.get('type'));
+                })
+            );
+        },
+        base_layers: function() {
+            return this.filter_by_type(function(t) { return t === 'google_maps'; });
+        },
+
+        raster_layers: function() {
+            return this.filter_by_type(function(t) { return t !== 'google_maps'; });
         }
 
 });

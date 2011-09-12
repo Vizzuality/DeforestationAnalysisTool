@@ -130,11 +130,12 @@
               description: 'Brazil Legal Amazon'
             }
         );
-        /*available_maps.splice(0, 0, {
+        available_maps.splice(0, 0, {
               id: '6',
               type: 'google_maps',
               map_id: 'TERRAIN',
-              description: 'Terrain'
+              description: 'Terrain',
+              enabled: true
         });
         available_maps.splice(0, 0, {
               id: '7',
@@ -153,10 +154,8 @@
               type: 'google_maps',
               map_id: 'HYBRID',
               description: 'Hybrid',
-              static : true
         });
 
-        */
         window.app.available_layers.reset(available_maps);
 
     }
@@ -228,7 +227,12 @@
         <div id="layer_editor_dialog" class="hidden">
             <img id="layer_top" src="/static/img/layers_top.png"></img>
             <img id="layer_bottom" src="/static/img/layers_bottom.png"></img>
-
+            <ul>
+            </ul>
+        </div>
+   </script>
+   <script type="text/template" id="layer-editor-base">
+        <div id="layer_editor_dialog_base" class="hidden">
             <ul>
             </ul>
         </div>

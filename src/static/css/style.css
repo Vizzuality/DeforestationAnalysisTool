@@ -1104,7 +1104,7 @@ body, html {
   background-position: -22px -22px;
 }
 
-#layer_editor_dialog {
+#layer_editor_dialog, #layer_editor_dialog_base {
   position: absolute;
   width: 253px;
   height: 254px;
@@ -1112,10 +1112,10 @@ body, html {
   display: none;
   background: url("../img/bkg_layer_editor_raster.png") no-repeat 0 0;
 }
-#layer_editor_dialog .jspVerticalBar {
+#layer_editor_dialog .jspVerticalBar, #layer_editor_dialog_base .jspVerticalBar {
   right: 13px;
 }
-#layer_editor_dialog #layer_top {
+#layer_editor_dialog #layer_top, #layer_editor_dialog_base #layer_top {
   position: absolute;
   top: 11px;
   left: 11px;
@@ -1125,7 +1125,7 @@ body, html {
   -moz-border-radius-topright: 3px;
   -moz-border-radius-topleft: 3px;
 }
-#layer_editor_dialog #layer_bottom {
+#layer_editor_dialog #layer_bottom, #layer_editor_dialog_base #layer_bottom {
   position: absolute;
   top: 225px;
   left: 11px;
@@ -1135,7 +1135,7 @@ body, html {
   -moz-border-radius-bottomright: 3px;
   -moz-border-radius-bottomleft: 3px;
 }
-#layer_editor_dialog ul {
+#layer_editor_dialog ul, #layer_editor_dialog_base ul {
   position: relative;
   top: 11px;
   left: 11px;
@@ -1143,7 +1143,7 @@ body, html {
   width: 220px;
   overflow: hidden;
 }
-#layer_editor_dialog ul li {
+#layer_editor_dialog ul li, #layer_editor_dialog_base ul li {
   width: 188px;
   font-size: 13px;
   color: #626262;
@@ -1153,26 +1153,26 @@ body, html {
   border-bottom: 1px solid #CFCFCF;
   background: url("/static/img/tick_white.png") no-repeat 6px 16px;
 }
-#layer_editor_dialog ul li:first-child {
+#layer_editor_dialog ul li:first-child, #layer_editor_dialog_base ul li:first-child {
   border-top: none;
 }
-#layer_editor_dialog ul li:last-child {
+#layer_editor_dialog ul li:last-child, #layer_editor_dialog_base ul li:last-child {
   border-bottom: none;
 }
-#layer_editor_dialog ul li.selected {
+#layer_editor_dialog ul li.selected, #layer_editor_dialog_base ul li.selected {
   background: url("/static/img/tick_white_selected.png") no-repeat 6px 16px;
 }
-#layer_editor_dialog ul li.moving {
+#layer_editor_dialog ul li.moving, #layer_editor_dialog_base ul li.moving {
   background-color: #E7E7E7;
   box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.1);
 }
-#layer_editor_dialog ul li:hover a {
+#layer_editor_dialog ul li:hover a, #layer_editor_dialog_base ul li:hover a {
   color: #333333;
 }
-#layer_editor_dialog ul li.sortable a {
+#layer_editor_dialog ul li.sortable a, #layer_editor_dialog_base ul li.sortable a {
   background: url("/static/img/bkg_layers_drag.png") no-repeat 160px 5px;
 }
-#layer_editor_dialog ul li a {
+#layer_editor_dialog ul li a, #layer_editor_dialog_base ul li a {
   display: block;
   width: 160px;
   padding-right: 20px;
@@ -1181,8 +1181,21 @@ body, html {
   text-shadow: 0 1px white;
   text-decoration: none;
 }
-#layer_editor_dialog ul li a:hover {
+#layer_editor_dialog ul li a:hover, #layer_editor_dialog_base ul li a:hover {
   color: #333333;
+}
+
+#layer_editor_dialog_base {
+  background: url("../img/bkg_layer_editor_gmaps.png") no-repeat 0 0;
+}
+#layer_editor_dialog_base ul {
+  top: 7px;
+}
+#layer_editor_dialog_base ul li {
+  background: url("/static/img/tick_unselected.png") no-repeat 6px 16px;
+}
+#layer_editor_dialog_base ul li.selected {
+  background: url("/static/img/tick_selected.png") no-repeat 6px 16px;
 }
 
 #loading_small {
