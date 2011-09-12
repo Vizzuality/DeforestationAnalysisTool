@@ -203,7 +203,7 @@
                 font:bold 13px $text_font;
                 color:white;
                 text-shadow:0 1px black;
-                padding:0 25px 3px 0;
+                padding:0 30px 3px 4px;
                 text-decoration:none;
 
                 &#compare {
@@ -220,13 +220,13 @@
                 width: 8px;
                 img{
                     margin-top: -20px;
-                    position: relative; 
+                    position: relative;
                     top: 10px;
-                    padding: 0 3px;
+                    padding: 0 0px;
                 }
-                   
+
               }
-                
+
             }
 
             $bkg_slider: #232427;
@@ -300,7 +300,7 @@
             }
 
             #range:hover {
-              background:url('../img/over_header_settings2.png') no-repeat -11px 0;
+              background:url('../img/over_header_settings2.png') no-repeat -12px -4px;
               #ndfirange {
                 background-position:right -30px;
               }
@@ -310,7 +310,7 @@
             }
 
             #range {
-                position: relative;
+              position: relative;
             }
 
             #slider_wrapper {
@@ -318,23 +318,64 @@
               display:none;
               top:40px;
               right:-13px;
-              width:273px;
-              height:61px;
+              width:320px;
+              height:164px;
               background:url('../img/bottom_range_wrapper.png') no-repeat 0 0;
               z-index:2;
 
-              div#display_options {
+
+              h3 {
+                  font:bold 13px $text_font;
+                  color: rgba(153, 153, 153, 0.9);
+                  text-shadow: #000000 0px 1px 0px;
+                  &#ndfi_text {
+                    position:absolute;
+                    left:27px;
+                    top:13px;
+                  }
+                  &#ndfi_visibility_text {
+                    position:absolute;
+                    left:27px;
+                    top:60px;
+                  }
+              }
+
+              div#ndfi_visibility{
                 position:absolute;
-                top:100px;
+                top:80px;
                 left:27px;
+                width: 265px;
+                .class_selector {
+                  font:normal 13px $text_font;
+                  color: #777;
+                  text-shadow: #000000 0px 1px 0px;
+                  padding: 0 0 5px 20px;
+                  background:url('../img/check.png') no-repeat 0 3px;
+                  &:hover {
+                      color: #FFF;
+                  }
+                }
+                .check_selected {
+                    background:url('../img/check_selected.png') no-repeat 0 3px;
+                }
+                .check_unselected {
+                }
+                .left {
+                    width: 50%;
+                    float: left;
+                }
+                .right{
+                    width: 50%;
+                    float: right;
+                }
               }
 
               div#ndfi_slider {
                 position:absolute;
-                top:29px;
+                top:43px;
                 left:27px;
                 border:none;
-                width:218px;
+                width:266px;
                 height:1px;
                 background:none;
 
@@ -580,7 +621,7 @@
             float: right;
         }
 
-        
+
         .conf_dialog {
         /*#confirmation_dialog {*/
             $padding: 20px;

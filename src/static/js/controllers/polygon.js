@@ -132,9 +132,9 @@ var CellPolygons = Backbone.View.extend({
 
     // remove all polygons from map
     remove: function() {
-        _.each(this.poly_views, function(p) {
-            p.remove();
-        });
+        while(this.poly_views.length > 0) {
+            this.poly_views[0].remove();
+        }
     },
 
     commit: function() {

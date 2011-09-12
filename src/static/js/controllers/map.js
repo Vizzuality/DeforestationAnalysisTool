@@ -18,14 +18,15 @@ var MapView = Backbone.View.extend({
     },
 
     events: {
-            'click .layer_editor': 'open_layer_editor',
+            'click .layer_raster': 'open_layer_editor',
+            'click .layer_google_maps': 'open_google_maps_base_layer_editor',
             'click .zoom_in': 'zoom_in',
             'click .zoom_out': 'zoom_out'
     },
     //el: $("#map"),
 
     initialize: function() {
-        _.bindAll(this, 'center_changed', 'ready', 'click', 'set_center', 'reoder_layers', 'open_layer_editor', 'zoom_changed', 'zoom_in', 'zoom_out', 'adjustSize', 'set_zoom_silence', 'set_center_silence', 'close_layer_editor');
+        _.bindAll(this, 'center_changed', 'ready', 'click', 'set_center', 'reoder_layers', 'open_layer_editor', 'zoom_changed', 'zoom_in', 'zoom_out', 'adjustSize', 'set_zoom_silence', 'set_center_silence', 'close_layer_editor', 'open_google_maps_base_layer_editor');
        this.map_layers = {};
        // hide controls until map is ready
        this.hide_controls();
@@ -125,22 +126,64 @@ var MapView = Backbone.View.extend({
     //close layer editor if it's opened
     close_layer_editor: function() {
         if(this.layer_editor !== undefined && this.layer_editor.showing) {
-            this.layer_editor.close();
+            this.open_layer_editor();
+        }
+        if(this.layer_editor_base !== undefined && this.layer_editor_base.showing) {
+            this.open_google_maps_base_layer_editor();
         }
     },
 
-    open_layer_editor: function(e) {
-            e.preventDefault();
-            if(this.layer_editor === undefined) {
-                this.layer_editor = new LayerEditor({
+    open_google_maps_base_layer_editor: function(e) {
+            if(e) e.preventDefault();
+            if(this.layer_editor_base === undefined) {
+                this.layer_editor_base = new LayerEditorGoogleMaps({
                     parent: this.el,
-                    layers: this.layers
+                    layers: this.layers.base_layers()
                 });
             }
 
+
+            if(this.layer_editor_base.showing) {
+                this.layer_editor_base.close();
+                var view_bkg = {'background-image': "url('/static/img/layers_editor.png')"};
+                this.$(".layer_raster").css(view_bkg);
+                this.$(".layer_google_maps").css(view_bkg);
+            } else {
+                if(this.layer_editor !== undefined && this.layer_editor.showing) {
+                    this.open_layer_editor();
+                }
+                var view_bkg = {'background-image': "url('/static/img/layer_editor_google_maps_selected.png')"};
+                this.$(".layer_raster").css(view_bkg);
+                this.$(".layer_google_maps").css(view_bkg);
+                //this.trigger('open_layer_editor_base');
+                this.layer_editor_base.show(this.$('.layer_editor').position(),
+                    this.layer_dialog_pos);
+
+            }
+    },
+
+    open_layer_editor: function(e) {
+            if(e) e.preventDefault();
+            if(this.layer_editor === undefined) {
+                this.layer_editor = new LayerEditor({
+                    parent: this.el,
+                    layers: this.layers.raster_layers()
+                });
+            }
+
+
             if(this.layer_editor.showing) {
                 this.layer_editor.close();
+                var view_bkg = {'background-image': "url('/static/img/layers_editor.png')"};
+                this.$(".layer_raster").css(view_bkg);
+                this.$(".layer_google_maps").css(view_bkg);
             } else {
+                if(this.layer_editor_base !== undefined && this.layer_editor_base.showing) {
+                    this.open_google_maps_base_layer_editor();
+                }
+                var view_bkg = {'background-image': "url('/static/img/layer_editor_raster_selected.png')"};
+                this.$(".layer_raster").css(view_bkg);
+                this.$(".layer_google_maps").css(view_bkg);
                 this.trigger('open_layer_editor');
                 this.layer_editor.show(this.$('.layer_editor').position(), this.layer_dialog_pos);
             }
@@ -165,6 +208,7 @@ var MapView = Backbone.View.extend({
             this.layers.bind('remove', this.reoder_layers);
             this.show_controls();
             this.trigger('ready');
+            this.layers.reset(this.layers.toJSON());
     },
 
     enable_layer: function(idx) {
@@ -189,6 +233,7 @@ var MapView = Backbone.View.extend({
         }
     },*/
 
+    // the next two functions are an EPIC PIECE OF SHIT
     reoder_layers: function() {
         var self = this;
         var idx = 0;

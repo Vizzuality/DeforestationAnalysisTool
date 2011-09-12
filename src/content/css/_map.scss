@@ -23,7 +23,21 @@ body, html {
         div.layer_editor {
             position: absolute;
             top: 20px;
-            right: 20px;
+            right: 30px;
+            z-index: 21;
+            .layer_raster {
+                display: block;
+                width: 22px;
+                height: 23px;
+                background:url('../img/layers_editor.png') no-repeat 0 0;
+            }
+            .layer_google_maps{
+                display: block;
+                width: 22px;
+                height: 22px;
+                background:url('../img/layers_editor.png') no-repeat 0 -23px;
+            }
+
         }
 
         div.tiles_info {
@@ -87,11 +101,11 @@ body, html {
 #layer_editor_dialog {
     $h: 254px;
     position: absolute;
-    width: 187px;
+    width: 253px;
     height: $h;
     z-index: 20;
     display: none;
-    background:url('../img/bkg_layer_editor_top.png') no-repeat 0 0;
+    background:url('../img/bkg_layer_editor_raster.png') no-repeat 0 0;
 
     .jspVerticalBar{
         right: 13px;
@@ -109,7 +123,7 @@ body, html {
     }
     #layer_bottom {
         position: absolute;
-        top: 229px;
+        top: 225px;
         left: 11px;
         z-index: 20;
         -webkit-border-bottom-right-radius: 3px;
@@ -121,12 +135,12 @@ body, html {
         position: relative;
         top: (254px - 232px)/2;
         left: (187px - 165px)/2;
-        height: 232px;
-        width: 165px;
+        height: 228px;
+        width: 220px;
         overflow:hidden;
 
         li {
-            width: 133px;
+            width: 188px;
             $fontsize: 13px;
             font-size: $fontsize;
             color: #626262;
@@ -134,7 +148,7 @@ body, html {
             /*margin-left: 18px;*/
             border-top: 1px solid #FBFBFB;
             border-bottom: 1px solid #CFCFCF;
-            background: url('/static/img/tick_unselected.png') no-repeat 10px 16px;
+            background: url('/static/img/tick_white.png') no-repeat 6px 16px;
 
             &:first-child {
                 border-top: none;
@@ -145,7 +159,7 @@ body, html {
             }
 
             &.selected {
-               background:url('/static/img/tick_selected.png') no-repeat 10px 16px;
+               background:url('/static/img/tick_white_selected.png') no-repeat 6px 16px;
             }
 
             &.moving {
@@ -158,12 +172,12 @@ body, html {
             }
 
             &.sortable a {
-              background:url('/static/img/bkg_layers_drag.png') no-repeat 111px 5px;
+              background:url('/static/img/bkg_layers_drag.png') no-repeat 160px 5px;
             }
 
             a {
               display:block;
-              width:100px;
+              width:160px;
               padding-right: 20px;
               font:normal 13px "Helvetica Neue";
               color:#666666;
@@ -173,6 +187,20 @@ body, html {
               &:hover {
                 color:#333333;
               }
+            }
+        }
+    }
+}
+
+#layer_editor_dialog_base {
+    @extend #layer_editor_dialog;
+    background:url('../img/bkg_layer_editor_gmaps.png') no-repeat 0 0;
+    ul {
+        top: 7px;
+        li {
+            background: url('/static/img/tick_unselected.png') no-repeat 6px 16px;
+            &.selected {
+               background:url('/static/img/tick_selected.png') no-repeat 6px 16px;
             }
         }
     }
@@ -391,3 +419,4 @@ body, html {
         }
     }
 }
+

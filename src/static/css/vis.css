@@ -591,7 +591,7 @@ article .example .field {
   font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
   color: white;
   text-shadow: 0 1px black;
-  padding: 0 25px 3px 0;
+  padding: 0 30px 3px 4px;
   text-decoration: none;
 }
 #header #tools #maptools li a#compare {
@@ -608,7 +608,7 @@ article .example .field {
   margin-top: -20px;
   position: relative;
   top: 10px;
-  padding: 0 3px;
+  padding: 0 0px;
 }
 #header #tools #maptools #compare_li {
   position: relative;
@@ -674,7 +674,7 @@ article .example .field {
   display: block;
 }
 #header #tools #maptools #range:hover {
-  background: url("../img/over_header_settings2.png") no-repeat -11px 0;
+  background: url("../img/over_header_settings2.png") no-repeat -12px -4px;
 }
 #header #tools #maptools #range:hover #ndfirange {
   background-position: right -30px;
@@ -690,22 +690,59 @@ article .example .field {
   display: none;
   top: 40px;
   right: -13px;
-  width: 273px;
-  height: 61px;
+  width: 320px;
+  height: 164px;
   background: url("../img/bottom_range_wrapper.png") no-repeat 0 0;
   z-index: 2;
 }
-#header #tools #maptools #slider_wrapper div#display_options {
+#header #tools #maptools #slider_wrapper h3 {
+  font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: rgba(153, 153, 153, 0.9);
+  text-shadow: #000000 0px 1px 0px;
+}
+#header #tools #maptools #slider_wrapper h3#ndfi_text {
   position: absolute;
-  top: 100px;
   left: 27px;
+  top: 13px;
+}
+#header #tools #maptools #slider_wrapper h3#ndfi_visibility_text {
+  position: absolute;
+  left: 27px;
+  top: 60px;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_visibility {
+  position: absolute;
+  top: 80px;
+  left: 27px;
+  width: 265px;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_visibility .class_selector {
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: #777;
+  text-shadow: #000000 0px 1px 0px;
+  padding: 0 0 5px 20px;
+  background: url("../img/check.png") no-repeat 0 3px;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_visibility .class_selector:hover {
+  color: #FFF;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_visibility .check_selected {
+  background: url("../img/check_selected.png") no-repeat 0 3px;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_visibility .left {
+  width: 50%;
+  float: left;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_visibility .right {
+  width: 50%;
+  float: right;
 }
 #header #tools #maptools #slider_wrapper div#ndfi_slider {
   position: absolute;
-  top: 29px;
+  top: 43px;
   left: 27px;
   border: none;
-  width: 218px;
+  width: 266px;
   height: 1px;
   background: none;
 }
@@ -1002,7 +1039,20 @@ body, html {
 #workarea .map_container div.layer_editor {
   position: absolute;
   top: 20px;
-  right: 20px;
+  right: 30px;
+  z-index: 21;
+}
+#workarea .map_container div.layer_editor .layer_raster {
+  display: block;
+  width: 22px;
+  height: 23px;
+  background: url("../img/layers_editor.png") no-repeat 0 0;
+}
+#workarea .map_container div.layer_editor .layer_google_maps {
+  display: block;
+  width: 22px;
+  height: 22px;
+  background: url("../img/layers_editor.png") no-repeat 0 -23px;
 }
 #workarea .map_container div.tiles_info {
   font: normal 13px "Arial", "Helvetica", Sans-Serif;
@@ -1054,18 +1104,18 @@ body, html {
   background-position: -22px -22px;
 }
 
-#layer_editor_dialog {
+#layer_editor_dialog, #layer_editor_dialog_base {
   position: absolute;
-  width: 187px;
+  width: 253px;
   height: 254px;
   z-index: 20;
   display: none;
-  background: url("../img/bkg_layer_editor_top.png") no-repeat 0 0;
+  background: url("../img/bkg_layer_editor_raster.png") no-repeat 0 0;
 }
-#layer_editor_dialog .jspVerticalBar {
+#layer_editor_dialog .jspVerticalBar, #layer_editor_dialog_base .jspVerticalBar {
   right: 13px;
 }
-#layer_editor_dialog #layer_top {
+#layer_editor_dialog #layer_top, #layer_editor_dialog_base #layer_top {
   position: absolute;
   top: 11px;
   left: 11px;
@@ -1075,9 +1125,9 @@ body, html {
   -moz-border-radius-topright: 3px;
   -moz-border-radius-topleft: 3px;
 }
-#layer_editor_dialog #layer_bottom {
+#layer_editor_dialog #layer_bottom, #layer_editor_dialog_base #layer_bottom {
   position: absolute;
-  top: 229px;
+  top: 225px;
   left: 11px;
   z-index: 20;
   -webkit-border-bottom-right-radius: 3px;
@@ -1085,54 +1135,67 @@ body, html {
   -moz-border-radius-bottomright: 3px;
   -moz-border-radius-bottomleft: 3px;
 }
-#layer_editor_dialog ul {
+#layer_editor_dialog ul, #layer_editor_dialog_base ul {
   position: relative;
   top: 11px;
   left: 11px;
-  height: 232px;
-  width: 165px;
+  height: 228px;
+  width: 220px;
   overflow: hidden;
 }
-#layer_editor_dialog ul li {
-  width: 133px;
+#layer_editor_dialog ul li, #layer_editor_dialog_base ul li {
+  width: 188px;
   font-size: 13px;
   color: #626262;
   padding: 13.5px 0 13.5px 23px;
   /*margin-left: 18px;*/
   border-top: 1px solid #FBFBFB;
   border-bottom: 1px solid #CFCFCF;
-  background: url("/static/img/tick_unselected.png") no-repeat 10px 16px;
+  background: url("/static/img/tick_white.png") no-repeat 6px 16px;
 }
-#layer_editor_dialog ul li:first-child {
+#layer_editor_dialog ul li:first-child, #layer_editor_dialog_base ul li:first-child {
   border-top: none;
 }
-#layer_editor_dialog ul li:last-child {
+#layer_editor_dialog ul li:last-child, #layer_editor_dialog_base ul li:last-child {
   border-bottom: none;
 }
-#layer_editor_dialog ul li.selected {
-  background: url("/static/img/tick_selected.png") no-repeat 10px 16px;
+#layer_editor_dialog ul li.selected, #layer_editor_dialog_base ul li.selected {
+  background: url("/static/img/tick_white_selected.png") no-repeat 6px 16px;
 }
-#layer_editor_dialog ul li.moving {
+#layer_editor_dialog ul li.moving, #layer_editor_dialog_base ul li.moving {
   background-color: #E7E7E7;
   box-shadow: 0 0 3px 3px rgba(0, 0, 0, 0.1);
 }
-#layer_editor_dialog ul li:hover a {
+#layer_editor_dialog ul li:hover a, #layer_editor_dialog_base ul li:hover a {
   color: #333333;
 }
-#layer_editor_dialog ul li.sortable a {
-  background: url("/static/img/bkg_layers_drag.png") no-repeat 111px 5px;
+#layer_editor_dialog ul li.sortable a, #layer_editor_dialog_base ul li.sortable a {
+  background: url("/static/img/bkg_layers_drag.png") no-repeat 160px 5px;
 }
-#layer_editor_dialog ul li a {
+#layer_editor_dialog ul li a, #layer_editor_dialog_base ul li a {
   display: block;
-  width: 100px;
+  width: 160px;
   padding-right: 20px;
   font: normal 13px "Helvetica Neue";
   color: #666666;
   text-shadow: 0 1px white;
   text-decoration: none;
 }
-#layer_editor_dialog ul li a:hover {
+#layer_editor_dialog ul li a:hover, #layer_editor_dialog_base ul li a:hover {
   color: #333333;
+}
+
+#layer_editor_dialog_base {
+  background: url("../img/bkg_layer_editor_gmaps.png") no-repeat 0 0;
+}
+#layer_editor_dialog_base ul {
+  top: 7px;
+}
+#layer_editor_dialog_base ul li {
+  background: url("/static/img/tick_unselected.png") no-repeat 6px 16px;
+}
+#layer_editor_dialog_base ul li.selected {
+  background: url("/static/img/tick_selected.png") no-repeat 6px 16px;
 }
 
 #loading_small {

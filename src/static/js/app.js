@@ -157,7 +157,8 @@ $(function() {
             this.overview.bind('close_report', this.close_report);
             this.user.bind('change:current_cells', this.overview.change_user_cells);
             this.overview.change_user_cells(this.user, this.user.get('current_cells'));
-            this.polygon_tools.bind('polygon_visibility', this.cell_polygons.show_polygons);
+            this.polygon_tools.bind('visibility_change', this.ndfi_layer.class_visibility);
+
             this.ndfi_layer.bind('map_error', function() {
                 show_error("Not enough data available to generate map for this report. After the latest report is generated, map images can take some time to appear.");
             });
@@ -204,6 +205,7 @@ $(function() {
 
         compare_view: function(compare_type) {
             var self = this;
+            this.map.close_layer_editor();
             if(compare_type !== 'one') {
                 if(this.compare_layout !== null) {
                     this.compare_view('one');

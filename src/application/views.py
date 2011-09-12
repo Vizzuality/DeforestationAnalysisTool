@@ -26,14 +26,19 @@ def default_maps():
     r = Report.current()
     logging.info("report " + unicode(r))
     ee_resource = 'MOD09GA'
-    #landsat = EELandsat('LANDSAT/L7_L1T')
+    landsat = EELandsat('LANDSAT/L7_L1T')
     ndfi = NDFI(ee_resource,
         past_month_range(r.start),
         r.range())
 
-    #d = landsat.mapid()
-    #if 'data' in d:
-        #maps.append({'data' :d['data'], 'info': 'LANDSAT/L7_L1T'})
+    d = landsat.mapid(*r.range())
+    if 'data' in d:
+        maps.append({'data' :d['data'], 'info': 'LANDSAT/L7_L1T'})
+    """
+    d = landsat.mapid(*past_month_range(r.start))
+    if 'data' in d:
+        maps.append({'data' :d['data'], 'info': 'LANDSAT/L7_L1T-old'})
+    """
     d = ndfi.mapid()
     if 'data' in d:
         maps.append({'data' :d['data'], 'info': 'ndfi difference'})
