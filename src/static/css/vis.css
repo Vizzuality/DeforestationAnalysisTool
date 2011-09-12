@@ -1424,3 +1424,31 @@ body, html {
   display: none;
   position: absolute;
 }
+#header #overview {
+  background: -webkit-gradient(linear, left top, left bottom, from(#39ad39), to(#2d872c));
+}
+#header #overview h3 {
+  background: url("../img/icons/padlock.png") no-repeat 0 2px;
+  color: #c4e5c4;
+  font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
+  text-shadow: #133D13 0px 1px 0px;
+}
+#header #overview div.info {
+  margin-top: 35px;
+}
+#header #overview div.info p {
+  color: #133D13;
+  text-shadow: 0 1px #47DE44;
+  background: url("../img/icons/marker_overview_green.png") no-repeat 0 2px;
+}
+#header #overview div.analysed button.finish_button {
+  box-shadow: 0 1px #3cb83a;
+}
+#header #overview div.analysed p {
+  padding: 1px 0 0 0;
+  font: bold 12px "Helvetica Neue", Arial, Sans-Serif;
+  color: #333333;
+  text-shadow: #FFF 0px 1px 0px;
+  text-transform: uppercase;
+  text-align: center;
+}

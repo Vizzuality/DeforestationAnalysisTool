@@ -1,7 +1,5 @@
 
 
-
-
 #header {
     #tools {
         #work_toolbar {
@@ -33,5 +31,38 @@
            position: absolute;
        }
 
+    }
+
+
+    #overview {
+        background: -webkit-gradient(linear, left top, left bottom, from(#39AD39), to(#2D872C));
+        h3 {
+          background:url('../img/icons/padlock.png') no-repeat 0 2px;
+          color: rgb(196, 229, 196);
+          font:bold 13px $text_font;
+          text-shadow: #133D13 0px 1px 0px;
+        }
+
+        div.info {
+          margin-top: 35px;
+          p {
+            color:#133D13;
+            text-shadow:0 1px #47DE44;
+            background:url('../img/icons/marker_overview_green.png') no-repeat 0 2px;
+          }
+        }
+        div.analysed {
+          button.finish_button {
+            box-shadow:0 1px rgb(60, 184, 58);
+          }
+          p {
+              padding:1px 0 0 0;
+              font:bold 12px $text_font;
+              color:#333333;
+              text-shadow: #FFF 0px 1px 0px;
+              text-transform:uppercase;
+              text-align:center;
+          }
+        }
     }
 }

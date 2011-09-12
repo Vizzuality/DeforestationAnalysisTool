@@ -48,6 +48,7 @@ class EarthEngine( object ):
         except:
             data = { 'error': { 'type':'Other', 'info':sys.exc_info() } }
         finally:
+            logging.info("ee <- %s" % data)
             return data
 
     def get(self, api, params=None):
