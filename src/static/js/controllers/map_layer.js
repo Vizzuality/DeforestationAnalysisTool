@@ -245,6 +245,15 @@ var NDFILayer = Backbone.View.extend({
         var DEGRADATION_COLOR= [255, 199, 44];
         //var DEGRADATION_COLOR= [247, 119, 87];
         var FOREST_COLOR= [32, 224, 32];
+        var UNCLASSIFIED = 200;
+        var BASELINE = 204;
+        /*
+        FOREST = 201;
+        DEFORESTED = 202;
+        DEGRADED = 203;
+        CLOUD = 205;
+        OLD_DEFORESTATION = 206;
+        */
 
         var show_deforestation = this.show_deforestation;
         var show_degradation = this.show_degradation;
@@ -276,13 +285,13 @@ var NDFILayer = Backbone.View.extend({
                         image_data[pixel_pos + 3] = show_degradation;
                     }
 
-                    if(p > NDFI_ENCODING_LIMIT) {
-                        if (p == 205) { //CLOUD
+                    if(p >= NDFI_ENCODING_LIMIT) {
+                        if (p == UNCLASSIFIED) {
                             image_data[pixel_pos + 0] = 255;
                             image_data[pixel_pos + 1] = 255;
                             image_data[pixel_pos + 2] = 255;
                             image_data[pixel_pos + 3] = 255;
-                        } else {
+                        } else if (p == BASELINE) {
                             image_data[pixel_pos + 0] = 0;
                             image_data[pixel_pos + 1] = 0;
                             image_data[pixel_pos + 2] = 0;
