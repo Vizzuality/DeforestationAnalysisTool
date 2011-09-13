@@ -95,40 +95,9 @@ class NDFI(object):
         }
         return self._execute_cmd('/mapid', cmd)
 
-    def mapid(self):
-        """ return a dict with mapid and token to use in google maps tiles url
-
-            returned dict is like this:
-            {
-              "data": {
-                "token": "a77a0345fce41da72334b29e61c9b8d5",
-                "mapid": "62dc6e8f906a187d323fea768aab6504"
-              }
-            }
-
-            it can be used in google maps
-
-            {{mapid}}/zoom/x/y/?token={{token}}
-        """
-
-        # get image list from those days
-        reference_images = self._images_for_period(self.last_perdiod)
-        work_images = self._images_for_period(self.work_period)
-
-        logging.debug("reference images " + str(reference_images))
-        logging.debug("work images " + str(work_images))
-
-        # get map id from EE
-        cmd = self._NDFI_map_command(
-            reference_images,
-            work_images
-        )
-        return self._execute_cmd('/mapid', cmd)
 
     def freeze_map(self, asset_id, table, report_id):
         """
-        reference_images = self._images_for_period(self.last_perdiod)
-        work_images = self._images_for_period(self.work_period)
         ndfi_image_1 = self._NDFI_image(reference_images)
         ndfi_image_2 = self._NDFI_image(work_images)
         image = self._change_detection_data(reference_images, work_images)
@@ -144,45 +113,26 @@ class NDFI(object):
         }
         return self._execute_cmd('/create', cmd)
 
-
-    """
-    def tag(self):
-        reference_images = self._images_for_period(self.last_perdiod)
-        work_images = self._images_for_period(self.work_period)
-
-        # get map id from EE
-        cmd = self._NDFI_map_command(
-            reference_images,
-            work_images
-        )
-        return self._execute_cmd('/create', cmd)
-    """
-
-
     def rgbid(self):
         """ return params to access NDFI rgb image """
-        work_images = self._images_for_period(self.work_period)
         # get map id from EE
-        params = self._RGB_image_command(work_images)
+        params = self._RGB_image_command(self.work_period)
         return self._execute_cmd('/mapid', params)
 
     def smaid(self):
         """ return params to access NDFI rgb image """
-        work_images = self._images_for_period(self.work_period)
         # get map id from EE
-        params = self._SMA_image_command(work_images)
+        params = self._SMA_image_command(self.work_period)
         return self._execute_cmd('/mapid', params)
 
     def ndfi0id(self):
-        reference_images = self._images_for_period(self.last_perdiod)
         # get map id from EE
-        params = self._NDFI_period_image_command(reference_images)
+        params = self._NDFI_period_image_command(self.last_perdiod)
         return self._execute_cmd('/mapid', params)
 
     def ndfi1id(self):
-        work_images = self._images_for_period(self.work_period)
         # get map id from EE
-        params = self._NDFI_period_image_command(work_images)
+        params = self._NDFI_period_image_command(self.work_period)
         return self._execute_cmd('/mapid', params)
 
     def _get_polygon_bbox(self, polygon):
@@ -224,16 +174,9 @@ class NDFI(object):
                 #raise Exception("polygon bbox size must be less than 3 degrees")
                 pass
 
-        # get image list from those days
-        reference_images = self._images_for_period(self.last_perdiod)
-        work_images = self._images_for_period(self.work_period)
-
-        logging.debug("reference images " + str(reference_images))
-        logging.debug("work images " + str(work_images))
-
         cmd = self._NDFI_change_value(
-            reference_images,
-            work_images,
+            self.last_perdiod,
+            self.work_period,
             polygons,
             rows,
             cols
@@ -271,7 +214,7 @@ class NDFI(object):
         return specs;
 
 
-    def _NDFI_image(self, image_list):
+    def _NDFI_image(self, period):
         """ given image list from EE, returns the operator chain to return NDFI image """
         return {
             "creator": 'SAD/com.google.earthengine.examples.sad.NDFIImage',
@@ -281,15 +224,15 @@ class NDFI(object):
                 "creator": 'SAD/com.google.earthengine.examples.sad.KrigingStub',
                 "args": [{
                   "creator": 'SAD/com.google.earthengine.examples.sad.MakeMosaic',
-                  "args": [self._image_composition(image_list), self.MODIS_BANDS]
+                  "args": ["MODIS/MOD09GA","MODIS/MOD09GQ", period['start'], period['end']]
                 }]
               }]
             }]
          }
 
-    def _change_detection_data(self, reference_images, work_images, polygons=[], cols=10, rows=10):
-        ndfi_image_1 = self._NDFI_image(reference_images)
-        ndfi_image_2 = self._NDFI_image(work_images)
+    def _change_detection_data(self, reference_period, work_period, polygons=[], cols=10, rows=10):
+        ndfi_image_1 = self._NDFI_image(reference_period)
+        ndfi_image_2 = self._NDFI_image(work_period)
         return {
                "creator": 'sad_test/com.google.earthengine.examples.sad.ChangeDetectionData',
                "args": [ndfi_image_1,
@@ -301,7 +244,7 @@ class NDFI(object):
         }
 
 
-    def _NDFI_change_value(self, reference_images, work_images, polygons, cols=10, rows=10):
+    def _NDFI_change_value(self, reference_period, work_period, polygons, cols=10, rows=10):
         """ calc the ndfi change value between two periods inside specified polys
 
             ``polygons`` are a list of closed polygons defined by lat, lon::
@@ -315,30 +258,15 @@ class NDFI(object):
         POLY = []
         fields = []
 
-        image = self._change_detection_data(reference_images, work_images, [polygons], cols, rows)
+        image = self._change_detection_data(reference_period, work_period, [polygons], cols, rows)
         return {
             "image": json.dumps(image),
             "fields": 'ndfiSum'#','.join(fields)
         }
 
-    def _NDFI_map_command(self, reference_images, work_images):
-        """ returns command to send to EE to get map token """
-        ndfi_image_1 = self._NDFI_image(reference_images)
-        ndfi_image_2 = self._NDFI_image(work_images)
-        dummy = 0
-        image = self._change_detection_data(reference_images, work_images)
-        return {
-            "image": json.dumps(image),
-            "bands": 'ndfi_delta',
-            "format": 'png',
-            "gain": 1,
-            "bias": 0.0,
-            "gamma": 1.6
-        }
-
-    def _NDFI_period_image_command(self, reference_images):
+    def _NDFI_period_image_command(self, period):
         """ get NDFI command to get map of NDFI for a period of time """
-        ndfi_image = self._NDFI_image(reference_images)
+        ndfi_image = self._NDFI_image(period)
         return {
             "image": json.dumps(ndfi_image),
             "bands": 'vis-red,vis-green,vis-blue',
@@ -347,14 +275,14 @@ class NDFI(object):
             "gamma": 1.6
         }
 
-    def _RGB_image_command(self, image_list):
+    def _RGB_image_command(self, period):
         """ commands for RGB image """
         return {
             "image": json.dumps({
                "creator": 'SAD/com.google.earthengine.examples.sad.KrigingStub',
                "args": [{
                 "creator": 'SAD/com.google.earthengine.examples.sad.MakeMosaic',
-                "args": [self._image_composition(image_list), self.MODIS_BANDS]
+                  "args": ["MODIS/MOD09GA","MODIS/MOD09GQ", period['start'], period['end']]
               }]
             }),
             "bands": 'sur_refl_b01,sur_refl_b04,sur_refl_b03',
@@ -363,7 +291,7 @@ class NDFI(object):
             "gamma": 1.6
           };
 
-    def _SMA_image_command(self, image_list):
+    def _SMA_image_command(self, period):
         return {
             "image": json.dumps({
               "creator": 'SAD/com.google.earthengine.examples.sad.UnmixModis',
@@ -371,7 +299,7 @@ class NDFI(object):
                 "creator": 'SAD/com.google.earthengine.examples.sad.KrigingStub',
                 "args": [{
                   "creator": 'SAD/com.google.earthengine.examples.sad.MakeMosaic',
-                  "args": [self._image_composition(image_list), self.MODIS_BANDS]
+                  "args": ["MODIS/MOD09GA","MODIS/MOD09GQ", period['start'], period['end']]
                 }]
               }]
             }),

@@ -39,9 +39,9 @@ def default_maps():
     if 'data' in d:
         maps.append({'data' :d['data'], 'info': 'LANDSAT/L7_L1T-old'})
     """
-    d = ndfi.mapid()
-    if 'data' in d:
-        maps.append({'data' :d['data'], 'info': 'ndfi difference'})
+    #d = ndfi.mapid2()
+    #if 'data' in d:
+        #maps.append({'data' :d['data'], 'info': 'ndfi difference'})
     d = ndfi.smaid()
     if 'data' in d:
         maps.append({'data': d['data'], 'info': 'sma'})
