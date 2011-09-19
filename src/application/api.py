@@ -85,11 +85,15 @@ def landstat():
 @app.route('/api/v0/test')
 def testing():
     r = Report.current()
-    r = Report.get(Key('ahBpbWF6b24tcHJvdG90eXBlcg4LEgZSZXBvcnQYiaECDA'))
+    #r = Report.get(Key('ahBpbWF6b24tcHJvdG90eXBlcg4LEgZSZXBvcnQYiaECDA'))
     logging.info("report " + unicode(r))
     ee_resource = 'MOD09GA'
     ndfi = NDFI(ee_resource,
             r.comparation_range(),
             r.range())
+    return jsonify(ndfi._execute_cmd("/value", {
+        "image": json.dumps({"creator":"SAD/com.google.earthengine.examples.sad.GetStats","args":[{"creator":"SAD/com.google.earthengine.examples.sad.ProdesImage","args":["PRODES_IMAZON_2011a"]},{"type":"FeatureCollection","table_id":1505198},"name"]}),
+        "fields": "classHistogram"
+    }))
     #return str(ndfi.mapid2())
-    return str(ndfi.freeze_map(1089491, r.key().id()))
+    #return str(ndfi.freeze_map(1089491, r.key().id()))
