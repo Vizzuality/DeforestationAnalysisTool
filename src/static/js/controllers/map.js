@@ -138,7 +138,7 @@ var MapView = Backbone.View.extend({
             if(this.layer_editor_base === undefined) {
                 this.layer_editor_base = new LayerEditorGoogleMaps({
                     parent: this.el,
-                    layers: this.layers.base_layers()
+                    layers: this.layers
                 });
             }
 
@@ -167,7 +167,7 @@ var MapView = Backbone.View.extend({
             if(this.layer_editor === undefined) {
                 this.layer_editor = new LayerEditor({
                     parent: this.el,
-                    layers: this.layers.raster_layers()
+                    layers: this.layers
                 });
             }
 
@@ -208,7 +208,7 @@ var MapView = Backbone.View.extend({
             this.layers.bind('remove', this.reoder_layers);
             this.show_controls();
             this.trigger('ready');
-            this.layers.reset(this.layers.toJSON());
+            this.layers.trigger('reset');
     },
 
     enable_layer: function(idx) {

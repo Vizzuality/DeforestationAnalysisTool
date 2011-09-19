@@ -41,6 +41,30 @@ var LayerView = Backbone.View.extend({
     }
 });
 
+var SwitchLayerView = LayerView.extend({
+
+    initialize: function() {
+        _.bindAll(this, 'render', 'click', 'changed');
+        this.model.bind('change', this.changed);
+    },
+
+    render: function() {
+        this.constructor.__super__.render.call(this);
+        $(this.el).addClass('switch');
+        this.changed();
+        return this;
+    },
+
+    changed: function() {
+        var enabled = this.model.enabled;
+        if(!enabled) {
+            $(this.el).removeClass('on');
+        } else {
+            $(this.el).addClass('on');
+        }
+    }
+});
+
 var GoogleMapsLayerView = LayerView.extend({
     click: function(e) {
         e.preventDefault();
@@ -100,7 +124,11 @@ var LayerEditor = Backbone.View.extend({
     addLayer: function(layer) {
         if(!layer.hidden) {
             var ul = this.el.find('ul');
-            var view = new LayerView({model: layer});
+            if(layer.get('color') !== undefined) {
+                var view = new SwitchLayerView({model: layer});
+            } else {
+                var view = new LayerView({model: layer});
+            }
             ul.append(view.render().el);
             this.item_view_map[view.id] = view;
         }
@@ -108,7 +136,7 @@ var LayerEditor = Backbone.View.extend({
 
     addLayers: function(layers) {
          this.el.find('ul').html('');
-         layers.each(this.addLayer);
+         layers.raster_layers().each(this.addLayer);
     },
 
     show: function(pos, side) {
@@ -160,7 +188,7 @@ var LayerEditorGoogleMaps = Backbone.View.extend({
     deselect_layers: function(changed) {
         //console.log("CHANING" + changed.get('description'));
         if(changed.enabled) {
-            this.layers.each(function(layer) {
+            this.layers.base_layers().each(function(layer) {
                 if(layer.enabled && layer !== changed) {
                     //console.log("disabling " + layer.get('description'));
                     layer.set_enabled(false);
@@ -171,7 +199,7 @@ var LayerEditorGoogleMaps = Backbone.View.extend({
 
     addLayers: function(layers) {
          this.el.find('ul').html('');
-         layers.each(this.addLayer);
+         layers.base_layers().each(this.addLayer);
     },
 
     show: function(pos, side) {

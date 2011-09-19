@@ -20,6 +20,7 @@ var LayerModel = Backbone.Model.extend({
     set_enabled: function(b) {
         if(!this._static) {
             this.enabled = b;
+            this.set({'enabled': this.enabled});
             this.trigger('change', this);
         }
     }
@@ -45,11 +46,9 @@ var LayerCollection = Backbone.Collection.extend({
         },
         // return a new collection 
         filter_by_type: function(callback) {
-            return new LayerCollection(
-                this.filter(function(layer) {
+            return _(this.filter(function(layer) {
                     return callback(layer.get('type'));
-                })
-            );
+                   }));
         },
         base_layers: function() {
             return this.filter_by_type(function(t) { return t === 'google_maps'; });
