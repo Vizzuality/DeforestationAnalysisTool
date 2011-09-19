@@ -65,9 +65,6 @@ var Toolbar = Backbone.View.extend({
 
 });
 
-var MapPopup = Backbone.View.extend({
-
-});
 
 var Vizzualization = Backbone.View.extend({
 
@@ -88,13 +85,14 @@ var Vizzualization = Backbone.View.extend({
         this.stats = new StatiticsInfo();
 
         this.tools = new Toolbar();
+        this.popup = new MapPopup();
         loader.finished('Vizzualization::initialize');
     },
 
     start: function() {
         // load layers in map
         this.map.layers.reset(this.available_layers.models);
-        this.map.layers.get_by_name('Brazil Legal Amazon').set_enabled(true);
+        this.map.layers.get_by_name('Legal Amazon').set_enabled(true);
         var polygon_layer = this.map.layers.get_by_name('polygons');
         this.polygons_layer = new FusionTablesLayer({
             mapview: this.map,
@@ -105,11 +103,9 @@ var Vizzualization = Backbone.View.extend({
     },
 
     polygon_click: function(row) {
-        this.stats.set_info(10, 20);
-        this.stats.set_location('polygon (' + row.latLng.lat().toFixed(3) + "," + row.latLng.lng().toFixed(3) + ")");
+        this.popup.showAt(row.latLng);
+        //this.stats.set_info(10, 20);
+        //this.stats.set_location('polygon (' + row.latLng.lat().toFixed(3) + "," + row.latLng.lng().toFixed(3) + ")");
     }
-
-
-
 
 });

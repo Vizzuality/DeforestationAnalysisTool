@@ -67,6 +67,8 @@
   <!-- loading -->
   <script src="{{url_for('static',filename='js/controllers/loader.js')}}"></script>
 
+  <!-- popup -->
+  <script src="{{url_for('static',filename='js/vis/popup.js')}}"></script>
   <!-- app -->
   <script src="{{url_for('static',filename='js/vis.js')}}"></script>
 
@@ -94,9 +96,20 @@
               <a href="#zoom_out" class="zoom_out">zoom_out</a>
             </div>
             <!-- end zoom control -->
-            <div class="layer_editor"><img src="/static/img/layers_editor.png"></img></div>
+            <div class="layer_editor">
+                <a href="#" class="layer_raster"></a>
+                <a href="#" class="layer_google_maps"></a>
+                <!--<img src="/static/img/layers_editor.png"></img>-->
+            </div>
             <div class="tiles_info"><span></span></div>
-            <div id="popup"></div>
+            <div id="popup">
+                <h1><h1>
+                <span class="area"></span>
+                <div>
+                    <span class="area_def"></span>
+                    <span class="area_deg"></span>
+                </div>
+            </div>
         </div>
 
         <div id="loading">

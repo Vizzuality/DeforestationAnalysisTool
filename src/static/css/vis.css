@@ -1452,3 +1452,25 @@ body, html {
   text-transform: uppercase;
   text-align: center;
 }
+
+.map_container #popup {
+  position: absolute;
+  width: 213px;
+  height: 172px;
+  top: 0;
+  display: none;
+  background: url("../img/vis_bkg_popup.png") no-repeat 0 0;
+}
+
+#layer_editor_dialog ul li.switch, #layer_editor_dialog_base ul li.switch {
+  background: url("../img/icons/switch_disabled.png") no-repeat 6px 10px;
+  padding-left: 50px;
+  width: 161px;
+}
+#layer_editor_dialog ul li.switch a, #layer_editor_dialog_base ul li.switch a {
+  width: 133px;
+  background: url("/static/img/bkg_layers_drag.png") no-repeat 133px 5px !important;
+}
+#layer_editor_dialog ul li.on, #layer_editor_dialog_base ul li.on {
+  background: url("../img/icons/switch_enabled.png") no-repeat 6px 10px;
+}
