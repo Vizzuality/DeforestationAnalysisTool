@@ -9,11 +9,73 @@
         height: 172px;
         top: 0;
         display: none;
+        z-index: 100;
 
         background: url('../img/vis_bkg_popup.png') no-repeat 0 0;
-        h1 {
-        }
-        .area {
+        #popup_content {
+            position: relative;
+            padding: 16px;
+            font: normal 13px $text_font;
+            text-shadow:0 1px #FFF;
+            color: #666666;
+
+            #popup_close {
+                display: block;
+                position: absolute;
+                top: 8px;
+                left: 185px;
+            }
+            .area_metric {
+                text-transform: uppercase;
+                font-size: 9px;
+                margin-left: 3px;
+            }
+            h1 {
+                color: #333333;
+                font-weight: bold;
+                text-transform: uppercase;
+                margin-bottom: 3px;
+            }
+            .area {
+                text-transform: uppercase;
+            }
+
+            #area_report {
+                margin-top: 17px;
+                .area_metric {
+                    font-weight: bold;
+                }
+                #deg {
+                    width: 50%;
+                    float: left;
+                }
+                #def {
+                    width: 50%;
+                    float: right;
+                }
+                .qty {
+                    font-size: 18px;
+                    font-weight: bold;
+                }
+
+                .type {
+                    text-transform: uppercase;
+                    font-size: 10px;
+                    line-height:5px;
+                }
+            }
+            button {
+                float: right;
+                margin: 17px 8px 0 0px;
+                padding:5px 10px;
+                border:1px solid #AAA;
+                @include border-radius(3px);
+                background:-webkit-gradient(linear,50% 0%,50% 100%,from(#FFFFFF),to(#EEE));
+                font:bold 11px $text_font;
+                color:#333333;
+                text-transform:uppercase;
+                text-align:center;
+            }
         }
     }
 }

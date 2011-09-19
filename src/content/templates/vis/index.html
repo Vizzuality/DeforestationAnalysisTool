@@ -103,12 +103,25 @@
             </div>
             <div class="tiles_info"><span></span></div>
             <div id="popup">
-                <h1><h1>
-                <span class="area"></span>
-                <div>
-                    <span class="area_def"></span>
-                    <span class="area_deg"></span>
-                </div>
+                <div id="popup_content">
+                    <a id="popup_close" href="#"><img src="/static/img/icons/popup_close.png"></img></a>
+                    <h1></h1>
+                    <div>
+                        <span class="area"></span>
+                        <span class="area_metric">km<sup>2</sup></span>
+                    </div>
+                    <div id="area_report">
+                        <div id="deg">
+                            <span class="area_def qty"></span><span class="area_metric">km<sup>2</sup></span>
+                            <div class="type">degradated</div>
+                        </div>
+                        <div id="def">
+                            <span class="area_deg qty"></span><span class="area_metric">km<sup>2</sup></span>
+                            <div class="type">deforestated</div>
+                        </div>
+                    </div>
+                    <button>report</button>
+                </div> <!-- popup_content -->
             </div>
         </div>
 

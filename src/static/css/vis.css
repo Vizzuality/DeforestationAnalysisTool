@@ -1459,7 +1459,72 @@ body, html {
   height: 172px;
   top: 0;
   display: none;
+  z-index: 100;
   background: url("../img/vis_bkg_popup.png") no-repeat 0 0;
+}
+.map_container #popup #popup_content {
+  position: relative;
+  padding: 16px;
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  text-shadow: 0 1px #FFF;
+  color: #666666;
+}
+.map_container #popup #popup_content #popup_close {
+  display: block;
+  position: absolute;
+  top: 8px;
+  left: 185px;
+}
+.map_container #popup #popup_content .area_metric {
+  text-transform: uppercase;
+  font-size: 9px;
+  margin-left: 3px;
+}
+.map_container #popup #popup_content h1 {
+  color: #333333;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.map_container #popup #popup_content .area {
+  text-transform: uppercase;
+}
+.map_container #popup #popup_content #area_report {
+  margin-top: 17px;
+}
+.map_container #popup #popup_content #area_report .area_metric {
+  font-weight: bold;
+}
+.map_container #popup #popup_content #area_report #deg {
+  width: 50%;
+  float: left;
+}
+.map_container #popup #popup_content #area_report #def {
+  width: 50%;
+  float: right;
+}
+.map_container #popup #popup_content #area_report .qty {
+  font-size: 18px;
+  font-weight: bold;
+}
+.map_container #popup #popup_content #area_report .type {
+  text-transform: uppercase;
+  font-size: 10px;
+  line-height: 5px;
+}
+.map_container #popup #popup_content button {
+  float: right;
+  margin: 17px 8px 0 0px;
+  padding: 5px 10px;
+  border: 1px solid #AAA;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-radius: 3px;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(white), to(#eeeeee));
+  font: bold 11px "Helvetica Neue", Arial, Sans-Serif;
+  color: #333333;
+  text-transform: uppercase;
+  text-align: center;
 }
 
 #layer_editor_dialog ul li.switch, #layer_editor_dialog_base ul li.switch {

@@ -10,23 +10,12 @@ var FusionTablesLayer = Backbone.View.extend({
         var self = this;
         this.mapview = this.options.mapview;
         this.google_maps_layer = this.options.layer;
-        /*= new google.maps.FusionTablesLayer({
-              query: {
-                select: 'geometry',
-                from:  '1089491'
-              }
-        });
-        */
         this.google_maps_layer.setOptions({suppressInfoWindows: true});
-        //this.google_maps_layer.setMap(this.mapview.map);
-
 
         google.maps.event.addListener(this.google_maps_layer, "click", function(event) {
             self.click_on_polygon(event);
         });
 
-        //this.google_maps_layer.setMap(this.mapview.map);
-        //this.mapview.layers.add(this.layer);
     },
 
     click_on_polygon: function(poly) {
@@ -66,6 +55,12 @@ var Toolbar = Backbone.View.extend({
 });
 
 
+/*
+ =======================
+ main app
+ =======================
+*/
+
 var Vizzualization = Backbone.View.extend({
 
     el: $('body'),
@@ -92,18 +87,28 @@ var Vizzualization = Backbone.View.extend({
     start: function() {
         // load layers in map
         this.map.layers.reset(this.available_layers.models);
+
+        // show default layers
         this.map.layers.get_by_name('Legal Amazon').set_enabled(true);
-        var polygon_layer = this.map.layers.get_by_name('polygons');
-        this.polygons_layer = new FusionTablesLayer({
+        this.map.layers.get_by_name('polygons').set_enabled(true);
+
+        //TODO: debug, remove
+        this.map.layers.get_by_name('State Conservation').set_enabled(true);
+        this.prepare_ft_layers();
+    },
+
+    // add click listener to fusion tables layers
+    prepare_ft_layers: function() {
+        this.state_conservation_layer = new FusionTablesLayer({
             mapview: this.map,
-            layer: polygon_layer.map_layer
+            layer: this.map.layers.get_by_name('State Conservation').map_layer
         });
-        polygon_layer.set_enabled(true);
-        this.polygons_layer.bind('polygon_click', this.polygon_click);
+        this.state_conservation_layer.bind('polygon_click', this.polygon_click);
     },
 
     polygon_click: function(row) {
-        this.popup.showAt(row.latLng);
+        var pos = this.map.projector.transformCoordinates(row.latLng);
+        this.popup.showAt(pos, "goiania", '23.291', '1.291', '293');
         //this.stats.set_info(10, 20);
         //this.stats.set_location('polygon (' + row.latLng.lat().toFixed(3) + "," + row.latLng.lng().toFixed(3) + ")");
     }
