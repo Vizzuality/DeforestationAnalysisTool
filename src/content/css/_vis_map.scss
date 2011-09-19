@@ -1,0 +1,38 @@
+
+
+
+
+.map_container {
+    #popup {
+        position: absolute;
+        width: 213px;
+        height: 172px;
+        top: 0;
+        display: none;
+
+        background: url('../img/vis_bkg_popup.png') no-repeat 0 0;
+        h1 {
+        }
+        .area {
+        }
+    }
+}
+
+#layer_editor_dialog {
+    ul {
+        li {
+            &.switch {
+                background: url('../img/icons/switch_disabled.png') no-repeat 6px 10px;
+                padding-left: 50px;
+                width: 188 - 50 + 23px;
+                a {
+                    width:160px - 27px;
+                    background:url('/static/img/bkg_layers_drag.png') no-repeat 133px 5px !important;
+                }
+            }
+            &.on {
+                background: url('../img/icons/switch_enabled.png') no-repeat 6px 10px;
+            }
+        }
+    }
+}
