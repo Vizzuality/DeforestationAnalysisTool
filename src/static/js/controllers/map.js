@@ -214,25 +214,6 @@ var MapView = Backbone.View.extend({
     enable_layer: function(idx) {
     },
 
-    /*change_layer: function(layer) {
-        var self = this;
-        if(layer.enabled) {
-            if(layer.get('type') === 'fusion_tables') {
-                layer.map_layer.setMap(self.map);
-            }
-            else {
-                //self.map.overlayMapTypes.insertAt(layer.map_position, layer.map_layer);
-                self.map.overlayMapTypes.insertAt(0, layer.map_layer);
-            }
-        } else {
-            if(layer.get('type') === 'fusion_tables') {
-                layer.map_layer.setMap(null);
-            } else {
-                self.map.overlayMapTypes.removeAt(layer.map_position);
-            }
-        }
-    },*/
-
     // the next two functions are an EPIC PIECE OF SHIT
     reoder_layers: function() {
         var self = this;

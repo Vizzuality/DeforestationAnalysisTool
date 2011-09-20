@@ -135,6 +135,10 @@ class NDFI(object):
         params = self._NDFI_period_image_command(self.work_period)
         return self._execute_cmd('/mapid', params)
 
+    def rgb_strech(self, polygon, bands):
+        cmd = self._RGB_streched_command(self.work_period, polygon, bands)
+        return self._execute_cmd('/mapid', cmd)
+
     def _get_polygon_bbox(self, polygon):
         lats = [x[0] for x in polygon]
         lngs = [x[1] for x in polygon]
@@ -308,6 +312,30 @@ class NDFI(object):
             "bias": 0.0,
             "gamma": 1.6
         };
+
+    def _RGB_streched_command(self, period, polygon, bands):
+        """ bands in format (1, 2, 3) """
+        bands = "sur_refl_b0%d,sur_refl_b0%d,sur_refl_b0%d" % bands
+        return {
+            "image": json.dumps({
+                "creator":"SAD/com.google.earthengine.examples.sad.StretchImage",
+                "args":[{
+                    "creator":"ClipToMultiPolygon",
+                    "args":[{
+                        "creator":"SAD/com.google.earthengine.examples.sad.KrigingStub",
+                        "args":[{
+                            "creator":"SAD/com.google.earthengine.examples.sad.MakeMosaic",
+                            "args":["MODIS/MOD09GA","MODIS/MOD09GQ", period['start'], period['end']]                        }]
+                    },
+                    polygon]
+                 },
+                 ["sur_refl_b01","sur_refl_b02","sur_refl_b03","sur_refl_b04","sur_refl_b05"], 
+                 2 #EPIC
+                 ]
+            }),
+            "bands": bands
+        }
+            
 
 
 
