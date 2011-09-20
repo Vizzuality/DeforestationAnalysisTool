@@ -1016,6 +1016,63 @@ article .example .field {
   padding: 0 0 15px;
 }
 
+.timerange_widget {
+  position: absolute;
+  top: 59px;
+  left: 103px;
+  width: 254px;
+  height: 69px;
+  background-color: #1F2123;
+  border: 1px solid #000;
+  border-radius: 3px;
+}
+.timerange_widget ul {
+  /*width: 100%;*/
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.timerange_widget ul li {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: block;
+  float: left;
+  width: 4px;
+  margin-right: 2px;
+}
+.timerange_widget ul li .bar {
+  background: #404040;
+}
+.timerange_widget .selection {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.2);
+  width: 60px;
+  height: 69px;
+  left: 100px;
+  border: 1px solid #FFF;
+}
+.timerange_widget .mover {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  top: 28px;
+  /*background: url(/static/img/icons/time_range_selector.png) -13px 0px;*/
+}
+.timerange_widget .mover img {
+  position: relative;
+  left: -5px;
+}
+.timerange_widget #right {
+  left: 60px;
+}
+.timerange_widget #left {
+  left: 20px;
+}
+
 body, html {
   height: 100%;
   overflow: hidden;
@@ -1418,9 +1475,11 @@ body, html {
   display: block;
 }
 #header #date_range_select #range_selector {
-  width: 200px;
-  height: 100px;
-  background: #ccc;
+  background: url("../img/bkg_time_range.png") no-repeat 0px 2px;
+  width: 378px;
+  height: 148px;
+  top: -11px;
+  left: -215px;
   display: none;
   position: absolute;
 }

@@ -33,7 +33,7 @@
   <!-- error dialog -->
   <script src="{{url_for('static',filename='js/controllers/error.js')}}"></script>
   <!-- report -->
-  <!--<script src="{{url_for("static", filename="js/models/report.js")}}"></script>-->
+  <script src="{{url_for("static", filename="js/models/report.js")}}"></script>
 
   <!-- map layers -->
   <!--<script src="{{url_for("static", filename="js/controllers/draw_tool.js")}}"></script>-->
@@ -69,6 +69,8 @@
 
   <!-- popup -->
   <script src="{{url_for('static',filename='js/vis/popup.js')}}"></script>
+  <!-- time range selector -->
+  <script src="{{url_for('static',filename='js/vis/timerange.js')}}"></script>
   <!-- app -->
   <script src="{{url_for('static',filename='js/vis.js')}}"></script>
 
@@ -122,7 +124,8 @@
                     </div>
                     <button>report</button>
                 </div> <!-- popup_content -->
-            </div>
+            </div> <!-- popup -->
+
         </div>
 
         <div id="loading">

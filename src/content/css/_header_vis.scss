@@ -24,9 +24,11 @@
            }
        }
        #range_selector {
-           width: 200px;
-           height: 100px;
-           background:#ccc;
+           background: url('../img/bkg_time_range.png') no-repeat 0px 2px;
+           width: 378px;
+           height: 148px;
+           top: -11px;
+           left: -215px;
            display:none;
            position: absolute;
        }

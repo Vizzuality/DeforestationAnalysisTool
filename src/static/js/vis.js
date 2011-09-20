@@ -82,6 +82,7 @@ var Vizzualization = Backbone.View.extend({
 
         this.tools = new Toolbar();
         this.popup = new MapPopup();
+        this.time_range = new TimeRange();
 
         this.map.bind('click', function() { self.popup.close(); });
         loader.finished('Vizzualization::initialize');
