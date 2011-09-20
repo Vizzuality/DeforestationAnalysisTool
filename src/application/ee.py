@@ -136,6 +136,12 @@ class NDFI(object):
         return self._execute_cmd('/mapid', params)
 
     def rgb_strech(self, polygon, bands):
+        # this is an special call, the application needs to call /value 
+        # before call /mapid in order to google earthn engine makes his work
+        cmd = self._RGB_streched_command(self.work_period, polygon, bands)
+        del cmd['bands']
+        cmd['fields'] = 'stats'
+        self._execute_cmd('/value', cmd)
         cmd = self._RGB_streched_command(self.work_period, polygon, bands)
         return self._execute_cmd('/mapid', cmd)
 
