@@ -17,6 +17,8 @@ from ee import NDFI, EELandsat
 
 from resources.report import ReportAPI, CellAPI, NDFIMapApi, PolygonAPI, NoteAPI, UserAPI
 
+from resources.stats import RegionStatsAPI
+
 from application.constants import amazon_bounds
 
 ReportAPI.add_urls(app, '/api/v0/report')
@@ -33,6 +35,8 @@ NDFIMapApi.add_urls(app, '/api/v0/report/<report_id>/map')
 PolygonAPI.add_urls(app, '/api/v0/report/<report_id>/cell/<cell_pos>/polygon')
 NoteAPI.add_urls(app, '/api/v0/report/<report_id>/cell/<cell_pos>/note')
 UserAPI.add_urls(app, '/api/v0/user')
+
+RegionStatsAPI.add_urls(app, '/api/v0/report/<report_id>/stats')
 
 
 

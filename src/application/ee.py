@@ -6,6 +6,26 @@ import simplejson as json
 
 from earthengine.connector import EarthEngine
 
+class Stats(object):
+
+    def __init__(self):
+        self.ee = EarthEngine(settings.EE_TOKEN)
+
+    def _execute_cmd(self, url, cmd):
+        params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
+        return self.ee.post(url, params)
+    
+    def get_stats_for_table(self, frozen_image, table_id, key_name='name'):
+        return self._execute_cmd("/value", {
+            "image": json.dumps({
+                 "creator":"SAD/com.google.earthengine.examples.sad.GetStats",
+                 "args":[{
+                    "creator":"SAD/com.google.earthengine.examples.sad.ProdesImage",
+                    "args":[frozen_image]},
+                    {"type":"FeatureCollection", "table_id":table_id}, key_name]}),
+            "fields": "classHistogram"
+        })
+
 class EELandsat(object):
 
     def __init__(self, resource):
