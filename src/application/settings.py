@@ -21,6 +21,11 @@ if 'SERVER_SOFTWARE' in os.environ and os.environ['SERVER_SOFTWARE'].startswith(
 
 DEBUG = DEBUG_MODE
 
+if DEBUG:
+    FT_TABLE = 'areas_dev'
+else:
+    FT_TABLE = 'areas'
+
 # Set secret keys for CSRF protection
 SECRET_KEY = CSRF_SECRET_KEY
 CSRF_SESSION_KEY = SESSION_KEY

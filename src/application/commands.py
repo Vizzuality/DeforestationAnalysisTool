@@ -23,7 +23,7 @@ def create_table():
             settings.FT_CONSUMER_SECRET,
             settings.FT_TOKEN,
             settings.FT_SECRET)
-    table_desc = {'areas': {
+    table_desc = {settings.FT_TABLE: {
        'added_on': 'DATETIME',
        'type': 'NUMBER',
        'geo': 'LOCATION',
