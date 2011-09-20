@@ -413,9 +413,9 @@ class Area(db.Model):
                 settings.FT_CONSUMER_SECRET,
                 settings.FT_TOKEN,
                 settings.FT_SECRET)
-        table_id = cl.table_id('areas')
+        table_id = cl.table_id(settings.FT_TABLE)
         if not table_id:
-            raise Exception("Create areas tables first")
+            raise Exception("Create areas %s first" % settings.FT_TABLE)
         return cl
 
     def fusion_tables_type(self):
@@ -427,21 +427,21 @@ class Area(db.Model):
     def delete_fusion_tables(self):
         """ delete area from fusion tables. Do not use this method directly, call delete method"""
         cl = self._get_ft_client()
-        table_id = cl.table_id('areas')
+        table_id = cl.table_id(settings.FT_TABLE)
         cl.sql("delete from %s where rowid = '%s'" % (table_id, self.fusion_tables_id))
 
     def update_fusion_tables(self):
         """ update polygon in fusion tables. Do not call this method, use save method when change instance data """
         logging.info("updating fusion tables %s" % self.key())
         cl = self._get_ft_client()
-        table_id = cl.table_id('areas')
+        table_id = cl.table_id(settings.FT_TABLE)
         geo_kml = path_to_kml(json.loads(self.geo))
         cl.sql("update  %s set geo = '%s', type = '%s' where rowid = '%s'" % (table_id, geo_kml, self.fusion_tables_type(), self.fusion_tables_id))
 
     def create_fusion_tables(self):
         logging.info("saving to fusion tables %s" % self.key())
         cl = self._get_ft_client()
-        table_id = cl.table_id('areas')
+        table_id = cl.table_id(settings.FT_TABLE)
         geo_kml = path_to_kml(json.loads(self.geo))
         rowid = cl.sql("insert into %s ('geo', 'added_on', 'type', 'report_id') VALUES ('%s', '%s', %d, %d)" % (table_id, geo_kml, self.added_on, self.fusion_tables_type(), self.cell.report.key().id()))
         self.fusion_tables_id = int(rowid.split('\n')[1])
