@@ -352,6 +352,14 @@ class Cell(db.Model):
             Mercator.unproject(self.x*sx + topx, topy + (self.y+1)*sy)
         )
 
+    def bbox_polygon(self, top_bounds):
+        bounds = self.bounds(top_bounds)
+        ne = bounds[0]
+        sw = bounds[1]
+        # spcify lon, lat FUCK, MONKEY BALLS
+        return [[[ (sw[1], sw[0]), (sw[1], ne[0]), (ne[1], ne[0]), (ne[1], sw[0]) ]]]
+
+
 class Area(db.Model):
     """ area selected by user """
 
