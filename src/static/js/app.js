@@ -375,7 +375,7 @@ $(function() {
 
             this.gridstack.bind('work_mode', rgb_141.on_cell);
             //TODO: enable this when GEE problems are gone
-            //this.map.layers.add(rgb_141);
+            this.map.layers.add(rgb_141);
             this.map.layers.trigger('reset');
 
             // enable layer, amazonas bounds
