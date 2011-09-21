@@ -1512,6 +1512,102 @@ body, html {
   text-align: center;
 }
 
+#report_dialog_outer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+#report_dialog {
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.3);
+  -webkit-border-top-right-radius: 2px;
+  -webkit-border-top-left-radius: 2px;
+  -moz-border-radius-topright: 2px;
+  -moz-border-radius-topleft: 2px;
+  border-top-right-radius: 2px;
+  border-top-left-radius: 2px;
+  padding: 20px;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(white), to(#f3f3f3));
+  border-bottom: 3px solid #d8d8d8;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -100.5px 0 0 -174px;
+  width: 348px;
+  height: 201px;
+}
+#report_dialog h1 {
+  font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: #333333;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+#report_dialog h1 span {
+  color: #009933;
+  position: relative;
+  display: inline-block;
+}
+#report_dialog h1 span:hover .region_selector {
+  display: block;
+}
+#report_dialog h1 span .region_selector {
+  border-radius: 2px;
+  display: none;
+  position: absolute;
+  width: 180px;
+  /*height: 74px;*/
+  box-shadow: 0 0 4px 0px rgba(0, 0, 0, 0.3);
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(white), to(#f3f3f3));
+  border: 1px solid #999999;
+  padding: 5px 8px;
+  left: -9px;
+  top: -9px;
+}
+#report_dialog h1 span .region_selector li {
+  color: #333;
+  text-decoration: none;
+  padding: 3px 0;
+}
+#report_dialog p {
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: #999;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #DDD;
+}
+#report_dialog #export_types {
+  margin-top: 20px;
+}
+#report_dialog #export_types li {
+  color: #333;
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  padding: 3px 0 3px 20px;
+  background: url("/static/img/tick_selected.png") no-repeat 0px 6px;
+}
+#report_dialog #export_types li span {
+  font: normal 11px "Helvetica Neue", Arial, Sans-Serif;
+  color: #999;
+  margin-left: 4px;
+}
+#report_dialog button {
+  margin-top: 20px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-radius: 5px;
+  font: bold 12px "Helvetica Neue", Arial, Sans-Serif;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 0 1px white;
+  padding: 10px 10px;
+  border: 1px solid #777;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(white), to(#e6e6e6));
+}
+#report_dialog button:hover {
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(#e6e6e6), to(white));
+}
+
 .map_container #popup {
   position: absolute;
   width: 213px;
