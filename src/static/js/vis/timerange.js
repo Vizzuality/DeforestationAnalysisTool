@@ -62,9 +62,8 @@ var TimeRange = Backbone.View.extend({
 
         this.bars = this.$("#bars");
         // get data
-        this.reports = new ReportCollection();
+        this.reports = this.options.reports;
         this.reports.bind('reset', this.populate);
-        this.reports.fetch();
     },
 
     populate: function(reports) {

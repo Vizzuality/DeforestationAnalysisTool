@@ -96,6 +96,7 @@ class Report(db.Model):
     def as_dict(self):
         return {
                 'id': str(self.key()),
+                'fusion_tables_id': str(self.key().id()),
                 'start': timestamp(self.start),
                 #'end': timestamp(self.end),
                 'finished': self.finished,

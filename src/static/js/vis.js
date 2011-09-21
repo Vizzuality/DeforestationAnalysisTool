@@ -71,7 +71,9 @@ var Vizzualization = Backbone.View.extend({
     initialize: function() {
         _.bindAll(this, 'start', 'load_map','polygon_click');
         loader.loading('Vizzualization::initialize', 'loading data');
+        // initial data
         this.available_layers = new LayerCollection();
+        this.reports = new ReportCollection();
         this.load_map();
     },
 
@@ -85,7 +87,7 @@ var Vizzualization = Backbone.View.extend({
 
         this.tools = new Toolbar();
         this.popup = new MapPopup();
-        this.time_range = new TimeRange();
+        this.time_range = new TimeRange({reports: this.reports});
         this.report_stats = new ReportStatCollection();
 
         this.map.bind('click', function() { self.popup.close(); });
@@ -100,14 +102,13 @@ var Vizzualization = Backbone.View.extend({
         this.map.layers.get_by_name('Legal Amazon').set_enabled(true);
         this.map.layers.get_by_name('polygons').set_enabled(true);
 
-        //TODO: debug, remove
-        this.map.layers.get_by_name('State Conservation').set_enabled(true);
         this.prepare_ft_layers();
     },
 
     // add click listener to fusion tables layers
     prepare_ft_layers: function() {
         var self = this;
+        // areas layers
         var layers = [
           'Municipalities',
           'States',
@@ -123,6 +124,14 @@ var Vizzualization = Backbone.View.extend({
             });
             self.state_conservation_layer.bind('polygon_click', self.polygon_click);
         });
+        // polygon layer
+        var pl = self.map.layers.get_by_name('polygons');
+        self.polygons_layer = new PolygonsLayer({
+            map: self.map,
+            layer: pl,
+            initial_range: self.time_range.get_report_range()
+        });
+        this.time_range.bind('update_range', self.polygons_layer.range_changed);
     },
 
     polygon_click: function(data) {

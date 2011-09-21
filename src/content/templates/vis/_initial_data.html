@@ -49,7 +49,7 @@
           select: 'geometry',
           description: 'polygons',
           color: '#FF0000'
-        }, 
+        },
         {
               id: '6',
               type: 'google_maps',
@@ -79,6 +79,7 @@
      ];
 
      window.app.available_layers.reset(available_maps);
+     window.app.reports.reset({{reports|safe}});
 
     }
 

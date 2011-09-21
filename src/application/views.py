@@ -90,7 +90,9 @@ def home(cell_path=None):
 def vis():
     user = users.get_current_user()
     u = User.get_user(user)
-    return render_template('vis/index.html', user=u)
+    #TODO show only finished
+    reports = [x.as_dict() for x in Report.all().filter("finished =", True)]
+    return render_template('vis/index.html', user=u, reports=json.dumps(reports))
 
 @app.route('/login')
 def login():
