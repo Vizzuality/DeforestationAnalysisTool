@@ -1,5 +1,6 @@
 
 var loader = new Loading();
+var loading_small = new LoadingSmall();
 /*
   =================================
 */
@@ -11,6 +12,7 @@ var FusionTablesLayer = Backbone.View.extend({
         this.mapview = this.options.mapview;
         this.google_maps_layer = this.options.layer;
         this.google_maps_layer.setOptions({suppressInfoWindows: true});
+        this.table = this.options.table;
 
         google.maps.event.addListener(this.google_maps_layer, "click", function(event) {
             self.click_on_polygon(event);
@@ -19,6 +21,7 @@ var FusionTablesLayer = Backbone.View.extend({
     },
 
     click_on_polygon: function(poly) {
+        poly.table = this.table;
         this.trigger('polygon_click', poly);
     }
 
@@ -83,6 +86,7 @@ var Vizzualization = Backbone.View.extend({
         this.tools = new Toolbar();
         this.popup = new MapPopup();
         this.time_range = new TimeRange();
+        this.report_stats = new ReportStatCollection();
 
         this.map.bind('click', function() { self.popup.close(); });
         loader.finished('Vizzualization::initialize');
@@ -103,16 +107,37 @@ var Vizzualization = Backbone.View.extend({
 
     // add click listener to fusion tables layers
     prepare_ft_layers: function() {
-        this.state_conservation_layer = new FusionTablesLayer({
-            mapview: this.map,
-            layer: this.map.layers.get_by_name('State Conservation').map_layer
+        var self = this;
+        var layers = [
+          'Municipalities',
+          'States',
+          'Federal Conservation',
+          'State Conservation'
+        ];
+        _(layers).each(function(layer_name) {
+            var state = self.map.layers.get_by_name(layer_name);
+            self.state_conservation_layer = new FusionTablesLayer({
+                mapview: self.map,
+                layer: state.map_layer,
+                table: state.get('table')
+            });
+            self.state_conservation_layer.bind('polygon_click', self.polygon_click);
         });
-        this.state_conservation_layer.bind('polygon_click', this.polygon_click);
     },
 
-    polygon_click: function(row) {
-        var pos = this.map.projector.transformCoordinates(row.latLng);
-        this.popup.showAt(pos, "goiania", '23.291', '1.291', '293');
+    polygon_click: function(data) {
+        var self = this;
+        var pos = this.map.projector.transformCoordinates(data.latLng);
+        var reports = this.time_range.get_report_range();
+        loading_small.loading('fetching stats');
+        self.report_stats.stats_for_periods(reports, data.table + '_' + data.row.name.value, function(stats) {
+            if(stats === undefined) {
+                show_error('There was a problem getting stats for this area');
+            } else {
+                self.popup.showAt(pos, data.row.description.value, '23.291', stats.def,  stats.deg);
+            }
+            loading_small.finished('fething stats');
+        });
         //this.stats.set_info(10, 20);
         //this.stats.set_location('polygon (' + row.latLng.lat().toFixed(3) + "," + row.latLng.lng().toFixed(3) + ")");
     }

@@ -59,7 +59,6 @@ var TimeRange = Backbone.View.extend({
         this.rigth.bind('move', this.update_range);
 
         this.selection = this.$('.selection');
-        this.update_range();
 
         this.bars = this.$("#bars");
         // get data
@@ -76,6 +75,7 @@ var TimeRange = Backbone.View.extend({
             self.bars.append(v.render().el);
         });
         this.rigth.pos(MONTH_SIZE*this.reports.length);
+        this.update_range();
     },
 
     update_range: function(to) {
@@ -87,11 +87,11 @@ var TimeRange = Backbone.View.extend({
         this.selection.css({left: this.left.pos()});
         var s = this.rigth.pos() - this.left.pos();
         this.selection.css({width: s});
-        this.trigger('range_change', this.get_month_range());
+        this.trigger('range_change', this.get_report_range());
     },
 
-    get_month_range: function() {
-        return [this.left.pos()/MONTH_SIZE, this.rigth.pos()/MONTH_SIZE];
+    get_report_range: function() {
+        return this.reports.models.slice(this.left.pos()/MONTH_SIZE, this.rigth.pos()/MONTH_SIZE);
     }
 
 
