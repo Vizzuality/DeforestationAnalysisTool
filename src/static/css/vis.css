@@ -1513,15 +1513,18 @@ body, html {
 }
 
 #report_dialog_outer {
+  display: none;
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 200;
 }
 
 #report_dialog {
+  z-index: 201;
   box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.3);
   -webkit-border-top-right-radius: 2px;
   -webkit-border-top-left-radius: 2px;
@@ -1539,6 +1542,18 @@ body, html {
   width: 348px;
   height: 201px;
 }
+#report_dialog a.close {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 11px;
+  height: 11px;
+  text-indent: -9999px;
+  background: url("../img/close_notes.png") no-repeat 0 0;
+}
+#report_dialog a.close:hover {
+  background-position: 0 -12px;
+}
 #report_dialog h1 {
   font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
   color: #333333;
@@ -1550,10 +1565,15 @@ body, html {
   position: relative;
   display: inline-block;
 }
-#report_dialog h1 span:hover .region_selector {
+#report_dialog h1 span #selected {
+  text-decoration: underline;
+  background: url("../img/icons/drop_down_region.png") no-repeat right 5px;
+  padding-right: 10px;
+}
+#report_dialog h1 span:hover #region_selector {
   display: block;
 }
-#report_dialog h1 span .region_selector {
+#report_dialog h1 span #region_selector {
   border-radius: 2px;
   display: none;
   position: absolute;
@@ -1566,10 +1586,15 @@ body, html {
   left: -9px;
   top: -9px;
 }
-#report_dialog h1 span .region_selector li {
+#report_dialog h1 span #region_selector li a {
   color: #333;
+  display: block;
   text-decoration: none;
   padding: 3px 0;
+  text-decoration: none;
+}
+#report_dialog h1 span #region_selector li:first-child a {
+  color: #999;
 }
 #report_dialog p {
   font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
@@ -1584,15 +1609,19 @@ body, html {
   color: #333;
   font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
   padding: 3px 0 3px 20px;
-  background: url("/static/img/tick_selected.png") no-repeat 0px 6px;
+  background: url("/static/img/tick_unselected.png") no-repeat 0px 6px;
 }
 #report_dialog #export_types li span {
   font: normal 11px "Helvetica Neue", Arial, Sans-Serif;
   color: #999;
   margin-left: 4px;
 }
+#report_dialog #export_types li.selected {
+  background: url("/static/img/tick_selected.png") no-repeat 0px 6px;
+}
 #report_dialog button {
-  margin-top: 20px;
+  position: absolute;
+  bottom: 20px;
   border-radius: 5px;
   -moz-border-radius: 5px;
   -webkit-radius: 5px;

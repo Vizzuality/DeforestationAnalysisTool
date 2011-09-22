@@ -58,6 +58,7 @@ def stats(table, zone=None):
     csv_file = csv.writer(f)
     csv_file.writerow(('report', 'deforestated', 'degradated'))
     reports = [Report.get_by_id(x) for x in reports]
+    logging.info(reports);
     for r in reports:
         if not r:
             abort(404)

@@ -490,9 +490,9 @@ class StatsStore(db.Model):
         return self._as_dict
 
     def for_table(self, table, zone=None):
-        tb = [v for k, v in self.as_dict()['stats'].iteritems() if v['table'] == table]
+        tb = [v for k, v in self.as_dict()['stats'].iteritems() if str(v['table']) == table]
         if zone:
-            return [x for x in tb if x['id'] == zone]
+            return [x for x in tb if str(x['id']) == zone]
 
         return tb
 
