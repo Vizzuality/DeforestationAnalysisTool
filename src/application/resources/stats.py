@@ -6,7 +6,7 @@ from resource import Resource
 from flask import Response, request, jsonify, abort
 from google.appengine.ext.db import Key
 
-from application.models import Report
+from application.models import Report, StatsStore
 from application.ee import Stats
 
 from google.appengine.api import memcache
@@ -15,7 +15,8 @@ tables = [
     ('Municipalities', 1560866, 'name'),
     ('States', 1560836, 'name'),
     ('Federal Conservation', 1568452, 'name'),
-    ('State Conservation', 1568376, 'name')
+    ('State Conservation', 1568376, 'name'),
+    ('Legal Amazon', 1205151, 'name')
 ]
 
 class RegionStatsAPI(Resource):
@@ -46,6 +47,7 @@ class RegionStatsAPI(Resource):
             r = Report.get(Key(report_id))
             if not r:
                 abort(404)
+            #TODO: get from datastore
             stats = {
                 'id': report_id,
                 'stats': {}
@@ -55,5 +57,7 @@ class RegionStatsAPI(Resource):
             # cache it
             data = json.dumps(stats)
             memcache.set(cache_key, data)
+            # save it!
+            StatsStore(report=r, json=data).put()
         return Response(data, mimetype='application/json')
 

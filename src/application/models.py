@@ -6,6 +6,7 @@ App Engine datastore models
 """
 
 import logging
+import operator
 from google.appengine.ext import db
 from google.appengine.ext import deferred
 
@@ -41,7 +42,7 @@ class User(db.Model):
             x.current_cells = 0;
             x.put()
 
-    
+
     @staticmethod
     def get_user(user):
         q = User.all().filter('user =', user)
@@ -72,7 +73,7 @@ class User(db.Model):
     def as_json(self):
         return json.dumps(self.as_dict())
 
-    
+
 class Report(db.Model):
 
     start = db.DateProperty();
@@ -138,7 +139,7 @@ class Report(db.Model):
         if r:
             return r[0]
         return None
-        
+
     def range(self):
         end = datetime.now()
         end = datetime(2011, 8, 2)
@@ -218,7 +219,7 @@ class Cell(db.Model):
 
     def calc_parent_id(self):
         return '_'.join((str(self.z - 1), str(self.x/SPLITS), str(self.y/SPLITS)))
-    
+
     def get_parent(self):
         if self.z == 0:
             return None
@@ -467,8 +468,43 @@ class Note(db.Model):
         return json.dumps(self.as_dict())
 
 class Error(db.Model):
+    """ javascript errors registered """
     msg = db.TextProperty(required=True)
     url = db.StringProperty(required=True)
     line= db.StringProperty(required=True)
     user = db.UserProperty()
-    
+
+
+class StatsStore(db.Model):
+    report = db.ReferenceProperty(Report)
+    json = db.TextProperty()
+
+    @staticmethod
+    def get_for_report(id):
+        r = Report.get_by_id(id)
+        return json.decode(r.stats_set.json)
+
+    def as_dict(self):
+        if not hasattr(self, '_as_dict'):
+            self._as_dict = json.loads(self.json)
+        return self._as_dict
+
+    def for_table(self, table, zone=None):
+        tb = [v for k, v in self.as_dict()['stats'].iteritems() if v['table'] == table]
+        if zone:
+            return [x for x in tb if x['id'] == zone]
+
+        return tb
+
+
+    def table_accum(self, table, zone=None):
+        table_stats = self.for_table(table, zone)
+        if not table_stats:
+            return None
+        return {
+            # TODO add total KM^2
+            'def': reduce(operator.add, map(int, (x['def'] for x in table_stats))),
+            'deg': reduce(operator.add, map(int, (x['deg'] for x in table_stats)))}
+
+
+
