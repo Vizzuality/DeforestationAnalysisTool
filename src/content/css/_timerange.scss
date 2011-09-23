@@ -22,13 +22,16 @@
         left: 0;
 
         li {
+            &:first-child {
+                margin-left: 1px;
+            }
             height: 100%;
             padding: 0;
             margin: 0;
             list-style: none;
             display: block;
             float: left;
-            width: 4px;
+            width: 5px;
             margin-right: 2px;
             .bar {
                 background: #404040;
@@ -39,9 +42,10 @@
         position: absolute;
         background-color: rgba(255, 255, 255, 0.2);
         width: 60px;
-        height: 69px;
+        height: 67px;
         left: 100px;
         border: 1px solid #FFF;
+        border-bottom: 8px solid #FFF;
     }
     .mover {
         $w: 13px;
@@ -60,6 +64,9 @@
     }
     #left {
         left: 20px;
+        img {
+            left: -6px;
+        }
     }
 
     

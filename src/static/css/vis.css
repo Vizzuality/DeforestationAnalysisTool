@@ -1041,8 +1041,11 @@ article .example .field {
   list-style: none;
   display: block;
   float: left;
-  width: 4px;
+  width: 5px;
   margin-right: 2px;
+}
+.timerange_widget ul li:first-child {
+  margin-left: 1px;
 }
 .timerange_widget ul li .bar {
   background: #404040;
@@ -1051,9 +1054,10 @@ article .example .field {
   position: absolute;
   background-color: rgba(255, 255, 255, 0.2);
   width: 60px;
-  height: 69px;
+  height: 67px;
   left: 100px;
   border: 1px solid #FFF;
+  border-bottom: 8px solid #FFF;
 }
 .timerange_widget .mover {
   position: absolute;
@@ -1071,6 +1075,9 @@ article .example .field {
 }
 .timerange_widget #left {
   left: 20px;
+}
+.timerange_widget #left img {
+  left: -6px;
 }
 
 body, html {
@@ -1470,17 +1477,31 @@ body, html {
   float: right;
   margin: 10px 263px 0 0;
   position: relative;
+  padding: 10px;
+}
+#header #date_range_select a {
+  font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: white;
+  text-shadow: 0 1px black;
+  padding: 0 30px 3px 4px;
+  text-decoration: none;
+}
+#header #date_range_select a#select {
+  background: url("../img/icons/range.png") no-repeat right 0;
+}
+#header #date_range_select:hover {
+  background: url("../img/bkg_time_range_over.png") no-repeat -4px -7px;
 }
 #header #date_range_select:hover #range_selector {
   display: block;
 }
 #header #date_range_select #range_selector {
-  background: url("../img/bkg_time_range.png") no-repeat 0px 2px;
+  background: url("../img/bkg_time_range.png") no-repeat -2px 39px;
   width: 378px;
   height: 148px;
   top: -11px;
   left: -215px;
-  display: none;
+  /*display:none;*/
   position: absolute;
 }
 #header #overview {

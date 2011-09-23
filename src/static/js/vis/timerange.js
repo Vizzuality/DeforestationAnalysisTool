@@ -6,25 +6,38 @@ var SliderControl = Backbone.View.extend({
     initialize: function() {
         var self = this;
         _.bindAll(self, 'pos');
+        this.mix = 0;
+        this.max = 100;
         self.pos(this.options.position);
         this.el.draggable({
             axis: "x",
             drag: function(event, ui) {
                 self.pos(ui.position.left);
+            }, 
+            stop: function(event, ui) {
+                self.pos(ui.position.left);
             },
-            grid: [ 6, 6 ]
+            grid: [ 7, 7]
         });
     },
     pos: function(p) {
         var self = this;
         if(p !== undefined) {
             self.position = p;
+            /*if(p < self.min) {
+                self.position = self.min;
+            } else if(p > self.max) {
+                self.position = self.max;
+            }*/
+            console.log(p, self.position);
             self.el.css({left: self.position});
             self.trigger('move', self.position);
         }
         return self.position;
     },
     set_constrain: function(min, max) {
+        this.min = min;
+        this.max = max;
         this.el.draggable( "option", "containment", [min, 0, max, 100]);
     }
 });
@@ -42,7 +55,8 @@ ReportBarView = Backbone.View.extend({
         return this;
     }
 });
-MONTH_SIZE = 6;
+
+MONTH_SIZE = 7;
 var TimeRange = Backbone.View.extend({
     el: $('#timerange'),
 
@@ -50,7 +64,7 @@ var TimeRange = Backbone.View.extend({
         _.bindAll(this,  'update_range', 'populate');
 
         this.left = new SliderControl({el: this.$('#left'),
-            position: 0
+            position: -1
         });
         this.rigth = new SliderControl({el: this.$('#right'),
             position: 10*MONTH_SIZE
@@ -73,16 +87,25 @@ var TimeRange = Backbone.View.extend({
             var v = new ReportBarView({model: r});
             self.bars.append(v.render().el);
         });
-        this.rigth.pos(MONTH_SIZE*this.reports.length);
+        this.rigth.pos(this.pos_for_month_right(this.reports.length - 1));
         this.update_range();
     },
 
+    pos_for_month_left: function(month) {
+        return -1 + month*MONTH_SIZE;
+    },
+    pos_for_month_right: function(month) {
+        return this.pos_for_month_left(month) + MONTH_SIZE + 3;
+    },
+
     update_range: function(to) {
-        /*this.rigth.set_constrain(this.left.pos() + MONTH_SIZE,
-            this.el.width());
-        this.left.set_constrain(0,
-            this.rigth.pos() - MONTH_SIZE);
-        */
+        var base = this.el.offset();
+        this.rigth.set_constrain(
+            base.left + this.left.pos() + MONTH_SIZE,
+            base.left + this.el.width());
+        this.left.set_constrain(
+            base.left - 1 ,
+            base.left + this.rigth.pos() - MONTH_SIZE );
         this.selection.css({left: this.left.pos()});
         var s = this.rigth.pos() - this.left.pos();
         this.selection.css({width: s});

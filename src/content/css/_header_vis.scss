@@ -16,20 +16,31 @@
        float: right;
        margin:10px 263px 0 0;
        position: relative;
+       padding: 10px;
 
-       #select { }
+       a {
+            font:bold 13px $text_font;
+            color:white;
+            text-shadow:0 1px black;
+            padding:0 30px 3px 4px;
+            text-decoration:none;
+            &#select {
+                background:url('../img/icons/range.png') no-repeat right 0;
+            }
+       }
        &:hover {
+           background: url('../img/bkg_time_range_over.png') no-repeat -4px -7px;
            #range_selector {
               display: block;
            }
        }
        #range_selector {
-           background: url('../img/bkg_time_range.png') no-repeat 0px 2px;
+           background: url('../img/bkg_time_range.png') no-repeat -2px 39px;
            width: 378px;
            height: 148px;
            top: -11px;
            left: -215px;
-           display:none;
+           /*display:none;*/
            position: absolute;
        }
 

@@ -102,7 +102,7 @@ var Vizzualization = Backbone.View.extend({
     load_map: function() {
         var self = this;
         this.map = new MapView({el: this.$("#main_map")});
-        this.map.map.setCenter(new google.maps.LatLng(-10.131116841540678,  -51.954345703125));
+        this.map.map.setCenter(new google.maps.LatLng(-6.348056476859352, -57.88696289062));
         this.map.bind('ready', this.start);
 
         this.stats = new StatiticsInfo();
