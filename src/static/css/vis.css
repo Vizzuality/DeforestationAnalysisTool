@@ -1045,10 +1045,13 @@ article .example .field {
   margin-right: 2px;
 }
 .timerange_widget ul li:first-child {
-  margin-left: 1px;
+  margin-left: 2px;
 }
 .timerange_widget ul li .bar {
   background: #404040;
+}
+.timerange_widget #colored_bars .bar {
+  background: red;
 }
 .timerange_widget .selection {
   position: absolute;
@@ -1058,6 +1061,7 @@ article .example .field {
   left: 100px;
   border: 1px solid #FFF;
   border-bottom: 8px solid #FFF;
+  overflow: hidden;
 }
 .timerange_widget .mover {
   position: absolute;
@@ -1493,7 +1497,10 @@ body, html {
   background: url("../img/bkg_time_range_over.png") no-repeat -4px -7px;
 }
 #header #date_range_select:hover #range_selector {
-  display: block;
+  /* don't use display:none/block combo here
+   * jquery offset does not work with hidden elements
+   * so this hack solves the problem */
+  visibility: visible;
 }
 #header #date_range_select #range_selector {
   background: url("../img/bkg_time_range.png") no-repeat -2px 39px;
@@ -1502,7 +1509,33 @@ body, html {
   top: -11px;
   left: -215px;
   /*display:none;*/
+  /* don't use display:none/block combo here
+  * jquery offset does not work with hidden elements
+  * so this hack solves the problem */
+  visibility: hidden;
   position: absolute;
+}
+#header #date_range_select #range_selector #range_info {
+  position: absolute;
+  top: 60px;
+  left: 20px;
+}
+#header #date_range_select #range_selector #range_info h3 {
+  font: normal 10px "Helvetica Neue", Arial, Sans-Serif;
+  color: #777;
+  text-transform: uppercase;
+  text-shadow: #000 0px 1px 0px;
+  margin-bottom: 2px;
+}
+#header #date_range_select #range_selector #range_info input {
+  background-color: #404040;
+  width: 49px;
+  border-radius: 2px;
+  border: 1px solid #000;
+  font: normal 11px "Helvetica Neue", Arial, Sans-Serif;
+  color: #CCC;
+  padding: 2px 3px;
+  margin-bottom: 6px;
 }
 #header #overview {
   background: -webkit-gradient(linear, left top, left bottom, from(#39ad39), to(#2d872c));

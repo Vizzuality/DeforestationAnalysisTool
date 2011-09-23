@@ -23,7 +23,7 @@
 
         li {
             &:first-child {
-                margin-left: 1px;
+                margin-left: 2px;
             }
             height: 100%;
             padding: 0;
@@ -38,6 +38,9 @@
             }
         }
     }
+    #colored_bars .bar {
+        background: red;
+    }
     .selection {
         position: absolute;
         background-color: rgba(255, 255, 255, 0.2);
@@ -46,6 +49,7 @@
         left: 100px;
         border: 1px solid #FFF;
         border-bottom: 8px solid #FFF;
+        overflow:hidden;
     }
     .mover {
         $w: 13px;

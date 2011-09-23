@@ -20,21 +20,17 @@ var SliderControl = Backbone.View.extend({
             grid: [ 7, 7]
         });
     },
+
     pos: function(p) {
         var self = this;
         if(p !== undefined) {
             self.position = p;
-            /*if(p < self.min) {
-                self.position = self.min;
-            } else if(p > self.max) {
-                self.position = self.max;
-            }*/
-            console.log(p, self.position);
             self.el.css({left: self.position});
             self.trigger('move', self.position);
         }
         return self.position;
     },
+
     set_constrain: function(min, max) {
         this.min = min;
         this.max = max;
@@ -75,6 +71,7 @@ var TimeRange = Backbone.View.extend({
         this.selection = this.$('.selection');
 
         this.bars = this.$("#bars");
+        this.colored_bars = this.$("#colored_bars");
         // get data
         this.reports = this.options.reports;
         this.reports.bind('reset', this.populate);
@@ -86,6 +83,12 @@ var TimeRange = Backbone.View.extend({
         this.reports.each(function(r) {
             var v = new ReportBarView({model: r});
             self.bars.append(v.render().el);
+        });
+
+        this.reports.each(function(r) {
+            //TODO: render with color
+            var v = new ReportBarView({model: r});
+            self.colored_bars.append(v.render().el);
         });
         this.rigth.pos(this.pos_for_month_right(this.reports.length - 1));
         this.update_range();
@@ -102,11 +105,13 @@ var TimeRange = Backbone.View.extend({
         var base = this.el.offset();
         this.rigth.set_constrain(
             base.left + this.left.pos() + MONTH_SIZE,
-            base.left + this.el.width());
+            base.left + this.el.width() + 1);
         this.left.set_constrain(
             base.left - 1 ,
             base.left + this.rigth.pos() - MONTH_SIZE );
+
         this.selection.css({left: this.left.pos()});
+        this.colored_bars.css({left: -this.left.pos()});
         var s = this.rigth.pos() - this.left.pos();
         this.selection.css({width: s});
         this.trigger('range_change', this.get_report_range());

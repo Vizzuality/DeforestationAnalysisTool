@@ -31,7 +31,10 @@
        &:hover {
            background: url('../img/bkg_time_range_over.png') no-repeat -4px -7px;
            #range_selector {
-              display: block;
+              /* don't use display:none/block combo here
+               * jquery offset does not work with hidden elements
+               * so this hack solves the problem */
+              visibility:visible;
            }
        }
        #range_selector {
@@ -41,7 +44,33 @@
            top: -11px;
            left: -215px;
            /*display:none;*/
+           /* don't use display:none/block combo here
+           * jquery offset does not work with hidden elements
+           * so this hack solves the problem */
+           visibility:hidden;
            position: absolute;
+           #range_info {
+               position: absolute;
+               top: 60px;
+               left: 20px;
+               h3 {
+                    font:normal 10px $text_font;
+                    color: #777;
+                    text-transform: uppercase;
+                    text-shadow: #000 0px 1px 0px;
+                    margin-bottom: 2px;
+               }
+               input {
+                    background-color: #404040;
+                    width: 49px;
+                    border-radius: 2px;
+                    border: 1px solid #000;
+                    font:normal 11px $text_font;
+                    color: #CCC;
+                    padding: 2px 3px;
+                    margin-bottom: 6px;
+               }
+           }
        }
 
     }
