@@ -109,6 +109,7 @@ var Vizzualization = Backbone.View.extend({
 
         this.tools = new Toolbar();
         this.popup = new MapPopup();
+        this.searchbox = new Searchbox();
         this.report_dialog = new ReportDialog({
             reports: this.reports
         });
@@ -119,6 +120,7 @@ var Vizzualization = Backbone.View.extend({
         this.popup.bind('show_report', this.show_report); 
 
         this.map.bind('click', function() { self.popup.close(); });
+        this.map.bind('click', function() { self.searchbox.close(); });
         this.tools.bind('show_report', this.show_report);
         loader.finished('Vizzualization::initialize');
     },
@@ -139,6 +141,7 @@ var Vizzualization = Backbone.View.extend({
         this.map.layers.get_by_name('polygons').set_enabled(true);
 
         this.prepare_ft_layers();
+        this.searchbox.bind('goto', this.map.set_center);
     },
 
     // add click listener to fusion tables layers

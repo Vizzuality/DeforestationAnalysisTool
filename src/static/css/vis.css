@@ -1691,6 +1691,68 @@ body, html {
   background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(#e6e6e6), to(white));
 }
 
+#searchbox {
+  position: absolute;
+  left: 20px;
+  top: 80px;
+}
+#searchbox #small {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 253px;
+  height: 58px;
+  background: url("../img/bkg_searchbox_small.png") no-repeat -6px -6px;
+}
+#searchbox #small.big {
+  height: 266px;
+  background: url("../img/bkg_searchbox.png") no-repeat -6px -6px;
+}
+#searchbox #small input {
+  margin: 10px 0 0 32px;
+  width: 191px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  padding: 5px 3px;
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+}
+#searchbox #small ul {
+  position: relative;
+  margin-left: 23px;
+  margin-top: 20px;
+  width: 217px;
+  height: 195px;
+  overflow: hidden;
+}
+#searchbox #small ul li {
+  width: 206px;
+  font-size: 13px;
+  color: #626262;
+  padding: 13px 0 13px 10px;
+  /*margin-left: 18px;*/
+  border-top: 1px solid #FBFBFB;
+  border-bottom: 1px solid #CFCFCF;
+}
+#searchbox #small ul li.selected {
+  background: url("/static/img/tick_white_selected.png") no-repeat 6px 16px;
+}
+#searchbox #small ul li:hover a {
+  color: #333333;
+}
+#searchbox #small ul li a {
+  display: block;
+  width: 160px;
+  padding-right: 20px;
+  font: normal 13px "Helvetica Neue";
+  color: #666666;
+  text-shadow: 0 1px white;
+  text-decoration: none;
+}
+#searchbox #small ul li a:hover {
+  color: #333333;
+}
+
 .map_container #popup {
   position: absolute;
   width: 213px;

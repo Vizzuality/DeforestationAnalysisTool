@@ -73,6 +73,8 @@
   <!-- fusion tables polygon layer -->
   <script src="{{url_for('static',filename='js/vis/polygons_layer.js')}}"></script>
 
+  <!-- searchbox -->
+  <script src="{{url_for('static',filename='js/vis/searchbox.js')}}"></script>
   <!-- popup -->
   <script src="{{url_for('static',filename='js/vis/popup.js')}}"></script>
   <!-- report dialog -->
@@ -105,6 +107,8 @@
               <a href="#zoom_in" class="zoom_in">zoom_in</a>
               <a href="#zoom_out" class="zoom_out">zoom_out</a>
             </div>
+            <!-- searchbox-->
+            {% include "vis/_searchbox.html" %}
             <!-- end zoom control -->
             <div class="layer_editor">
                 <a href="#" class="layer_raster"></a>
