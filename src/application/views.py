@@ -8,7 +8,7 @@ from shutil import copyfile
 from google.appengine.api import urlfetch
 from google.appengine.api import users
 
-from flask import render_template, flash, url_for, redirect, abort, request, make_response 
+from flask import render_template, flash, url_for, redirect, abort, request, make_response
 from application.time_utils import timestamp, past_month_range
 
 from decorators import login_required, admin_required
@@ -21,9 +21,11 @@ from models import Report, User, Error
 from google.appengine.api import memcache
 from google.appengine.ext.db import Key
 
+from application import settings
+
 def default_maps():
     maps = []
-    r = Report.current()
+    r = Report.current() 
     logging.info("report " + unicode(r))
     ee_resource = 'MOD09GA'
     landsat = EELandsat('LANDSAT/L7_L1T')
@@ -83,6 +85,7 @@ def home(cell_path=None):
             reports_json=reports,
             user=u,
             maps=maps,
+            polygons_table=settings.FT_TABLE_ID,
             logout_url=logout_url)
 
 @app.route('/vis')
@@ -92,7 +95,10 @@ def vis():
     u = User.get_user(user)
     #TODO show only finished
     reports = [x.as_dict() for x in Report.all().filter("finished =", True)]
-    return render_template('vis/index.html', user=u, reports=json.dumps(reports))
+    return render_template('vis/index.html',
+            user=u,
+            polygons_table=settings.FT_TABLE_ID,
+            reports=json.dumps(reports))
 
 @app.route('/login')
 def login():
