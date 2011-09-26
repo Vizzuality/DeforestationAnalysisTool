@@ -140,7 +140,8 @@ class NDFI(object):
         # before call /mapid in order to google earthn engine makes his work
         cmd = self._RGB_streched_command(self.work_period, polygon, bands)
         del cmd['bands']
-        cmd['fields'] = 'stats'
+        cmd['fields'] = 'stats_sur_refl_b01,stats_sur_refl_b02,stats_sur_refl_b03,stats_sur_refl_b04,stats_sur_refl_b05'
+        
         self._execute_cmd('/value', cmd)
         cmd = self._RGB_streched_command(self.work_period, polygon, bands)
         return self._execute_cmd('/mapid', cmd)
