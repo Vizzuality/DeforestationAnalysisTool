@@ -20,7 +20,8 @@ var Loading = Backbone.View.extend({
         console.log("f:" + where);
         --this.refcount;
         if(this.refcount === 0) {
-            this.el.hide();
+            //this.el.hide();
+            this.el.css({display: 'none'});
         }
     }
 

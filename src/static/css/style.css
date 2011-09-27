@@ -363,7 +363,7 @@ article .example .field {
 }
 
 #header {
-  z-index: 19;
+  z-index: 23;
   position: absolute;
   top: 0;
   left: 0;
@@ -979,6 +979,7 @@ article .example .field {
   -moz-border-radius: 5px;
   -webkit-radius: 5px;
   background: url("/static/img/confirmation_bkg.png");
+  z-index: 22;
 }
 #header #overview .conf_dialog button {
   padding: 11px 12px;
