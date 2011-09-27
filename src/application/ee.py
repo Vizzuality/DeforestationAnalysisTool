@@ -6,6 +6,9 @@ import simplejson as json
 
 from earthengine.connector import EarthEngine
 
+PIXEL_SIZE = 0.25
+PIXEL_AREA = PIXEL_SIZE**2
+
 class Stats(object):
 
     def __init__(self):
@@ -14,7 +17,7 @@ class Stats(object):
     def _execute_cmd(self, url, cmd):
         params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
         return self.ee.post(url, params)
-    
+
     def get_stats_for_table(self, frozen_image, table_id, key_name='name'):
         return self._execute_cmd("/value", {
             "image": json.dumps({
@@ -25,6 +28,32 @@ class Stats(object):
                     {"type":"FeatureCollection", "table_id":table_id}, key_name]}),
             "fields": "classHistogram"
         })
+
+    def get_stats(self, frozen_image, table_id):
+        r = self.get_stats_for_table(frozen_image,  table_id)
+        try:
+            stats_region = r["data"]["properties"]["classHistogram"]["values"]
+        except KeyError:
+            return None
+        stats = {}
+        for k,v in stats_region.iteritems():
+            # google earth engine return pixels, each pixel has 250m on a side...
+            # values classificacion:
+            #0: unclassified
+            #1: forest
+            #2: deforested
+            #3: degraded
+            #4: baseline
+            #5: cloud
+            #6: old_deforestation
+            stats[str(table_id) + '_' + k] = {
+                "id": k,
+                "table": table_id,
+                "def": int(v[2])*PIXEL_AREA,
+                "deg": int(v[3])*PIXEL_AREA
+            }
+
+        return stats
 
 class EELandsat(object):
 
@@ -106,12 +135,12 @@ class NDFI(object):
                 rows,
                 cols]
             }
-        
+
     def mapid2(self, asset_id):
         cmd = {
             "image": json.dumps(self.mapid2_cmd(asset_id)),
             "format": 'png'
-            
+
         }
         return self._execute_cmd('/mapid', cmd)
 
@@ -128,7 +157,7 @@ class NDFI(object):
                 "creator":"SAD/com.google.earthengine.examples.sad.FreezeMap",
                 "args": [image, table, 0, 4, "report_id", 1, "type", report_id],
                 "type":"image"
-             }), 
+             }),
             "type":"image"
         }
         return self._execute_cmd('/create', cmd)
@@ -156,12 +185,12 @@ class NDFI(object):
         return self._execute_cmd('/mapid', params)
 
     def rgb_strech(self, polygon, bands):
-        # this is an special call, the application needs to call /value 
+        # this is an special call, the application needs to call /value
         # before call /mapid in order to google earthn engine makes his work
         cmd = self._RGB_streched_command(self.work_period, polygon, bands)
         del cmd['bands']
         cmd['fields'] = 'stats_sur_refl_b01,stats_sur_refl_b02,stats_sur_refl_b03,stats_sur_refl_b04,stats_sur_refl_b05'
-        
+
         self._execute_cmd('/value', cmd)
         cmd = self._RGB_streched_command(self.work_period, polygon, bands)
         return self._execute_cmd('/mapid', cmd)
@@ -186,7 +215,7 @@ class NDFI(object):
             "fields": 'ndfiSum'#','.join(fields)
         }
         return self._execute_cmd('/value', cmd)
-    
+
     def ndfi_change_value_old(self, polygons, rows=10, cols=10):
         """ return how much NDFI has changed in the time period
             ``polygons`` are a list of closed polygons defined by lat, lon::
@@ -356,13 +385,13 @@ class NDFI(object):
                     },
                     polygon]
                  },
-                 ["sur_refl_b01","sur_refl_b02","sur_refl_b03","sur_refl_b04","sur_refl_b05"], 
+                 ["sur_refl_b01","sur_refl_b02","sur_refl_b03","sur_refl_b04","sur_refl_b05"],
                  2 #EPIC
                  ]
             }),
             "bands": bands
         }
-            
+
 
 
 

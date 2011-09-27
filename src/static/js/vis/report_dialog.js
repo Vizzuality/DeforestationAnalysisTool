@@ -113,7 +113,7 @@ var ReportDialog = Backbone.View.extend({
             return r.get('fusion_tables_id');
         });
         
-        var url = '/api/v0/stats/'
+        var url = '/api/v0/stats/';
         if(this.custom) {
             url += this.custom.table + '/' + this.custom.zone;
         } else {
@@ -121,12 +121,15 @@ var ReportDialog = Backbone.View.extend({
         } 
         url += '?reports=' + reports.join(',');
         //alert(url);
+        console.log(url);
         window.open(url);
     },
 
     set_reports: function(reports) {
+        var self = this;
         this.reports = reports;
-        //TODO: change dates
+        this.date_from.html(format_date(new Date(this.reports[0].get('start'))));
+        this.date_to.html(format_date(new Date(_(this.reports).last().get('end'))));
     },
 
     show: function(custom) {

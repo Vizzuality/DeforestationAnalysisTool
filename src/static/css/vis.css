@@ -363,7 +363,7 @@ article .example .field {
 }
 
 #header {
-  z-index: 19;
+  z-index: 23;
   position: absolute;
   top: 0;
   left: 0;
@@ -979,6 +979,7 @@ article .example .field {
   -moz-border-radius: 5px;
   -webkit-radius: 5px;
   background: url("/static/img/confirmation_bkg.png");
+  z-index: 22;
 }
 #header #overview .conf_dialog button {
   padding: 11px 12px;
@@ -1050,8 +1051,11 @@ article .example .field {
 .timerange_widget ul li .bar {
   background: #404040;
 }
-.timerange_widget #colored_bars .bar {
+.timerange_widget #colored_bars .def {
   background: red;
+}
+.timerange_widget #colored_bars .deg {
+  background: yellow;
 }
 .timerange_widget .selection {
   position: absolute;
@@ -1512,7 +1516,7 @@ body, html {
   /* don't use display:none/block combo here
   * jquery offset does not work with hidden elements
   * so this hack solves the problem */
-  visibility: hidden;
+  /*visibility:hidden;*/
   position: absolute;
 }
 #header #date_range_select #range_selector #range_info {

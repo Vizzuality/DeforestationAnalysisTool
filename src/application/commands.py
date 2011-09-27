@@ -141,3 +141,10 @@ def ndfi_value_for_cells_dummy(cell_key):
             c.put()
 
     cell.calculate_ndfi_change_from_childs()
+
+
+def update_report_stats(report_key):
+    r = Report.get(Key(report_key))
+
+    
+    

@@ -1,8 +1,9 @@
 
 
 <script type="text/template" id="report-bar">
-        <div style="height: 30%"></div>
-        <div class="bar" style="height: 70%"></div>
+    <div style="height: <% print(100 - deg_percent - def_percent); %>%"></div>
+        <div class="bar deg" style="height: <%=deg_percent%>%"></div>
+        <div class="bar def" style="height: <%=def_percent%>%"></div>
 </script>
 
 <div id="timerange" class="timerange_widget">

@@ -77,9 +77,27 @@ var TimeRange = Backbone.View.extend({
         this.reports.bind('reset', this.populate);
     },
 
+    normalize: function(reports) {
+        degs = this.reports.map(function(r) {
+            return r.get('degradation');
+        });
+        defs = this.reports.map(function(r) {
+            return r.get('deforestation');
+        });
+        var max_def = _(defs).max();
+        var max_deg = _(degs).max();
+        this.reports.each(function(r) {
+            r.set({
+                def_percent: 50*r.get('deforestation')/max_def,
+                deg_percent: 50*r.get('degradation')/max_deg
+            });
+        });
+    },
+
     populate: function(reports) {
         var self = this;
         this.bars.html('');
+        this.normalize(reports);
         this.reports.each(function(r) {
             var v = new ReportBarView({model: r});
             self.bars.append(v.render().el);
@@ -105,20 +123,23 @@ var TimeRange = Backbone.View.extend({
         var base = this.el.offset();
         this.rigth.set_constrain(
             base.left + this.left.pos() + MONTH_SIZE,
-            base.left + this.el.width() + 1);
+            Math.min(base.left + this.reports.length*MONTH_SIZE + 3, base.left + this.el.width() + 1));
         this.left.set_constrain(
             base.left - 1 ,
             base.left + this.rigth.pos() - MONTH_SIZE );
 
         this.selection.css({left: this.left.pos()});
-        this.colored_bars.css({left: -this.left.pos()});
+        this.colored_bars.css({left: -this.left.pos() - 1});
         var s = this.rigth.pos() - this.left.pos();
         this.selection.css({width: s});
+        console.log(this.get_report_range().length);
         this.trigger('range_change', this.get_report_range());
     },
 
     get_report_range: function() {
-        return this.reports.models.slice(this.left.pos()/MONTH_SIZE, this.rigth.pos()/MONTH_SIZE);
+        var m0 = (1+this.left.pos())/MONTH_SIZE;
+        var m1 = (this.rigth.pos()-2)/MONTH_SIZE;
+        return this.reports.models.slice(m0, m1);
     }
 
 

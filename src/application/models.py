@@ -66,8 +66,7 @@ class User(db.Model):
         return {
                 'id': str(self.key()),
                 'current_cells': self.current_cells,
-                'mail': self.user.email(),
-                'is_admin': self.is_admin()
+                'mail': self.user.email(), 'is_admin': self.is_admin()
         }
 
     def as_json(self):
@@ -82,6 +81,10 @@ class Report(db.Model):
     cells_finished = db.IntegerProperty(default=0)
     total_cells = db.IntegerProperty(default=(100-len(CELL_BLACK_LIST))*100)
     assetid = db.StringProperty()
+
+    # some stats
+    degradation = db.FloatProperty(default=0.0)
+    deforestation = db.FloatProperty(default=0.0)
 
     @staticmethod
     def current():
@@ -99,12 +102,14 @@ class Report(db.Model):
                 'id': str(self.key()),
                 'fusion_tables_id': str(self.key().id()),
                 'start': timestamp(self.start),
-                #'end': timestamp(self.end),
+                'end': timestamp(self.end or date.today()),
                 'finished': self.finished,
                 'cells_finished': self.cells_finished(),
                 'total_cells': self.total_cells,
                 'str': self.start.strftime("%Y-%b-%d"),
-                'assetid': self.assetid
+                'assetid': self.assetid,
+                'deforestation': self.deforestation,
+                'degradation': self.degradation
         }
 
     def close(self, assetid):

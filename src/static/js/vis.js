@@ -91,7 +91,7 @@ var Vizzualization = Backbone.View.extend({
     el: $('body'),
 
     initialize: function() {
-        _.bindAll(this, 'start', 'load_map','polygon_click', 'show_report');
+        _.bindAll(this, 'start', 'load_map','polygon_click', 'show_report', 'update_dates');
         loader.loading('Vizzualization::initialize', 'loading data');
         // initial data
         this.available_layers = new LayerCollection();
@@ -134,14 +134,22 @@ var Vizzualization = Backbone.View.extend({
                 return self.available_layers.get_by_name(a).toJSON();
          });
 
-        this.time_range.bind('update_range', this.report_dialog.set_reports);
+        this.time_range.bind('range_change', this.report_dialog.set_reports);
+        this.time_range.bind('range_change', this.update_dates);
         this.report_dialog.set_reports(this.time_range.get_report_range());
+        this.update_dates(this.time_range.get_report_range());
         // show default layers
         this.map.layers.get_by_name('Legal Amazon').set_enabled(true);
         this.map.layers.get_by_name('polygons').set_enabled(true);
 
         this.prepare_ft_layers();
         this.searchbox.bind('goto', this.map.set_center);
+    },
+
+    // update timerange dates
+    update_dates: function(reports) {
+        $('#report_from').val(format_date(reports[0].get('start')));
+        $('#report_to').val(format_date(_(reports).last().get('end')));
     },
 
     // add click listener to fusion tables layers

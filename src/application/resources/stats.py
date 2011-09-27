@@ -20,8 +20,6 @@ tables = [
     ('Legal Amazon', 1205151, 'name')
 ]
 
-PIXEL_SIZE = 0.25
-PIXEL_AREA = PIXEL_SIZE**2
 
 class RegionStatsAPI(Resource):
     """ serves stats for regions
@@ -31,27 +29,7 @@ class RegionStatsAPI(Resource):
 
     def stats_for(self, r, table):
         st = Stats()
-        r = st.get_stats_for_table(r.base_map(),  table)
-        stats_region = r["data"]["properties"]["classHistogram"]["values"]
-        stats = {}
-        for k,v in stats_region.iteritems():
-            # google earth engine return pixels, each pixel has 250m on a side...
-            # values classificacion: 
-            #0: unclassified
-            #1: forest
-            #2: deforested
-            #3: degraded
-            #4: baseline
-            #5: cloud
-            #6: old_deforestation
-            _def = int(v[0])*PIXEL_AREA
-            stats[str(table) + '_' + k] = {
-                "id": k,
-                "table": table,
-                "def": int(v[2])*PIXEL_AREA,
-                "deg": int(v[3])*PIXEL_AREA
-            }
-        return stats
+        return st.get_stats(r.base_map(),  table)
 
     # TODO: change for get
     def list(self, report_id):

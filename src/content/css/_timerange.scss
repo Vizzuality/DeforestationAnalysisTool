@@ -38,8 +38,11 @@
             }
         }
     }
-    #colored_bars .bar {
+    #colored_bars .def {
         background: red;
+    }
+    #colored_bars .deg {
+        background: yellow;
     }
     .selection {
         position: absolute;
@@ -72,6 +75,4 @@
             left: -6px;
         }
     }
-
-    
 }
