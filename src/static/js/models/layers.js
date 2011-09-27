@@ -32,10 +32,11 @@ var RGBStrechLayer = LayerModel.extend({
 
     initialize: function() {
         _.bindAll(this, 'set_enabled', 'on_cell');
+        var desc = this.get('description') || 'RGB ' + this.get('r') + this.get('g') + this.get('b');
         this.set({
               id: 'RGB',
               type: 'custom',
-              description: 'RGB ' + this.get('r') + this.get('g') + this.get('b'),
+              description: desc,
               layer: this.google_maps_layer()
         });
         this.set_enabled(false);
