@@ -12,6 +12,7 @@ import simplejson as json
 from application.time_utils import timestamp
 
 from application.constants import amazon_bounds, LANDSAT7
+from application import settings
 
 from google.appengine.ext.db import Key
 from google.appengine.api import users
