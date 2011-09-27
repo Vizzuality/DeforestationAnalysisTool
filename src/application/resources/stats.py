@@ -16,6 +16,8 @@ tables = [
     ('States', 1560836, 'name'),
     ('Federal Conservation', 1568452, 'name'),
     ('State Conservation', 1568376, 'name'),
+    ('Ingienous Land','1630610', 'name'),
+          
     ('Legal Amazon', 1205151, 'name')
 ]
 
