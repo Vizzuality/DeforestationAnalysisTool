@@ -47,7 +47,7 @@
            /* don't use display:none/block combo here
            * jquery offset does not work with hidden elements
            * so this hack solves the problem */
-           /*visibility:hidden;*/
+           visibility:hidden;
            position: absolute;
            #range_info {
                position: absolute;

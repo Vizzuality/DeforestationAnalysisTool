@@ -42,7 +42,7 @@ var StatiticsInfo = Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'set_info', 'set_location', 'show_report');
+        _.bindAll(this, 'set_info', 'set_location', 'show_report', 'range_change');
         this.area_info = this.$(".stats");
         this.location = this.$("#current_cell");
     },
@@ -53,11 +53,17 @@ var StatiticsInfo = Backbone.View.extend({
 
     set_location: function(loc) {
         this.location.html(loc);
-    },
+     },
 
     show_report: function(e) {
         if(e) e.preventDefault();
         this.trigger('show_report');
+    },
+
+    range_change: function(reports) {
+        this.location.html("All areas " + _(reports).reduce(function(total, r) {
+            return total + r.get('deforestation') + r.get('degradation');
+        }, 0) + "km2");
     }
 });
 
@@ -136,8 +142,8 @@ var Vizzualization = Backbone.View.extend({
 
         this.time_range.bind('range_change', this.report_dialog.set_reports);
         this.time_range.bind('range_change', this.update_dates);
-        this.report_dialog.set_reports(this.time_range.get_report_range());
-        this.update_dates(this.time_range.get_report_range());
+        this.time_range.bind('range_change', this.stats.range_change);
+        this.time_range.trigger('range_change', this.time_range.get_report_range());
         // show default layers
         this.map.layers.get_by_name('Legal Amazon').set_enabled(true);
         this.map.layers.get_by_name('polygons').set_enabled(true);
