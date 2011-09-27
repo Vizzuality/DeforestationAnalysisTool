@@ -23,8 +23,10 @@ DEBUG = DEBUG_MODE
 
 if DEBUG:
     FT_TABLE = 'areas_dev'
+    FT_TABLE_ID = '1556991'
 else:
     FT_TABLE = 'areas'
+    FT_TABLE_ID = '1089491'
 
 # Set secret keys for CSRF protection
 SECRET_KEY = CSRF_SECRET_KEY
