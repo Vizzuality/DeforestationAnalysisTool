@@ -76,7 +76,7 @@ class User(db.Model):
 class Report(db.Model):
 
     start = db.DateProperty();
-    #end = db.DateProperty();
+    end = db.DateProperty();
     finished = db.BooleanProperty(default=False);
     cells_finished = db.IntegerProperty(default=0)
     total_cells = db.IntegerProperty(default=(100-len(CELL_BLACK_LIST))*100)
@@ -107,6 +107,7 @@ class Report(db.Model):
 
     def close(self, assetid):
         if not self.finished:
+            self.end = date.today();
             self.finished = True
             self.assetid = assetid
             self.put()
