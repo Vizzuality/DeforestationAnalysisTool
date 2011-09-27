@@ -92,7 +92,7 @@ class ReportAPI(Resource):
             ndfi = NDFI(ee_resource,
                     r.comparation_range(),
                     r.range())
-            data = ndfi.freeze_map(r.base_map(), 1089491, r.key().id())
+            data = ndfi.freeze_map(r.base_map(), int(settings.FT_TABLE_ID), r.key().id())
             logging.info(data)
             if 'data' not in data:
                 abort(400)

@@ -5,7 +5,7 @@
 }
 
 #header {
-    z-index: 19;
+    z-index: 23;
     position: absolute;
     top:0;
     left:0;
@@ -633,6 +633,7 @@
             left: -$padding - 3px;
             @include border-radius(5px);
             background: url('/static/img/confirmation_bkg.png');
+            z-index: 22;
 
             button {
                 padding:11px 12px;

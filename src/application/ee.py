@@ -94,14 +94,14 @@ class NDFI(object):
         self._image_cache = {}
 
     def mapid2_cmd(self, asset_id, polygon=None, rows=10, cols=10):
-            return {"creator":"thau_sad/com.google.earthengine.examples.sad.GetNDFIDelta","args":
+            return {"creator":"SAD/com.google.earthengine.examples.sad.GetNDFIDelta","args":
                [self.last_perdiod['start'],
                 self.last_perdiod['end'],
                 self.work_period['start'],
                 self.work_period['end'],
                 "MODIS/MOD09GA",
                 "MODIS/MOD09GQ",
-                {"creator":"thau_sad/com.google.earthengine.examples.sad.ProdesImage","args":[asset_id]},
+                {"creator":"SAD/com.google.earthengine.examples.sad.ProdesImage","args":[asset_id]},
                 polygon,
                 rows,
                 cols]
@@ -125,7 +125,7 @@ class NDFI(object):
         image = self.mapid2_cmd(asset_id)
         cmd ={
             "value": json.dumps({
-                "creator":"sad_test/com.google.earthengine.examples.sad.FreezeMap",
+                "creator":"SAD/com.google.earthengine.examples.sad.FreezeMap",
                 "args": [image, table, 0, 4, "report_id", 1, "type", report_id],
                 "type":"image"
              }), 

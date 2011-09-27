@@ -226,6 +226,9 @@ $(function() {
                     m.bind('click', self.map.close_layer_editor);
                     m.bind('open_layer_editor', self.map.close_layer_editor);
                     m.layers.reset(self.available_layers.toJSON());
+                    // add rgb layers
+                    add_rgb_layers(m.layers, self.gridstack, self.active_report.get('id'));
+                    m.layers.trigger('reset');
                     _.each(self.compare_maps, function(other) {
                         if(other !== m) {
                             m.bind('center_changed', other.set_center_silence);
@@ -249,6 +252,7 @@ $(function() {
                     m.unbind('click', self.map.close_layer_editor);
                     self.map.unbind('open_layer_editor', m.close_layer_editor);
                     m.unbind('open_layer_editor', self.map.close_layer_editor);
+                    unbind_rgb_layers(m.layers, self.gridstack);
                     _.each(self.compare_maps, function(other) {
                         if(other !== m) {
                             m.unbind('center_changed', other.set_center_silence);
@@ -366,16 +370,8 @@ $(function() {
             // init the map
             this.map.map.setCenter(this.amazon_bounds.getCenter());
             this.map.layers.reset(this.available_layers.models);
-            var rgb_141 = new RGBStrechLayer({
-                r: 1,
-                g: 4,
-                b: 3,
-                report_id: this.active_report.get('id')
-            });
 
-            this.gridstack.bind('work_mode', rgb_141.on_cell);
-            //TODO: enable this when GEE problems are gone
-            this.map.layers.add(rgb_141);
+            add_rgb_layers(this.map.layers, this.gridstack, this.active_report.get('id'));
             this.map.layers.trigger('reset');
 
             // enable layer, amazonas bounds
