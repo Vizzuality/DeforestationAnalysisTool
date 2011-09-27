@@ -56,7 +56,7 @@ def stats(table, zone=None):
         
     f = StringIO()
     csv_file = csv.writer(f)
-    csv_file.writerow(('report', 'deforestated', 'degradated'))
+    csv_file.writerow(('report_id', 'start_date', 'end_date', 'deforestated', 'degradated'))
     reports = [Report.get_by_id(x) for x in reports]
     logging.info(reports);
     for r in reports:
@@ -65,7 +65,11 @@ def stats(table, zone=None):
         st = r.statsstore_set.get().table_accum(table, zone)
         if not st:
             abort(404)
-        csv_file.writerow((str(r.key().id()), st['def'], st['deg']))
+        csv_file.writerow((str(r.key().id()), 
+                r.start.isoformat(),
+                r.end.isoformat(),
+                st['def'], 
+                st['deg']))
 
     return Response(f.getvalue(), mimetype='text/csv')
 
