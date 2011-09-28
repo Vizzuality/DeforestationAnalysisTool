@@ -7,9 +7,7 @@ function validateEmail(email) {
 
 var User = Backbone.Model.extend({
 
-    urlRoot: function() {
-        return '/api/v0/user';
-    },
+    urlRoot: '/api/v0/user',
 
     inc_cells: function() {
         this.set({current_cells: this.get('current_cells') + 1});
