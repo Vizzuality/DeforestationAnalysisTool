@@ -72,9 +72,27 @@ var Toolbar = Backbone.View.extend({
     el: $('#tools'),
 
     initialize: function() {
+        _.bindAll(this, 'change_state');
         this.el.show();
         this.$('#work_toolbar').show();
+        this.buttons = new ButtonGroup({el: $('#selection')});
+
+        this.draw_tool = this.options.draw_tool;
+        this.buttons.bind('state', this.change_state);
+        
+    },
+
+    change_state: function(state) {
+        switch(state) {
+            case 'draw':
+                this.draw_tool.editing_state(true);
+                break;
+            case 'edit':
+                this.draw_tool.editing_state(false);
+                break;
+        }
     }
+
 
 });
 
@@ -107,27 +125,32 @@ var Vizzualization = Backbone.View.extend({
 
     load_map: function() {
         var self = this;
+        // create map
         this.map = new MapView({el: this.$("#main_map")});
         this.map.map.setCenter(new google.maps.LatLng(-6.348056476859352, -57.88696289062));
         this.map.bind('ready', this.start);
 
+        // widgets
         this.stats = new StatiticsInfo();
-
-        this.tools = new Toolbar();
         this.popup = new MapPopup();
         this.searchbox = new Searchbox();
-        this.report_dialog = new ReportDialog({
-            reports: this.reports
-        });
+        this.report_dialog = new ReportDialog({ reports: this.reports });
         this.time_range = new TimeRange({reports: this.reports});
         this.report_stats = new ReportStatCollection();
+        this.create_polygon_tool = new  PolygonDrawEditTool({mapview: this.map});
+        this.tools = new Toolbar({draw_tool: this.create_polygon_tool});
 
-        this.stats.bind('show_report', this.show_report); 
-        this.popup.bind('show_report', this.show_report); 
+        this.create_polygon_tool.bind('polygon_click', function(path) {
+            console.log(path);
+        });
 
+        // binding
+        this.stats.bind('show_report', this.show_report);
+        this.popup.bind('show_report', this.show_report);
         this.map.bind('click', function() { self.popup.close(); });
         this.map.bind('click', function() { self.searchbox.close(); });
         this.tools.bind('show_report', this.show_report);
+
         loader.finished('Vizzualization::initialize');
     },
 
@@ -203,7 +226,7 @@ var Vizzualization = Backbone.View.extend({
         //this.stats.set_info(10, 20);
         //this.stats.set_location('polygon (' + row.latLng.lat().toFixed(3) + "," + row.latLng.lng().toFixed(3) + ")");
     },
-      
+
     show_report: function(report_info) {
         this.report_dialog.show(report_info);
     }

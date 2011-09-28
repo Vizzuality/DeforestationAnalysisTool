@@ -1,24 +1,9 @@
-
 /*
-
-var PolygonEditTool = Backbone.View.extend({
-
-    initialize: function() {
-        _.bindAll(this, 'add_vertex', 'create_polygon', 'reset', 'editing_state', '_add_vertex');
-        this.mapview = this.options.mapview;
-        this.map = this.mapview.map;
-        this.reset();
-
-        this.image = new google.maps.MarkerImage('/static/img/sprite.png',
-                    new google.maps.Size(11, 11),
-                    new google.maps.Point(0,52),
-                    new google.maps.Point(5, 5)
-        );
-    },
-
-});
+ ===========================================
+ generic tool for polygon drawing over google maps map
+ ===========================================
+ 
 */
-
 var PolygonDrawTool = Backbone.View.extend({
 
     initialize: function() {
@@ -45,6 +30,7 @@ var PolygonDrawTool = Backbone.View.extend({
 
 
     reset: function() {
+        var self = this;
         if(this.polyline !== undefined) {
             this.polyline.setMap(null);
             delete this.polyline;
@@ -74,6 +60,11 @@ var PolygonDrawTool = Backbone.View.extend({
           strokeWeight: 0,
           map: this.map
         });
+
+        google.maps.event.addListener(this.polygon, "click", function(e) {
+            self.trigger('polygon_click', this.getPath(), e.latLng);
+        });
+
     },
 
     edit_polygon: function(polygon) {
@@ -156,3 +147,50 @@ var PolygonDrawTool = Backbone.View.extend({
 
 
 });
+
+
+var PolygonDrawEditTool = PolygonDrawTool.extend({
+    initialize: function() {
+        this.constructor.__super__.initialize.call(this);
+    },
+
+    editing_state: function(editing) {
+        if(editing) {
+            this.mapview.bind('click', this.add_vertex);
+        } else {
+            this.reset();
+            this.mapview.unbind('click', this.add_vertex);
+        }
+    },
+
+    _add_vertex: function(latLng) {
+        var self = this;
+        var marker = new google.maps.Marker({position:
+                latLng,
+                map: this.map,
+                icon: this.image,
+                draggable: true,
+                flat : true,
+                raiseOnDrag: false
+        });
+
+        marker.index = this.vertex.length;
+        this.markers.push(marker);
+        this.vertex.push(latLng);
+        this.polyline.setPath(this.vertex);
+        this.polygon.setPath(this.vertex);
+
+        google.maps.event.addListener(marker, "drag", function(e) {
+            self.polyline.getPath().setAt(this.index, e.latLng);
+            self.polygon.getPath().setAt(this.index, e.latLng);
+        });
+        return marker;
+    },
+
+    add_vertex: function(e) {
+        var latLng = e.latLng;
+        var marker = this._add_vertex(latLng);
+    }
+
+});
+
