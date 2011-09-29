@@ -27,9 +27,12 @@ class RegionStatsAPI(Resource):
         basically is a proxy for google earth engine
     """
 
+    def __init__(self):
+        super(RegionStatsAPI, self).__init__()
+        self.ee = Stats()
+
     def stats_for(self, r, table):
-        st = Stats()
-        return st.get_stats(r.base_map(),  table)
+        return self.ee.get_stats(r.assetid,  table)
 
     # TODO: change for get
     def list(self, report_id):
@@ -51,5 +54,16 @@ class RegionStatsAPI(Resource):
             memcache.set(cache_key, data)
             # save it!
             StatsStore(report=r, json=data).put()
+        return Response(data, mimetype='application/json')
+
+    def get(self, report_id, id):
+        r = Report.get(Key(report_id))
+        s = self.stats_for(r, int(id))
+        if request.args.get('_debug', False):
+            s['debug'] = {
+                'request': self.ee.ee.last_request,
+                'response': self.ee.ee.last_response
+            }
+        data = json.dumps(s)
         return Response(data, mimetype='application/json')
 
