@@ -55,6 +55,8 @@ var Searchbox = Backbone.View.extend({
         console.log(this.results.models);
         this.results_ul.html('');
         this.$('#small').addClass('big');
+        // add empty row at top to show small gray border in the first result
+        self.results_ul.append('<li></li>');
         this.results.each(function(r) {
             var ll = r.get('geometry').location;
             var ll_str = ll.lat() + "," + ll.lng();

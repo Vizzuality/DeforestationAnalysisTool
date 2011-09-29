@@ -1738,6 +1738,11 @@ body, html {
   border-top: 1px solid #FBFBFB;
   border-bottom: 1px solid #CFCFCF;
 }
+#searchbox #small ul li:first-child {
+  padding-top: 0;
+  padding-bottom: 0;
+  border-top: none;
+}
 #searchbox #small ul li.selected {
   background: url("/static/img/tick_white_selected.png") no-repeat 6px 16px;
 }
