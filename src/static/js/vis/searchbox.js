@@ -59,7 +59,7 @@ var Searchbox = Backbone.View.extend({
             var ll = r.get('geometry').location;
             var ll_str = ll.lat() + "," + ll.lng();
             self.results_ul.append(
-                '<li><a href="#' + ll_str + '">' + r.get('address_components')[0]['long_name'] + '</a></li>'
+                '<li><a href="#' + ll_str + '">' + r.get('formatted_address') + '</a></li>'
             );
         });
     },
