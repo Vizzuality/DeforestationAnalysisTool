@@ -128,6 +128,7 @@ var Vizzualization = Backbone.View.extend({
         // create map
         this.map = new MapView({el: this.$("#main_map")});
         this.map.map.setCenter(new google.maps.LatLng(-6.348056476859352, -57.88696289062));
+        this.map.map.setOptions({disableDoubleClickZoom: false});
         this.map.bind('ready', this.start);
 
         // widgets
