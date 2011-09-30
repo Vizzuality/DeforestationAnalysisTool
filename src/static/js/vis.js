@@ -133,7 +133,7 @@ var Vizzualization = Backbone.View.extend({
 
         // widgets
         this.stats = new StatiticsInfo();
-        this.popup = new MapPopup();
+        this.popup = new MapPopup({map: this.map});
         this.searchbox = new Searchbox();
         this.report_dialog = new ReportDialog({ reports: this.reports });
         this.time_range = new TimeRange({reports: this.reports});
@@ -218,14 +218,13 @@ var Vizzualization = Backbone.View.extend({
 
     polygon_click: function(data) {
         var self = this;
-        var pos = this.map.projector.transformCoordinates(data.latLng);
         var reports = this.time_range.get_report_range();
         loading_small.loading('fetching stats');
         self.report_stats.stats_for_periods(reports, data.table + '_' + data.row.name.value, function(stats) {
             if(stats === undefined) {
                 show_error('There was a problem getting stats for this area');
             } else {
-                self.popup.showAt(pos, data.table, data.row.name.value, data.row.description.value, '23.291', stats.def,  stats.deg);
+                self.popup.showAt(data.latLng, data.table, data.row.name.value, data.row.description.value, '23.291', stats.def,  stats.deg);
             }
             loading_small.finished('fething stats');
         });
@@ -233,7 +232,6 @@ var Vizzualization = Backbone.View.extend({
 
     custom_polygon_click: function(latLng, data) {
         var self = this;
-        var pos = this.map.projector.transformCoordinates(latLng);
         var reports = this.time_range.get_report_range();
         loading_small.loading('fetching stats');
         // TODO: get stats
@@ -249,7 +247,7 @@ var Vizzualization = Backbone.View.extend({
             if(stats === undefined) {
                 show_error('There was a problem getting stats for this area');
             } else {
-                self.popup.showAt(pos, stats.table, stats.zone, stats.title, stats.total_area, stats.area_def, stats.area_deg);
+                self.popup.showAt(latLng, stats.table, stats.zone, stats.title, stats.total_area, stats.area_def, stats.area_deg);
             }
             loading_small.finished('fething stats');
          }
