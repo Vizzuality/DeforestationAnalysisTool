@@ -2,7 +2,7 @@
  ===========================================
  generic tool for polygon drawing over google maps map
  ===========================================
- 
+
 */
 var PolygonDrawTool = Backbone.View.extend({
 
@@ -93,7 +93,7 @@ var PolygonDrawTool = Backbone.View.extend({
                     self.polyline.getPath(this.path_index).setAt(this.index, e.latLng);
                 });
                 google.maps.event.addListener(marker, "dragend", function(e) {
-                    polygon.update_pos(this.path_index, 
+                    polygon.update_pos(this.path_index,
                         this.index, [e.latLng.lat(), e.latLng.lng()]);
                     polygon.save();
                 });
@@ -152,6 +152,16 @@ var PolygonDrawTool = Backbone.View.extend({
 var PolygonDrawEditTool = PolygonDrawTool.extend({
     initialize: function() {
         this.constructor.__super__.initialize.call(this);
+        this.final_polygon = new google.maps.Polygon({
+          path:[],
+          //strokeColor: "#DC143C",
+          strokeColor: "#0099CC",
+          strokeOpacity: 1.0,
+          fillColor: "#0099CC",
+          fillOpacity: 0.5,
+          strokeWeight: 1,
+          map: this.map
+        });
     },
 
     editing_state: function(editing) {
@@ -163,34 +173,26 @@ var PolygonDrawEditTool = PolygonDrawTool.extend({
         }
     },
 
-    _add_vertex: function(latLng) {
-        var self = this;
-        var marker = new google.maps.Marker({position:
-                latLng,
-                map: this.map,
-                icon: this.image,
-                draggable: true,
-                flat : true,
-                raiseOnDrag: false
-        });
-
-        marker.index = this.vertex.length;
-        this.markers.push(marker);
-        this.vertex.push(latLng);
-        this.polyline.setPath(this.vertex);
-        this.polygon.setPath(this.vertex);
-
-        google.maps.event.addListener(marker, "drag", function(e) {
-            self.polyline.getPath().setAt(this.index, e.latLng);
-            self.polygon.getPath().setAt(this.index, e.latLng);
-        });
-        return marker;
-    },
-
     add_vertex: function(e) {
+        this.final_polygon.setPath([]);
         var latLng = e.latLng;
         var marker = this._add_vertex(latLng);
+        var self = this;
+        if (this.vertex.length === 1) {
+            google.maps.event.addListener(marker, "click", function() {
+                self.create_polygon(self.vertex);
+            });
+        }
+    },
+
+    create_polygon: function(vertex) {
+        // polygon style
+        this.final_polygon.setPath(this.polyline.getPath());
+        this.reset();
+        var v = _.map(vertex, function(p) { return [p.lat(), p.lng()]; });
+        this.trigger('polygon', {path: v});
     }
+
 
 });
 

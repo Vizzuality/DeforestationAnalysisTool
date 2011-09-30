@@ -115,7 +115,7 @@ var Vizzualization = Backbone.View.extend({
     el: $('body'),
 
     initialize: function() {
-        _.bindAll(this, 'start', 'load_map','polygon_click', 'show_report', 'update_dates');
+        _.bindAll(this, 'start', 'load_map','polygon_click','custom_polygon_click', 'show_report', 'update_dates');
         loader.loading('Vizzualization::initialize', 'loading data');
         // initial data
         this.available_layers = new LayerCollection();
@@ -143,6 +143,11 @@ var Vizzualization = Backbone.View.extend({
 
         this.create_polygon_tool.bind('polygon_click', function(path) {
             console.log(path);
+        });
+        this.create_polygon_tool.bind('polygon', function(path) {
+            var p = path.path[0];
+            //console.log('polygon');
+            self.custom_polygon_click(new google.maps.LatLng(p[0], p[1]), path.paths);
         });
 
         // binding
@@ -224,8 +229,30 @@ var Vizzualization = Backbone.View.extend({
             }
             loading_small.finished('fething stats');
         });
-        //this.stats.set_info(10, 20);
-        //this.stats.set_location('polygon (' + row.latLng.lat().toFixed(3) + "," + row.latLng.lng().toFixed(3) + ")");
+    },
+
+    custom_polygon_click: function(latLng, data) {
+        var self = this;
+        var pos = this.map.projector.transformCoordinates(latLng);
+        var reports = this.time_range.get_report_range();
+        loading_small.loading('fetching stats');
+        // TODO: get stats
+        if(1) {
+            stats =  {
+                table: 'table',
+                zone: 'zone',
+                title: 'custom polygon',
+                total_area: '1234',
+                area_deg: '2',
+                area_def: '1.2'
+            };
+            if(stats === undefined) {
+                show_error('There was a problem getting stats for this area');
+            } else {
+                self.popup.showAt(pos, stats.table, stats.zone, stats.title, stats.total_area, stats.area_def, stats.area_deg);
+            }
+            loading_small.finished('fething stats');
+         }
     },
 
     show_report: function(report_info) {
