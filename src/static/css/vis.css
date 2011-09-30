@@ -1477,7 +1477,25 @@ body, html {
   width: 200px;
 }
 #header #tools #work_toolbar #selection {
-  width: 90px;
+  width: 60px;
+}
+#header #tools #work_toolbar #selection li a#draw {
+  width: 28px;
+  height: 29px;
+  text-indent: -9999px;
+  border-right: 1px solid #3f3d43;
+  border-left: 1px solid #1c1d20;
+  width: 29px;
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  border-right: none;
+  background: url(../img/icons/tool_icons_vis.png) no-repeat -30px 0px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(#36383c), to(#232427));
+}
+#header #tools #work_toolbar #selection li a#draw:hover {
+  background: url(../img/icons/tool_icons_vis.png) no-repeat -30px 0px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
+}
+#header #tools #work_toolbar #selection li a#draw.selected {
+  background: url(../img/icons/tool_icons_vis.png) no-repeat -30px 0px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
 }
 #header #date_range_select {
   display: inline-block;
