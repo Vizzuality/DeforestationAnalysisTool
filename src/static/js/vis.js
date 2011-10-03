@@ -76,6 +76,7 @@ var Toolbar = Backbone.View.extend({
         this.el.show();
         this.$('#work_toolbar').show();
         this.buttons = new ButtonGroup({el: $('#selection')});
+        this.buttons.select('edit');
 
         this.draw_tool = this.options.draw_tool;
         this.buttons.bind('state', this.change_state);
