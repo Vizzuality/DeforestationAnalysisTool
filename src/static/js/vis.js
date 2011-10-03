@@ -176,7 +176,7 @@ var Vizzualization = Backbone.View.extend({
         this.time_range.trigger('range_change', this.time_range.get_report_range());
         // show default layers
         this.map.layers.get_by_name('Legal Amazon').set_enabled(true);
-        this.map.layers.get_by_name('polygons').set_enabled(true);
+        this.map.layers.get_by_name('deforestation').set_enabled(true);
 
         this.prepare_ft_layers();
         this.searchbox.bind('goto', this.map.set_center);
@@ -209,7 +209,7 @@ var Vizzualization = Backbone.View.extend({
             self.state_conservation_layer.bind('polygon_click', self.polygon_click);
         });
         // polygon layer
-        var pl = self.map.layers.get_by_name('polygons');
+        var pl = self.map.layers.get_by_name('deforestation');
         self.polygons_layer = new PolygonsLayer({
             map: self.map,
             layer: pl,
