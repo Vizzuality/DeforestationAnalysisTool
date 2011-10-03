@@ -36,7 +36,7 @@ class Stats(object):
         except KeyError:
             return None
         stats = {}
-        for k,v in stats_region.iteritems():
+        for k,values in stats_region.iteritems():
             # google earth engine return pixels, each pixel has 250m on a side...
             # values classificacion:
             #0: unclassified
@@ -46,11 +46,12 @@ class Stats(object):
             #4: baseline
             #5: cloud
             #6: old_deforestation
+            v = values['values']
             stats[str(table_id) + '_' + k] = {
                 "id": k,
                 "table": table_id,
-                "def": int(v[2])*PIXEL_AREA,
-                "deg": int(v[3])*PIXEL_AREA
+                "def": int(v[u'2'])*PIXEL_AREA,
+                "deg": int(v[u'3'])*PIXEL_AREA
             }
 
         return stats

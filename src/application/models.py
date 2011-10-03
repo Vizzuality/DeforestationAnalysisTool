@@ -481,13 +481,16 @@ class Error(db.Model):
 
 
 class StatsStore(db.Model):
-    report = db.ReferenceProperty(Report)
+    report_id = db.StringProperty()
     json = db.TextProperty()
 
     @staticmethod
     def get_for_report(id):
-        r = Report.get_by_id(id)
-        return json.decode(r.stats_set.json)
+        try:
+            s = StatsStore.all().filter('report_id =', id).fetch(1)[0]
+            return s
+        except IndexError:
+            return None
 
     def as_dict(self):
         if not hasattr(self, '_as_dict'):
@@ -508,8 +511,8 @@ class StatsStore(db.Model):
             return None
         return {
             # TODO add total KM^2
-            'def': reduce(operator.add, map(int, (x['def'] for x in table_stats))),
-            'deg': reduce(operator.add, map(int, (x['deg'] for x in table_stats)))}
+            'def': reduce(operator.add, map(float, (x['def'] for x in table_stats))),
+            'deg': reduce(operator.add, map(float, (x['deg'] for x in table_stats)))}
 
 
 

@@ -2,18 +2,20 @@
 
 import logging
 import random
+import simplejson as json
 from datetime import datetime, date
 from app import app
 from flask import render_template, flash, url_for, redirect, abort, request, make_response
 from application.time_utils import timestamp
 from google.appengine.ext import deferred
 from google.appengine.ext.db import Key
+from google.appengine.api import memcache
 
 from application import settings
 from ft import FT
 
 from time_utils import month_range
-from application.models import Report, Cell
+from application.models import Report, Cell, StatsStore
 from application.constants import amazon_bounds
 from ee import NDFI
 
@@ -67,6 +69,7 @@ def update_cells_ndfi():
         c.put()
         deferred.defer(ndfi_value_for_cells, str(c.key()), _queue="ndfichangevalue")
     return 'working'
+
 
 
 @app.route('/_ah/cmd/cron/update_cell/<int:z>/<int:x>/<int:y>', methods=('GET',))
@@ -143,8 +146,43 @@ def ndfi_value_for_cells_dummy(cell_key):
     cell.calculate_ndfi_change_from_childs()
 
 
-def update_report_stats(report_key):
-    r = Report.get(Key(report_key))
+tables = [
+    ('Municipalities', 1560866, 'name'),
+    ('States', 1560836, 'name'),
+    ('Federal Conservation', 1568452, 'name'),
+    ('State Conservation', 1568376, 'name'),
+    ('Ingienous Land',1630610, 'name'),
+    ('Legal Amazon', 1205151, 'name')
+]
 
-    
-    
+# 
+# ==================================================
+#
+
+from application.ee import Stats
+@app.route('/_ah/cmd/update_report_stats/<report_id>', methods=('GET',))
+def update_report_stats_view(report_id):
+    deferred.defer(update_report_stats, report_id)
+    return 'updating'
+
+def stats_for(assetid, table):
+    ee = Stats()
+    return ee.get_stats(assetid,  table)
+
+def update_report_stats(report_id):
+    cache_key = 'stats_' + report_id
+    stats = {
+        'id': report_id,
+        'stats': {}
+    }
+    for desc, table, name in tables:
+        #stats['stats'].update(self.stats_for(r.assetid, table))
+        #TODO: revert this in production
+        stats['stats'].update(stats_for("PRODES_IMAZON_2011a", table))
+        # add some random magic :D
+        for k in stats['stats']:
+            stats['stats'][k]['def'] = "%.1f" % (random.random()*4)
+            stats['stats'][k]['deg'] = "%.1f" % (random.random()*4)
+    data = json.dumps(stats)
+    memcache.set(cache_key, data)
+    StatsStore(report_id=report_id, json=data).put()

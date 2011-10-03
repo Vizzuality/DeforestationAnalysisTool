@@ -40,31 +40,11 @@ class RegionStatsAPI(Resource):
         cache_key = 'stats_' + report_id
         data = memcache.get(cache_key)
         if not data:
-            #TODO: PLEASEPLASEPLASE uncomment this in production
-            """
-            r = Report.get(Key(report_id))
-            if not r:
+            try:
+                data = StatsStore.all().filter('report_id =', report_id).fetch(1)[0].json
+            except IndexError:
                 abort(404)
-            """
-            #TODO: get from datastore
-            stats = {
-                'id': report_id,
-                'stats': {}
-            }
-            for desc, table, name in tables:
-                #stats['stats'].update(self.stats_for(r.assetid, table))
-                #TODO: revert this in production
-                stats['stats'].update(self.stats_for("PRODES_IMAZON_2011a", table))
-                # add some random magic :D
-                for k in stats['stats']:
-                    stats['stats'][k]['def'] = "%.1f" % (random.random()*4)
-                    stats['stats'][k]['deg'] = "%.1f" % (random.random()*4)
-
-            # cache it
-            data = json.dumps(stats)
             memcache.set(cache_key, data)
-            # save it!
-            #StatsStore(report=r, json=data).put()
         return Response(data, mimetype='application/json')
 
     def get(self, report_id, id):

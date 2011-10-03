@@ -2,7 +2,7 @@
 
 import time
 import csv
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import random
 import logging
 import simplejson as json
@@ -15,7 +15,7 @@ from flask import jsonify, request, abort, Response
 from app import app
 import settings
 
-from models import Area, Note, Report
+from models import Area, Note, Report, StatsStore
 from ee import NDFI, EELandsat
 
 from resources.report import ReportAPI, CellAPI, NDFIMapApi, PolygonAPI, NoteAPI, UserAPI
@@ -47,6 +47,7 @@ RegionStatsAPI.add_urls(app, '/api/v0/report/<report_id>/stats')
 def stats(table, zone=None):
     
     reports = request.args.get('reports', None)
+    """
     if not reports:
         abort(400)
     try:
@@ -54,17 +55,21 @@ def stats(table, zone=None):
     except ValueError:
         logging.error("bad format for report id")
         abort(400)
+    """
         
     f = StringIO()
     csv_file = csv.writer(f)
     csv_file.writerow(('report_id', 'start_date', 'end_date', 'deforestated', 'degradated'))
-    reports = [Report.get_by_id(x) for x in reports]
+    #reports = [Report.get_by_id(x) for x in reports]
+    reports = reports.split(',')
     logging.info(reports);
     i = 0
+    rr = Report.current()
     for r in reports:
         if not r:
             abort(404)
-        st = r.statsstore_set.get().table_accum(table, zone)
+        logging.info(r)
+        st = StatsStore.get_for_report(r).table_accum(table, zone)
         if not st:
             abort(404)
         #hack
@@ -76,9 +81,9 @@ def stats(table, zone=None):
                 st['def'], 
                 st['deg']))
         """
-        csv_file.writerow((str(r.key().id() + i), 
-                (r.start + timedelta(days=i*30)).isoformat(),
-                (r.end + timedelta(days=i*30)).isoformat(),
+        csv_file.writerow((r,
+                (date(year=2011, month=7, day=1) + timedelta(days=i*30)).isoformat(),
+                (date(year=2011, month=7, day=30) + timedelta(days=i*30)).isoformat(),
                 random.random()*10,
                 random.random()*10))
                 #st['def'], 

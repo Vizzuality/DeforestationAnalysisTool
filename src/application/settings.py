@@ -21,7 +21,7 @@ if 'SERVER_SOFTWARE' in os.environ and os.environ['SERVER_SOFTWARE'].startswith(
 
 DEBUG = DEBUG_MODE
 
-if DEBUG:
+if 1 or DEBUG:
     FT_TABLE = 'areas_dev'
     FT_TABLE_ID = '1556991'
 else:
