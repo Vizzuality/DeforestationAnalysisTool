@@ -34,8 +34,16 @@ var ReportStatCollection = Backbone.Collection.extend({
     stats_for_periods: function(periods, key, callback) {
         var self = this;
         self.fetch_periods(periods, function() {
-            var st = self.get(periods[0]);
-            callback(st.get('stats')[key]);
+            var def = 0;
+            var deg = 0;
+            //var total_area = 0;
+            _(periods).each(function(p) {
+                var st = self.get(p).get('stats')[key];
+                def += parseFloat(st.def);
+                deg += parseFloat(st.deg);
+                //total_area += st.total_area;
+            });
+            callback({'def': def.toFixed(2), 'deg': deg.toFixed(2)});
         });
         //TODO agregate report results
         return this;
