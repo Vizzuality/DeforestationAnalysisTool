@@ -191,7 +191,10 @@ var Vizzualization = Backbone.View.extend({
         this.map.layers.get_by_name('deforestation').set_enabled(true);
 
         this.prepare_ft_layers();
-        this.searchbox.bind('goto', this.map.set_center);
+        this.searchbox.bind('goto', function(center, zoom) {
+            self.map.set_center(center);
+            self.map.set_zoom(zoom);
+        });
     },
 
     // update timerange dates

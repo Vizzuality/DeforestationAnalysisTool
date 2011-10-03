@@ -69,7 +69,7 @@ var Searchbox = Backbone.View.extend({
     goto: function(e) {
         e.preventDefault();
         var a = $(e.target).attr('href').slice(1).split(',');
-        this.trigger('goto', new google.maps.LatLng(a[0], a[1]));
+        this.trigger('goto', new google.maps.LatLng(a[0], a[1]), 10);
     },
 
     show: function() {
