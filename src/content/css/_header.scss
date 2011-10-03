@@ -11,7 +11,6 @@
     left:0;
     right:0;
     width:100%;
-    background: url('../img/title_bkg.png');
 
     @include box-shadow;
     text-align: center;
@@ -30,7 +29,8 @@
     #title {
         border-bottom: 1px solid #000;
         color: white;
-        height:84px;
+        height:112px;
+        background: url('../img/title_bkg.png');
 
         a {
             color:#999999;
@@ -47,7 +47,37 @@
         }
 
         #intro {
-            padding-top: 27px;
+            padding: 27px 0;
+        }
+        #topbar { 
+            background:#000;
+            height: 30px;
+            ul {
+                position: absolute;
+                right: 0;
+                top: 0;
+                li {
+                    display: inline-block;
+                    width: 118px;
+                    text-align: center;
+                    text-transform: uppercase;
+                    font:bold 13px $text_font;
+                    padding-top: 7px;
+                    height: 30px;
+                    &#analysis {
+                        background-color: rgb(241, 74, 48);
+                        text-shadow:0 1px rgb(237, 112, 90);
+                        a{
+                            color: #7E2817;
+                        }
+                    }
+                    &#report {
+                        a {
+                            color: #FFF;
+                        }
+                    }
+                }
+            }
         }
     }
     #tools {
@@ -431,7 +461,7 @@
     #overview {
         position: absolute;
         right: 0;
-        top: 0;
+        top: 0px;
         $padding: 20px;
         width: 240px - 2*$padding;
         height: 153px - 2*$padding;

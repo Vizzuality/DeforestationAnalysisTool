@@ -15,6 +15,29 @@
            }
         }
     }
+    #title {
+        #topbar { 
+            ul {
+                li {
+                    &#report {
+                        background-color: rgb(57, 172, 57);
+                        text-shadow:0 1px rgb(68, 209, 68);
+                        a {
+                            color: #133D13;
+                        }
+                    }
+                    &#analysis{ 
+                        background: none;
+                        text-shadow:none;
+                        a {
+                            color: #FFF;
+                        }
+                    }
+                }
+            }
+        }
+    }
+        
     #date_range_select {
        display: inline-block;
        width: 200px;

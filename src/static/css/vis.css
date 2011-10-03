@@ -369,7 +369,6 @@ article .example .field {
   left: 0;
   right: 0;
   width: 100%;
-  background: url("../img/title_bkg.png");
   -webkit-box-shadow: 0px 0px 5px #000;
   text-align: center;
 }
@@ -385,7 +384,8 @@ article .example .field {
 #header #title {
   border-bottom: 1px solid #000;
   color: white;
-  height: 84px;
+  height: 112px;
+  background: url("../img/title_bkg.png");
 }
 #header #title a {
   color: #999999;
@@ -401,7 +401,35 @@ article .example .field {
   color: #999999;
 }
 #header #title #intro {
-  padding-top: 27px;
+  padding: 27px 0;
+}
+#header #title #topbar {
+  background: #000;
+  height: 30px;
+}
+#header #title #topbar ul {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+#header #title #topbar ul li {
+  display: inline-block;
+  width: 118px;
+  text-align: center;
+  text-transform: uppercase;
+  font: bold 13px "Helvetica Neue", Arial, Sans-Serif;
+  padding-top: 7px;
+  height: 30px;
+}
+#header #title #topbar ul li#analysis {
+  background-color: #f14a30;
+  text-shadow: 0 1px #ed705a;
+}
+#header #title #topbar ul li#analysis a {
+  color: #7E2817;
+}
+#header #title #topbar ul li#report a {
+  color: #FFF;
 }
 #header #tools {
   border-top: 1px solid rgba(51, 51, 51, 0.5);
@@ -788,7 +816,7 @@ article .example .field {
 #header #overview {
   position: absolute;
   right: 0;
-  top: 0;
+  top: 0px;
   width: 200px;
   height: 113px;
   padding: 20px;
@@ -1096,7 +1124,7 @@ body, html {
 #workarea {
   position: absolute;
   width: 100%;
-  top: 144px;
+  top: 172px;
   bottom: 0;
 }
 #workarea .map_container {
@@ -1497,6 +1525,20 @@ body, html {
 #header #tools #work_toolbar #selection li a#draw.selected {
   background: url(../img/icons/tool_icons_vis.png) no-repeat -30px 0px, -webkit-gradient(linear, 50% 0%, 50% 100%, from(black), to(#1a1b1e));
 }
+#header #title #topbar ul li#report {
+  background-color: #39ac39;
+  text-shadow: 0 1px #44d144;
+}
+#header #title #topbar ul li#report a {
+  color: #133D13;
+}
+#header #title #topbar ul li#analysis {
+  background: none;
+  text-shadow: none;
+}
+#header #title #topbar ul li#analysis a {
+  color: #FFF;
+}
 #header #date_range_select {
   display: inline-block;
   width: 200px;
@@ -1778,6 +1820,10 @@ body, html {
 }
 #searchbox #small ul li a:hover {
   color: #333333;
+}
+
+html {
+  background: url("../img/login_pattern.jpg") repeat 0 0 !important;
 }
 
 .map_container #popup {
