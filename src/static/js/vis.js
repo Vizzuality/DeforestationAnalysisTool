@@ -223,6 +223,13 @@ var Vizzualization = Backbone.View.extend({
             self.map.set_zoom(zoom);
             self.router.navigate('/' + zoom + "/" + center.lat() + "/" + center.lng());
         });
+        var update_router = function() {
+            var center = self.map.map.getCenter();
+            var zoom = self.map.map.getZoom();
+            self.router.navigate('/' + zoom + "/" + center.lat() + "/" + center.lng());
+        };
+        this.map.bind('center_changed', update_router);
+        this.map.bind('zoom_changed', update_router);
 
         if(location.hash === '') {
             var ll = this.map.map.getCenter();
