@@ -169,6 +169,7 @@ var PolygonDrawEditTool = PolygonDrawTool.extend({
             this.mapview.bind('click', this.add_vertex);
         } else {
             this.reset();
+            this.final_polygon.setPath([]);
             this.mapview.unbind('click', this.add_vertex);
         }
     },
