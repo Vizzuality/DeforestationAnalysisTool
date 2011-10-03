@@ -79,7 +79,7 @@ var Toolbar = Backbone.View.extend({
 
         this.draw_tool = this.options.draw_tool;
         this.buttons.bind('state', this.change_state);
-        
+
     },
 
     change_state: function(state) {
@@ -163,7 +163,7 @@ var Vizzualization = Backbone.View.extend({
     start: function() {
         var self = this;
         // load layers in map
-        this.map.layers.reset(this.available_layers.models);
+        this.map.layers.reset(this.available_layers.models.reverse());
 
         this.report_dialog.regions = _(self.REPORT_LAYERS).map(function(a) {
                 return self.available_layers.get_by_name(a).toJSON();
