@@ -1,6 +1,21 @@
 
 var loader = new Loading();
 var loading_small = new LoadingSmall();
+
+
+/*
+  =================================
+  app router
+  =================================
+*/
+var Router = Backbone.Router.extend({
+
+  routes: {
+    "/:zoom/:lat/:lon":        "goto"
+  },
+  goto: function() {}
+});
+
 /*
   =================================
 */
@@ -154,6 +169,17 @@ var Vizzualization = Backbone.View.extend({
         this.create_polygon_tool = new  PolygonDrawEditTool({mapview: this.map});
         this.tools = new Toolbar({draw_tool: this.create_polygon_tool});
 
+        //router
+        this.router = new Router();
+        this.router.bind('route:goto', function(zoom, lat, lon) {
+            self.map.set_center(
+                    new google.maps.LatLng(
+                        parseFloat(lat),
+                        parseFloat(lon))
+            );
+            self.map.set_zoom(parseInt(zoom, 10));
+        });
+
         this.create_polygon_tool.bind('polygon_click', function(path) {
             console.log(path);
         });
@@ -170,6 +196,7 @@ var Vizzualization = Backbone.View.extend({
         this.map.bind('click', function() { self.searchbox.close(); });
         this.tools.bind('show_report', this.show_report);
 
+        Backbone.history.start();
         loader.finished('Vizzualization::initialize');
     },
 
@@ -194,7 +221,14 @@ var Vizzualization = Backbone.View.extend({
         this.searchbox.bind('goto', function(center, zoom) {
             self.map.set_center(center);
             self.map.set_zoom(zoom);
+            self.router.navigate('/' + zoom + "/" + center.lat() + "/" + center.lng());
         });
+
+        if(location.hash === '') {
+            var ll = this.map.map.getCenter();
+            var z = this.map.map.getZoom();
+            self.router.navigate('/'+ z + '/' + ll.lat() + '/' + ll.lng());
+        }
     },
 
     // update timerange dates
