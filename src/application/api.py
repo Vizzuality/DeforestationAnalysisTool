@@ -2,7 +2,8 @@
 
 import time
 import csv
-from datetime import datetime
+from datetime import datetime, timedelta
+import random
 import logging
 import simplejson as json
 from StringIO import StringIO
@@ -59,17 +60,30 @@ def stats(table, zone=None):
     csv_file.writerow(('report_id', 'start_date', 'end_date', 'deforestated', 'degradated'))
     reports = [Report.get_by_id(x) for x in reports]
     logging.info(reports);
+    i = 0
     for r in reports:
         if not r:
             abort(404)
         st = r.statsstore_set.get().table_accum(table, zone)
         if not st:
             abort(404)
+        #hack
+        #TODO: Fix this
+        """
         csv_file.writerow((str(r.key().id()), 
                 r.start.isoformat(),
                 r.end.isoformat(),
                 st['def'], 
                 st['deg']))
+        """
+        csv_file.writerow((str(r.key().id() + i), 
+                (r.start + timedelta(days=i*30)).isoformat(),
+                (r.end + timedelta(days=i*30)).isoformat(),
+                random.random()*10,
+                random.random()*10))
+                #st['def'], 
+                #st['deg']))
+        i+=1
 
     return Response(f.getvalue(), mimetype='text/csv')
 
