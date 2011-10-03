@@ -58,7 +58,7 @@ var NDFILayer = Backbone.View.extend({
         var self = this;
         this.token = this.ndfimap.get('token');
         this.mapid = this.ndfimap.get('mapid');
-        this.mapview.layers.add(this.map_layer);
+        this.mapview.layers.add(this.map_layer, { at: 0 });
         /*_.each(this.sub_map_layer, function(l) {
             l.bind('change', self.class_visibility);
             self.mapview.layers.add(l);

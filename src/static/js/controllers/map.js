@@ -219,7 +219,10 @@ var MapView = Backbone.View.extend({
         var self = this;
         var idx = 0;
         self.map.overlayMapTypes.clear();
-        self.layers.each(function(layer, index) {
+        var lyrs = self.layers.models;
+        for(var i=0; i< lyrs.length; ++i) {
+            var layer = lyrs[lyrs.length - i - 1];
+            var index = i;
             var lyr;
             if(layer.get('type') === 'fake') {
                 //i'm very sorry
@@ -260,7 +263,7 @@ var MapView = Backbone.View.extend({
                     }
                 }
             }
-        });
+        }
     },
 
     create_layer: function(model_layer) {
