@@ -63,7 +63,7 @@ var StatiticsInfo = Backbone.View.extend({
     range_change: function(reports) {
         this.location.html("All areas " + _(reports).reduce(function(total, r) {
             return total + r.get('deforestation') + r.get('degradation');
-        }, 0) + "km2");
+        }, 0).toFixed(2) + "km2");
     }
 });
 
@@ -196,7 +196,8 @@ var Vizzualization = Backbone.View.extend({
           'Municipalities',
           'States',
           'Federal Conservation',
-          'State Conservation'
+          'State Conservation',
+          'Ingienous Land'
         ];
         _(layers).each(function(layer_name) {
             var state = self.map.layers.get_by_name(layer_name);
@@ -225,7 +226,9 @@ var Vizzualization = Backbone.View.extend({
             if(stats === undefined) {
                 show_error('There was a problem getting stats for this area');
             } else {
-                self.popup.showAt(data.latLng, data.table, data.row.name.value, data.row.description.value, '23.291', stats.def,  stats.deg);
+                //hack to avoid fails on tables without description
+                var desc = data.row.description || {'value': 'desc'};
+                self.popup.showAt(data.latLng, data.table, data.row.name.value, desc.value, '23.291', stats.def,  stats.deg);
             }
             loading_small.finished('fething stats');
         });

@@ -1593,7 +1593,7 @@ body, html {
 }
 #header #date_range_select #range_selector #range_info input {
   background-color: #404040;
-  width: 49px;
+  width: 65px;
   border-radius: 2px;
   border: 1px solid #000;
   font: normal 11px "Helvetica Neue", Arial, Sans-Serif;
