@@ -271,7 +271,7 @@ var Vizzualization = Backbone.View.extend({
             layer: pl,
             initial_range: self.time_range.get_report_range()
         });
-        this.time_range.bind('update_range', self.polygons_layer.range_changed);
+        this.time_range.bind('range_change', self.polygons_layer.range_changed);
     },
 
     polygon_click: function(data) {
