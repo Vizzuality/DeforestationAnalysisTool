@@ -37,7 +37,7 @@ var ReportDialog = Backbone.View.extend({
 
         //input
         this.reports = this.options.reports;
-        this.formats = ['csv'];
+        this.formats = ['csv', 'kml'];
 
     },
 
@@ -82,7 +82,7 @@ var ReportDialog = Backbone.View.extend({
     },
     select_format_click: function(e) {
         e.preventDefault();
-        this.export_types.$('li').removeClass('selected');
+        this.export_types.find('li').removeClass('selected');
         this.select_format(e.target);
     },
 
