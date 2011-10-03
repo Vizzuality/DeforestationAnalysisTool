@@ -88,7 +88,26 @@
      ];
 
      window.app.available_layers.reset(available_maps);
-     window.app.reports.reset({{reports|safe}});
+     //TODO: change in production FAKE DATA
+     //window.app.reports.reset({{reports|safe}});
+     var reports = []
+     for(var i=0; i < 10; ++i) {
+         var offset =  3600*24*30*1000*i;
+         reports.push({
+            assetid: "gM8ZmQK3zEdXODRG",
+            cells_finished: 1,
+            deforestation: Math.random()*5,
+            degradation: Math.random()*8,
+            end: 1317168000000 + offset,
+            finished: true,
+            fusion_tables_id: "54003",
+            id: "ahBpbWF6b24tcHJvdG90eXBlcg4LEgZSZXBvcnQY86UDDA_FAKE_" + i,
+            start: 1309478400000 + offset,
+            str: "2011-" + (7+i) + "-01",
+            total_cells: 7400
+         })
+     }
+     window.app.reports.reset(reports);
 
     }
 

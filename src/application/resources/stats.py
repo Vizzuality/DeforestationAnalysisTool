@@ -2,6 +2,7 @@
 
 
 import simplejson as json
+import random
 from resource import Resource
 from flask import Response, request, jsonify, abort
 from google.appengine.ext.db import Key
@@ -31,29 +32,39 @@ class RegionStatsAPI(Resource):
         super(RegionStatsAPI, self).__init__()
         self.ee = Stats()
 
-    def stats_for(self, r, table):
-        return self.ee.get_stats(r.assetid,  table)
+    def stats_for(self, assetid, table):
+        return self.ee.get_stats(assetid,  table)
 
     # TODO: change for get
     def list(self, report_id):
         cache_key = 'stats_' + report_id
         data = memcache.get(cache_key)
         if not data:
+            #TODO: PLEASEPLASEPLASE uncomment this in production
+            """
             r = Report.get(Key(report_id))
             if not r:
                 abort(404)
+            """
             #TODO: get from datastore
             stats = {
                 'id': report_id,
                 'stats': {}
             }
             for desc, table, name in tables:
-                stats['stats'].update(self.stats_for(r, table))
+                #stats['stats'].update(self.stats_for(r.assetid, table))
+                #TODO: revert this in production
+                stats['stats'].update(self.stats_for("PRODES_IMAZON_2011a", table))
+                # add some random magic :D
+                for k in stats['stats']:
+                    stats['stats'][k]['def'] = "%.1f" % (random.random()*4)
+                    stats['stats'][k]['deg'] = "%.1f" % (random.random()*4)
+
             # cache it
             data = json.dumps(stats)
             memcache.set(cache_key, data)
             # save it!
-            StatsStore(report=r, json=data).put()
+            #StatsStore(report=r, json=data).put()
         return Response(data, mimetype='application/json')
 
     def get(self, report_id, id):
