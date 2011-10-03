@@ -134,5 +134,21 @@
               text-align:center;
           }
         }
+        #settings {
+            #settings_popup {
+                background: url('/static/img/bkg_settings_popup_vis.png');
+                height: 59px;
+            }
+            a {
+                font:normal 13px $text_font;
+                color: rgba(255, 255, 255, 0.7);
+                text-shadow:0 1px rgb(39,115,39);
+            }
+            #logout {
+                float: left;
+                margin-left: 0px;
+                background: url('/static/img/icons/logout_vis.png') no-repeat 0px 1px;
+            }
+        }
     }
 }

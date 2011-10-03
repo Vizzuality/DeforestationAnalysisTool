@@ -1629,6 +1629,20 @@ body, html {
   text-transform: uppercase;
   text-align: center;
 }
+#header #overview #settings #settings_popup {
+  background: url("/static/img/bkg_settings_popup_vis.png");
+  height: 59px;
+}
+#header #overview #settings a {
+  font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: 0 1px #277327;
+}
+#header #overview #settings #logout {
+  float: left;
+  margin-left: 0px;
+  background: url("/static/img/icons/logout_vis.png") no-repeat 0px 1px;
+}
 
 #report_dialog_outer {
   display: none;

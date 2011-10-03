@@ -93,10 +93,12 @@ def home(cell_path=None):
 def vis():
     user = users.get_current_user()
     u = User.get_user(user)
+    logout_url = users.create_logout_url('/')
     #TODO show only finished
     reports = [x.as_dict() for x in Report.all().filter("finished =", True)]
     return render_template('vis/index.html',
             user=u,
+            logout_url=logout_url,
             polygons_table=settings.FT_TABLE_ID,
             reports=json.dumps(reports))
 
