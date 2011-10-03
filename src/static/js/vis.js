@@ -83,7 +83,19 @@ var Toolbar = Backbone.View.extend({
 
     },
 
+    set_cursor: function(st) {
+            var cursors_pos = {
+                'edit': '4 4',
+                'auto': '7 7',
+                'remove': '6 6',
+                'draw': '4 16'
+            };
+            this.draw_tool.mapview.map.setOptions({
+                    draggableCursor: 'url(/static/img/cursor_' + st +'.png) ' + cursors_pos[st] + ', default'});
+    },
+
     change_state: function(state) {
+        this.set_cursor(state);
         switch(state) {
             case 'draw':
                 this.draw_tool.editing_state(true);
