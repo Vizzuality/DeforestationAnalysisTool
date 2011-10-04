@@ -96,6 +96,7 @@ def testing():
     logging.info("report " + unicode(r))
     ee_resource = 'MOD09GA'
     s = Stats()
-    return str(s.get_stats_for_polygon(None, None))
+    polygon = [[[-61.9,-11.799],[-61.9,-11.9],[-61.799,-11.9],[-61.799,-11.799],[-61.9,-11.799]]]
+    return str(s.get_stats_for_polygon("PRODES_2009", polygon))
     #return str(ndfi.mapid2())
     #return str(ndfi.freeze_map(1089491, r.key().id()))
