@@ -1793,7 +1793,7 @@ body, html {
 }
 #searchbox #small.big {
   height: 266px;
-  background: url("../img/bkg_searchbox.png") no-repeat -6px -6px;
+  /*background:url('../img/bkg_searchbox.png') no-repeat -6px -6px;*/
 }
 #searchbox #small input {
   margin: 10px 0 0 32px;
@@ -1803,13 +1803,28 @@ body, html {
   padding: 5px 3px;
   font: normal 13px "Helvetica Neue", Arial, Sans-Serif;
 }
+#searchbox #small #hack {
+  position: absolute;
+  margin-left: 22px;
+  margin-top: 5px;
+  width: 217px;
+  height: 3px;
+  overflow: hidden;
+  border-bottom: 1px solid #555;
+  border-left: 1px solid #555;
+  border-right: 1px solid #555;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, from(#e9e9e9), to(#d5d5d5));
+}
 #searchbox #small ul {
   position: relative;
   margin-left: 23px;
   margin-top: 10px;
   width: 217px;
-  height: 195px;
+  height: 206px;
   overflow: hidden;
+  border-radius: 3px;
 }
 #searchbox #small ul li {
   width: 206px;
