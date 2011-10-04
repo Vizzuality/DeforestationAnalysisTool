@@ -1774,6 +1774,14 @@ body, html {
   left: 20px;
   top: 80px;
 }
+#searchbox #open_close_trigger {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
 #searchbox #small {
   display: none;
   position: absolute;
