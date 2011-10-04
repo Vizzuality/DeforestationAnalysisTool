@@ -116,9 +116,13 @@ var LayerEditor = Backbone.View.extend({
         this.el.find('ul').find('li').each(function(idx, item) {
             var id = $(item).attr('id');
             var view = self.item_view_map[id];
+            self.layers.remove(view.model);
             new_order_list.push(view.model);
         });
-        this.layers.reset(new_order_list);
+        _(new_order_list).each(function(l) {
+            self.layers.add(l);
+        });
+        this.layers.trigger('reset');
     },
 
     addLayer: function(layer) {
