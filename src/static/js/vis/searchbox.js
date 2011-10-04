@@ -27,11 +27,12 @@ var Searchbox = Backbone.View.extend({
     events: {
         'change #to_search': 'typing',
         'click li a': 'goto',
-        'click #icon': 'show'
+        'click #icon': 'show',
+        'click #open_close_trigger': 'toggle'
     },
 
     initialize: function() {
-        _.bindAll(this, 'typing', 'render', 'goto', 'show', 'close');
+        _.bindAll(this, 'typing', 'render', 'goto', 'show', 'close', 'toggle');
         this.results = new SearchResults();
         this.to_search = this.$('#to_search');
         this.results.bind('reset', this.render);
@@ -64,6 +65,11 @@ var Searchbox = Backbone.View.extend({
                 '<li><a href="#' + ll_str + '">' + r.get('formatted_address') + '</a></li>'
             );
         });
+        var h = 0;
+        this.$('li').each(function() {
+            h += $(this).outerHeight();
+        });
+        this.$('#hack').css({height: Math.min(216, h + 8)});
     },
 
     goto: function(e) {
@@ -78,6 +84,11 @@ var Searchbox = Backbone.View.extend({
 
     close: function() {
         this.$("#small").hide();
+    },
+
+    toggle: function() {
+        this.$("#small").toggle();
     }
+
 
 });
