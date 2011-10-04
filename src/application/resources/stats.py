@@ -6,9 +6,11 @@ import random
 from resource import Resource
 from flask import Response, request, jsonify, abort
 from google.appengine.ext.db import Key
+from google.appengine.ext import deferred
 
 from application.models import Report, StatsStore
 from application.ee import Stats
+from application.commands import update_report_stats
 
 from google.appengine.api import memcache
 
@@ -43,6 +45,9 @@ class RegionStatsAPI(Resource):
             try:
                 data = StatsStore.all().filter('report_id =', report_id).fetch(1)[0].json
             except IndexError:
+                # launch caching!
+                logging.info("launching stats calc")
+                deferred.defer(update_report_stats, report_id)
                 abort(404)
             memcache.set(cache_key, data)
         return Response(data, mimetype='application/json')

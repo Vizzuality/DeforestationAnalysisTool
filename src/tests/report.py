@@ -17,7 +17,9 @@ class StatsTest(unittest.TestCase, GoogleAuthMixin):
         self.app = app.test_client()
         self.login('test@gmail.com', 'testuser')
         # generate data for reports
-        self.r = Report(start=date(year=2011, month=2, day=1), finished=True)
+        self.r = Report(start=date(year=2011, month=2, day=1),
+                        end=date(year=2011, month=3, day=1),
+                        finished=True)
         self.r.put();
         stats = {
             'id': str(self.r.key()),
@@ -43,8 +45,7 @@ class StatsTest(unittest.TestCase, GoogleAuthMixin):
             }
         }
 
-        StatsStore(report=self.r, json=json.dumps(stats)).put();
-        
+        StatsStore(report_id=str(self.r.key()), json=json.dumps(stats)).put();
 
     def test_table(self):
         """ get reports for all regions  """
@@ -54,13 +55,15 @@ class StatsTest(unittest.TestCase, GoogleAuthMixin):
         rows = rv.data.split('\n')
         header = rows[0].split(',')
         row1= rows[1].split(',')
-        self.assertEquals('report', header[0])
-        self.assertEquals('deforestated', header[1])
-        self.assertEquals('degradated\r', header[2])
+        self.assertEquals('report_id', header[0])
+        self.assertEquals('start_date', header[1])
+        self.assertEquals('end_date', header[2])
+        self.assertEquals('deforestated', header[3])
+        self.assertEquals('degradated\r', header[4])
 
         self.assertEquals(str(self.r.key().id()), row1[0])
-        self.assertEquals(2, int(row1[1]))
-        self.assertEquals(4, int(row1[2]))
+        self.assertEquals(2, float(row1[3]))
+        self.assertEquals(4, float(row1[4]))
 
     def test_table_zone(self):
         """ get reports for all regions  """
@@ -70,20 +73,24 @@ class StatsTest(unittest.TestCase, GoogleAuthMixin):
         rows = rv.data.split('\n')
         header = rows[0].split(',')
         row1= rows[1].split(',')
-        self.assertEquals('report', header[0])
-        self.assertEquals('deforestated', header[1])
-        self.assertEquals('degradated\r', header[2])
+        self.assertEquals('report_id', header[0])
+        self.assertEquals('start_date', header[1])
+        self.assertEquals('end_date', header[2])
+        self.assertEquals('deforestated', header[3])
+        self.assertEquals('degradated\r', header[4])
 
         self.assertEquals(str(self.r.key().id()), row1[0])
-        self.assertEquals(1, int(row1[1]))
-        self.assertEquals(2, int(row1[2]))
+        self.assertAlmostEquals(1, float(row1[3]))
+        self.assertAlmostEquals(2, float(row1[4]))
 
     def test_non_existing(self):
         rv = self.app.get('/api/v0/stats/0002?reports=' + str(self.r.key().id()))
         self.assertEquals(404, rv.status_code)
+
     def test_non_existing_report(self):
         rv = self.app.get('/api/v0/stats/0000?reports=123123,' + str(self.r.key().id()))
         self.assertEquals(404, rv.status_code)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -170,19 +170,18 @@ def stats_for(assetid, table):
     return ee.get_stats(assetid,  table)
 
 def update_report_stats(report_id):
-    cache_key = 'stats_' + report_id
+    r = Report.get(Key(report_id))
     stats = {
         'id': report_id,
         'stats': {}
     }
     for desc, table, name in tables:
-        #stats['stats'].update(self.stats_for(r.assetid, table))
-        #TODO: revert this in production
-        stats['stats'].update(stats_for("PRODES_IMAZON_2011a", table))
-        # add some random magic :D
-        for k in stats['stats']:
-            stats['stats'][k]['def'] = "%.1f" % (random.random()*4)
-            stats['stats'][k]['deg'] = "%.1f" % (random.random()*4)
+        stats['stats'].update(stats_for(r.assetid, table))
+
     data = json.dumps(stats)
-    memcache.set(cache_key, data)
-    StatsStore(report_id=report_id, json=data).put()
+    s = StatsStore.get_for_report(report_id)
+    if s:
+        s.json = data
+        s.put()
+    else:
+        StatsStore(report_id=report_id, json=data).put()

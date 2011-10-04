@@ -45,9 +45,8 @@ RegionStatsAPI.add_urls(app, '/api/v0/report/<report_id>/stats')
 @app.route('/api/v0/stats/<table>/<zone>')
 @app.route('/api/v0/stats/<table>')
 def stats(table, zone=None):
-    
+
     reports = request.args.get('reports', None)
-    """
     if not reports:
         abort(400)
     try:
@@ -55,40 +54,31 @@ def stats(table, zone=None):
     except ValueError:
         logging.error("bad format for report id")
         abort(400)
-    """
-        
+
     f = StringIO()
     csv_file = csv.writer(f)
     csv_file.writerow(('report_id', 'start_date', 'end_date', 'deforestated', 'degradated'))
-    #reports = [Report.get_by_id(x) for x in reports]
-    reports = reports.split(',')
-    logging.info(reports);
-    i = 0
-    rr = Report.current()
+    reports = [Report.get_by_id(x) for x in reports]
     for r in reports:
         if not r:
             abort(404)
-        logging.info(r)
-        st = StatsStore.get_for_report(r).table_accum(table, zone)
+        report_id = str(r.key())
+        st = StatsStore.get_for_report(report_id)
+
         if not st:
+            logging.error("no cached stats for %s" % report_id)
             abort(404)
-        #hack
-        #TODO: Fix this
-        """
-        csv_file.writerow((str(r.key().id()), 
+
+        stats = st.table_accum(table, zone)
+        if not stats:
+            logging.error("no stats for %s" % report_id)
+            abort(404)
+
+        csv_file.writerow((str(r.key().id()),
                 r.start.isoformat(),
                 r.end.isoformat(),
-                st['def'], 
-                st['deg']))
-        """
-        csv_file.writerow((r,
-                (date(year=2011, month=7, day=1) + timedelta(days=i*30)).isoformat(),
-                (date(year=2011, month=7, day=30) + timedelta(days=i*30)).isoformat(),
-                random.random()*10,
-                random.random()*10))
-                #st['def'], 
-                #st['deg']))
-        i+=1
+                stats['def'],
+                stats['deg']))
 
     return Response(f.getvalue(), mimetype='text/csv')
 

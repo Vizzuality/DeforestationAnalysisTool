@@ -32,13 +32,9 @@ var PolygonsLayer = Backbone.View.extend({
     },
 
     range_changed: function(reports) {
-        /*
         var r = _(reports).map(function(rep) { 
             return "'" + rep.get('fusion_tables_id') + "'"; 
         });
-        */
-        var rr = ['54003', '81064', '43001' ];
-        var r = rr.slice(0, reports.length);
         var sql_where = 'report_id IN (' + r.join(',') + ')';
         this.google_maps_layer.setOptions({
             query: {
