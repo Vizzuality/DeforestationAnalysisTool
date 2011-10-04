@@ -8,7 +8,12 @@ var ReportStat = Backbone.Model.extend({
     }
 });
 
-
+/*
+ ========================================
+ store all statictics in the cliend side. Take this class
+ as a memcache in client side
+ ========================================
+*/
 var ReportStatCollection = Backbone.Collection.extend({
 
     model: ReportStat,
@@ -45,11 +50,51 @@ var ReportStatCollection = Backbone.Collection.extend({
             });
             callback({'def': def.toFixed(2), 'deg': deg.toFixed(2)});
         });
-        //TODO agregate report results
         return this;
-        /*this.reduce(function(total,
-            _.reduce([1, 2, 3], function(memo, num){ return memo + num; }
-        */
-
     }
 });
+
+// model used to return stats for a given poly
+var PolygonStat = Backbone.Model.extend({
+    url: function() {
+        return '/api/v0/report/' + this.get('report_id') + '/stats/polygon';
+    }
+});
+
+/*
+ ========================================
+ ========================================
+*/
+
+var PolygonStatCollection = Backbone.Collection.extend({
+
+    model: PolygonStat,
+
+    initialize: function(models, options) {
+        this.polygon_path = options.polygon_path;
+        this.reports = options.reports;
+    },
+
+    stats: function(callback) {
+        var self = this;
+        var callback_after = _.after(self.reports.length, function(){
+             // agregate
+             var def = 0, deg = 0;
+             self.each(function(p) {
+                def += p.get('def');
+                deg += p.get('deg');
+             });
+             callback({def: def, deg: def});
+        });
+        _(this.reports).each(function(r) {
+            var poly = new PolygonStat({
+                report_id: r.id,
+                polygon: self.polygon_path
+            });
+            self.add(poly);
+            poly.save(null, {success:callback_after});
+        });
+    }
+});
+
+

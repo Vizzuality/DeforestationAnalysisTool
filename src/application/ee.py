@@ -29,6 +29,34 @@ class Stats(object):
             "fields": "classHistogram"
         })
 
+    def get_stats_for_polygon(self, assetid, polygon):
+        """ example poygon, must be CCW 
+            #polygon = [[[-61.9,-11.799],[-61.9,-11.9],[-61.799,-11.9],[-61.799,-11.799],[-61.9,-11.799]]]
+        """
+        return self._execute_cmd("/value", {
+            "image": json.dumps({"creator":"SAD/com.google.earthengine.examples.sad.GetStats",
+                "args":[
+                    {
+                    "creator":"SAD/com.google.earthengine.examples.sad.ProdesImage",
+                    "args":[assetid]
+                    },
+                    {
+                    "features":
+                        [
+                            {"type":"Feature",
+                             "geometry":
+                                {"type":"Polygon",
+                                 "coordinates": polygon,
+                                 "properties":{"name":"myPoly"}
+                                }
+                            }
+                        ]
+                    },
+                    "name"
+                 ]}),
+            "fields": "classHistogram"
+        })
+
     def get_stats(self, frozen_image, table_id):
         r = self.get_stats_for_table(frozen_image,  table_id)
         try:

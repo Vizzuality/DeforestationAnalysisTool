@@ -16,7 +16,7 @@ from app import app
 import settings
 
 from models import Area, Note, Report, StatsStore
-from ee import NDFI, EELandsat
+from ee import NDFI, EELandsat, Stats
 
 from resources.report import ReportAPI, CellAPI, NDFIMapApi, PolygonAPI, NoteAPI, UserAPI
 
@@ -40,6 +40,7 @@ NoteAPI.add_urls(app, '/api/v0/report/<report_id>/cell/<cell_pos>/note')
 UserAPI.add_urls(app, '/api/v0/user')
 
 RegionStatsAPI.add_urls(app, '/api/v0/report/<report_id>/stats')
+RegionStatsAPI.add_custom_url(app, '/api/v0/report/<report_id>/stats/polygon', 'polygon', methods=('POST',))
 
 
 @app.route('/api/v0/stats/<table>/<zone>')
@@ -94,12 +95,7 @@ def testing():
     #r = Report.get(Key('ahBpbWF6b24tcHJvdG90eXBlcg4LEgZSZXBvcnQYiaECDA'))
     logging.info("report " + unicode(r))
     ee_resource = 'MOD09GA'
-    ndfi = NDFI(ee_resource,
-            r.comparation_range(),
-            r.range())
-    return jsonify(ndfi._execute_cmd("/value", {
-        "image": json.dumps({"creator":"SAD/com.google.earthengine.examples.sad.GetStats","args":[{"creator":"SAD/com.google.earthengine.examples.sad.ProdesImage","args":["PRODES_IMAZON_2011a"]},{"type":"FeatureCollection","table_id":1505198},"name"]}),
-        "fields": "classHistogram"
-    }))
+    s = Stats()
+    return str(s.get_stats_for_polygon(None, None))
     #return str(ndfi.mapid2())
     #return str(ndfi.freeze_map(1089491, r.key().id()))

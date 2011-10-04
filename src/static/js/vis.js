@@ -13,10 +13,12 @@ var Router = Backbone.Router.extend({
   routes: {
     "/:zoom/:lat/:lon":        "goto"
   },
+  //fake function, not used
   goto: function() {}
 });
 
 /*
+  =================================
   =================================
 */
 var FusionTablesLayer = Backbone.View.extend({
@@ -183,10 +185,11 @@ var Vizzualization = Backbone.View.extend({
         this.create_polygon_tool.bind('polygon_click', function(path) {
             console.log(path);
         });
+
         this.create_polygon_tool.bind('polygon', function(path) {
             var p = path.path[0];
-            //console.log('polygon');
-            self.custom_polygon_click(new google.maps.LatLng(p[0], p[1]), path.paths);
+            console.log(path.path);
+            self.custom_polygon_click(new google.maps.LatLng(p[0], p[1]), path.path);
         });
 
         // binding
@@ -290,19 +293,23 @@ var Vizzualization = Backbone.View.extend({
         });
     },
 
-    custom_polygon_click: function(latLng, data) {
+    custom_polygon_click: function(latLng, polygon_path) {
         var self = this;
         var reports = this.time_range.get_report_range();
+        var polygon_stats = new PolygonStatCollection(null, {
+            reports: reports,
+            polygon_path: polygon_path
+        });
         loading_small.loading('fetching stats');
         // TODO: get stats
-        if(1) {
+        polygon_stats.stats(function(stats) {
             stats =  {
                 table: 'table',
                 zone: 'zone',
                 title: 'custom polygon',
                 total_area: '1234',
-                area_deg: '2',
-                area_def: '1.2'
+                area_deg: stats.deg,
+                area_def: stats.def
             };
             if(stats === undefined) {
                 show_error('There was a problem getting stats for this area');
@@ -310,7 +317,7 @@ var Vizzualization = Backbone.View.extend({
                 self.popup.showAt(latLng, stats.table, stats.zone, stats.title, stats.total_area, stats.area_def, stats.area_deg);
             }
             loading_small.finished('fething stats');
-         }
+         });
     },
 
     show_report: function(report_info) {
