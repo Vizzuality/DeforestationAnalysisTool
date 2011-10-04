@@ -142,6 +142,14 @@ var Vizzualization = Backbone.View.extend({
       'State Conservation'
     ],
 
+    INTERACTION_LAYERS: [
+      'Municipalities',
+      'States',
+      'Federal Conservation',
+      'State Conservation',
+      'Ingienous Land'
+    ],
+
     el: $('body'),
 
     initialize: function() {
@@ -198,6 +206,12 @@ var Vizzualization = Backbone.View.extend({
         this.map.bind('click', function() { self.popup.close(); });
         this.map.bind('click', function() { self.searchbox.close(); });
         this.tools.bind('show_report', this.show_report);
+        this.tools.buttons.bind('state:edit', function() {
+            self.layers_clickable(true);
+        });
+        this.tools.buttons.bind('state:draw', function() {
+            self.layers_clickable(false);
+        });
 
         Backbone.history.start();
         loader.finished('Vizzualization::initialize');
@@ -251,14 +265,7 @@ var Vizzualization = Backbone.View.extend({
     prepare_ft_layers: function() {
         var self = this;
         // areas layers
-        var layers = [
-          'Municipalities',
-          'States',
-          'Federal Conservation',
-          'State Conservation',
-          'Ingienous Land'
-        ];
-        _(layers).each(function(layer_name) {
+        _(this.INTERACTION_LAYERS).each(function(layer_name) {
             var state = self.map.layers.get_by_name(layer_name);
             self.state_conservation_layer = new FusionTablesLayer({
                 mapview: self.map,
@@ -274,7 +281,19 @@ var Vizzualization = Backbone.View.extend({
             layer: pl,
             initial_range: self.time_range.get_report_range()
         });
+            
+        // set amazonas not clicable
+        pl = self.map.layers.get_by_name('Legal Amazon');
+        pl.map_layer.setOptions({clickable: false});
         this.time_range.bind('range_change', self.polygons_layer.range_changed);
+    },
+
+    layers_clickable: function(clickable) {
+        var self = this;
+        _(this.INTERACTION_LAYERS).each(function(layer) {
+            var l = self.map.layers.get_by_name(layer);
+            l.map_layer.setOptions({clickable: clickable});
+        });
     },
 
     polygon_click: function(data) {

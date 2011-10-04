@@ -118,6 +118,7 @@ var ButtonGroup = Backbone.View.extend({
         button.addClass('selected');
         event.preventDefault();
         this.trigger('state', button.attr('id'));
+        this.trigger('state:' + button.attr('id'));
     },
 
     select: function(opt) {
@@ -125,6 +126,7 @@ var ButtonGroup = Backbone.View.extend({
         this.buttons.removeClass('selected');
         button.addClass('selected');
         this.trigger('state', button.attr('id'));
+        this.trigger('state:' + button.attr('id'));
     },
 
     show: function() {
