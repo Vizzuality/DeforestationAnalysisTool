@@ -30,7 +30,7 @@ class Stats(object):
         })
 
     def get_stats_for_polygon(self, assetid, polygon):
-        """ example poygon, must be CCW 
+        """ example poygon, must be CCW
             #polygon = [[[-61.9,-11.799],[-61.9,-11.9],[-61.799,-11.9],[-61.799,-11.799],[-61.9,-11.799]]]
         """
         return self._execute_cmd("/value", {
@@ -176,18 +176,24 @@ class NDFI(object):
 
     def freeze_map(self, asset_id, table, report_id):
         """
-        ndfi_image_1 = self._NDFI_image(reference_images)
-        ndfi_image_2 = self._NDFI_image(work_images)
-        image = self._change_detection_data(reference_images, work_images)
         """
-        image = self.mapid2_cmd(asset_id)
         cmd ={
             "value": json.dumps({
-                "creator":"SAD/com.google.earthengine.examples.sad.FreezeMap",
-                "args": [image, table, 0, 4, "report_id", 1, "type", report_id],
-                "type":"image"
+                "creator": "SAD/com.google.earthengine.examples.sad.FreezeMap",
+                "args":[{
+                        "creator":"SAD/com.google.earthengine.examples.sad.ProdesImage",
+                        "args":[asset_id]
+                    },
+                    {
+                        "type":"FeatureCollection",
+                        "table_id": table, "filters":[
+                            {"metadata":"report_id", "equals": report_id}
+                        ]
+                    },
+                    "type"
+                ],
+                "type":"Image"
              }),
-            "type":"image"
         }
         return self._execute_cmd('/create', cmd)
 

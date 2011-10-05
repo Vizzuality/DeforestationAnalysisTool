@@ -428,7 +428,7 @@ class Area(db.Model):
     def fusion_tables_type(self):
         """ custom type id for FT """
         if self.type == self.DEGRADATION:
-            return 3
+            return 1
         return 2
 
     def delete_fusion_tables(self):
