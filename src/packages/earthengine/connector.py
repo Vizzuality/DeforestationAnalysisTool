@@ -30,7 +30,7 @@ class EarthEngine( object ):
 
     def _http( self, method, url, params=None ):
         logging.info("ee -> %s" % url)
-        #logging.info(params)
+        logging.info(params)
         try:
             response = urlfetch.fetch(
                 method = method,

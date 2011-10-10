@@ -6,8 +6,8 @@ import simplejson as json
 
 from earthengine.connector import EarthEngine
 
-PIXEL_SIZE = 0.25
-PIXEL_AREA = PIXEL_SIZE**2
+METER2_TO_KM2 = 1.0/(1000*1000)
+
 
 class Stats(object):
 
@@ -78,8 +78,9 @@ class Stats(object):
             stats[str(table_id) + '_' + k] = {
                 "id": k,
                 "table": table_id,
-                "def": int(v[u'2'])*PIXEL_AREA,
-                "deg": int(v[u'3'])*PIXEL_AREA
+                "total_area": int(v[u'1'])*METER2_TO_KM2,
+                "def": int(v[u'2'])*METER2_TO_KM2,
+                "deg": int(v[u'3'])*METER2_TO_KM2
             }
 
         return stats

@@ -147,7 +147,7 @@ var Vizzualization = Backbone.View.extend({
       'States',
       'Federal Conservation',
       'State Conservation',
-      'Ingienous Land'
+      'Indigenous Land'
     ],
 
     el: $('body'),
@@ -167,6 +167,8 @@ var Vizzualization = Backbone.View.extend({
         this.map = new MapView({el: this.$("#main_map")});
         this.map.map.setCenter(new google.maps.LatLng(-6.348056476859352, -57.88696289062));
         this.map.map.setOptions({disableDoubleClickZoom: false});
+
+
         this.map.bind('ready', this.start);
 
         // widgets
@@ -219,6 +221,12 @@ var Vizzualization = Backbone.View.extend({
 
     start: function() {
         var self = this;
+
+        if(this.reports.length === 0) {
+            show_error("No reports finished");
+            return;
+        }
+
         // load layers in map
         this.map.layers.reset(this.available_layers.models.reverse());
 
@@ -306,7 +314,7 @@ var Vizzualization = Backbone.View.extend({
             } else {
                 //hack to avoid fails on tables without description
                 var desc = data.row.description || {'value': 'desc'};
-                self.popup.showAt(data.latLng, data.table, data.row.name.value, desc.value, '23.291', stats.def,  stats.deg);
+                self.popup.showAt(data.latLng, data.table, data.row.name.value, desc.value, stats.total_area, stats.def,  stats.deg);
             }
             loading_small.finished('fething stats');
         });

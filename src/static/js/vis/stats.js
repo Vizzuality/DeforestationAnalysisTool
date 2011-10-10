@@ -41,14 +41,16 @@ var ReportStatCollection = Backbone.Collection.extend({
         self.fetch_periods(periods, function() {
             var def = 0;
             var deg = 0;
-            //var total_area = 0;
+            var total_area = 0;
             _(periods).each(function(p) {
                 var st = self.get(p).get('stats')[key];
                 def += parseFloat(st.def);
                 deg += parseFloat(st.deg);
-                //total_area += st.total_area;
+                total_area += st.total_area;
             });
-            callback({'def': def.toFixed(2), 'deg': deg.toFixed(2)});
+            callback({'def': def.toFixed(2),
+                      'deg': deg.toFixed(2),
+                      'total_area': total_area.toFixed(1)});
         });
         return this;
     }
@@ -80,11 +82,13 @@ var PolygonStatCollection = Backbone.Collection.extend({
         var callback_after = _.after(self.reports.length, function(){
              // agregate
              var def = 0, deg = 0;
+            var total_area = 0;
              self.each(function(p) {
                 def += p.get('def');
                 deg += p.get('deg');
+                total_area += p.get('total_area');
              });
-             callback({def: def, deg: def});
+             callback({def: def, deg: def, total_area: total_area});
         });
         _(this.reports).each(function(r) {
             var poly = new PolygonStat({

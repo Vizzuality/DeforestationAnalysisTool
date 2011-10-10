@@ -176,7 +176,7 @@ def update_report_stats(report_id):
         'stats': {}
     }
     for desc, table, name in tables:
-        stats['stats'].update(stats_for(r.assetid, table))
+        stats['stats'].update(stats_for(r.assetid or "PRODES_IMAZON_2011a", table))
 
     data = json.dumps(stats)
     s = StatsStore.get_for_report(report_id)

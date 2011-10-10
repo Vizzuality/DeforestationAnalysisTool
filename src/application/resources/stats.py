@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-
+import logging
 import simplejson as json
 import random
 from resource import Resource
