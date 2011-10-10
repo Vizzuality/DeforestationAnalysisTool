@@ -46,10 +46,10 @@ def default_maps():
         #maps.append({'data' :d['data'], 'info': 'ndfi difference'})
     d = ndfi.smaid()
     if 'data' in d:
-        maps.append({'data': d['data'], 'info': 'sma'})
+        maps.append({'data': d['data'], 'info': 'SMA'})
     d = ndfi.rgbid()
     if 'data' in d:
-        maps.append({'data': d['data'], 'info': 'rgb'})
+        maps.append({'data': d['data'], 'info': 'RGB'})
     d = ndfi.ndfi0id()
     if 'data' in d:
         maps.append({'data': d['data'], 'info': 'NDFI t0'})
