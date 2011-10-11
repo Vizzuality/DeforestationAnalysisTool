@@ -388,7 +388,7 @@ $(function() {
             var polygons = new LayerModel({
                   id: 'polygons',
                   type: 'fake',
-                  description: 'polygons'
+                  description: 'Validated polygons'
             });
             polygons.set_enabled(true);
             polygons.bind('change', function(layer) {
