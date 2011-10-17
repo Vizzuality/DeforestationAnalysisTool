@@ -8,6 +8,7 @@ Important: Place your keys in the secret_keys.py module,
 
 """
 
+from google.appengine.api import app_identity
 import os
 
 from secret_keys import *
@@ -21,12 +22,19 @@ if 'SERVER_SOFTWARE' in os.environ and os.environ['SERVER_SOFTWARE'].startswith(
 
 DEBUG = DEBUG_MODE
 
-if 1 or DEBUG:
+
+if DEBUG:
     FT_TABLE = 'areas_dev'
     FT_TABLE_ID = '1556991'
 else:
-    FT_TABLE = 'areas'
-    FT_TABLE_ID = '1089491'
+    app_id  = app_identity.get_application_id()
+    if app_id == 'imazon-sad-tool':
+        FT_TABLE = 'areas'
+        FT_TABLE_ID = '1089491'
+    elif app_id == 'imazon-prototipe':
+        FT_TABLE = 'areas_testing'
+        FT_TABLE_ID = '1869271'
+
 
 # Set secret keys for CSRF protection
 SECRET_KEY = CSRF_SECRET_KEY
