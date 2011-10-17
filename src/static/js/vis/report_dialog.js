@@ -37,7 +37,7 @@ var ReportDialog = Backbone.View.extend({
 
         //input
         this.reports = this.options.reports;
-        this.formats = ['csv', 'kml'];
+        this.formats = ['csv'];//, 'kml'];
 
     },
 
