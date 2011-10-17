@@ -81,7 +81,11 @@ def stats(table, zone=None):
                 stats['def'],
                 stats['deg']))
 
-    return Response(f.getvalue(), mimetype='text/csv')
+    return Response(f.getvalue(),
+            headers={
+                "Content-Disposition": "attachment; filename=\"report_%s.csv\"" % table
+            },
+            mimetype='text/csv')
 
 
 def landstat():
