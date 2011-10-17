@@ -343,10 +343,7 @@ class NDFI(object):
               "creator": 'SAD/com.google.earthengine.examples.sad.UnmixModis',
               "args": [{
                 "creator": 'SAD/com.google.earthengine.examples.sad.KrigingStub',
-                "args": [{
-                  "creator": 'SAD/com.google.earthengine.examples.sad.MakeMosaic',
-                  "args": ["MODIS/MOD09GA","MODIS/MOD09GQ", period['start'], period['end']]
-                }]
+                "args": [ self._MakeMosaic(period) ]
               }]
             }]
          }
@@ -400,11 +397,8 @@ class NDFI(object):
         """ commands for RGB image """
         return {
             "image": json.dumps({
-               "creator": 'SAD/com.google.earthengine.examples.sad.KrigingStub',
-               "args": [{
-                "creator": 'SAD/com.google.earthengine.examples.sad.MakeMosaic',
-                  "args": ["MODIS/MOD09GA","MODIS/MOD09GQ", period['start'], period['end']]
-              }]
+               "creator": 'sad_test/com.google.earthengine.examples.sad.KrigingStub',
+               "args": [ self._MakeMosaic(period) ]
             }),
             "bands": 'sur_refl_b01,sur_refl_b04,sur_refl_b03',
             "gain": 0.1,
@@ -412,16 +406,21 @@ class NDFI(object):
             "gamma": 1.6
           };
 
+    def _MakeMosaic(self, period):
+        return {
+          "creator": 'SAD/com.google.earthengine.examples.sad.MakeMosaic',
+          "args": ["MODIS/MOD09GA","MODIS/MOD09GQ", 
+                {'type':'FeatureCollection','table_id':1868251}, #this number is an special fusion tables id but i have no idea what it is supposed to do
+                period['start'], period['end']]
+        }
+
     def _SMA_image_command(self, period):
         return {
             "image": json.dumps({
               "creator": 'SAD/com.google.earthengine.examples.sad.UnmixModis',
               "args": [{
                 "creator": 'SAD/com.google.earthengine.examples.sad.KrigingStub',
-                "args": [{
-                  "creator": 'SAD/com.google.earthengine.examples.sad.MakeMosaic',
-                  "args": ["MODIS/MOD09GA","MODIS/MOD09GQ", period['start'], period['end']]
-                }]
+                "args": [self._MakeMosaic(period)]
               }]
             }),
             "bands": 'gv,soil,npv',
@@ -440,9 +439,7 @@ class NDFI(object):
                     "creator":"ClipToMultiPolygon",
                     "args":[{
                         "creator":"SAD/com.google.earthengine.examples.sad.KrigingStub",
-                        "args":[{
-                            "creator":"SAD/com.google.earthengine.examples.sad.MakeMosaic",
-                            "args":["MODIS/MOD09GA","MODIS/MOD09GQ", period['start'], period['end']]                        }]
+                        "args":[ self._MakeMosaic(period)]
                     },
                     polygon]
                  },
