@@ -40,7 +40,7 @@ NoteAPI.add_urls(app, '/api/v0/report/<report_id>/cell/<cell_pos>/note')
 UserAPI.add_urls(app, '/api/v0/user')
 
 RegionStatsAPI.add_urls(app, '/api/v0/report/<report_id>/stats')
-RegionStatsAPI.add_custom_url(app, '/api/v0/report/<report_id>/stats/polygon', 'polygon', methods=('POST',))
+RegionStatsAPI.add_custom_url(app, '/api/v0/stats/polygon', 'polygon', methods=('POST',))
 
 
 @app.route('/api/v0/stats/<table>/<zone>')
@@ -95,6 +95,7 @@ def landstat():
 
 @app.route('/api/v0/test')
 def testing():
+    """
     r = Report.current()
     #r = Report.get(Key('ahBpbWF6b24tcHJvdG90eXBlcg4LEgZSZXBvcnQYiaECDA'))
     logging.info("report " + unicode(r))
@@ -104,3 +105,10 @@ def testing():
     return str(s.get_stats_for_polygon("PRODES_2009", polygon))
     #return str(ndfi.mapid2())
     #return str(ndfi.freeze_map(1089491, r.key().id()))
+    """
+    s = Stats()
+    return jsonify(s._execute_cmd("/value", {
+        "image": json.dumps({"creator":"SAD/com.google.earthengine.examples.sad.GetStatsList","args":[
+    [{"creator":"sad_test/com.google.earthengine.examples.sad.ProdesImage","args":["PRODES_2009"]},
+     {"creator":"sad_test/com.google.earthengine.examples.sad.ProdesImage","args":["PRODES_IMAZON_2011a"]}],{"type":"FeatureCollection","table_id":1505198},"name"]}), "fields": "classHistogram"}))
+

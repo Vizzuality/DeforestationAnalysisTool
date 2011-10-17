@@ -63,15 +63,20 @@ class RegionStatsAPI(Resource):
         data = json.dumps(s)
         return Response(data, mimetype='application/json')
 
-    def polygon(self, report_id):
+    def polygon(self):
         """ return stats for given polygon """
-        r = Report.get(Key(report_id))
         data = json.loads(request.data)
         polygon = data['polygon']
+        reports = data['reports']
+        try:
+            reports = [Report.get(Key(x)) for x in reports]
+        except ValueError:
+            logging.error("can't find some report")
+            abort(404)
         #TODO: test if polygon is ccw
         # exchange lat, lon -> lon, lat
         normalized_poly = [(coord[1], coord[0]) for coord in polygon]
-        stats = self.ee.get_stats_for_polygon(r.assetid, [normalized_poly])
+        stats = self.ee.get_stats_for_polygon([r.assetid for r in reports], [normalized_poly])
         try:
             s = stats[0]
             s.update(data)

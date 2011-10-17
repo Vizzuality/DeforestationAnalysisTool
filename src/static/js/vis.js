@@ -329,14 +329,14 @@ var Vizzualization = Backbone.View.extend({
         });
         loading_small.loading('fetching stats');
         // TODO: get stats
-        polygon_stats.stats(function(stats) {
-            stats =  {
+        polygon_stats.stats(function(st) {
+            var stats = {
                 table: 'table',
                 zone: 'zone',
                 title: 'custom polygon',
-                total_area: '1234',
-                area_deg: stats.deg,
-                area_def: stats.def
+                total_area: st.total_area,
+                area_deg: st.deg,
+                area_def: st.def
             };
             if(stats === undefined) {
                 show_error('There was a problem getting stats for this area');

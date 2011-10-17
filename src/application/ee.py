@@ -68,7 +68,7 @@ class Stats(object):
         })
 
         try:
-            raw_stats = ['data']['properties']['classHistogram']
+            raw_stats = data['data']['properties']['classHistogram']
         except KeyError:
             return None
         stats = []
@@ -76,7 +76,7 @@ class Stats(object):
             logging.info(x)
             s = x['values']['null']['values']
             stats.append({
-                "total_area": int(v[u'1'])*METER2_TO_KM2,
+                "total_area": int(s[u'1'])*METER2_TO_KM2,
                 'def': float(s[u'2'])*METER2_TO_KM2,
                 'deg': float(s[u'3'])*METER2_TO_KM2,
             })
