@@ -3,6 +3,7 @@
 import logging
 import settings
 import simplejson as json
+import collections
 
 from earthengine.connector import EarthEngine
 
@@ -29,17 +30,26 @@ class Stats(object):
             "fields": "classHistogram"
         })
 
-    def get_stats_for_polygon(self, assetid, polygon):
+    def get_stats_for_polygon(self, assetids, polygon):
         """ example poygon, must be CCW
             #polygon = [[[-61.9,-11.799],[-61.9,-11.9],[-61.799,-11.9],[-61.799,-11.799],[-61.9,-11.799]]]
         """
-        return self._execute_cmd("/value", {
-            "image": json.dumps({"creator":"SAD/com.google.earthengine.examples.sad.GetStats",
-                "args":[
-                    {
+        # javascript way, lovely
+        if not hasattr(assetids, '__iter__'):
+            assetids = [assetids]
+
+        reports = []
+        for x in assetids:
+            reports.append({
                     "creator":"SAD/com.google.earthengine.examples.sad.ProdesImage",
-                    "args":[assetid]
-                    },
+                    "args":[x]
+            })
+
+        data = self._execute_cmd("/value", {
+            "image": json.dumps({"creator":"SAD/com.google.earthengine.examples.sad.GetStatsList",
+                "args":[
+                    reports
+                    ,
                     {
                     "features":
                         [
@@ -56,6 +66,21 @@ class Stats(object):
                  ]}),
             "fields": "classHistogram"
         })
+
+        try:
+            raw_stats = ['data']['properties']['classHistogram']
+        except KeyError:
+            return None
+        stats = []
+        for x in raw_stats:
+            logging.info(x)
+            s = x['values']['null']['values']
+            stats.append({
+                "total_area": int(v[u'1'])*METER2_TO_KM2,
+                'def': float(s[u'2'])*METER2_TO_KM2,
+                'deg': float(s[u'3'])*METER2_TO_KM2,
+            })
+        return stats
 
     def get_stats(self, frozen_image, table_id):
         r = self.get_stats_for_table(frozen_image,  table_id)

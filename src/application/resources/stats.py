@@ -73,16 +73,10 @@ class RegionStatsAPI(Resource):
         normalized_poly = [(coord[1], coord[0]) for coord in polygon]
         stats = self.ee.get_stats_for_polygon(r.assetid, [normalized_poly])
         try:
-            s = stats['data']['properties']['classHistogram']['values']['null']['values']
-            stats = {
-                'def': float(s[u'2'])/10000,
-                'deg': float(s[u'3'])/10000,
-                'id': report_id
-            }
-            # update with request data
-            stats.update(data)
-            return Response(json.dumps(stats), mimetype='application/json')
-        except KeyError, ValueError:
+            s = stats[0]
+            s.update(data)
+            return Response(json.dumps(s), mimetype='application/json')
+        except (KeyError, ValueError, IndexError):
             abort(404)
 
 
