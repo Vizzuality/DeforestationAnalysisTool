@@ -34,6 +34,9 @@ else:
     elif app_id == 'imazon-prototipe':
         FT_TABLE = 'areas_testing'
         FT_TABLE_ID = '1869271'
+    elif app_id == 'sad-training':
+        FT_TABLE = 'areas_training'
+        FT_TABLE_ID = '1873290'
 
 
 # Set secret keys for CSRF protection
