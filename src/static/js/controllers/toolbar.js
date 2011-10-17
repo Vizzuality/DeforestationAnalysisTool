@@ -99,8 +99,9 @@ var ReportToolbar = Toolbar.extend({
     el: $("#range_select"),
 
     initialize: function() {
-        this.report = this.options.report;
+       this.report = this.options.report;
        this.$("#report-date").html(this.report.escape('str'));
+       this.$("#report-date-end").html(this.report.escape('str_end'));
     }
 
 });

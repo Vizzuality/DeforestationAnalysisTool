@@ -107,6 +107,7 @@ class Report(db.Model):
                 'cells_finished': self.cells_finished(),
                 'total_cells': self.total_cells,
                 'str': self.start.strftime("%Y-%b-%d"),
+                'str_end': (self.end or date.today()).strftime("%Y-%b-%d"),
                 'assetid': self.assetid,
                 'deforestation': self.deforestation,
                 'degradation': self.degradation
