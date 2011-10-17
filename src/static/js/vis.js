@@ -341,7 +341,7 @@ var Vizzualization = Backbone.View.extend({
             if(stats === undefined) {
                 show_error('There was a problem getting stats for this area');
             } else {
-                self.popup.showAt(latLng, stats.table, stats.zone, stats.title, stats.total_area, stats.area_def, stats.area_deg);
+                self.popup.showAt(latLng, stats.table, stats.zone, stats.title, stats.total_area, stats.area_def, stats.area_deg, polygon_path);
             }
             loading_small.finished('fething stats');
          });

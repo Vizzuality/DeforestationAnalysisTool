@@ -60,6 +60,11 @@ var ReportStatCollection = Backbone.Collection.extend({
 var PolygonStat = Backbone.Model.extend({
     url: function() {
         return '/api/v0/stats/polygon';
+    },
+    get_csv: function() {
+        $.post(this.url() + '/csv',
+            this.attributes
+        );
     }
 });
 

@@ -20,11 +20,12 @@ var MapPopup = Backbone.View.extend({
     },
 
     // shows the popup with info
-    showAt: function(pos, table, zone, title, total_area, area_def, area_deg) {
+    showAt: function(pos, table, zone, title, total_area, area_def, area_deg, polygon) {
         var el = this.el;
         this.table = table;
         this.zone = zone;
         this.description = title;
+        this.polygon = polygon;
         this.pos(pos);
         this.$('h1').html(title);
         this.$('.area').html(total_area);
@@ -56,7 +57,8 @@ var MapPopup = Backbone.View.extend({
         this.trigger('show_report', {
             table: this.table,
             zone: this.zone,
-            name: this.description
+            name: this.description,
+            polygon: this.polygon
         });
     }
 

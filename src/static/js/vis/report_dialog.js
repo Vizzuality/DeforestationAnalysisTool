@@ -80,6 +80,7 @@ var ReportDialog = Backbone.View.extend({
         e.preventDefault();
         this.select_region($(e.target).html());
     },
+
     select_format_click: function(e) {
         e.preventDefault();
         this.export_types.find('li').removeClass('selected');
@@ -115,11 +116,18 @@ var ReportDialog = Backbone.View.extend({
         
         var url = '/api/v0/stats/';
         if(this.custom) {
-            url += this.custom.table + '/' + this.custom.zone;
+            if(this.custom.polygon) {
+                url += 'polygon/csv';
+            } else {
+                url += this.custom.table + '/' + this.custom.zone;
+            }
         } else {
             url += this.region_selected.table;
         } 
         url += '?reports=' + reports.join(',');
+        if(this.custom.polygon) {
+            url += '&polygon=' + encodeURI(JSON.stringify(this.custom.polygon));
+        }
         //alert(url);
         console.log(url);
         window.open(url);

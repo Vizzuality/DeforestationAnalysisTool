@@ -88,6 +88,49 @@ def stats(table, zone=None):
             mimetype='text/csv')
 
 
+@app.route('/api/v0/stats/polygon/csv')
+def polygon_stats_csv():
+    reports = request.args.get('reports', None)
+    if not reports:
+        abort(400)
+    try:
+        reports = map(int, reports.split(','))
+    except ValueError:
+        logging.error("bad format for report id")
+        abort(400)
+
+    try:
+        reports = [Report.get_by_id(x) for x in reports]
+    except ValueError:
+        logging.error("can't find some report")
+        abort(404)
+    #TODO: test if polygon is ccw
+    # exchange lat, lon -> lon, lat
+    polygon = json.loads(request.args.get('polygon', None))
+    if not polygon:
+        abort(404)
+    ee = Stats()
+    normalized_poly = [(coord[1], coord[0]) for coord in polygon]
+    stats = ee.get_stats_for_polygon([r.assetid for r in reports], [normalized_poly])
+    try:
+        f = StringIO()
+        csv_file = csv.writer(f)
+        csv_file.writerow(('report_id', 'start_date', 'end_date', 'deforestated', 'degradated'))
+        for i,s in enumerate(stats):
+            r = reports[i]
+            csv_file.writerow((str(r.key().id()),
+                    r.start.isoformat(),
+                    r.end.isoformat(),
+                    s['def'],
+                    s['deg']))
+        return Response(f.getvalue(),
+                headers={
+                    "Content-Disposition": "attachment; filename=\"polygon.csv\""
+                },
+                mimetype='text/csv')
+    except (KeyError, ValueError, IndexError):
+        abort(404)
+
 def landstat():
     e = EELandsat('LANDSAT/L7_L1T')
     #return jsonify(images=e.list())
