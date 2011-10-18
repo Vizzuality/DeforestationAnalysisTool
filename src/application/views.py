@@ -67,7 +67,7 @@ def home(cell_path=None):
         maps = json.loads(maps)
     else:
         maps = default_maps()
-        memcache.add(key='default_maps', value=json.dumps(maps), time=3600*24)
+        memcache.add(key='default_maps', value=json.dumps(maps), time=60*10)
 
     # send only the active report
     reports = json.dumps([Report.current().as_dict()])
