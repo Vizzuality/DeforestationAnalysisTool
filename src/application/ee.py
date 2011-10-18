@@ -178,18 +178,19 @@ class NDFI(object):
         self._image_cache = {}
 
     def mapid2_cmd(self, asset_id, polygon=None, rows=10, cols=10):
-            return {"creator":"SAD/com.google.earthengine.examples.sad.GetNDFIDelta","args":
-               [self.last_perdiod['start'],
-                self.last_perdiod['end'],
-                self.work_period['start'],
-                self.work_period['end'],
-                "MODIS/MOD09GA",
-                "MODIS/MOD09GQ",
-                {"creator":"SAD/com.google.earthengine.examples.sad.ProdesImage","args":[asset_id]},
-                polygon,
-                rows,
-                cols]
-            }
+        return {"creator":"SAD/com.google.earthengine.examples.sad.GetNDFIDelta","args": [
+            self.last_perdiod['start'],
+            self.last_perdiod['end'],
+            self.work_period['start'],
+            self.work_period['end'],
+            "MODIS/MOD09GA",
+            "MODIS/MOD09GQ",
+            {'type':'FeatureCollection','table_id': 1868251},
+            {"creator":"SAD/com.google.earthengine.examples.sad.ProdesImage","args":[asset_id]},
+            polygon,
+            rows,
+            cols]
+        }
 
     def mapid2(self, asset_id):
         cmd = {
