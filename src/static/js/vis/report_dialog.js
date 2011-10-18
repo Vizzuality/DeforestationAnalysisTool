@@ -28,7 +28,7 @@ var ReportDialog = Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'dowload_report', 'select_format', 'set_reports', 'select_format_click', 'select_region_click');
+        _.bindAll(this, 'dowload_report', 'select_format', 'set_reports', 'select_format_click', 'select_region_click', 'keyPress');
         this.selected = this.$('#selected');
         this.region_selector = this.$('#region_selector');
         this.date_from = this.$('#date_from');
@@ -38,6 +38,8 @@ var ReportDialog = Backbone.View.extend({
         //input
         this.reports = this.options.reports;
         this.formats = ['csv'];//, 'kml'];
+
+        $(document).bind('keydown', this.keyPress);
 
     },
 
@@ -150,6 +152,13 @@ var ReportDialog = Backbone.View.extend({
     hide: function(e) {
         if(e) e.preventDefault();
         this.el.hide();
+    },
+    
+    keyPress: function(e) {
+        //if(e) e.preventDefault();
+        if (e.keyCode == 27) { //lovely
+            this.hide();
+        }
     }
 
 });

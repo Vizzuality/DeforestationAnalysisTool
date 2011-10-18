@@ -32,7 +32,7 @@ var Searchbox = Backbone.View.extend({
     },
 
     initialize: function() {
-        _.bindAll(this, 'typing', 'render', 'goto', 'show', 'close', 'toggle');
+        _.bindAll(this, 'typing', 'render', 'goto', 'show', 'close', 'toggle', 'keyPress');
         this.results = new SearchResults();
         this.to_search = this.$('#to_search');
         this.results.bind('reset', this.render);
@@ -44,6 +44,7 @@ var Searchbox = Backbone.View.extend({
           cursor: 'pointer'
         });
         this.results_ul = this.results_ul.find('div.jspPane');
+        $(document).bind('keydown', this.keyPress);
     },
 
     typing: function() {
@@ -88,6 +89,13 @@ var Searchbox = Backbone.View.extend({
 
     toggle: function() {
         this.$("#small").toggle();
+    },
+
+    keyPress: function(e) {
+        //if(e) e.preventDefault();
+        if (e.keyCode == 27) { //lovely
+            this.close();
+        }
     }
 
 
