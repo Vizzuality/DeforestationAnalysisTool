@@ -408,7 +408,7 @@ class NDFI(object):
 
     def _MakeMosaic(self, period):
         return {
-          "creator": 'sad_test/com.google.earthengine.examples.sad.MakeMosaic',
+          "creator": 'SAD/com.google.earthengine.examples.sad.MakeMosaic',
           "args": ["MODIS/MOD09GA","MODIS/MOD09GQ", 
                 {'type':'FeatureCollection','table_id':1868251}, #this number is an special fusion tables id but i have no idea what it is supposed to do
                 period['start'], period['end']]
