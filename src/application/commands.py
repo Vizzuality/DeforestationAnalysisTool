@@ -57,7 +57,17 @@ def show_tables():
     start = date(year=int(year), month=int(month), day=int(day))
     r = Report(start=start, finished=False)
     r.put()
-    return 'created'
+    
+    assetid = request.args.get('assetid', '')
+    month = request.args.get('fmonth','')
+    year = request.args.get('fyear','')
+    day= request.args.get('fday','')
+    if assetid and month and year and day:
+        r.end = date(year=int(year), month=int(month), day=int(day))
+        r.assetid = assetid
+        r.put()
+        
+    return r.as_json()
 
 
 
