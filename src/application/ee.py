@@ -10,6 +10,11 @@ from earthengine.connector import EarthEngine
 METER2_TO_KM2 = 1.0/(1000*1000)
 
 
+TOTAL_AREA_KEY = u'1'
+DEF_KEY = u'7'
+DEG_KEY = u'8'
+
+
 class Stats(object):
 
     def __init__(self):
@@ -76,9 +81,9 @@ class Stats(object):
             logging.info(x)
             s = x['values']['null']['values']
             stats.append({
-                "total_area": int(s[u'1'])*METER2_TO_KM2,
-                'def': float(s[u'2'])*METER2_TO_KM2,
-                'deg': float(s[u'3'])*METER2_TO_KM2,
+                "total_area": int(s[TOTAL_AREA_KEY])*METER2_TO_KM2,
+                'def': float(s[DEF_KEY])*METER2_TO_KM2,
+                'deg': float(s[DEG_KEY])*METER2_TO_KM2,
             })
         return stats
 
@@ -92,20 +97,16 @@ class Stats(object):
         for k,values in stats_region.iteritems():
             # google earth engine return pixels, each pixel has 250m on a side...
             # values classificacion:
-            #0: unclassified
-            #1: forest
-            #2: deforested
-            #3: degraded
-            #4: baseline
-            #5: cloud
-            #6: old_deforestation
+            # 1 -> total_area
+            # 7 -> deforestation
+            # 8 -> degradation
             v = values['values']
             stats[str(table_id) + '_' + k] = {
                 "id": k,
                 "table": table_id,
-                "total_area": int(v[u'1'])*METER2_TO_KM2,
-                "def": int(v[u'2'])*METER2_TO_KM2,
-                "deg": int(v[u'3'])*METER2_TO_KM2
+                "total_area": int(v[TOTAL_AREA_KEY])*METER2_TO_KM2,
+                "def": int(v[DEF_KEY])*METER2_TO_KM2,
+                "deg": int(v[DEG_KEY])*METER2_TO_KM2
             }
 
         return stats
