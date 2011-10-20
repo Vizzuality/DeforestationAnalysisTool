@@ -227,3 +227,10 @@ def update_total_stats_for_report(report_id):
         logging.error("can't find stats for %s" % report_id)
 
 
+@app.route('/_ah/cmd/flush_all')
+def flush_all():
+    memcache.flush_all()
+    if request.args.get('stats',''):
+        for x in StatsStore.all():
+            x.delete()
+    return "all killed, colonel Trautman"
