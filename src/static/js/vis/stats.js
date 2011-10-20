@@ -105,7 +105,7 @@ var PolygonStatCollection = Backbone.Collection.extend({
             success: function(model) {
                 callback({
                     def: model.get('def').toFixed(2),
-                    deg: model.get('def').toFixed(2),
+                    deg: model.get('deg').toFixed(2),
                     total_area: model.get('total_area').toFixed(2)});
             }
         });
