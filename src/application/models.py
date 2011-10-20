@@ -27,6 +27,7 @@ CELL_BLACK_LIST = ['1_0_0', '1_1_0', '1_0_1', '1_0_2', '1_0_3', '1_0_7', '1_0_8'
              '1_2_0', '1_5_0', '1_6_0', '1_8_0', '1_9_0','1_8_1', '1_9_1',
              '1_8_8', '1_8_9', '1_9_8', '1_9_9']
 
+METER2_TO_KM2 = 1.0/(1000*1000)
 
 class User(db.Model):
 
@@ -499,7 +500,7 @@ class StatsStore(db.Model):
         return self._as_dict
 
     def for_table(self, table, zone=None):
-        tb = [v for k, v in self.as_dict()['stats'].iteritems() if str(v['table']) == table]
+        tb = [v for k, v in self.as_dict()['stats'].iteritems() if str(v['table']) == str(table)]
         if zone:
             return [x for x in tb if str(x['id']) == zone]
 
@@ -509,11 +510,12 @@ class StatsStore(db.Model):
     def table_accum(self, table, zone=None):
         table_stats = self.for_table(table, zone)
         if not table_stats:
+            logging.info("no stats for %s on %s" % (table, self.report_id))
             return None
         return {
-            # TODO add total KM^2
             'def': reduce(operator.add, map(float, (x['def'] for x in table_stats))),
-            'deg': reduce(operator.add, map(float, (x['deg'] for x in table_stats)))}
+            'deg': reduce(operator.add, map(float, (x['deg'] for x in table_stats)))
+        }
 
 
 
