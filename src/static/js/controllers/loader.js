@@ -11,10 +11,13 @@ var Loading = Backbone.View.extend({
     loading: function(where, msg) {
         console.log("s:" + where);
         if(msg) {
-            this.msg.html(msg);
+            this.set_msg(msg);
         }
         this.refcount++;
         this.el.fadeIn();
+    },
+    set_msg: function(msg) {
+        this.msg.html(msg);
     },
     finished: function(where) {
         console.log("f:" + where);
