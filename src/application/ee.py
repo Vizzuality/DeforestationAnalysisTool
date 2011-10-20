@@ -81,7 +81,7 @@ class Stats(object):
             logging.info(x)
             s = x['values']['null']['values']
             stats.append({
-                "total_area": int(s[TOTAL_AREA_KEY])*METER2_TO_KM2,
+                "total_area": sum(map(float, s.values()))*METER2_TO_KM2,
                 'def': float(s[DEF_KEY])*METER2_TO_KM2,
                 'deg': float(s[DEG_KEY])*METER2_TO_KM2,
             })
@@ -104,7 +104,7 @@ class Stats(object):
             stats[str(table_id) + '_' + k] = {
                 "id": k,
                 "table": table_id,
-                "total_area": int(v[TOTAL_AREA_KEY])*METER2_TO_KM2,
+                "total_area": sum(map(float, v.values()))*METER2_TO_KM2,
                 "def": int(v[DEF_KEY])*METER2_TO_KM2,
                 "deg": int(v[DEG_KEY])*METER2_TO_KM2
             }
