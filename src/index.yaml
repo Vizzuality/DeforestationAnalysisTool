@@ -15,3 +15,8 @@ indexes:
   - name: cell
   - name: added_on
     direction: desc
+
+- kind: Report
+  properties:
+  - name: finished
+  - name: start
