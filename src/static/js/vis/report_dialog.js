@@ -127,7 +127,7 @@ var ReportDialog = Backbone.View.extend({
             url += this.region_selected.table;
         } 
         url += '?reports=' + reports.join(',');
-        if(this.custom.polygon) {
+        if(this.custom && this.custom.polygon) {
             url += '&polygon=' + encodeURI(JSON.stringify(this.custom.polygon));
         }
         //alert(url);
