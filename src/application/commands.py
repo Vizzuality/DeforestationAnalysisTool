@@ -44,6 +44,13 @@ def show_tables():
             settings.FT_SECRET)
     return '\n'.join(map(str, cl.get_tables()))
 
+@app.route('/_ah/cmd/fix_report')
+def fix_report():
+    for x in Report.all():
+        x.finished = True;
+        x.put()
+    return "thank you, john"
+
 @app.route('/_ah/cmd/create_report', methods=('POST',))
 def show_tables():
     """ creates a report for specified month """
@@ -57,7 +64,7 @@ def show_tables():
     start = date(year=int(year), month=int(month), day=int(day))
     r = Report(start=start, finished=False)
     r.put()
-    
+
     assetid = request.args.get('assetid', '')
     month = request.args.get('fmonth','')
     year = request.args.get('fyear','')
@@ -65,8 +72,10 @@ def show_tables():
     if assetid and month and year and day:
         r.end = date(year=int(year), month=int(month), day=int(day))
         r.assetid = assetid
+        r.finished = True
         r.put()
-        
+        deferred.defer(update_report_stats, str(r.key()))
+
     return r.as_json()
 
 
@@ -110,7 +119,7 @@ def ndfi_value_for_cells(cell_key):
     ndfi = data['data']['properties']['ndfiSum']['values']
     for row in xrange(10):
         for col in xrange(10):
-            idx = row*10 + col 
+            idx = row*10 + col
             count = float(ndfi['count'][idx])
             s = float(ndfi['sum'][idx])
             if count > 0.0:
@@ -165,7 +174,9 @@ tables = [
     ('Legal Amazon', 1205151, 'name')
 ]
 
-# 
+tables_map = dict(x[:2] for x in tables)
+
+#
 # ==================================================
 #
 
@@ -173,6 +184,11 @@ from application.ee import Stats
 @app.route('/_ah/cmd/update_report_stats/<report_id>', methods=('GET',))
 def update_report_stats_view(report_id):
     deferred.defer(update_report_stats, report_id)
+    return 'updating'
+
+@app.route('/_ah/cmd/update_report_global_stats/<report_id>', methods=('GET',))
+def update_report_global_stats(report_id):
+    deferred.defer(update_total_stats_for_report, report_id)
     return 'updating'
 
 def stats_for(assetid, table):
@@ -195,3 +211,19 @@ def update_report_stats(report_id):
         s.put()
     else:
         StatsStore(report_id=report_id, json=data).put()
+    update_total_stats_for_report(report_id)
+
+def update_total_stats_for_report(report_id):
+    r = Report.get(Key(report_id))
+    stats = StatsStore.get_for_report(report_id)
+    if stats:
+        s = stats.table_accum(tables_map['Legal Amazon'])
+        logging.info("stats for %s" % s)
+        if s:
+            r.degradation = s['deg']
+            r.deforestation = s['def']
+            r.put()
+    else:
+        logging.error("can't find stats for %s" % report_id)
+
+
