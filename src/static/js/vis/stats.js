@@ -38,10 +38,13 @@ var ReportStatCollection = Backbone.Collection.extend({
         _.each(to_fetch, function(report) {
             var rstats = new ReportStat({id: report.id});
             self.add(rstats);
-            count ++;
             //TODO: error control
-            window.loader.set_msg("loading stats, " + count + "/" + to_fetch.length);
-            rstats.fetch({success: callback_after});
+            rstats.fetch({success: function() {
+                count ++;
+                window.loader.set_msg("loading stats, " + count + "/" + to_fetch.length);
+                callback_after();
+            }
+            });
         });
     },
 
