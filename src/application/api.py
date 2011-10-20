@@ -43,6 +43,7 @@ RegionStatsAPI.add_urls(app, '/api/v0/report/<report_id>/stats')
 RegionStatsAPI.add_custom_url(app, '/api/v0/stats/polygon', 'polygon', methods=('POST',))
 
 
+#TODO: this function need a huge refactor
 @app.route('/api/v0/stats/<table>/<zone>')
 @app.route('/api/v0/stats/<table>')
 def stats(table, zone=None):
@@ -58,27 +59,50 @@ def stats(table, zone=None):
 
     f = StringIO()
     csv_file = csv.writer(f)
-    csv_file.writerow(('report_id', 'start_date', 'end_date', 'deforestated', 'degradated'))
-    reports = [Report.get_by_id(x) for x in reports]
-    for r in reports:
+
+    # if user is request only one report
+    # return the stats for each zone
+    if len(reports) == 1 and not zone:
+        csv_file.writerow(('report_id', 'start_date', 'end_date','zone_id', 'deforestated', 'degradated'))
+        r = Report.get_by_id(reports[0])
         if not r:
+            logging.error("report not found")
             abort(404)
-        report_id = str(r.key())
-        st = StatsStore.get_for_report(report_id)
-
+        st = StatsStore.get_for_report(str(r.key()))
         if not st:
-            logging.error("no cached stats for %s" % report_id)
+            logging.error("no stats for report")
             abort(404)
+        stats = st.for_table(table)
+        for s in stats:
+            csv_file.writerow((str(r.key().id()),
+                    r.start.isoformat(),
+                    r.end.isoformat(),
+                    s['id'],
+                    s['def'],
+                    s['deg']))
 
-        stats = st.table_accum(table, zone)
-        if not stats:
-            logging.error("no stats for %s" % report_id)
-            abort(404)
+    else:
+        csv_file.writerow(('report_id', 'start_date', 'end_date', 'deforestated', 'degradated'))
+        reports = [Report.get_by_id(x) for x in reports]
+        for r in reports:
+            if not r:
+                abort(404)
+            report_id = str(r.key())
+            st = StatsStore.get_for_report(report_id)
 
-        csv_file.writerow((str(r.key().id()),
-                r.start.isoformat(),
-                r.end.isoformat(),
-                stats['def'],
+            if not st:
+                logging.error("no cached stats for %s" % report_id)
+                abort(404)
+
+            stats = st.table_accum(table, zone)
+            if not stats:
+                logging.error("no stats for %s" % report_id)
+                abort(404)
+
+            csv_file.writerow((str(r.key().id()),
+                    r.start.isoformat(),
+                    r.end.isoformat(),
+                    stats['def'],
                 stats['deg']))
 
     return Response(f.getvalue(),
