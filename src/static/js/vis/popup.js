@@ -48,7 +48,7 @@ var MapPopup = Backbone.View.extend({
     },
 
     close: function(e) {
-        if(e && e.hasOwnProperty('preventDefault')) e.preventDefault();
+        if(e && e.preventDefault) e.preventDefault();
         this.el.hide();
     },
 
