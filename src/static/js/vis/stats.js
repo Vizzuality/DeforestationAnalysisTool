@@ -20,18 +20,27 @@ var ReportStatCollection = Backbone.Collection.extend({
 
     fetch_periods: function(periods, callback) {
         var self = this;
+        // remove already cached
         var to_fetch = _(periods).filter(function(p) {
             return self.get(p) === undefined;
         });
         if(to_fetch.length === 0) {
             callback();
+            return;
         }
+        window.loader.loading("reportstatcollection", "loading stats, 1/" + to_fetch.length);
         // fetch them
-        var callback_after = _.after(to_fetch.length, callback);
+        var callback_after = _.after(to_fetch.length,function() {
+            window.loader.finished();
+            callback();
+        });
+        var count = 0;
         _.each(to_fetch, function(report) {
             var rstats = new ReportStat({id: report.id});
             self.add(rstats);
+            count ++;
             //TODO: error control
+            window.loader.set_msg("loading stats, " + count + "/" + to_fetch.length);
             rstats.fetch({success: callback_after});
         });
     },
