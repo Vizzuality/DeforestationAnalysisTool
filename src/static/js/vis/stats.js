@@ -39,11 +39,15 @@ var ReportStatCollection = Backbone.Collection.extend({
             var rstats = new ReportStat({id: report.id});
             self.add(rstats);
             //TODO: error control
-            rstats.fetch({success: function() {
-                count ++;
-                window.loader.set_msg("loading stats, " + count + "/" + to_fetch.length);
-                callback_after();
-            }
+            rstats.fetch({
+                success: function() {
+                    count ++;
+                    window.loader.set_msg("loading stats, " + count + "/" + to_fetch.length);
+                    callback_after();
+                },
+                error: function() {
+                    self.trigger('error');
+                }
             });
         });
     },

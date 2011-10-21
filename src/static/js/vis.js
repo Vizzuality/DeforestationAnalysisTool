@@ -203,6 +203,9 @@ var Vizzualization = Backbone.View.extend({
         });
 
         // binding
+        this.report_stats.bind('error', function() {
+            show_error("The stats are not available, try in a few minutes", true);
+        });
         this.stats.bind('show_report', this.show_report);
         this.popup.bind('show_report', this.show_report);
         this.map.bind('click', function() { self.popup.close(); });

@@ -10,6 +10,9 @@ var ErrorDialog = Backbone.View.extend({
         _.bindAll(this, 'close', 'show');
         this.msg = this.options.msg;
         this.$("#error_text").html(this.msg);
+        if(this.options.hide_close === true) {
+            this.$("#ok").hide();
+        }
     },
 
     show: function() {
@@ -23,7 +26,7 @@ var ErrorDialog = Backbone.View.extend({
 
 });
 
-function show_error(msg) {
-    var dlg = new ErrorDialog({msg: msg});
+function show_error(msg, hide_close) {
+    var dlg = new ErrorDialog({msg: msg, hide_close: hide_close});
     dlg.show();
 }
