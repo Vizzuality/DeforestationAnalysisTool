@@ -59,7 +59,7 @@ def default_maps():
     return maps
 
 
-@app.route('/')
+@app.route('/analysis')
 @login_required
 def home(cell_path=None):
     maps = memcache.get('default_maps')
@@ -88,6 +88,7 @@ def home(cell_path=None):
             polygons_table=settings.FT_TABLE_ID,
             logout_url=logout_url)
 
+@app.route('/')
 @app.route('/vis')
 @login_required
 def vis():
