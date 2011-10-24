@@ -1203,6 +1203,16 @@ body, html {
 #workarea .map_container div.zoom_control a.zoom_out:hover {
   background-position: -22px -22px;
 }
+#workarea .map_container div.crosshair {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+#workarea .map_container div.crosshair img {
+  margin-left: -7px;
+  margin-top: -7px;
+}
 
 #layer_editor_dialog, #layer_editor_dialog_base {
   position: absolute;

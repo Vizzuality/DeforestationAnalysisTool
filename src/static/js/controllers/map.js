@@ -123,6 +123,15 @@ var MapView = Backbone.View.extend({
             this.trigger('click', e);
     },
 
+    crosshair: function(onoff) {
+        var c = this.$('.crosshair');
+        if(onoff) {
+            c.show();
+        } else {
+            c.hide();
+        }
+    },
+
     //close layer editor if it's opened
     close_layer_editor: function() {
         if(this.layer_editor !== undefined && this.layer_editor.showing) {

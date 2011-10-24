@@ -216,6 +216,7 @@ $(function() {
                 } else {
                     this.compare_four();
                 }
+                this.map.crosshair(true);
                 _.each(this.compare_maps, function(m) {
                     m.map.setZoom(self.map.map.getZoom());
                     m.map.setCenter(self.map.map.getCenter());
@@ -226,6 +227,7 @@ $(function() {
                     m.bind('click', self.map.close_layer_editor);
                     m.bind('open_layer_editor', self.map.close_layer_editor);
                     m.layers.reset(self.available_layers.toJSON());
+                    m.crosshair(true);
                     // add rgb layers
                     add_rgb_layers(m.layers, self.gridstack, self.active_report.get('id'));
                     m.layers.trigger('reset');
@@ -238,8 +240,10 @@ $(function() {
                     });
                 });
             } else {
+                //restore
                 this.map.el.css({width: '100%'});
                 this.map.adjustSize();
+                this.map.crosshair(false);
                 if(this.compare_layout !== null) {
                     this.compare_layout.hide();
                     this.compare_layout = null;
