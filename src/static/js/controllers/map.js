@@ -92,6 +92,7 @@ var MapView = Backbone.View.extend({
         e.preventDefault();
         this.map.setZoom(this.map.getZoom() - 1);
     },
+
     zoom_changed: function() {
         if(this.signals_on) {
             this.trigger('zoom_changed', this.map.getZoom());

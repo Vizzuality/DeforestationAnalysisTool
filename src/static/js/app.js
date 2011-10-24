@@ -135,6 +135,7 @@ $(function() {
             this.map.bind('ready', this.start);
             this.available_layers = new LayerCollection();
             this.available_layers.bind('reset', this.update_map_layers);
+            this.compare_maps_cache = {};
         },
 
         init_ui: function() {
@@ -178,20 +179,21 @@ $(function() {
             //update here other maps
         },
 
+        get_map: function(id, opts) {
+            if(this.compare_maps_cache[id] === undefined) {
+              this.compare_maps_cache[id] = new MapView({el: this.$(id)});
+            }
+            return this.compare_maps_cache[id];
+        },
+
         compare_four: function() {
               this.map.el.css({width: '66.66%'});
               this.map.adjustSize();
               this.compare_layout = this.$("#compare_layout_1").show();
               this.compare_maps = [];
-              this.compare_maps.push(new MapView({el: this.$("#map1")}));
-              this.compare_maps.push(new MapView({
-                el: this.$("#map2"),
-                layer_dialog_pos: 'center'
-              }));
-              this.compare_maps.push(new MapView({
-                el: this.$("#map3"),
-                layer_dialog_pos: 'center'
-              }));
+              this.compare_maps.push(this.get_map("#map1"));
+              this.compare_maps.push(this.get_map("#map2"));
+              this.compare_maps.push(this.get_map("#map3"));
         },
 
         compare_two: function() {
@@ -199,7 +201,7 @@ $(function() {
               this.map.adjustSize();
               this.compare_layout = this.$("#compare_layout_2").show();
               this.compare_maps = [];
-              this.compare_maps.push(new MapView({el: this.$("#map_half")}));
+              this.compare_maps.push(this.get_map("#map_half"));
         },
 
 
@@ -264,9 +266,6 @@ $(function() {
                             m.unbind('open_layer_editor', other.close_layer_editor);
                         }
                     });
-                    // flybye!
-                    delete m.map;
-                    delete m;
                 });
                 this.compare_maps = [];
             }
