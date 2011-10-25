@@ -1,4 +1,3 @@
-
 // contains stats for a region
 // each region is defined by a table_id and
 // a name which is an string
@@ -66,7 +65,7 @@ var ReportStatCollection = Backbone.Collection.extend({
             });
             callback({'def': def.toFixed(2),
                       'deg': deg.toFixed(2),
-                      'total_area': total_area.toFixed(1)});
+                      'total_area': (total_area/periods.length).toFixed(1)});
         });
         return this;
     }
@@ -110,7 +109,7 @@ var PolygonStatCollection = Backbone.Collection.extend({
                 callback({
                     def: model.get('def').toFixed(2),
                     deg: model.get('deg').toFixed(2),
-                    total_area: model.get('total_area').toFixed(2)});
+                    total_area: (model.get('total_area')/report_ids.length).toFixed(2)});
             }
         });
     }
