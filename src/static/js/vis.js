@@ -292,7 +292,7 @@ var Vizzualization = Backbone.View.extend({
             layer: pl,
             initial_range: self.time_range.get_report_range()
         });
-            
+
         // set amazonas not clicable
         pl = self.map.layers.get_by_name('Legal Amazon');
         pl.map_layer.setOptions({clickable: false});
@@ -316,8 +316,14 @@ var Vizzualization = Backbone.View.extend({
                 show_error('There was a problem getting stats for this area');
             } else {
                 //hack to avoid fails on tables without description
-                var desc = data.row.description || {'value': 'desc'};
-                self.popup.showAt(data.latLng, data.table, data.row.name.value, desc.value, stats.total_area, stats.def,  stats.deg);
+                var desc = data.row.ex_area || data.row.NOME_TI || data.row.description || {'value': 'desc'};
+                self.popup.showAt(data.latLng,
+                        data.table,
+                        data.row.name.value,
+                        desc.value,
+                        stats.total_area,
+                        stats.def,
+                        stats.deg);
             }
             loading_small.finished('fething stats');
         });
