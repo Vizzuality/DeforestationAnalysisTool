@@ -150,6 +150,13 @@ var Vizzualization = Backbone.View.extend({
       'Indigenous Land'
     ],
 
+    DEFAULT_LAYERS: [
+      'Legal Amazon',
+      'Federal Conservation',
+      'State Conservation',
+      'Indigenous Land'
+    ],
+
     el: $('body'),
 
     initialize: function() {
@@ -242,8 +249,12 @@ var Vizzualization = Backbone.View.extend({
         this.time_range.bind('range_change', this.stats.range_change);
         this.time_range.trigger('range_change', this.time_range.get_report_range());
         // show default layers
-        this.map.layers.get_by_name('Legal Amazon').set_enabled(true);
-        this.map.layers.get_by_name('deforestation').set_enabled(true);
+        _(this.DEFAULT_LAYERS).each(function(layer) {
+            var l = self.map.layers.get_by_name(layer);
+            if(l) {
+                l.set_enabled(true);
+            }
+        });
 
         this.prepare_ft_layers();
         this.searchbox.bind('goto', function(center, zoom) {
