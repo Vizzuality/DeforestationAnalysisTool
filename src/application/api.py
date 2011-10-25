@@ -63,7 +63,7 @@ def stats(table, zone=None):
     # if user is request only one report
     # return the stats for each zone
     if len(reports) == 1 and not zone:
-        csv_file.writerow(('report_id', 'start_date', 'end_date','zone_id', 'deforestated', 'degradated'))
+        csv_file.writerow(('report_id', 'start_date', 'end_date','zone_id', 'deforested', 'degradaded'))
         r = Report.get_by_id(reports[0])
         if not r:
             logging.error("report not found")
@@ -82,7 +82,7 @@ def stats(table, zone=None):
                     s['deg']))
 
     else:
-        csv_file.writerow(('report_id', 'start_date', 'end_date', 'deforestated', 'degradated'))
+        csv_file.writerow(('report_id', 'start_date', 'end_date', 'deforested', 'degradaded'))
         reports = [Report.get_by_id(x) for x in reports]
         for r in reports:
             if not r:
@@ -139,7 +139,7 @@ def polygon_stats_csv():
     try:
         f = StringIO()
         csv_file = csv.writer(f)
-        csv_file.writerow(('report_id', 'start_date', 'end_date', 'deforestated', 'degradated'))
+        csv_file.writerow(('report_id', 'start_date', 'end_date', 'deforested', 'degradaded'))
         for i,s in enumerate(stats):
             r = reports[i]
             csv_file.writerow((str(r.key().id()),
