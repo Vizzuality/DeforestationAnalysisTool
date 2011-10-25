@@ -109,6 +109,7 @@ var TimeRange = Backbone.View.extend({
             self.colored_bars.append(v.render().el);
         });
         this.rigth.pos(this.pos_for_month_right(this.reports.length - 1));
+        this.left.pos(this.pos_for_month_left(this.reports.length - 1));
         this.update_range();
     },
 
