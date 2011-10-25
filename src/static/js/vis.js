@@ -154,7 +154,8 @@ var Vizzualization = Backbone.View.extend({
       'Legal Amazon',
       'Federal Conservation',
       'State Conservation',
-      'Indigenous Land'
+      'Indigenous Land',
+      'deforestation'
     ],
 
     el: $('body'),
