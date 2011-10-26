@@ -327,7 +327,7 @@ $(function() {
             this.compare_view('one');
             this.selection_toolbar.show();
             this.polygon_tools.hide();
-            //this.ndfi_layer.hide();
+            this.ndfi_layer.hide();
             this.overview.select_mode();
             this.cell_polygons.polygons.reset();
             if(this.editing_router) {
