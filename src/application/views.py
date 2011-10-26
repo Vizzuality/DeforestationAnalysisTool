@@ -58,6 +58,13 @@ def default_maps():
         maps.append({'data' :d['data'], 'info': 'NDFI t1'})
     return maps
 
+def get_or_create_user():
+    user = users.get_current_user()
+    u = User.get_user(user)
+    if not u and users.is_current_user_admin():
+        u = User(user=user, role='admin')
+        u.put()
+    return u
 
 @app.route('/analysis')
 @login_required
@@ -71,12 +78,7 @@ def home(cell_path=None):
 
     # send only the active report
     reports = json.dumps([Report.current().as_dict()])
-    user = users.get_current_user()
-    u = User.get_user(user)
-    if not u and users.is_current_user_admin():
-        u = User(user=user, role='admin')
-        u.put()
-
+    u = get_or_create_user()
     if not u:
         abort(403)
 
@@ -88,12 +90,16 @@ def home(cell_path=None):
             polygons_table=settings.FT_TABLE_ID,
             logout_url=logout_url)
 
+
+
 @app.route('/')
 @app.route('/vis')
 @login_required
 def vis():
-    user = users.get_current_user()
-    u = User.get_user(user)
+    u = get_or_create_user()
+    if not u:
+        abort(403)
+
     logout_url = users.create_logout_url('/')
     #TODO show only finished
     reports = [x.as_dict() for x in Report.all().filter("finished =", True).order("start")]
