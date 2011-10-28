@@ -20,11 +20,11 @@ var PolygonDrawTool = Backbone.View.extend({
     },
 
     editing_state: function(editing) {
+        this.mapview.unbind('click', this.add_vertex);
         if(editing) {
             this.mapview.bind('click', this.add_vertex);
         } else {
             this.reset();
-            this.mapview.unbind('click', this.add_vertex);
         }
     },
 
