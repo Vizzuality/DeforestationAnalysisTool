@@ -166,9 +166,11 @@ var PolygonDrawEditTool = PolygonDrawTool.extend({
 
     editing_state: function(editing) {
         if(editing) {
+            this.mapview.unbind('click', this.add_vertex);
             this.mapview.bind('click', this.add_vertex);
         } else {
             this.reset();
+            google.maps.event.clearListeners(this.final_polygon);
             this.final_polygon.setPath([]);
             this.mapview.unbind('click', this.add_vertex);
         }
@@ -188,10 +190,14 @@ var PolygonDrawEditTool = PolygonDrawTool.extend({
 
     create_polygon: function(vertex) {
         // polygon style
+        var self = this;
         this.final_polygon.setPath(this.polyline.getPath());
         this.reset();
         var v = _.map(vertex, function(p) { return [p.lat(), p.lng()]; });
         this.trigger('polygon', {path: v});
+        google.maps.event.addListener(this.final_polygon, "click", function(e) {
+            self.trigger('polygon_click', v, e.latLng);
+        });
     }
 
 

@@ -200,14 +200,13 @@ var Vizzualization = Backbone.View.extend({
             self.map.set_zoom(parseInt(zoom, 10));
         });
 
-        this.create_polygon_tool.bind('polygon_click', function(path) {
-            console.log(path);
-        });
-
         this.create_polygon_tool.bind('polygon', function(path) {
             var p = path.path[0];
             console.log(path.path);
             self.custom_polygon_click(new google.maps.LatLng(p[0], p[1]), path.path);
+        });
+        this.create_polygon_tool.bind('polygon_click', function(path, where) {
+            self.custom_polygon_click(where, path);
         });
 
         // binding
