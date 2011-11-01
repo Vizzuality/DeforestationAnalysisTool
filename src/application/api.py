@@ -60,29 +60,29 @@ def stats(table, zone=None):
     f = StringIO()
     csv_file = csv.writer(f)
 
-    # if user is request only one report
     # return the stats for each zone
-    if len(reports) == 1 and not zone:
-        csv_file.writerow(('report_id', 'start_date', 'end_date','zone_id', 'deforested', 'degradaded'))
-        r = Report.get_by_id(reports[0])
-        if not r:
-            logging.error("report not found")
-            abort(404)
-        st = StatsStore.get_for_report(str(r.key()))
-        if not st:
-            logging.error("no stats for report")
-            abort(404)
-        stats = st.for_table(table)
-        for s in stats:
-            csv_file.writerow((str(r.key().id()),
-                    r.start.isoformat(),
-                    r.end.isoformat(),
-                    s['id'],
-                    s['def'],
-                    s['deg']))
+    if not zone:
+        csv_file.writerow(('report_id', 'start_date', 'end_date','zone_id', 'deforested', 'degraded'))
+        reports = [Report.get_by_id(x) for x in reports]
+        for r in reports:
+            if not r:
+                logging.error("report not found")
+                abort(404)
+            st = StatsStore.get_for_report(str(r.key()))
+            if not st:
+                logging.error("no stats for report")
+                abort(404)
+            stats = st.for_table(table)
+            for s in stats:
+                csv_file.writerow((str(r.key().id()),
+                        r.start.isoformat(),
+                        r.end.isoformat(),
+                        s['id'],
+                        s['def'],
+                        s['deg']))
 
     else:
-        csv_file.writerow(('report_id', 'start_date', 'end_date', 'deforested', 'degradaded'))
+        csv_file.writerow(('report_id', 'start_date', 'end_date', 'deforested', 'degraded'))
         reports = [Report.get_by_id(x) for x in reports]
         for r in reports:
             if not r:
@@ -139,7 +139,7 @@ def polygon_stats_csv():
     try:
         f = StringIO()
         csv_file = csv.writer(f)
-        csv_file.writerow(('report_id', 'start_date', 'end_date', 'deforested', 'degradaded'))
+        csv_file.writerow(('report_id', 'start_date', 'end_date', 'deforested', 'degraded'))
         for i,s in enumerate(stats):
             r = reports[i]
             csv_file.writerow((str(r.key().id()),
