@@ -48,10 +48,11 @@ class StatsTest(unittest.TestCase):
         st = self.stats.get_stats_for_polygon(asset_id, self.polygon)
         
         self.assertTrue(st is not None)
-        polygon_stats = st['data']['properties']['classHistogram']['values']['null']['values']
-        self.assertTrue(float(polygon_stats['2']) > 0.0)
-        self.assertAlmostEquals(0.0, float(polygon_stats['3']))
-        def_area = float(polygon_stats['2'])
+        polygon_stats = st[0]
+        print polygon_stats
+        self.assertTrue(float(polygon_stats['def']) > 0.0)
+        self.assertAlmostEquals(0.0, float(polygon_stats['deg']))
+        def_area = float(polygon_stats['def'])
         print "deforested area: ", def_area
 
         # get stats for this area
@@ -59,17 +60,17 @@ class StatsTest(unittest.TestCase):
         p = [[[x, y + 1.0] for x, y in self.polygon[0]]]
         st = self.stats.get_stats_for_polygon(asset_id, p)
         self.assertTrue(st is not None)
-        print st
+        print st[0]
         polygon_stats = st['data']['properties']['classHistogram']['values']['null']['values']
-        self.assertTrue(float(polygon_stats['2']) > 0.0)
-        self.assertTrue(float(polygon_stats['2']) < def_area)
-        print "new deforested area: ", float(polygon_stats['2'])
+        self.assertTrue(float(polygon_stats['def']) > 0.0)
+        self.assertTrue(float(polygon_stats['def']) < def_area)
+        print "new deforested area: ", float(polygon_stats['def'])
 
         # search in area whiout deforesation
         p = [[[x+4.0, y] for x, y in self.polygon[0]]]
         st = self.stats.get_stats_for_polygon(asset_id, p)
         self.assertTrue(st is not None)
-        polygon_stats = st['data']['properties']['classHistogram']['values']['null']['values']
-        self.assertAlmostEquals(0.0, float(polygon_stats['2']))
-        self.assertAlmostEquals(0.0, float(polygon_stats['3']))
+        polygon_stats = st[0]
+        self.assertAlmostEquals(0.0, float(polygon_stats['def']))
+        self.assertAlmostEquals(0.0, float(polygon_stats['deg']))
 

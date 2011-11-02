@@ -7,15 +7,16 @@ import collections
 
 from earthengine.connector import EarthEngine
 
+from time_utils import timestamp
+
 METER2_TO_KM2 = 1.0/(1000*1000)
 
 
-TOTAL_AREA_KEY = u'1'
-DEF_KEY = u'7'
-DEG_KEY = u'8'
-
-
 class Stats(object):
+
+    TOTAL_AREA_KEY = u'1'
+    DEF_KEY = u'7'
+    DEG_KEY = u'8'
 
     def __init__(self):
         self.ee = EarthEngine(settings.EE_TOKEN)
@@ -82,8 +83,8 @@ class Stats(object):
             s = x['values']['null']['values']
             stats.append({
                 "total_area": sum(map(float, s.values()))*METER2_TO_KM2,
-                'def': float(s[DEF_KEY])*METER2_TO_KM2,
-                'deg': float(s[DEG_KEY])*METER2_TO_KM2,
+                'def': float(s[Stats.DEF_KEY])*METER2_TO_KM2,
+                'deg': float(s[Stats.DEG_KEY])*METER2_TO_KM2,
             })
         return stats
 
@@ -105,8 +106,8 @@ class Stats(object):
                 "id": k,
                 "table": table_id,
                 "total_area": sum(map(float, v.values()))*METER2_TO_KM2,
-                "def": int(v[DEF_KEY])*METER2_TO_KM2,
-                "deg": int(v[DEG_KEY])*METER2_TO_KM2
+                "def": int(v[Stats.DEF_KEY])*METER2_TO_KM2,
+                "deg": int(v[Stats.DEG_KEY])*METER2_TO_KM2
             }
 
         return stats
@@ -186,7 +187,7 @@ class NDFI(object):
             self.work_period['end'],
             "MODIS/MOD09GA",
             "MODIS/MOD09GQ",
-            {'type':'FeatureCollection','table_id': 1868251},
+            {'type':'FeatureCollection','table_id': 1868251, 'mark': str(timestamp())},
             {"creator":"SAD/com.google.earthengine.examples.sad.ProdesImage","args":[asset_id]},
             polygon,
             rows,
@@ -212,12 +213,13 @@ class NDFI(object):
                         "creator":"SAD/com.google.earthengine.examples.sad.ProdesImage",
                         "args":[asset_id]
                     },
-                    {
-                        "type":"FeatureCollection",
-                        "table_id": table, "filters":[
-                            {"metadata":"report_id", "equals": report_id}
-                        ]
-                    },
+                    {'type':'FeatureCollection','table_id':1228540,'mark': str(timestamp())},
+                    #{
+                        #"type":"FeatureCollection",
+                        #"table_id": table, "filters":[
+                            #{"metadata":"report_id", "equals": report_id}
+                        #]
+                    #},
                     "type"
                 ],
                 "type":"Image"
@@ -412,7 +414,7 @@ class NDFI(object):
         return {
           "creator": 'SAD/com.google.earthengine.examples.sad.MakeMosaic',
           "args": ["MODIS/MOD09GA","MODIS/MOD09GQ", 
-                {'type':'FeatureCollection','table_id':1868251}, #this number is an special fusion tables id but i have no idea what it is supposed to do
+                {'type':'FeatureCollection','table_id':1868251, 'mark': str(timestamp())}, #this number is an special fusion tables id but i have no idea what it is supposed to do
                 period['start'], period['end']]
         }
 

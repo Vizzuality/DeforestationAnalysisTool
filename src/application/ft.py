@@ -49,10 +49,9 @@ class FT(object):
             return None
 
     def sql(self, sql):
-        logging.info("FT:SQL: %s" % sql)
-        print("FT:SQL: %s" % sql)
+        logging.debug("FT:SQL: %s" % sql)
         r = self.client.query(sql)
-        print("-> %s" % r)
+        logging.debug("-> %s" % r)
         return r
 
 

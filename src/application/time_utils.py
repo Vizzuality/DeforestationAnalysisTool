@@ -4,8 +4,9 @@ from dateutil.relativedelta import *
 import time
 from datetime import datetime, timedelta, date
 
-def timestamp(d):
+def timestamp(d=None):
     """ return timestamp from datetime in milliseconds """
+    d = d or datetime.now()
     return int(time.mktime(d.timetuple())*1000)
 
 def first_of_current_month(now=None):
