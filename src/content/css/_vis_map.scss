@@ -86,17 +86,44 @@ html {
 #layer_editor_dialog {
     ul {
         li {
+            span {
+              margin-left: 8px;
+              display: inline-block;
+              float: left;
+              width: 36px;
+              height: 20px;
+              border-radius: 3px;
+              background: url('../img/icons/switch_disabled.png') no-repeat 0px 0px;
+
+            }
+            &.on span {
+              background: #CCC url('../img/icons/switch_enabled.png') no-repeat 0px 0px;
+              &.legal_amazon {
+                background-color: #FFFF00;
+              }
+              &.indigenous_land {
+                background-color: #4DAF4A;
+              }
+              &.state_conservation {
+                background-color: #984EA3;
+              }
+              &.federal_conservation {
+                background-color: #377EB8;
+              }
+            }
             &.switch {
-                background: url('../img/icons/switch_disabled.png') no-repeat 6px 10px;
-                padding-left: 50px;
-                width: 188 - 50 + 23px;
+                width: 209px;
+                //background: url('../img/icons/switch_disabled.png') no-repeat 6px 10px;
+                background: none;
+                padding-left: 0px;
                 a {
                     width:160px - 27px;
-                    background:url('/static/img/bkg_layers_drag.png') no-repeat 133px 5px !important;
+                    padding-left: 55px;
+                    background: url('/static/img/bkg_layers_drag.png') no-repeat 184px 5px !important;
                 }
             }
             &.on {
-                background: url('../img/icons/switch_enabled.png') no-repeat 6px 10px;
+                //background: red url('../img/icons/switch_enabled.png') no-repeat 6px 10px;
             }
         }
     }

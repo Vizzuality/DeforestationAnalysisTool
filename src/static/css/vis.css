@@ -1537,6 +1537,7 @@ body, html {
 #header #tools #work_toolbar {
   display: inline-block;
   width: 200px;
+  float: left;
 }
 #header #tools #work_toolbar #selection {
   width: 60px;
@@ -1971,15 +1972,37 @@ html {
   text-align: center;
 }
 
+#layer_editor_dialog ul li span, #layer_editor_dialog_base ul li span {
+  margin-left: 8px;
+  display: inline-block;
+  float: left;
+  width: 36px;
+  height: 20px;
+  border-radius: 3px;
+  background: url("../img/icons/switch_disabled.png") no-repeat 0px 0px;
+}
+#layer_editor_dialog ul li.on span, #layer_editor_dialog_base ul li.on span {
+  background: #cccccc url("../img/icons/switch_enabled.png") no-repeat 0px 0px;
+}
+#layer_editor_dialog ul li.on span.legal_amazon, #layer_editor_dialog_base ul li.on span.legal_amazon {
+  background-color: #FFFF00;
+}
+#layer_editor_dialog ul li.on span.indigenous_land, #layer_editor_dialog_base ul li.on span.indigenous_land {
+  background-color: #4DAF4A;
+}
+#layer_editor_dialog ul li.on span.state_conservation, #layer_editor_dialog_base ul li.on span.state_conservation {
+  background-color: #984EA3;
+}
+#layer_editor_dialog ul li.on span.federal_conservation, #layer_editor_dialog_base ul li.on span.federal_conservation {
+  background-color: #377EB8;
+}
 #layer_editor_dialog ul li.switch, #layer_editor_dialog_base ul li.switch {
-  background: url("../img/icons/switch_disabled.png") no-repeat 6px 10px;
-  padding-left: 50px;
-  width: 161px;
+  width: 209px;
+  background: none;
+  padding-left: 0px;
 }
 #layer_editor_dialog ul li.switch a, #layer_editor_dialog_base ul li.switch a {
   width: 133px;
-  background: url("/static/img/bkg_layers_drag.png") no-repeat 133px 5px !important;
-}
-#layer_editor_dialog ul li.on, #layer_editor_dialog_base ul li.on {
-  background: url("../img/icons/switch_enabled.png") no-repeat 6px 10px;
+  padding-left: 55px;
+  background: url("/static/img/bkg_layers_drag.png") no-repeat 184px 5px !important;
 }

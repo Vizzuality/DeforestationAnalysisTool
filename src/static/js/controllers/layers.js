@@ -49,8 +49,10 @@ var SwitchLayerView = LayerView.extend({
     },
 
     render: function() {
+        var color_class = this.model.escape('description').replace(' ', '_').toLowerCase();
         this.constructor.__super__.render.call(this);
         $(this.el).addClass('switch');
+        $(this.el).prepend('<span class="switch_button ' + color_class + '"></span>');
         this.changed();
         return this;
     },
