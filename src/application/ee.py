@@ -11,6 +11,7 @@ from time_utils import timestamp
 
 METER2_TO_KM2 = 1.0/(1000*1000)
 
+CALL_SCOPE = "sad_test"
 
 class Stats(object):
 
@@ -28,9 +29,9 @@ class Stats(object):
     def get_stats_for_table(self, frozen_image, table_id, key_name='name'):
         return self._execute_cmd("/value", {
             "image": json.dumps({
-                 "creator":"SAD/com.google.earthengine.examples.sad.GetStats",
+                 "creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.GetStats",
                  "args":[{
-                    "creator":"SAD/com.google.earthengine.examples.sad.ProdesImage",
+                    "creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.ProdesImage",
                     "args":[frozen_image]},
                     {"type":"FeatureCollection", "table_id":table_id}, key_name]}),
             "fields": "classHistogram"
@@ -47,12 +48,12 @@ class Stats(object):
         reports = []
         for x in assetids:
             reports.append({
-                    "creator":"SAD/com.google.earthengine.examples.sad.ProdesImage",
+                    "creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.ProdesImage",
                     "args":[x]
             })
 
         data = self._execute_cmd("/value", {
-            "image": json.dumps({"creator":"SAD/com.google.earthengine.examples.sad.GetStatsList",
+            "image": json.dumps({"creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.GetStatsList",
                 "args":[
                     reports
                     ,
@@ -160,7 +161,7 @@ class NDFI(object):
     # hardcoded data for request
 
     PRODES_IMAGE = {
-        "creator": 'SAD/com.google.earthengine.examples.sad.ProdesImage',
+        "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.ProdesImage',
         "args": ["PRODES_2009"]
     };
 
@@ -180,7 +181,7 @@ class NDFI(object):
         self._image_cache = {}
 
     def mapid2_cmd(self, asset_id, polygon=None, rows=10, cols=10):
-        return {"creator":"SAD/com.google.earthengine.examples.sad.GetNDFIDelta","args": [
+        return {"creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.GetNDFIDelta","args": [
             self.last_perdiod['start'],
             self.last_perdiod['end'],
             self.work_period['start'],
@@ -188,7 +189,7 @@ class NDFI(object):
             "MODIS/MOD09GA",
             "MODIS/MOD09GQ",
             {'type':'FeatureCollection','table_id': 1868251, 'mark': str(timestamp())},
-            {"creator":"SAD/com.google.earthengine.examples.sad.ProdesImage","args":[asset_id]},
+            {"creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.ProdesImage","args":[asset_id]},
             polygon,
             rows,
             cols]
@@ -208,9 +209,9 @@ class NDFI(object):
         """
         cmd ={
             "value": json.dumps({
-                "creator": "SAD/com.google.earthengine.examples.sad.FreezeMap",
+                "creator": CALL_SCOPE + "/com.google.earthengine.examples.sad.FreezeMap",
                 "args":[{
-                        "creator":"SAD/com.google.earthengine.examples.sad.ProdesImage",
+                        "creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.ProdesImage",
                         "args":[asset_id]
                     },
                     {'type':'FeatureCollection','table_id':1228540,'mark': str(timestamp())},
@@ -333,7 +334,7 @@ class NDFI(object):
         for image in image_list:
             name = image.split("_", 2)[-1]
             specs.append({
-              "creator": 'SAD/com.google.earthengine.examples.sad.ModisCombiner',
+              "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.ModisCombiner',
               "args": ['MOD09GA_005_' + name, 'MOD09GQ_005_' + name]
             });
         return specs;
@@ -342,11 +343,11 @@ class NDFI(object):
     def _NDFI_image(self, period):
         """ given image list from EE, returns the operator chain to return NDFI image """
         return {
-            "creator": 'SAD/com.google.earthengine.examples.sad.NDFIImage',
+            "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.NDFIImage',
             "args": [{
-              "creator": 'SAD/com.google.earthengine.examples.sad.UnmixModis',
+              "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.UnmixModis',
               "args": [{
-                "creator": 'SAD/com.google.earthengine.examples.sad.KrigingStub',
+                "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.KrigingStub',
                 "args": [ self._MakeMosaic(period) ]
               }]
             }]
@@ -401,7 +402,7 @@ class NDFI(object):
         """ commands for RGB image """
         return {
             "image": json.dumps({
-               "creator": 'SAD/com.google.earthengine.examples.sad.KrigingStub',
+               "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.KrigingStub',
                "args": [ self._MakeMosaic(period) ]
             }),
             "bands": 'sur_refl_b01,sur_refl_b04,sur_refl_b03',
@@ -412,7 +413,7 @@ class NDFI(object):
 
     def _MakeMosaic(self, period):
         return {
-          "creator": 'SAD/com.google.earthengine.examples.sad.MakeMosaic',
+          "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.MakeMosaic',
           "args": ["MODIS/MOD09GA","MODIS/MOD09GQ", 
                 {'type':'FeatureCollection','table_id':1868251, 'mark': str(timestamp())}, #this number is an special fusion tables id but i have no idea what it is supposed to do
                 period['start'], period['end']]
@@ -421,9 +422,9 @@ class NDFI(object):
     def _SMA_image_command(self, period):
         return {
             "image": json.dumps({
-              "creator": 'SAD/com.google.earthengine.examples.sad.UnmixModis',
+              "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.UnmixModis',
               "args": [{
-                "creator": 'SAD/com.google.earthengine.examples.sad.KrigingStub',
+                "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.KrigingStub',
                 "args": [self._MakeMosaic(period)]
               }]
             }),
@@ -438,11 +439,11 @@ class NDFI(object):
         bands = "sur_refl_b0%d,sur_refl_b0%d,sur_refl_b0%d" % bands
         return {
             "image": json.dumps({
-                "creator":"SAD/com.google.earthengine.examples.sad.StretchImage",
+                "creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.StretchImage",
                 "args":[{
                     "creator":"ClipToMultiPolygon",
                     "args":[{
-                        "creator":"SAD/com.google.earthengine.examples.sad.KrigingStub",
+                        "creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.KrigingStub",
                         "args":[ self._MakeMosaic(period)]
                     },
                     polygon]
