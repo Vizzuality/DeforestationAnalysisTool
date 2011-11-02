@@ -773,8 +773,29 @@ article .example .field {
 #header #tools #maptools #slider_wrapper div#ndfi_visibility .class_selector:hover {
   color: #FFF;
 }
-#header #tools #maptools #slider_wrapper div#ndfi_visibility .check_selected {
-  background: url("../img/check_selected.png") no-repeat 0 3px;
+#header #tools #maptools #slider_wrapper div#ndfi_visibility #degradation {
+  background: url("../img/icons/switchers_ndfi.png") no-repeat no-repeat 0px 0px;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_visibility #degradation.check_selected {
+  background: url("../img/icons/switchers_ndfi.png") no-repeat no-repeat 0px -64px;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_visibility #deforestation {
+  background: url("../img/icons/switchers_ndfi.png") no-repeat no-repeat 0px -16px;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_visibility #deforestation.check_selected {
+  background: url("../img/icons/switchers_ndfi.png") no-repeat no-repeat 0px -80px;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_visibility #forest {
+  background: url("../img/icons/switchers_ndfi.png") no-repeat no-repeat 0px -32px;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_visibility #forest.check_selected {
+  background: url("../img/icons/switchers_ndfi.png") no-repeat no-repeat 0px -96px;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_visibility #deforested {
+  background: url("../img/icons/switchers_ndfi.png") no-repeat no-repeat 0px -48px;
+}
+#header #tools #maptools #slider_wrapper div#ndfi_visibility #deforested.check_selected {
+  background: url("../img/icons/switchers_ndfi.png") no-repeat no-repeat 0px -112px;
 }
 #header #tools #maptools #slider_wrapper div#ndfi_visibility .left {
   width: 50%;
