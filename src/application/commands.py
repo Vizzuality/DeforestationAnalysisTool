@@ -3,6 +3,7 @@
 import logging
 import random
 import simplejson as json
+import time
 from datetime import datetime, date
 from app import app
 from flask import render_template, flash, url_for, redirect, abort, request, make_response
@@ -18,6 +19,7 @@ from time_utils import month_range
 from application.models import Report, Cell, StatsStore
 from application.constants import amazon_bounds
 from ee import NDFI
+
 
 @app.route('/_ah/cmd/create_table')
 def create_table():
@@ -203,6 +205,9 @@ def update_report_stats(report_id):
     }
     for desc, table, name in tables:
         stats['stats'].update(stats_for(r.assetid or "PRODES_IMAZON_2011a", table))
+        # sleep for some time to avoid problems with FT 
+        time.sleep(2)
+        
 
     data = json.dumps(stats)
     s = StatsStore.get_for_report(report_id)
