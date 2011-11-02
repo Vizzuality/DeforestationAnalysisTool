@@ -247,6 +247,9 @@ var Vizzualization = Backbone.View.extend({
         this.time_range.bind('range_change', this.report_dialog.set_reports);
         this.time_range.bind('range_change', this.update_dates);
         this.time_range.bind('range_change', this.stats.range_change);
+        this.time_range.bind('range_change', function() {
+          self.popup.close();
+        });
         this.time_range.trigger('range_change', this.time_range.get_report_range());
         // show default layers
         _(this.DEFAULT_LAYERS).each(function(layer) {
