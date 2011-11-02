@@ -406,20 +406,21 @@
                       color: #FFF;
                   }
                 }
-                
+
                 #degradation {
+                   background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px -16px;
+                   &.check_selected {
+                      background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px (-64px - 16px);
+                   }
+                }
+
+                #deforestation {
                    background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px 0px;
                    &.check_selected {
                     background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px -64px;
                    }
                 }
 
-                #deforestation {
-                      background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px -16px;
-                     &.check_selected {
-                        background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px (-64px - 16px);
-                     }
-                }
                 #forest{
                       background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px -32px;
                      &.check_selected {
