@@ -408,29 +408,29 @@
                 }
 
                 #degradation {
-                   background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px -16px;
+                   background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px (-64px - 16px);
                    &.check_selected {
-                      background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px (-64px - 16px);
+                     background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px -16px;
                    }
                 }
 
                 #deforestation {
-                   background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px 0px;
+                   background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px -64px;
                    &.check_selected {
-                    background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px -64px;
+                      background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px 0px;
                    }
                 }
 
                 #forest{
-                      background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px -32px;
+                     background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px (-64px - 32px);
                      &.check_selected {
-                        background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px (-64px - 32px);
+                       background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px -32px;
                      }
                 }
                 #deforested {
-                      background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px -48px;
+                     background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px (-64px - 48px);
                      &.check_selected {
-                        background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px (-64px - 48px);
+                       background:url('../img/icons/switchers_ndfi.png') no-repeat  no-repeat 0px -48px;
                      }
                 }
 
