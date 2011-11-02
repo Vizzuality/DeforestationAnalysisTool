@@ -169,7 +169,7 @@ tables = [
     ('Municipalities', 1560866, 'name'),
     ('States', 1560836, 'name'),
     ('Federal Conservation', 1568452, 'name'),
-    ('State Conservation', 1568376, 'name'),
+    ('State Conservation', 2042133, 'name'),
     ('Ingienous Land',1630610, 'name'),
     ('Legal Amazon', 1205151, 'name')
 ]
