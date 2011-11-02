@@ -149,7 +149,7 @@ class Report(db.Model):
         return None
 
     def range(self):
-        end = datetime.now()
+        end = self.end or datetime.now()
         return tuple(map(timestamp, (self.start, end)))
 
     def __unicode__(self):
