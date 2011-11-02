@@ -79,26 +79,8 @@
                 }
             }
             #google_powered {
-              font:normal 13px $DroidSans;
-              color:white;
-              padding:7px 0 0 0;
-              text-shadow:0 1px black;
-
-
-              small {
-                color:#59646D;
-                font:normal 11px $DroidSans;
-                text-shadow:0 1px #000000;
-              }
-              a {
-                display:inline-block;
-                width:50px;
-                height:20px;
-                margin:0 0 0 1px;
-                background:url('../img/google.png') no-repeat 0 0;
-                text-indent:-9999px;
-              }
-             }
+              padding:9px 0 0 0;
+            }
         }
     }
     #tools {
