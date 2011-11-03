@@ -517,5 +517,10 @@ class StatsStore(db.Model):
             'deg': reduce(operator.add, map(float, (x['deg'] for x in table_stats)))
         }
 
+class FustionTablesNames(db.Model):
+    table_id = db.StringProperty()
+    json = db.TextProperty()
 
+    def as_dict(self):
+        return json.loads(self.json)
 

@@ -15,7 +15,7 @@ from flask import jsonify, request, abort, Response
 from app import app
 import settings
 
-from models import Area, Note, Report, StatsStore
+from models import Area, Note, Report, StatsStore, FustionTablesNames
 from ee import NDFI, EELandsat, Stats
 
 from resources.report import ReportAPI, CellAPI, NDFIMapApi, PolygonAPI, NoteAPI, UserAPI
@@ -43,7 +43,7 @@ RegionStatsAPI.add_urls(app, '/api/v0/report/<report_id>/stats')
 RegionStatsAPI.add_custom_url(app, '/api/v0/stats/polygon', 'polygon', methods=('POST',))
 
 
-#TODO: this function need a huge refactor
+#TODO: this function needs a huge refactor
 @app.route('/api/v0/stats/<table>/<zone>')
 @app.route('/api/v0/stats/<table>')
 def stats(table, zone=None):
@@ -60,6 +60,8 @@ def stats(table, zone=None):
     f = StringIO()
     csv_file = csv.writer(f)
 
+    table_names = FustionTablesNames.all().filter('table_id =', table).fetch(1)[0].as_dict()
+
     # return the stats for each zone
     if not zone:
         csv_file.writerow(('report_id', 'start_date', 'end_date','zone_id', 'deforested', 'degraded'))
@@ -74,10 +76,11 @@ def stats(table, zone=None):
                 abort(404)
             stats = st.for_table(table)
             for s in stats:
+                name = table_names.get(s['id'], s['id'])
                 csv_file.writerow((str(r.key().id()),
                         r.start.isoformat(),
                         r.end.isoformat(),
-                        s['id'],
+                        name,
                         s['def'],
                         s['deg']))
 

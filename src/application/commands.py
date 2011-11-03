@@ -16,7 +16,7 @@ from application import settings
 from ft import FT
 
 from time_utils import month_range
-from application.models import Report, Cell, StatsStore
+from application.models import Report, Cell, StatsStore, FustionTablesNames
 from application.constants import amazon_bounds
 from ee import NDFI
 
@@ -170,7 +170,7 @@ def ndfi_value_for_cells_dummy(cell_key):
 tables = [
     ('Municipalities', 1560866, 'name'),
     ('States', 1560836, 'name'),
-    ('Federal Conservation', 1568452, 'name'),
+    ('Federal Conservation', 1568452, 'ex_area'),
     ('State Conservation', 2042133, 'name'),
     ('Ingienous Land',1630610, 'name'),
     ('Legal Amazon', 1205151, 'name')
@@ -239,3 +239,32 @@ def flush_all():
         for x in StatsStore.all():
             x.delete()
     return "all killed, colonel Trautman"
+
+    
+
+
+
+@app.route('/_ah/cmd/fusion_tables_names')
+def fusion_tables_names():
+    """ precache de fusion tables names """
+    for x in FustionTablesNames.all():
+        x.delete()
+
+    cl = FT(settings.FT_CONSUMER_KEY,
+            settings.FT_CONSUMER_SECRET,
+            settings.FT_TOKEN,
+            settings.FT_SECRET)
+
+    for desc, table, name in tables:
+        info = cl.sql("select %s, description from %s" % (name, table))
+        data = []
+        # sorry
+        for line in info.split('\n')[1:]: 
+            if line:
+                tk = line.split(',')
+                #TODO: fix html decoding
+                data.append((tk[0], tk[1]))
+
+        FustionTablesNames(table_id=str(table), json=json.dumps(dict(data))).put()
+
+    return "working"
