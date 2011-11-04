@@ -206,7 +206,7 @@ def update_report_stats(report_id):
     for desc, table, name in tables:
         stats['stats'].update(stats_for(str(r.key().id()), r.assetid, table))
         # sleep for some time to avoid problems with FT 
-        time.sleep(2)
+        time.sleep(10)
         
 
     data = json.dumps(stats)
