@@ -193,9 +193,9 @@ def update_report_global_stats(report_id):
     deferred.defer(update_total_stats_for_report, report_id)
     return 'updating'
 
-def stats_for(assetid, table):
+def stats_for(report_id, assetid, table):
     ee = Stats()
-    return ee.get_stats(assetid,  table)
+    return ee.get_stats(report_id, assetid,  table)
 
 def update_report_stats(report_id):
     r = Report.get(Key(report_id))
@@ -204,7 +204,7 @@ def update_report_stats(report_id):
         'stats': {}
     }
     for desc, table, name in tables:
-        stats['stats'].update(stats_for(r.assetid or "PRODES_IMAZON_2011a", table))
+        stats['stats'].update(stats_for(str(r.key().id()), r.assetid, table))
         # sleep for some time to avoid problems with FT 
         time.sleep(2)
         

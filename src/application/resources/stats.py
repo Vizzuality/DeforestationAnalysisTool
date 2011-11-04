@@ -34,8 +34,8 @@ class RegionStatsAPI(Resource):
         super(RegionStatsAPI, self).__init__()
         self.ee = Stats()
 
-    def stats_for(self, assetid, table):
-        return self.ee.get_stats(assetid,  table)
+    def stats_for(self, report_id, assetid, table):
+        return self.ee.get_stats(report_id, assetid,  table)
 
     # TODO: change for get
     def list(self, report_id):
@@ -54,7 +54,7 @@ class RegionStatsAPI(Resource):
 
     def get(self, report_id, id):
         r = Report.get(Key(report_id))
-        s = self.stats_for(r.assetid, int(id))
+        s = self.stats_for(str(r.key().id()), assetid, int(id))
         if request.args.get('_debug', False):
             s['debug'] = {
                 'request': self.ee.ee.last_request,
@@ -76,7 +76,7 @@ class RegionStatsAPI(Resource):
         #TODO: test if polygon is ccw
         # exchange lat, lon -> lon, lat
         normalized_poly = [(coord[1], coord[0]) for coord in polygon]
-        stats = self.ee.get_stats_for_polygon([r.assetid for r in reports], [normalized_poly])
+        stats = self.ee.get_stats_for_polygon([(str(r.key().id()), r.assetid) for r in reports], [normalized_poly])
         try:
             s = stats[0]
             s.update(data)

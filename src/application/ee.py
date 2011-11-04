@@ -26,14 +26,36 @@ class Stats(object):
         params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
         return self.ee.post(url, params)
 
-    def get_stats_for_table(self, frozen_image, table_id, key_name='name'):
+    def get_stats_for_table(self, report_id, frozen_image, table_id, key_name='name'):
         return self._execute_cmd("/value", {
             "image": json.dumps({
-                 "creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.GetStats",
-                 "args":[{
-                    "creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.ProdesImage",
-                    "args":[frozen_image]},
-                    {"type":"FeatureCollection", "table_id":table_id}, key_name]}),
+                "creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.GetStats",
+                "args":[
+                    {
+                        "creator": CALL_SCOPE + "/com.google.earthengine.examples.sad.HistoricalFreeze",
+                        "args":[
+                            frozen_image,
+                            {
+                                "table_id": int(settings.FT_TABLE_ID),
+                                "type":"FeatureCollection",
+                                "filters":[
+                                {
+                                    "metadata":"report_id",
+                                    "equals": report_id
+                                }
+                                ]
+                            },
+                            "type"
+                         ],
+                         "type":"Image",
+                    },
+                    {
+                        "table_id": table_id,
+                        "type":"FeatureCollection"
+                    },
+                    "name"
+                 ]
+            }),
             "fields": "classHistogram"
         })
 
@@ -46,31 +68,40 @@ class Stats(object):
             assetids = [assetids]
 
         reports = []
-        for x in assetids:
+        for report_id, asset_id in assetids:
             reports.append({
-                    "creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.ProdesImage",
-                    "args":[x]
-            })
+                    "args":[
+                        asset_id,
+                        {
+                            "table_id": int(settings.FT_TABLE_ID),
+                            "type":"FeatureCollection",
+                            "filters":[
+                                {
+                                "metadata":"report_id",
+                                "equals": report_id
+                                }
+                            ]
+                        },
+                        "type"
+                    ],
+                    "type":"Image",
+                    "creator": CALL_SCOPE + "/com.google.earthengine.examples.sad.HistoricalFreeze"
+             })
 
         data = self._execute_cmd("/value", {
-            "image": json.dumps({"creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.GetStatsList",
-                "args":[
-                    reports
-                    ,
-                    {
-                    "features":
-                        [
-                            {"type":"Feature",
-                             "geometry":
-                                {"type":"Polygon",
-                                 "coordinates": polygon,
-                                 "properties":{"name":"myPoly"}
-                                }
+            "image": json.dumps({
+                    "creator":"sad_thau_test/com.google.earthengine.examples.sad.GetStatsList",
+                    "args":[reports, {
+                        'features': [{
+                           'type': 'feature',
+                           'geometry': { 
+                                'type': 'polygon',
+                                'coordinates': polygon,
+                                'properties':{'name': 'myPoly'}
                             }
-                        ]
-                    },
-                    "name"
-                 ]}),
+                        }]
+                    }, "name" ]
+             }),
             "fields": "classHistogram"
         })
 
@@ -89,8 +120,8 @@ class Stats(object):
             })
         return stats
 
-    def get_stats(self, frozen_image, table_id):
-        r = self.get_stats_for_table(frozen_image,  table_id)
+    def get_stats(self, report_id, frozen_image, table_id):
+        r = self.get_stats_for_table(report_id, frozen_image,  table_id)
         try:
             stats_region = r["data"]["properties"]["classHistogram"]["values"]
         except KeyError:
