@@ -63,8 +63,8 @@ var ReportStatCollection = Backbone.Collection.extend({
                 deg += parseFloat(st.deg);
                 total_area += st.total_area;
             });
-            callback({'def': def.toFixed(2),
-                      'deg': deg.toFixed(2),
+            callback({'def': def,
+                      'deg': deg,
                       'total_area': (total_area/periods.length).toFixed(1)});
         });
         return this;

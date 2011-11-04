@@ -29,8 +29,17 @@ var MapPopup = Backbone.View.extend({
         this.pos(pos);
         this.$('h1').html(title);
         this.$('.area').html(total_area);
-        this.$('.area_def').html(area_def);
-        this.$('.area_deg').html(area_deg);
+        function set_area(el, el_area, area) {
+            if(area < 0.01) {
+                self.$(el).html((1000*area).toFixed(1));
+                self.$(el_area).html('m<sup>2</sup>');
+            } else {
+                self.$(el).html(area.toFixed(2));
+                self.$(el_area).html('km<sup>2</sup>');
+            }
+        }
+        set_area('.area_def', '.metric_def', area_def);
+        set_area('.area_deg', '.metric_deg', area_deg);
         el.show();
         this.position = pos;
     },
