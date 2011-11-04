@@ -138,7 +138,7 @@ def polygon_stats_csv():
         abort(404)
     ee = Stats()
     normalized_poly = [(coord[1], coord[0]) for coord in polygon]
-    stats = ee.get_stats_for_polygon([r.assetid for r in reports], [normalized_poly])
+    stats = ee.get_stats_for_polygon([(str(r.key().id()), r.assetid) for r in reports], [normalized_poly])
     try:
         f = StringIO()
         csv_file = csv.writer(f)
