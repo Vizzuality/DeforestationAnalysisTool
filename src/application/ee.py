@@ -41,7 +41,7 @@ class Stats(object):
                                 "filters":[
                                 {
                                     "metadata":"report_id",
-                                    "equals": report_id
+                                    "equals": int(report_id)
                                 }
                                 ]
                             },
@@ -78,7 +78,7 @@ class Stats(object):
                             "filters":[
                                 {
                                 "metadata":"report_id",
-                                "equals": report_id
+                                "equals": int(report_id)
                                 }
                             ]
                         },
