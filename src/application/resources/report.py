@@ -154,7 +154,7 @@ class CellAPI(Resource):
         r = Report.get(Key(report_id))
         z, x, y = Cell.cell_id(id)
         cell = Cell.get_or_default(r, x, y, z)
-        ndfi = NDFI('MOD09GA',
+        ee = ndfi = NDFI('MOD09GA',
             r.comparation_range(),
             r.range())
 
@@ -170,6 +170,11 @@ class CellAPI(Resource):
         data = ndfi.ndfi_change_value(r.base_map(), [polygons], rows, cols)
         logging.info(data)
         ndfi = data['data'] #data['data']['properties']['ndfiSum']['values']
+        if request.args.get('_debug', False):
+            ndfi['debug'] = {
+                'request': ee.ee.last_request,
+                'response': ee.ee.last_response
+            }
         return Response(json.dumps(ndfi), mimetype='application/json')
 
     def bounds(self, report_id, id):
