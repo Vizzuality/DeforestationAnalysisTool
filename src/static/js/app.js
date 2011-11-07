@@ -89,6 +89,7 @@ $(function() {
                     this.app.polygon_tools.polytype.select('def');
                     break;
                 case 'auto':
+                    this.app.ndfi_layer.unbind('polygon', this.new_polygon);
                     this.app.ndfi_layer.bind('polygon', this.new_polygon);
                     this.app.ndfi_layer.editing_state = true;
                     //this.app.map.$("canvas").css('cursor','crosshair');
