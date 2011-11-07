@@ -20,3 +20,4 @@ indexes:
   properties:
   - name: finished
   - name: start
+    direction: desc

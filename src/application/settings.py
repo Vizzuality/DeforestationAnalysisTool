@@ -31,7 +31,7 @@ else:
     if app_id == 'imazon-sad-tool':
         FT_TABLE = 'areas'
         FT_TABLE_ID = '1089491'
-    elif app_id == 'imazon-prototipe':
+    elif app_id == 'imazon-prototype':
         FT_TABLE = 'areas_testing'
         FT_TABLE_ID = '1869271'
     elif app_id == 'sad-training':
