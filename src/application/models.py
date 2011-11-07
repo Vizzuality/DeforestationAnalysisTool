@@ -89,7 +89,7 @@ class Report(db.Model):
 
     @staticmethod
     def current():
-        q = Report.all().order("-start")
+        q = Report.all().filter('finished =', False).order("-start")
         r = q.fetch(1)
         if r:
             return r[0]
