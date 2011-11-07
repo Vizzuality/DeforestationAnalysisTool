@@ -11,7 +11,7 @@ from time_utils import timestamp
 
 METER2_TO_KM2 = 1.0/(1000*1000)
 
-CALL_SCOPE = "sad_test"
+CALL_SCOPE = "SAD"
 
 class Stats(object):
 
@@ -50,7 +50,7 @@ class Stats(object):
                          "type":"Image",
                     },
                     {
-                        "table_id": table_id,
+                        "table_id": int(table_id),
                         "type":"FeatureCollection"
                     },
                     "name"

@@ -28,7 +28,7 @@ var MapPopup = Backbone.View.extend({
         this.polygon = polygon;
         this.pos(pos);
         this.$('h1').html(title);
-        this.$('.area').html(total_area);
+        this.$('.area').html(total_area.toFixed(2));
         function set_area(el, el_area, area) {
             if(area < 0.01) {
                 self.$(el).html((1000*area).toFixed(1));

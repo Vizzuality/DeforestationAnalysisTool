@@ -188,6 +188,12 @@ def update_report_stats_view(report_id):
     deferred.defer(update_report_stats, report_id)
     return 'updating'
 
+@app.route('/_ah/cmd/update_stats', methods=('GET',))
+def update_all_stats():
+    for r in Report.all().filter('finished =', True):
+        deferred.defer(update_report_stats, str(r.key()))
+    return 'updating'
+
 @app.route('/_ah/cmd/update_report_global_stats/<report_id>', methods=('GET',))
 def update_report_global_stats(report_id):
     deferred.defer(update_total_stats_for_report, report_id)
@@ -206,8 +212,7 @@ def update_report_stats(report_id):
     for desc, table, name in tables:
         stats['stats'].update(stats_for(str(r.key().id()), r.assetid, table))
         # sleep for some time to avoid problems with FT 
-        time.sleep(10)
-        
+        time.sleep(4)
 
     data = json.dumps(stats)
     s = StatsStore.get_for_report(report_id)
@@ -216,6 +221,8 @@ def update_report_stats(report_id):
         s.put()
     else:
         StatsStore(report_id=report_id, json=data).put()
+    # wait a little bit to allow app store saves the data
+    time.sleep(1.0)
     update_total_stats_for_report(report_id)
 
 def update_total_stats_for_report(report_id):
@@ -239,10 +246,6 @@ def flush_all():
         for x in StatsStore.all():
             x.delete()
     return "all killed, colonel Trautman"
-
-    
-
-
 
 @app.route('/_ah/cmd/fusion_tables_names')
 def fusion_tables_names():
