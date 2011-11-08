@@ -195,6 +195,7 @@ var PolygonDrawEditTool = PolygonDrawTool.extend({
         this.reset();
         var v = _.map(vertex, function(p) { return [p.lat(), p.lng()]; });
         this.trigger('polygon', {path: v});
+        google.maps.event.clearListeners(this.final_polygon);
         google.maps.event.addListener(this.final_polygon, "click", function(e) {
             self.trigger('polygon_click', v, e.latLng);
         });
