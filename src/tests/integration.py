@@ -9,7 +9,8 @@ from application.models import Report, Area, Cell
 from application import settings
 
 class StatsTest(unittest.TestCase):
-    """ test for reporting api """
+    """ test for reporting api 
+    """
 
     def setUp(self):
         # create resources
@@ -34,6 +35,7 @@ class StatsTest(unittest.TestCase):
         """
         """
         # freeze map with on area
+        report_id = self.r.key().id()
         data = self.ndfi.freeze_map(self.r.base_map(), 
                              int(settings.FT_TABLE_ID),
                              self.r.key().id())
@@ -45,7 +47,7 @@ class StatsTest(unittest.TestCase):
         print "report id: ", asset_id
 
         # get stats for this area
-        st = self.stats.get_stats_for_polygon(asset_id, self.polygon)
+        st = self.stats.get_stats_for_polygon(report_id, asset_id, self.polygon)
         
         self.assertTrue(st is not None)
         polygon_stats = st[0]
@@ -58,7 +60,7 @@ class StatsTest(unittest.TestCase):
         # get stats for this area
         # move the polygon a little bit
         p = [[[x, y + 1.0] for x, y in self.polygon[0]]]
-        st = self.stats.get_stats_for_polygon(asset_id, p)
+        st = self.stats.get_stats_for_polygon(report_id, asset_id, p)
         self.assertTrue(st is not None)
         print st[0]
         polygon_stats = st['data']['properties']['classHistogram']['values']['null']['values']
@@ -68,7 +70,7 @@ class StatsTest(unittest.TestCase):
 
         # search in area whiout deforesation
         p = [[[x+4.0, y] for x, y in self.polygon[0]]]
-        st = self.stats.get_stats_for_polygon(asset_id, p)
+        st = self.stats.get_stats_for_polygon(report_id, asset_id, p)
         self.assertTrue(st is not None)
         polygon_stats = st[0]
         self.assertAlmostEquals(0.0, float(polygon_stats['def']))
