@@ -65,7 +65,7 @@ var ReportStatCollection = Backbone.Collection.extend({
             });
             callback({'def': def,
                       'deg': deg,
-                      'total_area': (total_area/periods.length).toFixed(1)});
+                      'total_area': (total_area/periods.length)});
         });
         return this;
     }
