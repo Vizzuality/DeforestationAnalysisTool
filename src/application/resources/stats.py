@@ -78,9 +78,11 @@ class RegionStatsAPI(Resource):
         normalized_poly = [(coord[1], coord[0]) for coord in polygon]
         stats = self.ee.get_stats_for_polygon([(str(r.key().id()), r.assetid) for r in reports], [normalized_poly])
         try:
-            s = stats[0]
-            s.update(data)
-            return Response(json.dumps(s), mimetype='application/json')
+            # aggregate
+            data['def'] = sum(s['def'] for s in stats)
+            data['deg'] = sum(s['deg'] for s in stats)
+            data['total_area'] = stats[0]['total_area']
+            return Response(json.dumps(data), mimetype='application/json')
         except (KeyError, ValueError, IndexError):
             abort(404)
 
