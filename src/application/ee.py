@@ -38,6 +38,7 @@ class Stats(object):
                             {
                                 "table_id": int(settings.FT_TABLE_ID),
                                 "type":"FeatureCollection",
+                                'mark': str(timestamp()),
                                 "filters":[
                                 {
                                     "metadata":"report_id",
@@ -75,6 +76,7 @@ class Stats(object):
                         {
                             "table_id": int(settings.FT_TABLE_ID),
                             "type":"FeatureCollection",
+                            #'mark': str(timestamp())
                             "filters":[
                                 {
                                 "metadata":"report_id",
