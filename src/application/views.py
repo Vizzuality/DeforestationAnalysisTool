@@ -52,10 +52,10 @@ def default_maps():
         maps.append({'data': d['data'], 'info': 'RGB'})
     d = ndfi.ndfi0id()
     if 'data' in d:
-        maps.append({'data': d['data'], 'info': 'NDFI t0'})
+        maps.append({'data': d['data'], 'info': 'NDFI T0'})
     d = ndfi.ndfi1id()
     if 'data' in d:
-        maps.append({'data' :d['data'], 'info': 'NDFI t1'})
+        maps.append({'data' :d['data'], 'info': 'NDFI T1'})
     return maps
 
 def get_or_create_user():
