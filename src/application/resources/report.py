@@ -188,7 +188,7 @@ class CellAPI(Resource):
         z, x, y = Cell.cell_id(id)
         cell = Cell.get_or_default(r, x, y, z)
         bounds = cell.bounds(amazon_bounds)
-        bounds = "%f,%f,%f,%f" % (bounds[0][1], bounds[0][0], bounds[1][1], bounds[1][0])
+        bounds = "%f,%f,%f,%f" % (bounds[1][1], bounds[1][0], bounds[0][1], bounds[0][0])
         ee = EELandsat(LANDSAT7)
         d = ee.list(bounds=bounds)
         data = {}
