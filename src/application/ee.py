@@ -283,15 +283,15 @@ class NDFI(object):
         params = self._NDFI_period_image_command(self.work_period)
         return self._execute_cmd('/mapid', params)
 
-    def rgb_strech(self, polygon, bands):
+    def rgb_strech(self, polygon, sensor, bands):
         # this is an special call, the application needs to call /value
         # before call /mapid in order to google earthn engine makes his work
-        cmd = self._RGB_streched_command(self.work_period, polygon, bands)
+        cmd = self._RGB_streched_command(self.work_period, polygon, sensor, bands)
         del cmd['bands']
         cmd['fields'] = 'stats_sur_refl_b01,stats_sur_refl_b02,stats_sur_refl_b03,stats_sur_refl_b04,stats_sur_refl_b05'
 
         self._execute_cmd('/value', cmd)
-        cmd = self._RGB_streched_command(self.work_period, polygon, bands)
+        cmd = self._RGB_streched_command(self.work_period, polygon, sensor, bands)
         return self._execute_cmd('/mapid', cmd)
 
     def _get_polygon_bbox(self, polygon):
@@ -467,7 +467,8 @@ class NDFI(object):
             "gamma": 1.6
         };
 
-    def _RGB_streched_command(self, period, polygon, bands):
+    def _RGB_streched_command(self, period, polygon, sensor, bands):
+     if(sensor=="modis"):
         """ bands in format (1, 2, 3) """
         bands = "sur_refl_b0%d,sur_refl_b0%d,sur_refl_b0%d" % bands
         return {
@@ -487,7 +488,29 @@ class NDFI(object):
             }),
             "bands": bands
         }
-
-
-
-
+     else:
+        bands = "%d,%d,%d" % bands
+        return {
+            "image": json.dumps({
+                "creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.StretchImage",
+                "args":[{
+                    "creator":"ClipToMultiPolygon",
+                    "args":[{
+                       "creator":"SimpleMosaic",
+                       "args":[{
+                          "creator":"LANDSAT/LandsatTOA",
+                          "input":"LANDSAT/L7_L1T",
+                          "bands":[{"id":"30","data_type":"float"},
+                                   {"id":"20","data_type":"float"},
+                                   {"id":"10","data_type":"float"}],
+                          "start_time":1313020801000,
+                          "end_time":1313279999000},
+                       polygon]
+                    },polygon]
+                 },
+                 ["30","20","10"],
+                 2 #EPIC
+                 ]
+            }),
+            "bands": bands
+        }

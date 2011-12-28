@@ -467,8 +467,7 @@ class NDFI(object):
             "gamma": 1.6
         };
 
-    def _RGB_streched_command(self, period, polygon, sensor, bands):
-     if(sensor=="modis"):
+    def _RGB_streched_command(self, period, polygon, bands):
         """ bands in format (1, 2, 3) """
         bands = "sur_refl_b0%d,sur_refl_b0%d,sur_refl_b0%d" % bands
         return {
@@ -483,32 +482,6 @@ class NDFI(object):
                     polygon]
                  },
                  ["sur_refl_b01","sur_refl_b02","sur_refl_b03","sur_refl_b04","sur_refl_b05"],
-                 2 #EPIC
-                 ]
-            }),
-            "bands": bands
-        }
-     else:
-        bands = "%d,%d,%d" % bands
-        return {
-            "image": json.dumps({
-                "creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.StretchImage",
-                "args":[{
-                    "creator":"ClipToMultiPolygon",
-                    "args":[{
-                       "creator":"SimpleMosaic",
-                       "args":[{
-                          "creator":"LANDSAT/LandsatTOA",
-                          "input":"LANDSAT/L7_L1T",
-                          "bands":[{"id":"30","data_type":"float"},
-                                   {"id":"20","data_type":"float"},
-                                   {"id":"10","data_type":"float"}],
-                          "start_time":1313020801000,
-                          "end_time":1313279999000},
-                       polygon]
-                    },polygon]
-                 },
-                 [30,20,10],
                  2 #EPIC
                  ]
             }),
