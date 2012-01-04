@@ -210,7 +210,7 @@ class CellAPI(Resource):
             }
         return Response(json.dumps(data), mimetype='application/json')
 
-    def rgb_mapid(self, report_id, id, r, g, b):
+    def rgb_mapid(self, report_id, id, r, g, b, sensor):
         report = Report.get(Key(report_id))
         z, x, y = Cell.cell_id(id)
         cell = Cell.get_or_default(report, x, y, z)
@@ -218,7 +218,7 @@ class CellAPI(Resource):
             report.comparation_range(),
             report.range())
         poly = cell.bbox_polygon(amazon_bounds)
-        mapid = ndfi.rgb_strech(poly, tuple(map(int, (r, g, b))))
+        mapid = ndfi.rgb_strech(poly, sensor, tuple(map(int, (r, g, b))))
         if 'data' not in mapid:
             abort(404)
         return Response(json.dumps(mapid['data']), mimetype='application/json')
