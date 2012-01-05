@@ -179,6 +179,6 @@ def testing():
     s = Stats()
     return jsonify(s._execute_cmd("/value", {
         "image": json.dumps({"creator":"SAD/com.google.earthengine.examples.sad.GetStatsList","args":[
-    [{"creator":"sad_test/com.google.earthengine.examples.sad.ProdesImage","args":["PRODES_2009"]},
-     {"creator":"sad_test/com.google.earthengine.examples.sad.ProdesImage","args":["PRODES_IMAZON_2011a"]}],{"type":"FeatureCollection","table_id":1505198},"name"]}), "fields": "classHistogram"}))
+    [{"creator":"SAD/com.google.earthengine.examples.sad.ProdesImage","args":["PRODES_2009"]},
+     {"creator":"SAD/com.google.earthengine.examples.sad.ProdesImage","args":["PRODES_IMAZON_2011a"]}],{"type":"FeatureCollection","table_id":1505198},"name"]}), "fields": "classHistogram"}))
 

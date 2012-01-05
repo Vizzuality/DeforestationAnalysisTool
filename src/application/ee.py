@@ -92,7 +92,7 @@ class Stats(object):
 
         data = self._execute_cmd("/value", {
             "image": json.dumps({
-                    "creator":"sad_thau_test/com.google.earthengine.examples.sad.GetStatsList",
+                    "creator": CALL_SCOPE + "/com.google.earthengine.examples.sad.GetStatsList",
                     "args":[reports, {
                         'features': [{
                            'type': 'feature',
@@ -390,7 +390,7 @@ class NDFI(object):
         ndfi_image_1 = self._NDFI_image(reference_period)
         ndfi_image_2 = self._NDFI_image(work_period)
         return {
-               "creator": 'sad_test/com.google.earthengine.examples.sad.ChangeDetectionData',
+               "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.ChangeDetectionData',
                "args": [ndfi_image_1,
                         ndfi_image_2,
                         self.PRODES_IMAGE,
