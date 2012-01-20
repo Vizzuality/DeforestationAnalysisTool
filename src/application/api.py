@@ -33,6 +33,7 @@ CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/ndfi_change', 
 CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/bounds', 'bounds')
 CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/landsat', 'landsat')
 CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/rgb/<r>/<g>/<b>/sensor/<sensor>', 'rgb_mapid')
+#CellAPI.add_custom_url(app, '/api/v0/report/<report_id>/cell/<id>/rgb/<r>/<g>/<b>/sensor', 'sensor')
 
 NDFIMapApi.add_urls(app, '/api/v0/report/<report_id>/map')
 PolygonAPI.add_urls(app, '/api/v0/report/<report_id>/cell/<cell_pos>/polygon')
@@ -179,6 +180,6 @@ def testing():
     s = Stats()
     return jsonify(s._execute_cmd("/value", {
         "image": json.dumps({"creator":"SAD/com.google.earthengine.examples.sad.GetStatsList","args":[
-    [{"creator":"sad_test/com.google.earthengine.examples.sad.ProdesImage","args":["PRODES_2009"]},
-     {"creator":"sad_test/com.google.earthengine.examples.sad.ProdesImage","args":["PRODES_IMAZON_2011a"]}],{"type":"FeatureCollection","table_id":1505198},"name"]}), "fields": "classHistogram"}))
+    [{"creator":"SAD/com.google.earthengine.examples.sad.ProdesImage","args":["PRODES_2009"]},
+     {"creator":"SAD/com.google.earthengine.examples.sad.ProdesImage","args":["PRODES_IMAZON_2011a"]}],{"type":"FeatureCollection","table_id":1505198},"name"]}), "fields": "classHistogram"}))
 

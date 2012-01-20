@@ -21,6 +21,13 @@ var RGB_layers =  [
         b: 4,
         sensor: 'modis',
         description: 'F color infrared RGB214'
+    },
+    {
+        r: 30,
+        g: 20,
+        b: 10,
+        sensor: 'landsat',
+        description: 'Landsat Stretch'
     }
 ];
 

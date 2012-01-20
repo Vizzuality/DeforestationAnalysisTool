@@ -92,7 +92,7 @@ class Stats(object):
 
         data = self._execute_cmd("/value", {
             "image": json.dumps({
-                    "creator":"sad_thau_test/com.google.earthengine.examples.sad.GetStatsList",
+                    "creator": CALL_SCOPE + "/com.google.earthengine.examples.sad.GetStatsList",
                     "args":[reports, {
                         'features': [{
                            'type': 'feature',
@@ -178,6 +178,7 @@ class EELandsat(object):
             'bands': ','.join(MAP_IMAGE_BANDS), #'30,20,10',
             'gain': PREVIEW_GAIN
         }
+
         return self._execute_cmd("/mapid", cmd)
 
     def _execute_cmd(self, url, cmd):
@@ -288,7 +289,10 @@ class NDFI(object):
         # before call /mapid in order to google earthn engine makes his work
         cmd = self._RGB_streched_command(self.work_period, polygon, sensor, bands)
         del cmd['bands']
-        cmd['fields'] = 'stats_sur_refl_b01,stats_sur_refl_b02,stats_sur_refl_b03,stats_sur_refl_b04,stats_sur_refl_b05'
+        if (sensor=="modis"):
+            cmd['fields'] = 'stats_sur_refl_b01,stats_sur_refl_b02,stats_sur_refl_b03,stats_sur_refl_b04,stats_sur_refl_b05'
+        else:
+            cmd['fields'] = 'stats_30,stats_20,stats_10'
 
         self._execute_cmd('/value', cmd)
         cmd = self._RGB_streched_command(self.work_period, polygon, sensor, bands)
@@ -390,7 +394,7 @@ class NDFI(object):
         ndfi_image_1 = self._NDFI_image(reference_period)
         ndfi_image_2 = self._NDFI_image(work_period)
         return {
-               "creator": 'sad_test/com.google.earthengine.examples.sad.ChangeDetectionData',
+               "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.ChangeDetectionData',
                "args": [ndfi_image_1,
                         ndfi_image_2,
                         self.PRODES_IMAGE,
@@ -504,8 +508,7 @@ class NDFI(object):
                                    {"id":"20","data_type":"float"},
                                    {"id":"10","data_type":"float"}],
                           "start_time":1313020801000,
-                          "end_time":1313279999000},
-                       polygon]
+                          "end_time":1313279999000}]
                     },polygon]
                  },
                  ["30","20","10"],
