@@ -27,7 +27,10 @@ The tool is intended to be use directly online (still pending the final URL) so 
    * Go to the src folder cd `src`
    * Run it using the following script: `tools/start`. Leave the window open, the application should be running.
 6. Create an initial report
-   * Open a new Terminal window, leaving the other open, and run `curl -d '' "http://localhost:8080/_ah/cmd/create_report?year=2011&month=7&day=15"`
+   * Open a new Terminal window, leaving the other open,
+   * Initialize fusion tables: curl "http://localhost:8080/_ah/cmd/fusion_tables_names"
+   * Create an unclosed report curl -d '' "http://localhost:8080/_ah/cmd/create_report?year=2011&month=7&day=15"
+   * If you'd like, create an closed report curl -d '' "http://localhost:8080/_ah/cmd/create_report?year=2011&month=8&day=15&fyear=2011&fmonth=9&fday=15&assetid=SAD_VALIDATED/SAD_2010_05"
 7. Start using the app.
    * You should now be able to go to http://localhost:8080 and start using the application locally.
    * When loggin in dont forget to set yourself as admin.

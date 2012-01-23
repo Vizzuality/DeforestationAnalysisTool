@@ -19,6 +19,7 @@ from google.appengine.api import users
 
 from google.appengine.api import memcache
 
+
 class NDFIMapApi(Resource):
     """ resource to get ndfi map access data """
 
@@ -222,11 +223,6 @@ class CellAPI(Resource):
         if 'data' not in mapid:
             abort(404)
         return Response(json.dumps(mapid['data']), mimetype='application/json')
-
-
-
-
-
 
 
 class PolygonAPI(Resource):
