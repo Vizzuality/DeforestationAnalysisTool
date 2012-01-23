@@ -14,7 +14,7 @@ from dateutil.relativedelta import relativedelta
 from ft import FT
 from flask import Response, abort, request
 from StringIO import StringIO
-from models import FustionTablesNames, StatsStore, FusionTablesPolygons
+from models import FustionTablesNames, StatsStore
 
 
 class ReportType(object):
@@ -61,6 +61,12 @@ class ReportType(object):
                 logging.error("no stats for %s" % report_id)
                 abort(404)
         return stats
+
+        def get_polygon_name(table, id):
+            all_table_name = FustionTablesNames.all()
+            filtered_table_names = all_table_names.filter('table_id =', table)
+            table_names=filtered_table_names.fetch(1)[0].as_dict()
+            name = table_names.get(id, id)
     
     @staticmethod
     def factory(format):
@@ -78,9 +84,11 @@ class CSVReportType(ReportType):
 
     def write_header(self):
         if self.zone:
-            self.csv_file.writerow(('report_id', 'start_date', 'end_date', 'deforested', 'degraded'))
+            self.csv_file.writerow(('report_id', 'start_date', 'end_date', 
+                'deforested', 'degraded'))
         else:
-            self.csv_file.writerow(('report_id', 'start_date', 'end_date', 'zone_id', 'deforested', 'degraded'))
+            self.csv_file.writerow(('report_id', 'start_date', 'end_date', 
+                'zone_id', 'deforested', 'degraded'))
 
     def write_footer(self):
         pass    
@@ -89,8 +97,7 @@ class CSVReportType(ReportType):
         name = None
 
         if table and not self.zone:
-            table_names = FustionTablesNames.all().filter('table_id =', table).fetch(1)[0].as_dict()
-            name = table_names.get(stats['id'], stats['id'])
+            name = get_polygon_name(table, stats['id'])
             
         if name:
             self.csv_file.writerow((str(report.key().id()),
@@ -115,7 +122,8 @@ class CSVReportType(ReportType):
         self.f.truncate(0)
         return Response(result, 
             headers={
-                "Content-Disposition": "attachment; filename=\"" + file_name + ".csv\""
+                "Content-Disposition": "attachment; filename=\"" + file_name + 
+                ".csv\""
             },
             mimetype='text/csv')
 
@@ -127,8 +135,11 @@ class KMLReportType(ReportType):
         self.f.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
         self.f.write("<kml xmlns=\"http://www.opengis.net/kml/2.2\">")
         self.f.write("<Document>")
-        self.f.write("<Style id=\"transGreenPoly\"><LineStyle><width>2.5</width></LineStyle><PolyStyle><color>3d00ff00</color></PolyStyle>")
-        self.f.write("<BalloonStyle><text>$[description]</text></BalloonStyle></Style>")
+        self.f.write("<Style id=\"transGreenPoly\"><LineStyle>" +
+            "<width>2.5</width></LineStyle><PolyStyle>" +
+            "<color>3d00ff00</color></PolyStyle>")
+        self.f.write("<BalloonStyle><text>$[description]</text>" + 
+            "</BalloonStyle></Style>")
 
     def write_footer(self):
         self.f.write("</Document>")
@@ -138,11 +149,10 @@ class KMLReportType(ReportType):
         name = None
 
         if table:
-          table_names = FustionTablesNames.all().filter('table_id =', table).fetch(1)[0].as_dict()
-          name = table_names.get(stats['id'], stats['id'])
-          kml = self.kml(table, stats['id'])
+            name = get_polygon_name(table, stats['id'])
+            kml = self.kml(table, stats['id'])
         else:
-          name = "Custom Polygon"
+            name = "Custom Polygon"
 
         description = self.description(name, stats)
 
@@ -161,7 +171,8 @@ class KMLReportType(ReportType):
         self.f.truncate(0)
         return Response(result, 
             headers={
-                "Content-Disposition": "attachment; filename=\"" + file_name + ".kml\""
+                "Content-Disposition": "attachment; filename=\"" + file_name + 
+                ".kml\""
             },
             mimetype='text/kml')
 
@@ -177,13 +188,19 @@ class KMLReportType(ReportType):
         else:
           id = 'name'
 
-        info = cl.sql("select geometry from %s where %s = %s" % (table, id, row_id))
+        info = cl.sql("select geometry from %s where %s = %s" % 
+            (table, id, row_id))
         polygon = info.split('\n')[1]
         polygon = polygon.replace("\"", "")
         return polygon
 
     def description(self, name, stats):
-        desc = "<![CDATA[<table><tr><td><h2>" + name + "</h2></td><td></td></tr><tr><td><b>Deforestation: </b></td><td>" + str(stats['def']) + "km<sup>2</sup></td></tr><tr><td><b>Degradation: </b></td><td>" + str(stats['deg']) + "km<sup>2</sup></td></tr></table>]]>"
+        desc = "<![CDATA[<table><tr><td><h2>" + name 
+        desc += "</h2></td><td></td></tr>"
+        desc += "<tr><td><b>Deforestation: </b></td><td>" 
+        desc += str(stats['def']) + "km<sup>2</sup></td></tr>" 
+        desc += "<tr><td><b>Degradation: </b></td><td>" + str(stats['deg']) 
+        desc += "km<sup>2</sup></td></tr></table>]]>"
         return desc
 
 
