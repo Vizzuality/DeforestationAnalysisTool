@@ -44,7 +44,6 @@ UserAPI.add_urls(app, '/api/v0/user')
 RegionStatsAPI.add_urls(app, '/api/v0/report/<report_id>/stats')
 RegionStatsAPI.add_custom_url(app, '/api/v0/stats/polygon', 'polygon', methods=('POST',))
 
-
 #TODO: this function needs a huge refactor
 @app.route('/api/v0/stats/<table>/<format>/<zone>')
 @app.route('/api/v0/stats/<table>/<format>')
@@ -105,8 +104,6 @@ def polygon_stats(format=None):
     # exchange lat, lon -> lon, lat
     polygon = json.loads(request.args.get('polygon', None))
     polygon.append(polygon[0])
-    logging.info(polygon)
-    logging.info(path_to_kml([polygon]))
     if not polygon:
         abort(404)
     ee = Stats()
