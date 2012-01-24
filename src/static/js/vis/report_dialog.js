@@ -37,7 +37,7 @@ var ReportDialog = Backbone.View.extend({
 
         //input
         this.reports = this.options.reports;
-        this.formats = ['csv'];//, 'kml'];
+        this.formats = ['csv', 'kml'];
 
         $(document).bind('keydown', this.keyPress);
 
@@ -119,18 +119,17 @@ var ReportDialog = Backbone.View.extend({
         var url = '/api/v0/stats/';
         if(this.custom) {
             if(this.custom.polygon) {
-                url += 'polygon/csv';
+                url += 'polygon/' + this.selected_format;
             } else {
-                url += this.custom.table + '/' + this.custom.zone;
+                url += this.custom.table + '/' + this.selected_format + '/' + this.custom.zone;
             }
         } else {
-            url += this.region_selected.table;
+            url += this.region_selected.table + '/' + this.selected_format;
         } 
         url += '?reports=' + reports.join(',');
         if(this.custom && this.custom.polygon) {
             url += '&polygon=' + encodeURI(JSON.stringify(this.custom.polygon));
         }
-        //alert(url);
         console.log(url);
         window.open(url);
     },

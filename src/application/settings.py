@@ -24,8 +24,8 @@ DEBUG = DEBUG_MODE
 
 
 if DEBUG:
-    FT_TABLE = 'areas_dev'
-    FT_TABLE_ID = '1556991'
+    FT_TABLE = 'imazon_testing'
+    FT_TABLE_ID = '2676501'
 else:
     app_id  = app_identity.get_application_id()
     if app_id == 'imazon-sad-tool':

@@ -512,10 +512,11 @@ class StatsStore(db.Model):
         if not table_stats:
             logging.info("no stats for %s on %s" % (table, self.report_id))
             return None
-        return {
+        return [{
+            'id': zone,
             'def': reduce(operator.add, map(float, (x['def'] for x in table_stats))),
             'deg': reduce(operator.add, map(float, (x['deg'] for x in table_stats)))
-        }
+        }]
 
 class FustionTablesNames(db.Model):
     table_id = db.StringProperty()
@@ -523,4 +524,3 @@ class FustionTablesNames(db.Model):
 
     def as_dict(self):
         return json.loads(self.json)
-

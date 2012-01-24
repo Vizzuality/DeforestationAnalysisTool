@@ -9,7 +9,7 @@ var ReportStat = Backbone.Model.extend({
 
 /*
  ========================================
- store all statictics in the cliend side. Take this class
+ store all statistics in the client side. Take this class
  as a memcache in client side
  ========================================
 */
@@ -78,6 +78,11 @@ var PolygonStat = Backbone.Model.extend({
     },
     get_csv: function() {
         $.post(this.url() + '/csv',
+            this.attributes
+        );
+    },
+    get_kml: function() {
+        $.post(this.url() + '/kml',
             this.attributes
         );
     }
