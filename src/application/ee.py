@@ -8,6 +8,7 @@ import collections
 from earthengine.connector import EarthEngine
 
 from time_utils import timestamp
+from datetime import timedelta
 
 METER2_TO_KM2 = 1.0/(1000*1000)
 
@@ -493,6 +494,9 @@ class NDFI(object):
             "bands": bands
         }
      else:
+        three_months = timedelta(days=90)
+        work_period_end   = self.work_period['end']
+        work_period_start = self.work_period['start'] - 7776000000#three_months
         bands = "%d,%d,%d" % bands
         return {
             "image": json.dumps({
@@ -507,8 +511,8 @@ class NDFI(object):
                           "bands":[{"id":"30","data_type":"float"},
                                    {"id":"20","data_type":"float"},
                                    {"id":"10","data_type":"float"}],
-                          "start_time":1313020801000,
-                          "end_time":1313279999000}]
+                          "start_time": work_period_start, #131302801000
+                          "end_time": work_period_end }] #1313279999000
                     },polygon]
                  },
                  ["30","20","10"],
