@@ -37,6 +37,9 @@ else:
     elif app_id == 'sad-training':
         FT_TABLE = 'areas_training'
         FT_TABLE_ID = '1898803'
+    elif app_id == 'sad-ee':
+        FT_TABLE = 'areas_training'
+        FT_TABLE_ID = '1898803'
 
 
 # Set secret keys for CSRF protection
