@@ -62,8 +62,8 @@ class ReportType(object):
                 abort(404)
         return stats
 
-        def get_polygon_name(table, id):
-            all_table_name = FustionTablesNames.all()
+    def get_polygon_name(self, table, id):
+            all_table_names = FustionTablesNames.all()
             filtered_table_names = all_table_names.filter('table_id =', table)
             table_names=filtered_table_names.fetch(1)[0].as_dict()
             name = table_names.get(id, id)
@@ -97,7 +97,7 @@ class CSVReportType(ReportType):
         name = None
 
         if table and not self.zone:
-            name = get_polygon_name(table, stats['id'])
+            name = self.get_polygon_name(table, stats['id'])
             
         if name:
             self.csv_file.writerow((str(report.key().id()),
@@ -149,7 +149,7 @@ class KMLReportType(ReportType):
         name = None
 
         if table:
-            name = get_polygon_name(table, stats['id'])
+            name = self.get_polygon_name(table, stats['id'])
             kml = self.kml(table, stats['id'])
         else:
             name = "Custom Polygon"
@@ -158,7 +158,8 @@ class KMLReportType(ReportType):
 
         self.f.write("<Placemark>")
         self.f.write("<styleUrl>#transGreenPoly</styleUrl>")
-        self.f.write("<name>" + name + "</name>")
+        if (name):
+          self.f.write("<name>" + name + "</name>")
         self.f.write("<description>" + description + "</description>")
         self.f.write(kml)
         self.f.write("</Placemark>")
@@ -195,7 +196,9 @@ class KMLReportType(ReportType):
         return polygon
 
     def description(self, name, stats):
-        desc = "<![CDATA[<table><tr><td><h2>" + name 
+        desc = "<![CDATA[<table><tr><td><h2>" 
+        if (name):
+          desc += name
         desc += "</h2></td><td></td></tr>"
         desc += "<tr><td><b>Deforestation: </b></td><td>" 
         desc += str(stats['def']) + "km<sup>2</sup></td></tr>" 
