@@ -10,8 +10,9 @@ from earthengine.connector import EarthEngine
 from time_utils import timestamp
 
 METER2_TO_KM2 = 1.0/(1000*1000)
-
 CALL_SCOPE = "SAD"
+#KRIGING = CALL_SCOPE + "/" + "com.google.earthengine.examples.sad.KrigingStub"
+KRIGING = "kriging/com.google.earthengine.examples.kriging.KrigedModisImage"
 
 class Stats(object):
 
@@ -380,7 +381,7 @@ class NDFI(object):
             "args": [{
               "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.UnmixModis',
               "args": [{
-                "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.KrigingStub',
+                "creator": KRIGING,
                 "args": [ self._MakeMosaic(period) ]
               }]
             }]
@@ -435,7 +436,7 @@ class NDFI(object):
         """ commands for RGB image """
         return {
             "image": json.dumps({
-               "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.KrigingStub',
+               "creator": KRIGING,
                "args": [ self._MakeMosaic(period) ]
             }),
             "bands": 'sur_refl_b01,sur_refl_b04,sur_refl_b03',
@@ -457,7 +458,7 @@ class NDFI(object):
             "image": json.dumps({
               "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.UnmixModis',
               "args": [{
-                "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.KrigingStub',
+                "creator": KRIGING,
                 "args": [self._MakeMosaic(period)]
               }]
             }),
@@ -476,7 +477,7 @@ class NDFI(object):
                 "args":[{
                     "creator":"ClipToMultiPolygon",
                     "args":[{
-                        "creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.KrigingStub",
+                        "creator":KRIGING,
                         "args":[ self._MakeMosaic(period)]
                     },
                     polygon]
