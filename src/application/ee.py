@@ -4,6 +4,7 @@ import logging
 import settings
 import simplejson as json
 import collections
+import urllib
 
 from earthengine.connector import EarthEngine
 
@@ -185,10 +186,52 @@ class EELandsat(object):
     def _execute_cmd(self, url, cmd):
         params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
         return self.ee.post(url, params)
-
-
-
 #http://earthengine.googleapis.com/api/list?id=LANDSAT/L5_L1T&bbox=72.6,18.8,73.1,19.18
+
+
+#class EEMODIS(object):
+#
+#    def __init__(self, resource):
+#        self.resource = resource
+#        self.ee = EarthEngine(settings.EE_TOKEN)
+#
+#    def list(self, start, end, params={}):
+#        images = self.ee.get("/list?id=%s&starttime=%s&endtime=%s" % (self.resource, start, end))
+#        logging.info(images)
+#        if 'data' in images:
+#            return [x['id'] for x in images['data']]
+#        return []
+#
+#    def mapid(self, start, end):
+#        MAP_IMAGE1 = {
+#            'creator':'MODIS/MOD09GA',
+#            'input':'LANDSAT/L7_L1T',
+#            'bands':[{'id':'10','data_type':'float'},{'id':'20','data_type':'float'},{'id':'30','data_type':'float'}],
+#            'start_time': start,
+#            'end_time': end
+#        };
+#        MAP_IMAGE = {
+#             "creator": "SimpleMosaic",
+#             "args": [MAP_IMAGE1]
+#        }
+#        #PREVIEW_GAIN = 500;
+#        MAP_IMAGE_BANDS = [
+#          'sur_refl_b01_250m', 'sur_refl_b02_250m', 'sur_refl_b03_500m',
+#          'sur_refl_b04_500m', 'sur_refl_b06_500m', 'sur_refl_b07_500m'];
+#        cmd = {
+#            'image': json.dumps(MAP_IMAGE), #json.dumps(modis)
+#            'bands': ','.join(MAP_IMAGE_BANDS),
+#            'gain': PREVIEW_GAIN
+#        }
+#
+#        return self._execute_cmd("/mapid", cmd)#
+#
+#    def _execute_cmd(self, url, cmd):
+#        params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
+#        return self.ee.post(url, params)
+#http://earthengine.googleapis.com/api/list?id=MODIS09GA&starttime=1254305000000&endtime=1256900200000
+
+
 class NDFI(object):
     """ ndfi info for a period of time
     """
@@ -496,7 +539,7 @@ class NDFI(object):
      else:
         three_months = timedelta(days=90)
         work_period_end   = self.work_period['end']
-        work_period_start = self.work_period['start'] - 7776000000#three_months
+        work_period_start = self.work_period['start'] - 7776000000 #three_months
         bands = "%d,%d,%d" % bands
         return {
             "image": json.dumps({
@@ -521,3 +564,19 @@ class NDFI(object):
             }),
             "bands": bands
         }
+
+class Thumbnail(object):
+    def __init__(self):
+        self.ee = EarthEngine(settings.EE_TOKEN)
+    def thumbid(self, id):
+        MAP_IMAGE = {'id':id};
+        MAP_IMAGE_BANDS = ['30','20','10'];
+        cmd = {
+            'getid':1,
+            'image':urllib.quote_plus(json.dumps(MAP_IMAGE)),
+            'bands':','.join(MAP_IMAGE_BANDS), #'30,20,10'
+        }
+        return self._execute_cmd("/thumb", cmd)
+    def _execute_cmd(self, url, cmd):
+        params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
+        return self.ee.get(url, params)
