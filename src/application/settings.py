@@ -38,8 +38,8 @@ else:
         FT_TABLE = 'areas_training'
         FT_TABLE_ID = '1898803'
     elif app_id == 'sad-ee':
-        FT_TABLE = 'areas_training'
-        FT_TABLE_ID = '1898803'
+        FT_TABLE = 'SAD EE Polygons'
+        FT_TABLE_ID = '2949980'
 
 
 # Set secret keys for CSRF protection
