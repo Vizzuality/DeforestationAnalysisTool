@@ -13,7 +13,7 @@ from application.time_utils import timestamp, past_month_range
 
 from decorators import login_required, admin_required
 from forms import ExampleForm
-from application.ee import NDFI, EELandsat
+from application.ee import NDFI, EELandsat, Thumbnail
 
 from app import app
 
@@ -52,10 +52,10 @@ def default_maps():
         maps.append({'data': d['data'], 'info': 'RGB'})
     d = ndfi.ndfi0id()
     if 'data' in d:
-        maps.append({'data': d['data'], 'info': 'NDFI t0'})
+        maps.append({'data': d['data'], 'info': 'NDFI T0'})
     d = ndfi.ndfi1id()
     if 'data' in d:
-        maps.append({'data' :d['data'], 'info': 'NDFI t1'})
+        maps.append({'data' :d['data'], 'info': 'NDFI T1'})
     return maps
 
 def get_or_create_user():
@@ -171,3 +171,12 @@ def warmup():
     """
     return ''
 
+@app.route('/picker')
+def picker():
+    scene = request.args.get('scene','')
+    if scene:
+       thumb = Thumbnail()
+       result = thumb.thumbid(scene)
+    else:
+       result = "{}"
+    return render_template('picker.html', thumbid=result['data']['thumbid'], token=result['data']['token'])

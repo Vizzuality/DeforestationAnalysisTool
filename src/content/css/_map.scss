@@ -5,6 +5,7 @@ body, html {
     overflow: hidden;
 }
 
+
 #workarea{
     position: absolute;
     width: 100%;
@@ -13,7 +14,7 @@ body, html {
 
     .map_container {
         position: absolute;
-        width: 100%;
+        width: 99%;
         height: 100%;
         .map {
             width: 100%;

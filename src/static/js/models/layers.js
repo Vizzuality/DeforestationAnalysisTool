@@ -51,7 +51,7 @@ var RGBStrechLayer = LayerModel.extend({
     url: function() {
         var cell_id =  this.get('z') + "_" + this.get('x') + "_" + this.get('y');
         var mapid =  this.get('r') + "/" + this.get('g') + '/' + this.get('b');
-        return "/api/v0/report/" + this.get('report_id') + "/cell/" + cell_id + "/rgb/" + mapid;
+        return "/api/v0/report/" + this.get('report_id') + "/cell/" + cell_id + "/rgb/" + mapid + "/sensor/" + this.get('sensor');
     },
 
     //parses token and mapid response from server and creates tile url

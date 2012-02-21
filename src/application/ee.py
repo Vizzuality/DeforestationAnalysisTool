@@ -4,10 +4,12 @@ import logging
 import settings
 import simplejson as json
 import collections
+import urllib
 
 from earthengine.connector import EarthEngine
 
 from time_utils import timestamp
+from datetime import timedelta
 
 METER2_TO_KM2 = 1.0/(1000*1000)
 CALL_SCOPE = "SAD"
@@ -179,15 +181,58 @@ class EELandsat(object):
             'bands': ','.join(MAP_IMAGE_BANDS), #'30,20,10',
             'gain': PREVIEW_GAIN
         }
+
         return self._execute_cmd("/mapid", cmd)
 
     def _execute_cmd(self, url, cmd):
         params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
         return self.ee.post(url, params)
-
-
-
 #http://earthengine.googleapis.com/api/list?id=LANDSAT/L5_L1T&bbox=72.6,18.8,73.1,19.18
+
+
+#class EEMODIS(object):
+#
+#    def __init__(self, resource):
+#        self.resource = resource
+#        self.ee = EarthEngine(settings.EE_TOKEN)
+#
+#    def list(self, start, end, params={}):
+#        images = self.ee.get("/list?id=%s&starttime=%s&endtime=%s" % (self.resource, start, end))
+#        logging.info(images)
+#        if 'data' in images:
+#            return [x['id'] for x in images['data']]
+#        return []
+#
+#    def mapid(self, start, end):
+#        MAP_IMAGE1 = {
+#            'creator':'MODIS/MOD09GA',
+#            'input':'LANDSAT/L7_L1T',
+#            'bands':[{'id':'10','data_type':'float'},{'id':'20','data_type':'float'},{'id':'30','data_type':'float'}],
+#            'start_time': start,
+#            'end_time': end
+#        };
+#        MAP_IMAGE = {
+#             "creator": "SimpleMosaic",
+#             "args": [MAP_IMAGE1]
+#        }
+#        #PREVIEW_GAIN = 500;
+#        MAP_IMAGE_BANDS = [
+#          'sur_refl_b01_250m', 'sur_refl_b02_250m', 'sur_refl_b03_500m',
+#          'sur_refl_b04_500m', 'sur_refl_b06_500m', 'sur_refl_b07_500m'];
+#        cmd = {
+#            'image': json.dumps(MAP_IMAGE), #json.dumps(modis)
+#            'bands': ','.join(MAP_IMAGE_BANDS),
+#            'gain': PREVIEW_GAIN
+#        }
+#
+#        return self._execute_cmd("/mapid", cmd)#
+#
+#    def _execute_cmd(self, url, cmd):
+#        params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
+#        return self.ee.post(url, params)
+#http://earthengine.googleapis.com/api/list?id=MODIS09GA&starttime=1254305000000&endtime=1256900200000
+
+
 class NDFI(object):
     """ ndfi info for a period of time
     """
@@ -284,15 +329,18 @@ class NDFI(object):
         params = self._NDFI_period_image_command(self.work_period)
         return self._execute_cmd('/mapid', params)
 
-    def rgb_strech(self, polygon, bands):
+    def rgb_strech(self, polygon, sensor, bands):
         # this is an special call, the application needs to call /value
         # before call /mapid in order to google earthn engine makes his work
-        cmd = self._RGB_streched_command(self.work_period, polygon, bands)
+        cmd = self._RGB_streched_command(self.work_period, polygon, sensor, bands)
         del cmd['bands']
-        cmd['fields'] = 'stats_sur_refl_b01,stats_sur_refl_b02,stats_sur_refl_b03,stats_sur_refl_b04,stats_sur_refl_b05'
+        if (sensor=="modis"):
+            cmd['fields'] = 'stats_sur_refl_b01,stats_sur_refl_b02,stats_sur_refl_b03,stats_sur_refl_b04,stats_sur_refl_b05'
+        else:
+            cmd['fields'] = 'stats_30,stats_20,stats_10'
 
         self._execute_cmd('/value', cmd)
-        cmd = self._RGB_streched_command(self.work_period, polygon, bands)
+        cmd = self._RGB_streched_command(self.work_period, polygon, sensor, bands)
         return self._execute_cmd('/mapid', cmd)
 
     def _get_polygon_bbox(self, polygon):
@@ -468,7 +516,8 @@ class NDFI(object):
             "gamma": 1.6
         };
 
-    def _RGB_streched_command(self, period, polygon, bands):
+    def _RGB_streched_command(self, period, polygon, sensor, bands):
+     if(sensor=="modis"):
         """ bands in format (1, 2, 3) """
         bands = "sur_refl_b0%d,sur_refl_b0%d,sur_refl_b0%d" % bands
         return {
@@ -488,7 +537,47 @@ class NDFI(object):
             }),
             "bands": bands
         }
+     else:
+        three_months = timedelta(days=90)
+        work_period_end   = self.work_period['end']
+        work_period_start = self.work_period['start'] - 7776000000 #three_months
+        bands = "%d,%d,%d" % bands
+        return {
+            "image": json.dumps({
+                "creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.StretchImage",
+                "args":[{
+                    "creator":"ClipToMultiPolygon",
+                    "args":[{
+                       "creator":"SimpleMosaic",
+                       "args":[{
+                          "creator":"LANDSAT/LandsatTOA",
+                          "input":"LANDSAT/L7_L1T",
+                          "bands":[{"id":"30","data_type":"float"},
+                                   {"id":"20","data_type":"float"},
+                                   {"id":"10","data_type":"float"}],
+                          "start_time": work_period_start, #131302801000
+                          "end_time": work_period_end }] #1313279999000
+                    },polygon]
+                 },
+                 ["30","20","10"],
+                 2 #EPIC
+                 ]
+            }),
+            "bands": bands
+        }
 
-
-
-
+class Thumbnail(object):
+    def __init__(self):
+        self.ee = EarthEngine(settings.EE_TOKEN)
+    def thumbid(self, id):
+        MAP_IMAGE = {'id':id};
+        MAP_IMAGE_BANDS = ['30','20','10'];
+        cmd = {
+            'getid':1,
+            'image':urllib.quote_plus(json.dumps(MAP_IMAGE)),
+            'bands':','.join(MAP_IMAGE_BANDS), #'30,20,10'
+        }
+        return self._execute_cmd("/thumb", cmd)
+    def _execute_cmd(self, url, cmd):
+        params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
+        return self.ee.get(url, params)

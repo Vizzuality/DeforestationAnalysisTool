@@ -38,7 +38,6 @@ assets_id = [
 ]
 
 print "assetid,report_id"
-#for r in assets_id[-1:]:
 for r in assets_id:
     first, last = month_range(*reversed(map(int, r.split('_')[-2:])))
     url =  "http://%s/_ah/cmd/create_report?year=%d&month=%d&day=%d&assetid=%s&fyear=%d&fmonth=%d&fday=%d""" % (sys.argv[1], first.year, first.month, first.day, r, last.year, last.month, last.day)

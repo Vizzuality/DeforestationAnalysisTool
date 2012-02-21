@@ -5,19 +5,29 @@ var RGB_layers =  [
         r: 1,
         g: 4,
         b: 3,
+        sensor: 'modis',
         description: 'True color RGB141'
     },
     {
         r: 5,
         g: 2,
         b: 1,
+        sensor: 'modis',
         description: 'False color RGB421'
     },
     {
         r: 2,
         g: 1,
         b: 4,
+        sensor: 'modis',
         description: 'F color infrared RGB214'
+    },
+    {
+        r: 30,
+        g: 20,
+        b: 10,
+        sensor: 'landsat',
+        description: 'Landsat Stretch'
     }
 ];
 
@@ -32,6 +42,7 @@ function add_rgb_layers(layers, gridstack, report_id) {
             r: layer.r,
             g: layer.g,
             b: layer.b,
+            sensor: layer.sensor,
             report_id: report_id,
             description: layer.description
         });
