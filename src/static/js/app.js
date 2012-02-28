@@ -329,7 +329,7 @@ $(function() {
 				    		lay.set_enabled(false);
 				    	}	
 				    }
-        		}
+        		} 
         		layers = "";
         		layers = cell.get('map_four_layer_status');
         		var map2 = this.compare_maps[2];

@@ -149,7 +149,7 @@ class CellAPI(Resource):
         cell.map_one_layer_status = str(data['map_one_layer_status'])
         cell.map_two_layer_status = str(data['map_two_layer_status'])
         cell.map_three_layer_status = str(data['map_three_layer_status'])
-        cell.map_four_layer_status = str(data['map_four_layer_status'])
+        cell.map_four_layer_status = str(data['map_four_layer_status']) 
         cell.done = data['done']
         cell.last_change_by = users.get_current_user()
         cell.put()

@@ -14,7 +14,7 @@ var LayerModel = Backbone.Model.extend({
         }
         if(this.get('enabled') === true) {
             this.set_enabled(true);
-        }
+        } 
     },
 
     set_enabled: function(b) {

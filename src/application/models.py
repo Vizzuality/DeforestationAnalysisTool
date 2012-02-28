@@ -179,7 +179,7 @@ class Cell(db.Model):
     map_three_layer_status = db.StringProperty(default='"Brazil Legal Amazon","false","Brazil Municipalities Public","false","Brazil States Public","false","Brazil Federal Conservation Unit Public","false","Brazil State Conservation Unit Public","false","LANDSAT/L7_L1T","false","SMA","false","RGB","false","NDFI t0","false","NDFI t1","true","NDFI analysis","true","True color RGB141","false","False color RGB421","false","F color infrared RGB214","false","Validated polygons","true",*')
     map_four_layer_status = db.StringProperty(default='"Brazil Legal Amazon","false","Brazil Municipalities Public","false","Brazil States Public","false","Brazil Federal Conservation Unit Public","false","Brazil State Conservation Unit Public","false","Terrain","true","Satellite","false","Hybrid","false","Roadmap","false","LANDSAT/L7_L1T","true","NDFI t0","false","True color RGB141","false","False color RGB421","false","F color infrared RGB214","false",*')
     
-    
+     
     @staticmethod
     def get_cell(report, x, y, z):
         q = Cell.all()
