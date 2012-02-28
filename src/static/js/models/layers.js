@@ -23,8 +23,15 @@ var LayerModel = Backbone.Model.extend({
             this.set({'enabled': this.enabled});
             this.trigger('change', this);
         }
-    }
+    },
 
+    get_enabled: function() {
+    	if(this.get('enabled') === true) {
+           return true;
+        }else{
+        	return false;
+        }
+    }
 });
 
 // this layer needs to update the tile url when

@@ -202,22 +202,221 @@ $(function() {
               this.map.adjustSize();
               this.compare_layout = this.$("#compare_layout_2").show();
               this.compare_maps = [];
-              this.compare_maps.push(this.get_map("#map_half"));
+              this.compare_maps.push(this.get_map("#map_half"));              
+        },
+        
+        status_layer_map_save: function(number){
+        	var cell = this.gridstack.current_cell;
+        	if(number === 'one') {
+        		cell.set({'map_one_layer_status':this.status_layer_map(this.map)});
+            	cell.save();
+            }else  if(number === 'two') {
+            	cell.set({'map_one_layer_status':this.status_layer_map(this.map)});
+            	var map2 = this.compare_maps[0];
+            	cell.set({'map_two_layer_status':this.status_layer_map(map2)});
+            	cell.save();
+            } else if(number === 'four'){
+            	cell.set({'map_one_layer_status':this.status_layer_map(this.map)}); 
+            	var map2 = this.compare_maps[0];
+            	cell.set({'map_two_layer_status':this.status_layer_map(map2)});
+            	map2 = this.compare_maps[1];
+            	cell.set({'map_three_layer_status':this.status_layer_map(map2)});
+            	map2 = this.compare_maps[2];
+            	cell.set({'map_four_layer_status':this.status_layer_map(map2)});
+            	cell.save();
+            }
+        },
+        
+        get_status_layer_map: function(number){        	       	
+        	if(number === 'one') {
+        		var cell = this.gridstack.current_cell; 
+        		var layers = cell.get('map_one_layer_status');        		
+        		while(layers!='*'){
+    				var layer = layers.slice(layers.indexOf("\"")+1,layers.indexOf("\","));
+    				layers = layers.slice(layers.indexOf(",")+1);
+    				var flag = layers.slice(layers.indexOf("\"")+1,layers.indexOf("\","));
+    				layers = layers.slice(layers.indexOf(",")+1);
+    				var lay = this.map.layers.get_by_name(layer);
+    				if(lay) {
+				    	if(flag==='true'){
+				    		lay.set_enabled(true);
+				    	}else{
+				    		lay.set_enabled(false);
+				    	}	
+				    }
+        		}        		
+        	}else  if(number === 'two') {   
+        		var cell = this.gridstack.current_cell; 
+        		var layers = cell.get('map_one_layer_status');        		
+        		while(layers!='*'){
+    				var layer = layers.slice(layers.indexOf("\"")+1,layers.indexOf("\","));
+    				layers = layers.slice(layers.indexOf(",")+1);
+    				var flag = layers.slice(layers.indexOf("\"")+1,layers.indexOf("\","));
+    				layers = layers.slice(layers.indexOf(",")+1);
+    				var lay = this.map.layers.get_by_name(layer);
+				    if(lay) {
+				    	if(flag==='true'){
+				    		lay.set_enabled(true);
+				    	}else{
+				    		lay.set_enabled(false);
+				    	}	
+				    }
+        		}        		
+        		layers = "";
+        		layers = cell.get('map_two_layer_status');
+        		var map2 = this.compare_maps[0];
+        		while(layers!='*'){
+    				var layer = layers.slice(layers.indexOf("\"")+1,layers.indexOf("\","));
+    				layers = layers.slice(layers.indexOf(",")+1);
+    				var flag = layers.slice(layers.indexOf("\"")+1,layers.indexOf("\","));
+    				layers = layers.slice(layers.indexOf(",")+1);
+    				var lay = map2.layers.get_by_name(layer);
+    				if(lay) {
+				    	if(flag==='true'){
+				    		lay.set_enabled(true);
+				    	}else{
+				    		lay.set_enabled(false);
+				    	}	
+				    }
+        		}            	
+        	} else if(number === 'four'){
+        		var cell = this.gridstack.current_cell; 
+        		var layers = cell.get('map_one_layer_status');
+        		while(layers!='*'){
+    				var layer = layers.slice(layers.indexOf("\"")+1,layers.indexOf("\","));
+    				layers = layers.slice(layers.indexOf(",")+1);
+    				var flag = layers.slice(layers.indexOf("\"")+1,layers.indexOf("\","));
+    				layers = layers.slice(layers.indexOf(",")+1);
+    				var lay = this.map.layers.get_by_name(layer);
+    				if(lay) {
+				    	if(flag==='true'){
+				    		lay.set_enabled(true);
+				    	}else{
+				    		lay.set_enabled(false);
+				    	}	
+				    }
+        		}
+        		layers = "";
+        		layers = cell.get('map_two_layer_status');
+        		var map2 = this.compare_maps[0];
+        		while(layers!='*'){
+    				var layer = layers.slice(layers.indexOf("\"")+1,layers.indexOf("\","));
+    				layers = layers.slice(layers.indexOf(",")+1);
+    				var flag = layers.slice(layers.indexOf("\"")+1,layers.indexOf("\","));
+    				layers = layers.slice(layers.indexOf(",")+1);
+    				var lay = map2.layers.get_by_name(layer);
+    				if(lay) {
+				    	if(flag==='true'){
+				    		lay.set_enabled(true);
+				    	}else{
+				    		lay.set_enabled(false);
+				    	}	
+				    }
+        		}
+        		layers = "";
+        		layers = cell.get('map_three_layer_status');
+        		var map2 = this.compare_maps[1];
+        		while(layers!='*'){
+    				var layer = layers.slice(layers.indexOf("\"")+1,layers.indexOf("\","));
+    				layers = layers.slice(layers.indexOf(",")+1);
+    				var flag = layers.slice(layers.indexOf("\"")+1,layers.indexOf("\","));
+    				layers = layers.slice(layers.indexOf(",")+1);
+    				var lay = map2.layers.get_by_name(layer);
+    				if(lay) {
+				    	if(flag==='true'){
+				    		lay.set_enabled(true);
+				    	}else{
+				    		lay.set_enabled(false);
+				    	}	
+				    }
+        		}
+        		layers = "";
+        		layers = cell.get('map_four_layer_status');
+        		var map2 = this.compare_maps[2];
+        		while(layers!='*'){
+    				var layer = layers.slice(layers.indexOf("\"")+1,layers.indexOf("\","));
+    				layers = layers.slice(layers.indexOf(",")+1);
+    				var flag = layers.slice(layers.indexOf("\"")+1,layers.indexOf("\","));
+    				layers = layers.slice(layers.indexOf(",")+1);
+    				var lay = map2.layers.get_by_name(layer);
+    				if(lay) {
+				    	if(flag==='true'){
+				    		lay.set_enabled(true);
+				    	}else{
+				    		lay.set_enabled(false);
+				    	}	
+				    }
+        		}
+        	}
+        },
+        
+        status_layer_map: function(map_name){
+        	// enable layer, amazonas bounds
+        	/*
+        	 * id{1} name{Brazil Legal Amazon}
+        	 * id{2} name{Brazil Municipalities Public}
+        	 * id{3} name{Brazil States Public}
+        	 * id{4} name{Brazil Federal Conservation Unit Public}
+        	 * id{5} name{Brazil State Conservation Unit Public}
+        	 * id{6} name{Terrain} this's not saving
+        	 * id{7} name{Satellite} this's not saving
+        	 * id{8} name{Hybrid} this's not saving
+        	 * id{9} name{Roadmap} this's not saving
+        	 * id{9affcec73a8b645dc4974ff4da8830f0} name{LANDSAT/L7_L1T}
+        	 * id{f69b3bb6add9276eef4d0ab158de74e8} name{NDFI t0}
+        	 * id{?} name{True color RGB141}
+        	 * id{?} name{False color RGB421}
+        	 * id{?} name{F color infrared RGB214}
+        	 * 
+        	 */ 
+        	var arraylayer = new Array("Brazil Legal Amazon","Brazil Municipalities Public","Brazil States Public","Brazil Federal Conservation Unit Public",
+        			"Brazil State Conservation Unit Public","LANDSAT/L7_L1T","SMA","RGB","NDFI t0","NDFI t1","NDFI analysis","True color RGB141","False color RGB421",
+        			"F color infrared RGB214","Validated polygons");
+        	var save_status_layer="";
+        	for(var num=0; num<arraylayer.length;num++){
+	            var lay = map_name.layers.get_by_name(arraylayer[num]);
+	            if(lay) {
+	                if(lay.get_enabled()){
+	                	if(num==(arraylayer.length-1)){
+	                		save_status_layer += "\""+arraylayer[num]+"\",\""+lay.get_enabled()+"\",*";
+	                	}else{
+	                		save_status_layer += "\""+arraylayer[num]+"\",\""+lay.get_enabled()+"\",";
+	                	}
+	                }else{
+	                	if(num==(arraylayer.length-1)){
+	                		save_status_layer += "\""+arraylayer[num]+"\",\""+lay.get_enabled()+"\",*";
+	                	}else{
+	                		save_status_layer += "\""+arraylayer[num]+"\",\""+lay.get_enabled()+"\",";
+	                	}                	
+	                }
+	            }
+        	}
+        	return save_status_layer;
         },
 
-
+        compare_view_save: function(num) {
+        	var cell = this.gridstack.current_cell;
+        	cell.set({'compare_view':num});
+        	cell.save();
+        },	
+        
         compare_view: function(compare_type) {
             var self = this;
+            var compare_type_view = compare_type;
             this.map.close_layer_editor();
             if(compare_type !== 'one') {
+                
                 if(this.compare_layout !== null) {
                     this.compare_view('one');
+                    this.compare_view_save('one');
                 }
                 // el gran putiferio
                 if(compare_type === 'two') {
-                    this.compare_two();
+                    this.compare_two();	
+                    this.compare_view_save('two');
                 } else {
                     this.compare_four();
+                    this.compare_view_save('four');
                 }
                 this.map.crosshair(true);
                 _.each(this.compare_maps, function(m) {
@@ -243,6 +442,7 @@ $(function() {
                     });
                 });
             } else {
+            	this.compare_view_save('one');
                 //restore
                 this.map.el.css({width: '100%'});
                 this.map.adjustSize();
@@ -290,6 +490,7 @@ $(function() {
             //update slider with current cell values
             var cell = this.gridstack.current_cell;
             this.polygon_tools.ndfi_range.set_values(cell.get('ndfi_low'), cell.get('ndfi_high'));
+            this.compare_view(cell.get('compare_view'));
             //cell done!
             this.overview.set_note_count(this.gridstack.current_cell.get('note_count'));
             this.overview.set_ndfi(this.gridstack.current_cell.get('ndfi_change_value'));
@@ -301,6 +502,7 @@ $(function() {
             this.editing_router = new EditingToolsRuoter({
                 app: this
             });
+            this.get_status_layer_map(cell.get('compare_view'));
         },
 
         cell_done: function() {
@@ -316,7 +518,12 @@ $(function() {
             this.active_report.fetch();
         },
 
-        go_back: function() {
+        go_back: function() {  
+        	//alert(this.status_layer_map(this.map)); 
+        	console.log(this.compare_type_view);
+        	this.status_layer_map_save(this.compare_type_view);
+        	//this.status_layer_map_save('two');
+        	//this.get_status_layer_map('one');
             var p = this.gridstack.current_cell.parent_cell();
             this.to_cell(p.get('z'), p.get('x'), p.get('y'));
             router.navigate('cell/' +  p.get('z') + "/" + p.get('x') + "/" + p.get('y'));
