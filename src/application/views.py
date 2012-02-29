@@ -66,6 +66,7 @@ def get_or_create_user():
         u.put()
     return u
 
+@app.route('/')
 @app.route('/analysis')
 @login_required
 def home(cell_path=None):
@@ -92,7 +93,6 @@ def home(cell_path=None):
 
 
 
-@app.route('/')
 @app.route('/vis')
 @login_required
 def vis():
