@@ -67,6 +67,9 @@ def get_or_create_user():
     return u
 
 @app.route('/')
+def start():
+    return redirect('/analysis')
+    
 @app.route('/analysis')
 @login_required
 def home(cell_path=None):
