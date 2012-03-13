@@ -173,7 +173,13 @@ class Cell(db.Model):
     done = db.BooleanProperty(default=False);
     last_change_by = db.UserProperty()
     last_change_on = db.DateTimeProperty(auto_now=True)
-
+    compare_view = db.StringProperty(default='four')
+    map_one_layer_status = db.StringProperty(default='"Brazil Legal Amazon","false","Brazil Municipalities Public","false","Brazil States Public","false","Brazil Federal Conservation Unit Public","false","Brazil State Conservation Unit Public","false","LANDSAT/L7_L1T","false","SMA","false","RGB","false","NDFI t0","false","NDFI t1","false","NDFI analysis","true","True color RGB141","false","False color RGB421","false","F color infrared RGB214","false","Validated polygons","true",*')
+    map_two_layer_status = db.StringProperty(default='"Brazil Legal Amazon","false","Brazil Municipalities Public","false","Brazil States Public","false","Brazil Federal Conservation Unit Public","false","Brazil State Conservation Unit Public","false","LANDSAT/L7_L1T","false","SMA","false","RGB","false","NDFI t0","true","NDFI t1","false","NDFI analysis","true","True color RGB141","false","False color RGB421","false","F color infrared RGB214","false","Validated polygons","true",*')
+    map_three_layer_status = db.StringProperty(default='"Brazil Legal Amazon","false","Brazil Municipalities Public","false","Brazil States Public","false","Brazil Federal Conservation Unit Public","false","Brazil State Conservation Unit Public","false","LANDSAT/L7_L1T","false","SMA","false","RGB","false","NDFI t0","false","NDFI t1","true","NDFI analysis","true","True color RGB141","false","False color RGB421","false","F color infrared RGB214","false","Validated polygons","true",*')
+    map_four_layer_status = db.StringProperty(default='"Brazil Legal Amazon","false","Brazil Municipalities Public","false","Brazil States Public","false","Brazil Federal Conservation Unit Public","false","Brazil State Conservation Unit Public","false","Terrain","true","Satellite","false","Hybrid","false","Roadmap","false","LANDSAT/L7_L1T","true","NDFI t0","false","True color RGB141","false","False color RGB421","false","F color infrared RGB214","false",*')
+    
+     
     @staticmethod
     def get_cell(report, x, y, z):
         q = Cell.all()
@@ -301,6 +307,11 @@ class Cell(db.Model):
                 'ndfi_low': self.ndfi_low,
                 'ndfi_high': self.ndfi_high,
                 'ndfi_change_value': self.ndfi_change_value,
+                'compare_view':self.compare_view,
+                'map_one_layer_status': self.map_one_layer_status,
+                'map_two_layer_status': self.map_two_layer_status,
+                'map_three_layer_status': self.map_three_layer_status,
+                'map_four_layer_status': self.map_four_layer_status,
                 'done': self.done,
                 'latest_change': t,
                 'added_by': by,
