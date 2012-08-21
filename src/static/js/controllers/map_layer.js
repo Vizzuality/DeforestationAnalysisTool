@@ -11,8 +11,12 @@ var NDFILayer = Backbone.View.extend({
     //DEGRADATION_COLOR: [247, 119, 87],
     DEFORESTATION_COLOR: [255, 46, 0],
     DEGRADATION_COLOR: [255, 199, 44],
+    PREVIOUS_DEFORESTATION_COLOR: [0, 0, 255],
+    PREVIOUS_DEGRADATION_COLOR: [0, 255, 255],
     FOREST_COLOR: [32, 224, 32],
-    NDFI_ENCODING_LIMIT: 200,
+    BASELINE_COLOR: [0, 0, 0],
+    UNCLASSIFIED_COLOR: [255, 255, 255],
+    NDFI_ENCODING_LIMIT: 201,
 
     initialize: function() {
         _.bindAll(this, 'canvas_setup', 'filter', 'apply_filter', 'map_auth', 'click', 'class_visibility');
@@ -194,7 +198,7 @@ var NDFILayer = Backbone.View.extend({
     },
 
     canvas_setup: function (canvas, coord, zoom) {
-      var EARTH_ENGINE_TILE_SERVER = 'http://earthengine.googleapis.com/map/';
+      var EARTH_ENGINE_TILE_SERVER = 'https://earthengine.googleapis.com/map/';
       var self = this;
       if (zoom < 12) {
         //return;
@@ -242,23 +246,28 @@ var NDFILayer = Backbone.View.extend({
         var NDFI_ENCODING_LIMIT = this.NDFI_ENCODING_LIMIT;
         //var DEFORESTATION_COLOR= [248, 8, 8];
         var DEFORESTATION_COLOR= [255, 46, 0];
+        var OLD_DEFORESTATION_COLOR= [255, 255, 0];
         var DEGRADATION_COLOR= [255, 199, 44];
         //var DEGRADATION_COLOR= [247, 119, 87];
         var FOREST_COLOR= [32, 224, 32];
-        var UNCLASSIFIED = 200;
-        var BASELINE = 204;
+        var UNCLASSIFIED = 201;
+        var BASELINE = 205;
+        var PREVIOUS_DEFORESTATION = 203;
+        var PREVIOUS_DEGRADATION = 204;
+        var OLD_DEFORESTATION = 207;
         /*
-        FOREST = 201;
-        DEFORESTED = 202;
-        DEGRADED = 203;
-        CLOUD = 205;
-        OLD_DEFORESTATION = 206;
+        FOREST = 202;
+        DEFORESTED = 203;
+        DEGRADED = 204;
+        CLOUD = 206;
+        OLD_DEFORESTATION = 207;
         */
 
         var show_deforestation = this.show_deforestation;
         var show_degradation = this.show_degradation;
         var show_forest = this.show_forest;
-        var show_deforested = this.show_deforested;
+        //var show_deforested = this.show_deforested;
+        var show_deforested = 255;
 
         var pixel_pos;
         for(var i=0; i < w; ++i) {
@@ -295,9 +304,22 @@ var NDFILayer = Backbone.View.extend({
                             image_data[pixel_pos + 0] = 0;
                             image_data[pixel_pos + 1] = 0;
                             image_data[pixel_pos + 2] = 0;
-                            image_data[pixel_pos + 3] = show_deforested;
+                            image_data[pixel_pos + 3] = 255;
+                        } else if (p == OLD_DEFORESTATION) {
+                            image_data[pixel_pos + 0] = DEFORESTATION_COLOR[0];
+                            image_data[pixel_pos + 1] = DEFORESTATION_COLOR[1];
+                            image_data[pixel_pos + 2] = DEFORESTATION_COLOR[2];
+                            image_data[pixel_pos + 3] = show_deforestation;
+                        } else if (p == PREVIOUS_DEFORESTATION) {
+                            image_data[pixel_pos + 0] = DEFORESTATION_COLOR[0];
+                            image_data[pixel_pos + 1] = DEFORESTATION_COLOR[1];
+                            image_data[pixel_pos + 2] = DEFORESTATION_COLOR[2];
+                            image_data[pixel_pos + 3] = show_deforestation;
                         } else {
-                            image_data[pixel_pos + 3] = 0;
+                          image_data[pixel_pos + 0] = FOREST_COLOR[0];
+                          image_data[pixel_pos + 1] = FOREST_COLOR[1];
+                          image_data[pixel_pos + 2] = FOREST_COLOR[2];
+                          image_data[pixel_pos + 3] = show_forest;
                         }
                     } else {
                         //image_data[pixel_pos + 3] = 255;
