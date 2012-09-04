@@ -167,12 +167,12 @@ class CellAPI(Resource):
         bounds = cell.bounds(amazon_bounds)
         ne = bounds[0]
         sw = bounds[1]
-        # spcify lon, lat FUCK, MONKEY BALLS
+        # spcify lon, lat 
         polygons = [[ (sw[1], sw[0]), (sw[1], ne[0]), (ne[1], ne[0]), (ne[1], sw[0]) ]]
         cols = 1
         rows = 1
         if z < 2:
-            cols = rows = 10
+            cols = rows = 5 
         data = ndfi.ndfi_change_value(r.base_map(), [polygons], rows, cols)
         logging.info(data)
         ndfi = data['data'] #data['data']['properties']['ndfiSum']['values']

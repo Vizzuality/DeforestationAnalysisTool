@@ -363,14 +363,14 @@ $(function() {
         	 * id{8} name{Hybrid} this's not saving
         	 * id{9} name{Roadmap} this's not saving
         	 * id{9affcec73a8b645dc4974ff4da8830f0} name{LANDSAT/L7_L1T}
-        	 * id{f69b3bb6add9276eef4d0ab158de74e8} name{NDFI t0}
+        	 * id{f69b3bb6add9276eef4d0ab158de74e8} name{NDFI T0}
         	 * id{?} name{True color RGB141}
         	 * id{?} name{False color RGB421}
         	 * id{?} name{F color infrared RGB214}
         	 * 
         	 */ 
         	var arraylayer = new Array("Brazil Legal Amazon","Brazil Municipalities Public","Brazil States Public","Brazil Federal Conservation Unit Public",
-        			"Brazil State Conservation Unit Public","LANDSAT/L7_L1T","SMA","RGB","NDFI t0","NDFI t1","NDFI analysis","True color RGB141","False color RGB421",
+        			"Brazil State Conservation Unit Public","LANDSAT/L7_L1T","SMA","RGB","NDFI T0","NDFI T1","NDFI analysis","True color RGB141","False color RGB421",
         			"F color infrared RGB214","Validated polygons");
         	var save_status_layer="";
         	for(var num=0; num<arraylayer.length;num++){

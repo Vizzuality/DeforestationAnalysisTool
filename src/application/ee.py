@@ -13,7 +13,7 @@ from time_utils import timestamp
 from datetime import timedelta, date
 
 METER2_TO_KM2 = 1.0/(1000*1000)
-CALL_SCOPE = "SAD"
+CALL_SCOPE = "thau_sad_test"
 KRIGING = "kriging/com.google.earthengine.examples.kriging.KrigedModisImage"
 
 class Stats(object):

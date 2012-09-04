@@ -22,10 +22,7 @@ from ft import FT
 
 from kml import path_to_kml
 
-CELL_BLACK_LIST = ['1_0_0', '1_1_0', '1_0_1', '1_0_2', '1_0_3', '1_0_7', '1_0_8', '1_0_9',
-             '1_1_7', '1_1_8', '1_1_9', '1_2_8', '1_2_9', '1_3_8', '1_3_9',
-             '1_2_0', '1_5_0', '1_6_0', '1_8_0', '1_9_0','1_8_1', '1_9_1',
-             '1_8_8', '1_8_9', '1_9_8', '1_9_9']
+CELL_BLACK_LIST = ['1_4_0', '1_0_4', '1_1_4', '1_4_4']
 
 METER2_TO_KM2 = 1.0/(1000*1000)
 
@@ -80,7 +77,7 @@ class Report(db.Model):
     end = db.DateProperty();
     finished = db.BooleanProperty(default=False);
     cells_finished = db.IntegerProperty(default=0)
-    total_cells = db.IntegerProperty(default=(100-len(CELL_BLACK_LIST))*100)
+    total_cells = db.IntegerProperty(default=(25-len(CELL_BLACK_LIST))*25)
     assetid = db.StringProperty()
 
     # some stats
@@ -158,7 +155,7 @@ class Report(db.Model):
                                    datetime.fromtimestamp(r1[1]/1000).isoformat(),
                                    self.start.isoformat())
 
-SPLITS = 10
+SPLITS =5 
 class Cell(db.Model):
 
     z = db.IntegerProperty(required=True)
@@ -174,10 +171,10 @@ class Cell(db.Model):
     last_change_by = db.UserProperty()
     last_change_on = db.DateTimeProperty(auto_now=True)
     compare_view = db.StringProperty(default='four')
-    map_one_layer_status = db.StringProperty(default='"Brazil Legal Amazon","false","Brazil Municipalities Public","false","Brazil States Public","false","Brazil Federal Conservation Unit Public","false","Brazil State Conservation Unit Public","false","LANDSAT/L7_L1T","false","SMA","false","RGB","false","NDFI t0","false","NDFI t1","false","NDFI analysis","true","True color RGB141","false","False color RGB421","false","F color infrared RGB214","false","Validated polygons","true",*')
-    map_two_layer_status = db.StringProperty(default='"Brazil Legal Amazon","false","Brazil Municipalities Public","false","Brazil States Public","false","Brazil Federal Conservation Unit Public","false","Brazil State Conservation Unit Public","false","LANDSAT/L7_L1T","false","SMA","false","RGB","false","NDFI t0","true","NDFI t1","false","NDFI analysis","true","True color RGB141","false","False color RGB421","false","F color infrared RGB214","false","Validated polygons","true",*')
-    map_three_layer_status = db.StringProperty(default='"Brazil Legal Amazon","false","Brazil Municipalities Public","false","Brazil States Public","false","Brazil Federal Conservation Unit Public","false","Brazil State Conservation Unit Public","false","LANDSAT/L7_L1T","false","SMA","false","RGB","false","NDFI t0","false","NDFI t1","true","NDFI analysis","true","True color RGB141","false","False color RGB421","false","F color infrared RGB214","false","Validated polygons","true",*')
-    map_four_layer_status = db.StringProperty(default='"Brazil Legal Amazon","false","Brazil Municipalities Public","false","Brazil States Public","false","Brazil Federal Conservation Unit Public","false","Brazil State Conservation Unit Public","false","Terrain","true","Satellite","false","Hybrid","false","Roadmap","false","LANDSAT/L7_L1T","true","NDFI t0","false","True color RGB141","false","False color RGB421","false","F color infrared RGB214","false",*')
+    map_one_layer_status = db.StringProperty(default='"Brazil Legal Amazon","false","Brazil Municipalities Public","false","Brazil States Public","false","Brazil Federal Conservation Unit Public","false","Brazil State Conservation Unit Public","false","LANDSAT/L7_L1T","false","SMA","false","RGB","false","NDFI T0","false","NDFI T1","false","NDFI analysis","true","True color RGB141","false","False color RGB421","false","F color infrared RGB214","false","Validated polygons","true",*')
+    map_two_layer_status = db.StringProperty(default='"Brazil Legal Amazon","false","Brazil Municipalities Public","false","Brazil States Public","false","Brazil Federal Conservation Unit Public","false","Brazil State Conservation Unit Public","false","LANDSAT/L7_L1T","false","SMA","false","RGB","false","NDFI T0","true","NDFI T1","false","NDFI analysis","true","True color RGB141","false","False color RGB421","false","F color infrared RGB214","false","Validated polygons","true",*')
+    map_three_layer_status = db.StringProperty(default='"Brazil Legal Amazon","false","Brazil Municipalities Public","false","Brazil States Public","false","Brazil Federal Conservation Unit Public","false","Brazil State Conservation Unit Public","false","LANDSAT/L7_L1T","false","SMA","false","RGB","false","NDFI T0","false","NDFI T1","true","NDFI analysis","true","True color RGB141","false","False color RGB421","false","F color infrared RGB214","false","Validated polygons","true",*')
+    map_four_layer_status = db.StringProperty(default='"Brazil Legal Amazon","false","Brazil Municipalities Public","false","Brazil States Public","false","Brazil Federal Conservation Unit Public","false","Brazil State Conservation Unit Public","false","Terrain","true","Satellite","false","Hybrid","false","Roadmap","false","LANDSAT/L7_L1T","true","NDFI T0","false","True color RGB141","false","False color RGB421","false","F color infrared RGB214","false",*')
     
      
     @staticmethod

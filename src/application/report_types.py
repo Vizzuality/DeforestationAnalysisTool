@@ -67,6 +67,7 @@ class ReportType(object):
             filtered_table_names = all_table_names.filter('table_id =', table)
             table_names=filtered_table_names.fetch(1)[0].as_dict()
             name = table_names.get(id, id)
+            return name
     
     @staticmethod
     def factory(format):

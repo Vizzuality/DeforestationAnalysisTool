@@ -138,8 +138,8 @@ def tiles(tile_path):
     #return redirect('/static/maps/%s' % tile_path)
 
 
+EARTH_ENGINE_TILE_SERVER = settings.EE_TILE_SERVER
 
-EARTH_ENGINE_TILE_SERVER = 'http://earthengine.googleapis.com/map/'
 @app.route('/ee/tiles/<path:tile_path>')
 def earth_engine_tile_proyx(tile_path):
     token = request.args.get('token', '')

@@ -4,7 +4,7 @@
 var MapView = Backbone.View.extend({
     mapOptions: {
             zoom: 5,
-            center: new google.maps.LatLng(-6.653695352486294, 58.743896484375),
+            center: new google.maps.LatLng(-6.653695352486294, -58.743896484375),
             mapTypeId: google.maps.MapTypeId.TERRAIN,
             disableDefaultUI: true,
             disableDoubleClickZoom: true,
