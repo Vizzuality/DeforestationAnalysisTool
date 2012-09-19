@@ -373,8 +373,9 @@ class Cell(db.Model):
         bounds = self.bounds(top_bounds)
         ne = bounds[0]
         sw = bounds[1]
-        # spcify lon, lat FUCK, MONKEY BALLS
-        return [[[ (sw[1], sw[0]), (sw[1], ne[0]), (ne[1], ne[0]), (ne[1], sw[0]) ]]]
+        # spcify lon, lat
+        #return [[[ (sw[1], sw[0]), (sw[1], ne[0]), (ne[1], ne[0]), (ne[1], sw[0]) ]]]
+        return {"type":"Polygon", "coordinates": [[ (sw[1], sw[0]), (sw[1], ne[0]), (ne[1], ne[0]), (ne[1], sw[0]) ]]}
 
 
 class Area(db.Model):

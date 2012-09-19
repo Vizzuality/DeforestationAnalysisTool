@@ -153,7 +153,7 @@ def earth_engine_tile_proyx(tile_path):
 
 @app.route('/proxy/<path:tile_path>')
 def proxy(tile_path):
-    result = urlfetch.fetch('http://'+ tile_path, deadline=10)
+    result = urlfetch.fetch('https://'+ tile_path, deadline=10)
     response = make_response(result.content)
     response.headers['Content-Type'] = result.headers['Content-Type']
     response.headers['Expires'] = 'Thu, 15 Apr 2020 20:00:00 GMT'
