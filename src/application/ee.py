@@ -593,8 +593,7 @@ class NDFI(object):
           "args": [{"id":"MODIS/MOD09GA","version":micro_yesterday,"start_time":start_time,"end_time":period['end']},
                    {"id":"MODIS/MOD09GQ","version":micro_yesterday,"start_time":start_time,"end_time":period['end']}, 
                    {'type':'FeatureCollection','table_id':1868251, 
-                      'filter':filter,
-                   start_time, period['end']]
+                      'filter':filter}, start_time, period['end']]
         }
 
     def _SMA_image_command(self, period):
