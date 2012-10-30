@@ -5,15 +5,17 @@ import settings
 import simplejson as json
 import collections
 import urllib
+import time
 
 from earthengine.connector import EarthEngine
 
 from time_utils import timestamp
-from datetime import timedelta
+from datetime import timedelta, date
 
 METER2_TO_KM2 = 1.0/(1000*1000)
 
 CALL_SCOPE = "SAD"
+KRIGING = "kriging/com.google.earthengine.examples.kriging.KrigedModisImage"
 
 class Stats(object):
 
@@ -28,7 +30,51 @@ class Stats(object):
         params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
         return self.ee.post(url, params)
 
+    def paint_call(self, current_asset, report_id, table, value):
+        return {
+          "creator": "Paint", "args": [current_asset,
+          {
+            "table_id": int(table), "type": "FeatureCollection", 
+            "filter":[{"property":"report_id","equals":int(report_id)},
+                      {"property":"type","equals":value}]},
+          value]
+        }
+
+    def get_historical_freeze(self, report_id, frozen_image):
+
+        remapped = {"algorithm": "Image.remap", "image":frozen_image, 
+          "from":[0,1,2,3,4,5,6,7,8,9], "to":[0,1,2,3,4,5,6,1,1,9]}
+
+        def_image = self.paint_call(remapped, report_id, settings.FT_TABLE_ID, 7)
+
+        selected_def = {"algorithm": "Image.select", "input": def_image, 
+                        "bandSelectors":["remapped"]}
+
+        deg_image = self.paint_call(selected_def, report_id, settings.FT_TABLE_ID, 8)
+
+        renamed_image = {"algorithm": "Image.select", "input": deg_image, 
+                        "bandSelectors":["remapped"], "newNames":["class"]}
+
+        clipped_image = {"creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.AddBB","args":[renamed_image, frozen_image, "classification"]}
+
+        map_image = {"algorithm": "Image.addBands", "dstImg": frozen_image, "srcImg": clipped_image,
+                    "names": ["class"], "overwrite": True}
+
+        return map_image
+
     def get_stats_for_table(self, report_id, frozen_image, table_id, key_name='name'):
+
+        historical_call = self.get_historical_freeze(report_id, frozen_image)
+
+        stats = {"creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.GetStats",
+                 "args":[historical_call, {"table_id": int(table_id), "type":"FeatureCollection"}, "name"]}
+
+        return self._execute_cmd("/value", {
+            "image": json.dumps(stats),
+            "fields": "classHistogram"
+        })
+
+        """
         return self._execute_cmd("/value", {
             "image": json.dumps({
                 "creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.GetStats",
@@ -41,9 +87,9 @@ class Stats(object):
                                 "table_id": int(settings.FT_TABLE_ID),
                                 "type":"FeatureCollection",
                                 'mark': str(timestamp()),
-                                "filters":[
+                                "filter":[
                                 {
-                                    "metadata":"report_id",
+                                    "property":"report_id",
                                     "equals": int(report_id)
                                 }
                                 ]
@@ -61,6 +107,7 @@ class Stats(object):
             }),
             "fields": "classHistogram"
         })
+        """
 
     def get_stats_for_polygon(self, assetids, polygon):
         """ example poygon, must be CCW
@@ -72,25 +119,7 @@ class Stats(object):
 
         reports = []
         for report_id, asset_id in assetids:
-            reports.append({
-                    "args":[
-                        asset_id,
-                        {
-                            "table_id": int(settings.FT_TABLE_ID),
-                            "type":"FeatureCollection",
-                            #'mark': str(timestamp())
-                            "filters":[
-                                {
-                                "metadata":"report_id",
-                                "equals": int(report_id)
-                                }
-                            ]
-                        },
-                        "type"
-                    ],
-                    "type":"Image",
-                    "creator": CALL_SCOPE + "/com.google.earthengine.examples.sad.HistoricalFreeze"
-             })
+            reports.append(self.get_historical_freeze(report_id, asset_id))
 
         data = self._execute_cmd("/value", {
             "image": json.dumps({
@@ -162,10 +191,12 @@ class EELandsat(object):
         return []
 
     def mapid(self, start, end):
+	landsat_bands = ['10','20','30','40','50','70','80','61','62']
+	creator_bands =[{'id':id, 'data_type':'float'} for id in landsat_bands]
         MAP_IMAGE1 = {
             'creator':'LANDSAT/LandsatTOA',
             'input':'LANDSAT/L7_L1T',
-            'bands':[{'id':'10','data_type':'float'},{'id':'20','data_type':'float'},{'id':'30','data_type':'float'}],
+            'bands':creator_bands,
             'start_time': start,
             'end_time': end
         };
@@ -186,51 +217,6 @@ class EELandsat(object):
     def _execute_cmd(self, url, cmd):
         params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
         return self.ee.post(url, params)
-#http://earthengine.googleapis.com/api/list?id=LANDSAT/L5_L1T&bbox=72.6,18.8,73.1,19.18
-
-
-#class EEMODIS(object):
-#
-#    def __init__(self, resource):
-#        self.resource = resource
-#        self.ee = EarthEngine(settings.EE_TOKEN)
-#
-#    def list(self, start, end, params={}):
-#        images = self.ee.get("/list?id=%s&starttime=%s&endtime=%s" % (self.resource, start, end))
-#        logging.info(images)
-#        if 'data' in images:
-#            return [x['id'] for x in images['data']]
-#        return []
-#
-#    def mapid(self, start, end):
-#        MAP_IMAGE1 = {
-#            'creator':'MODIS/MOD09GA',
-#            'input':'LANDSAT/L7_L1T',
-#            'bands':[{'id':'10','data_type':'float'},{'id':'20','data_type':'float'},{'id':'30','data_type':'float'}],
-#            'start_time': start,
-#            'end_time': end
-#        };
-#        MAP_IMAGE = {
-#             "creator": "SimpleMosaic",
-#             "args": [MAP_IMAGE1]
-#        }
-#        #PREVIEW_GAIN = 500;
-#        MAP_IMAGE_BANDS = [
-#          'sur_refl_b01_250m', 'sur_refl_b02_250m', 'sur_refl_b03_500m',
-#          'sur_refl_b04_500m', 'sur_refl_b06_500m', 'sur_refl_b07_500m'];
-#        cmd = {
-#            'image': json.dumps(MAP_IMAGE), #json.dumps(modis)
-#            'bands': ','.join(MAP_IMAGE_BANDS),
-#            'gain': PREVIEW_GAIN
-#        }
-#
-#        return self._execute_cmd("/mapid", cmd)#
-#
-#    def _execute_cmd(self, url, cmd):
-#        params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
-#        return self.ee.post(url, params)
-#http://earthengine.googleapis.com/api/list?id=MODIS09GA&starttime=1254305000000&endtime=1256900200000
-
 
 class NDFI(object):
     """ ndfi info for a period of time
@@ -249,29 +235,75 @@ class NDFI(object):
 
     THIS_POLY = None
 
-    def __init__(self, ee_res, last_perdiod, work_period):
-        self.last_perdiod = dict(start=last_perdiod[0],
-                                 end=last_perdiod[1])
+    def __init__(self, ee_res, last_period, work_period):
+        self.last_period = dict(start=last_period[0],
+                                 end=last_period[1])
         self.work_period = dict(start=work_period[0],
                                end=work_period[1])
         self.earth_engine_resource = ee_res
         self.ee = EarthEngine(settings.EE_TOKEN)
         self._image_cache = {}
 
-    def mapid2_cmd(self, asset_id, polygon=None, rows=10, cols=10):
-        return {"creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.GetNDFIDelta","args": [
-            self.last_perdiod['start'],
-            self.last_perdiod['end'],
+    def paint_deforestation(self, asset_id, month, year):
+	year_str = "%04d" % (year)
+        #end = "%04d%02d" % (year, month)
+        return {
+          "type": "Image", "creator": "Paint", "args": [asset_id,
+          {
+            "table_id": int(settings.FT_TABLE_ID), "type": "FeatureCollection", 
+            "filter":[{"property":"type","equals":7}, {"property":"asset_id","contains":year_str}]},
+          4]
+        }
+
+    def mapid2_cmd(self, asset_id, polygon=None, rows=5, cols=5):
+        year_msec = 1000 * 60 * 60 * 24 * 365 
+        month_msec = 1000 * 60 * 60 * 24 * 30 
+	six_months_ago = self.work_period['end'] - month_msec * 6
+	one_month_ago = self.work_period['end'] - month_msec
+	last_month = time.gmtime(int(six_months_ago / 1000))[1]
+	last_year = time.gmtime(int(six_months_ago / 1000))[0]
+	previous_month = time.gmtime(int(one_month_ago / 1000))[1]
+	previous_year = time.gmtime(int(one_month_ago / 1000))[0]
+        work_month = self.getMidMonth(self.work_period['start'], self.work_period['end'])
+        work_year = self.getMidYear(self.work_period['start'], self.work_period['end'])
+        end = "%04d%02d" % (work_year, work_month)
+        start = "%04d%02d" % (last_year, last_month)
+        previous = "%04d%02d" % (previous_year, previous_month)
+	start_filter = [{'property':'compounddate','greater_than':start},{'property':'compounddate','less_than':end}]
+        deforested_asset = self.paint_deforestation(asset_id, work_month, work_year)
+        json_cmd = {"creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.GetNDFIDelta","args": [
+            self.last_period['start'] - year_msec,
+            self.last_period['end'],
             self.work_period['start'],
             self.work_period['end'],
             "MODIS/MOD09GA",
             "MODIS/MOD09GQ",
-            {'type':'FeatureCollection','table_id': 1868251, 'mark': str(timestamp())},
-            {"creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.ProdesImage","args":[asset_id]},
+            {'type':'FeatureCollection','table_id': 1868251, 'mark': str(timestamp()), 'filter':start_filter},
+            {'type':'FeatureCollection','table_id': 1868251, 'mark': str(timestamp()), 
+		'filter':[{"property":"month","equals":work_month},{"property":"year","equals":work_year}]},
+            {'type':'FeatureCollection','table_id': 4468280, 'mark': str(timestamp()), 
+		'filter':[{"property":"Compounddate","equals":int(previous)}]},
+            {'type':'FeatureCollection','table_id': 4468280, 'mark': str(timestamp()), 
+		'filter':[{"property":"Compounddate","equals":int(end)}]},
+            deforested_asset,
             polygon,
             rows,
             cols]
         }
+	logging.info("GetNDFIDelta")
+	logging.info(json_cmd)
+	return json_cmd
+
+
+    def getMidMonth(self, start, end):
+        middle_seconds = int((end + start) / 2000)
+        this_time = time.gmtime(middle_seconds)
+        return this_time[1]
+      
+    def getMidYear(self, start, end):
+        middle_seconds = int((end + start) / 2000)
+        this_time = time.gmtime(middle_seconds)
+        return this_time[0]
 
     def mapid2(self, asset_id):
         cmd = {
@@ -285,27 +317,41 @@ class NDFI(object):
     def freeze_map(self, asset_id, table, report_id):
         """
         """
-        cmd ={
-            "value": json.dumps({
-                "creator": CALL_SCOPE + "/com.google.earthengine.examples.sad.FreezeMap",
-                "args":[{
-                        "creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.ProdesImage",
-                        "args":[asset_id]
-                    },
-                    {'type':'FeatureCollection','table_id':1228540,'mark': str(timestamp())},
-                    #{
-                        #"type":"FeatureCollection",
-                        #"table_id": table, "filters":[
-                            #{"metadata":"report_id", "equals": report_id}
-                        #]
-                    #},
-                    "type"
-                ],
-                "type":"Image"
-             }),
-        }
+        base_image = {"creator": CALL_SCOPE + "/com.google.earthengine.examples.sad.ProdesImage", "args":[asset_id]};
+
+        remapped = {"algorithm": "Image.remap", "image":base_image, 
+          "from":[0,1,2,3,4,5,6,7,8,9], "to":[0,1,2,3,4,5,6,2,3,9]}
+
+        def_image = self.paint_call(remapped, int(report_id), table, 7)
+
+        selected_def = {"algorithm": "Image.select", "input": def_image, 
+                        "bandSelectors":["remapped"]}
+
+        deg_image = self.paint_call(selected_def, int(report_id), table, 8)
+
+        renamed_image = {"algorithm": "Image.select", "input": deg_image, 
+                        "bandSelectors":["remapped"], "newNames":["classification"]}
+
+        clipped_image = {"creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.AddBB",
+		"args":[renamed_image, asset_id, "classification"]}
+
+        map_image = {"algorithm": "Image.addBands", "dstImg": asset_id, "srcImg": clipped_image,
+                    "names": ["classification"], "overwrite": True}
+
+        cmd = {"value": json.dumps(map_image)}
+
         return self._execute_cmd('/create', cmd)
 
+    def paint_call(self, current_asset, report_id, table, value):
+        return {
+          "algorithm": "Image.paint", "image": current_asset,
+          "featureCollection": {
+            "table_id": int(table), "type": "FeatureCollection", 
+            "filter":[{"property":"report_id","equals":int(report_id)},
+                      {"property":"type", "equals": value}]},
+          "color": value
+        }
+       
     def rgbid(self):
         """ return params to access NDFI rgb image """
         # get map id from EE
@@ -319,8 +365,12 @@ class NDFI(object):
         return self._execute_cmd('/mapid', params)
 
     def ndfi0id(self):
-        # get map id from EE
-        params = self._NDFI_period_image_command(self.last_perdiod)
+        # get map id from EE set long_span=1
+        params = self._NDFI_period_image_command(self.last_period, 1)
+        return self._execute_cmd('/mapid', params)
+
+    def baseline(self):
+        params = self._baseline_image_command()
         return self._execute_cmd('/mapid', params)
 
     def ndfi1id(self):
@@ -355,7 +405,7 @@ class NDFI(object):
         params = "&".join(("%s=%s"% v for v in cmd.iteritems()))
         return self.ee.post(url, params)
 
-    def ndfi_change_value(self, asset_id, polygon, rows=10, cols=10):
+    def ndfi_change_value(self, asset_id, polygon, rows=5, cols=5):
         img = self.mapid2_cmd(asset_id, polygon, rows, cols)
         cmd = {
             "image": json.dumps(img),
@@ -363,7 +413,7 @@ class NDFI(object):
         }
         return self._execute_cmd('/value', cmd)
 
-    def ndfi_change_value_old(self, polygons, rows=10, cols=10):
+    def ndfi_change_value_old(self, polygons, rows=5, cols=5):
         """ return how much NDFI has changed in the time period
             ``polygons`` are a list of closed polygons defined by lat, lon::
 
@@ -382,7 +432,7 @@ class NDFI(object):
                 pass
 
         cmd = self._NDFI_change_value(
-            self.last_perdiod,
+            self.last_period,
             self.work_period,
             polygons,
             rows,
@@ -420,21 +470,38 @@ class NDFI(object):
             });
         return specs;
 
+    def _baseline_image(self):
+        return {
+            'creator': CALL_SCOPE + '/com.google.earthengine.examples.sad.ProdesImage',
+            'args': ["Xy539pUtkRlazIO1"]
+        }
 
-    def _NDFI_image(self, period):
+    def _krig_filter(self, period):
+        work_month = self.getMidMonth(period['start'], period['end'])
+        work_year = self.getMidYear(period['start'], period['end'])
+        end = "%04d%02d" % (work_year, work_month)
+        filter = [{'property':'Compounddate','equals':int(end)}]
+	return filter
+
+
+
+    def _NDFI_image(self, period, long_span=0):
         """ given image list from EE, returns the operator chain to return NDFI image """
+	filter = self._krig_filter(period)
         return {
             "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.NDFIImage',
             "args": [{
               "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.UnmixModis',
               "args": [{
-                "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.KrigingStub',
-                "args": [ self._MakeMosaic(period) ]
+                "creator": KRIGING,
+                "args": [ self._MakeMosaic(period, long_span), 
+			{'type':'FeatureCollection','table_id':4468280,
+				'filter':filter,'mark':str(timestamp())} ]
               }]
             }]
          }
 
-    def _change_detection_data(self, reference_period, work_period, polygons=[], cols=10, rows=10):
+    def _change_detection_data(self, reference_period, work_period, polygons=[], cols=5, rows=5):
         ndfi_image_1 = self._NDFI_image(reference_period)
         ndfi_image_2 = self._NDFI_image(work_period)
         return {
@@ -448,7 +515,7 @@ class NDFI(object):
         }
 
 
-    def _NDFI_change_value(self, reference_period, work_period, polygons, cols=10, rows=10):
+    def _NDFI_change_value(self, reference_period, work_period, polygons, cols=5, rows=5):
         """ calc the ndfi change value between two periods inside specified polys
 
             ``polygons`` are a list of closed polygons defined by lat, lon::
@@ -468,9 +535,9 @@ class NDFI(object):
             "fields": 'ndfiSum'#','.join(fields)
         }
 
-    def _NDFI_period_image_command(self, period):
+    def _NDFI_period_image_command(self, period, long_span=0):
         """ get NDFI command to get map of NDFI for a period of time """
-        ndfi_image = self._NDFI_image(period)
+        ndfi_image = self._NDFI_image(period, long_span)
         return {
             "image": json.dumps(ndfi_image),
             "bands": 'vis-red,vis-green,vis-blue',
@@ -479,12 +546,23 @@ class NDFI(object):
             "gamma": 1.6
         }
 
+    def _baseline_image_command(self):
+        baseline_image = self._baseline_image()
+        return {
+            "image": json.dumps(baseline_image),
+            "bands": 'classification',
+            "min": 0,
+            "max": 9
+        }
+
     def _RGB_image_command(self, period):
         """ commands for RGB image """
+	filter = self._krig_filter(period)
         return {
             "image": json.dumps({
-               "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.KrigingStub',
-               "args": [ self._MakeMosaic(period) ]
+               "creator": KRIGING,
+               "args": [ self._MakeMosaic(period),{'type':'FeatureCollection','table_id':4468280,
+			'filter':filter,'mark':str(timestamp())} ]
             }),
             "bands": 'sur_refl_b01,sur_refl_b04,sur_refl_b03',
             "gain": 0.1,
@@ -492,21 +570,40 @@ class NDFI(object):
             "gamma": 1.6
           };
 
-    def _MakeMosaic(self, period):
+    def _MakeMosaic(self, period, long_span=0):
+        middle_seconds = int((period['end'] + period['start']) / 2000)
+        this_time = time.gmtime(middle_seconds)
+        month = this_time[1]
+        year = this_time[0]
+        yesterday = date.today() - timedelta(1)
+        micro_yesterday = time.mktime(yesterday.timetuple()) * 1000000
+        logging.info("month " + str(month))
+        logging.info("year " + str(year))
+        if long_span == 0:
+          filter = [{'property':'month','equals':month},{'property':'year','equals':year}]
+          start_time = period['start']
+        else:
+          start = "%04d%02d" % (year - 1, month)
+          end = "%04d%02d" % (year, month)
+          start_time = period['start'] - 1000 * 60 * 60 * 24 * 365
+          filter = [{'property':'compounddate','greater_than':start},
+		{'or': [{'property':'compounddate','less_than':end}, {'property':'compounddate','equals':end}]}]
         return {
           "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.MakeMosaic',
-          "args": ["MODIS/MOD09GA","MODIS/MOD09GQ", 
-                {'type':'FeatureCollection','table_id':1868251, 'mark': str(timestamp())}, #this number is an special fusion tables id but i have no idea what it is supposed to do
-                period['start'], period['end']]
+          "args": [{"id":"MODIS/MOD09GA","version":micro_yesterday,"start_time":start_time,"end_time":period['end']},
+                   {"id":"MODIS/MOD09GQ","version":micro_yesterday,"start_time":start_time,"end_time":period['end']}, 
+                   {'type':'FeatureCollection','table_id':1868251, 
+                      'filter':filter}, start_time, period['end']]
         }
 
     def _SMA_image_command(self, period):
+	filter = self._krig_filter(period)
         return {
             "image": json.dumps({
               "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.UnmixModis',
               "args": [{
-                "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.KrigingStub',
-                "args": [self._MakeMosaic(period)]
+                "creator": KRIGING,
+                "args": [self._MakeMosaic(period), {'type':'FeatureCollection','table_id':4468280,'filter':filter}]
               }]
             }),
             "bands": 'gv,soil,npv',
@@ -516,6 +613,7 @@ class NDFI(object):
         };
 
     def _RGB_streched_command(self, period, polygon, sensor, bands):
+     filter = self._krig_filter(period)
      if(sensor=="modis"):
         """ bands in format (1, 2, 3) """
         bands = "sur_refl_b0%d,sur_refl_b0%d,sur_refl_b0%d" % bands
@@ -524,14 +622,15 @@ class NDFI(object):
                 "creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.StretchImage",
                 "args":[{
                     "creator":"ClipToMultiPolygon",
-                    "args":[{
-                        "creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.KrigingStub",
-                        "args":[ self._MakeMosaic(period)]
+                    "args":[
+                    {
+                        "creator":KRIGING,
+                        "args":[ self._MakeMosaic(period), {'type':'FeatureCollection','table_id':4468280,
+				'filter':filter}]
                     },
-                    polygon]
-                 },
+                    polygon]},
                  ["sur_refl_b01","sur_refl_b02","sur_refl_b03","sur_refl_b04","sur_refl_b05"],
-                 2 #EPIC
+                 2 
                  ]
             }),
             "bands": bands
@@ -540,26 +639,28 @@ class NDFI(object):
         three_months = timedelta(days=90)
         work_period_end   = self.work_period['end']
         work_period_start = self.work_period['start'] - 7776000000 #three_months
+        yesterday = date.today() - timedelta(1)
+        micro_yesterday = time.mktime(yesterday.timetuple()) * 1000000
+	landsat_bands = ['10','20','30','40','50','70','80','61','62']
+	creator_bands =[{'id':id, 'data_type':'float'} for id in landsat_bands]
         bands = "%d,%d,%d" % bands
         return {
             "image": json.dumps({
                 "creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.StretchImage",
                 "args":[{
-                    "creator":"ClipToMultiPolygon",
+                    "creator":"LonLatReproject",
                     "args":[{
                        "creator":"SimpleMosaic",
                        "args":[{
                           "creator":"LANDSAT/LandsatTOA",
-                          "input":"LANDSAT/L7_L1T",
-                          "bands":[{"id":"30","data_type":"float"},
-                                   {"id":"20","data_type":"float"},
-                                   {"id":"10","data_type":"float"}],
+                          "input":{"id":"LANDSAT/L7_L1T","version":micro_yesterday},
+                          "bands":creator_bands,
                           "start_time": work_period_start, #131302801000
                           "end_time": work_period_end }] #1313279999000
-                    },polygon]
+                    },polygon, 30]
                  },
-                 ["30","20","10"],
-                 2 #EPIC
+                 landsat_bands,
+                 2 
                  ]
             }),
             "bands": bands

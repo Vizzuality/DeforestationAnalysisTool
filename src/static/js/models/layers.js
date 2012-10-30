@@ -14,7 +14,7 @@ var LayerModel = Backbone.Model.extend({
         }
         if(this.get('enabled') === true) {
             this.set_enabled(true);
-        }
+        } 
     },
 
     set_enabled: function(b) {
@@ -23,8 +23,15 @@ var LayerModel = Backbone.Model.extend({
             this.set({'enabled': this.enabled});
             this.trigger('change', this);
         }
-    }
+    },
 
+    get_enabled: function() {
+    	if(this.get('enabled') === true) {
+           return true;
+        }else{
+        	return false;
+        }
+    }
 });
 
 // this layer needs to update the tile url when
@@ -56,7 +63,7 @@ var RGBStrechLayer = LayerModel.extend({
 
     //parses token and mapid response from server and creates tile url
     parse: function(data) {
-        var base_url = 'http://earthengine.googleapis.com/map/{mapid}/{Z}/{X}/{Y}?token={token}';
+        var base_url = 'https://earthengine.googleapis.com/map/{mapid}/{Z}/{X}/{Y}?token={token}';
         var url = base_url.replace('{mapid}', data.mapid).replace('{token}', data.token);
         return {'url_pattern': url };
     },

@@ -51,7 +51,6 @@ class FT(object):
     def sql(self, sql):
         logging.debug("FT:SQL: %s" % sql)
         r = self.client.query(sql)
-        logging.debug("-> %s" % r)
         return r
 
 

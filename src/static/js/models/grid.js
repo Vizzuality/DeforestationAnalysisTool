@@ -1,5 +1,5 @@
 
-var SPLITS = 10;
+var SPLITS = 5;
 
 var Cell = Backbone.Model.extend({
 

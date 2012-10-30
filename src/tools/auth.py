@@ -28,7 +28,7 @@ class ClientLogin():
 import urllib2
 
 def do_test(token):
-    url = "http://earthengine.googleapis.com/api/list?id=MOD09GA&starttime=1254305000000&endtime=1256900200000"
+    url = "https://earthengine.googleapis.com/api/list?id=MOD09GA&starttime=1254305000000&endtime=1256900200000"
     opener = urllib2.build_opener()
     opener.addheaders = [('Authorization', 'GoogleLogin auth=' + token)]
     print opener.open(url).read()

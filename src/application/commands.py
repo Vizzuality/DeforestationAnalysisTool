@@ -229,7 +229,7 @@ def update_total_stats_for_report(report_id):
     r = Report.get(Key(report_id))
     stats = StatsStore.get_for_report(report_id)
     if stats:
-        s = stats.table_accum(tables_map['Legal Amazon'])
+        s = stats.table_accum(tables_map['Legal Amazon'])[0]
         logging.info("stats for %s" % s)
         if s:
             r.degradation = s['deg']

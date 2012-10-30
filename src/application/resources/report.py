@@ -19,6 +19,7 @@ from google.appengine.api import users
 
 from google.appengine.api import memcache
 
+
 class NDFIMapApi(Resource):
     """ resource to get ndfi map access data """
 
@@ -144,6 +145,11 @@ class CellAPI(Resource):
         data = json.loads(request.data)
         cell.ndfi_low = float(data['ndfi_low'])
         cell.ndfi_high = float(data['ndfi_high'])
+        cell.compare_view = str(data['compare_view'])
+        cell.map_one_layer_status = str(data['map_one_layer_status'])
+        cell.map_two_layer_status = str(data['map_two_layer_status'])
+        cell.map_three_layer_status = str(data['map_three_layer_status'])
+        cell.map_four_layer_status = str(data['map_four_layer_status']) 
         cell.done = data['done']
         cell.last_change_by = users.get_current_user()
         cell.put()
@@ -161,13 +167,13 @@ class CellAPI(Resource):
         bounds = cell.bounds(amazon_bounds)
         ne = bounds[0]
         sw = bounds[1]
-        # spcify lon, lat FUCK, MONKEY BALLS
-        polygons = [[ (sw[1], sw[0]), (sw[1], ne[0]), (ne[1], ne[0]), (ne[1], sw[0]) ]]
+        # spcify lon, lat 
+        polygons = [ (sw[1], sw[0]), (sw[1], ne[0]), (ne[1], ne[0]), (ne[1], sw[0]) ]
         cols = 1
         rows = 1
         if z < 2:
-            cols = rows = 10
-        data = ndfi.ndfi_change_value(r.base_map(), [polygons], rows, cols)
+            cols = rows = 5 
+        data = ndfi.ndfi_change_value(r.base_map(), {"type":"Polygon","coordinates":[polygons]}, rows, cols)
         logging.info(data)
         ndfi = data['data'] #data['data']['properties']['ndfiSum']['values']
         if request.args.get('_debug', False):
@@ -222,11 +228,6 @@ class CellAPI(Resource):
         if 'data' not in mapid:
             abort(404)
         return Response(json.dumps(mapid['data']), mimetype='application/json')
-
-
-
-
-
 
 
 class PolygonAPI(Resource):

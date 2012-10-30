@@ -124,21 +124,21 @@ var Grid = Backbone.View.extend({
         // normalize
         var x = Math.floor(p.x);
         var y = Math.floor(p.y);
-        var w = Math.floor((p.width/10))*10;
-        var h = Math.floor((p.height/10))*10;
+        var w = Math.floor((p.width/5))*5;
+        var h = Math.floor((p.height/5))*5;
         var marginx = 0;//Math.floor((p.width - w)/2);
         var marginy = 0;//Math.floor((p.height- h)/2);
 
-        var wc = w/10;
-        var wh = h/10;
+        var wc = w/5;
+        var wh = h/5;
         
         this.x = x;
         this.y = y;
         this.w = w;
         this.h = h;
 
-        var srcx = this.cells.x*10;
-        var srcy = this.cells.y*10;
+        var srcx = this.cells.x*5;
+        var srcy = this.cells.y*5;
 
         this.cells.each(function(c) {
             var pos = that.el.position();
@@ -166,8 +166,8 @@ var Grid = Backbone.View.extend({
             var p = window.mapper.cell_position(this.cells.x, this.cells.y, this.cells.z);
             x =  Math.floor(p.x);
             y =  Math.floor(p.y);
-            w =  10 + Math.floor((p.width/10)*10);
-            h =  10 + Math.floor((p.height/10)*10);
+            w =  5 + Math.floor((p.width/5)*5);
+            h =  5 + Math.floor((p.height/5)*5);
             this.el.css('top', y);
             this.el.css('left', x);
             this.el.css('width', w);

@@ -7,13 +7,14 @@
 """
 
 import logging
+import application.settings
 
 import cgi, sys
 
 from google.appengine.api import urlfetch
 import simplejson as json
 
-DEFAULT_API = "http://earthengine.googleapis.com/api"
+DEFAULT_API = application.settings.EE_API + "/api"
 
 class EarthEngine( object ):
     """ google earth engine conector for app engine 
