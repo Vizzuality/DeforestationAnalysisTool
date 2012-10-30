@@ -42,6 +42,13 @@ var RGB_layers =  [
         b: 30,
         sensor: 'landsat',
         description: 'Landsat Stretch RGB543'
+    },
+    {
+        r: 10,
+        g: 40,
+        b: 20,
+        sensor: 'landsat',
+        description: 'Landsat Stretch RGB142'
     }
 ];
 
