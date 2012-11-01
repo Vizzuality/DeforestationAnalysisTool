@@ -26,6 +26,7 @@ if DEBUG:
     FT_TABLE = 'imazon_testing.csv'
     FT_TABLE_ID = '2676501'
     EE_API = 'https://earthengine.googleapis.com'
+    #EE_API = 'https://earthengine.sandbox.google.com'
     EE_TILE_SERVER = EE_API + '/map/'
 else:
     EE_API = 'https://earthengine.googleapis.com'

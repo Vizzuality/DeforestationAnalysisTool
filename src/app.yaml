@@ -1,5 +1,5 @@
-application: imazon-prototype
-version: v03
+application: sad-ee
+version: v01 
 runtime: python
 api_version: 1
 

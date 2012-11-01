@@ -15,6 +15,7 @@ from datetime import timedelta, date
 METER2_TO_KM2 = 1.0/(1000*1000)
 
 CALL_SCOPE = "SAD"
+#CALL_SCOPE = "sad_test"
 KRIGING = "kriging/com.google.earthengine.examples.kriging.KrigedModisImage"
 
 class Stats(object):
@@ -369,8 +370,17 @@ class NDFI(object):
         params = self._NDFI_period_image_command(self.last_period, 1)
         return self._execute_cmd('/mapid', params)
 
-    def baseline(self):
-        params = self._baseline_image_command()
+    def baseline(self, asset_id):
+        params = self._baseline_image_command(asset_id)
+        return self._execute_cmd('/mapid', params)
+
+    def rgb0id(self):
+
+        quarter_msec = 1000 * 60 * 60 * 24 * 90 
+        last_start = self.last_period['start']
+        last_period = dict(start=last_start - quarter_msec,
+                                 end=self.last_period['end'])
+        params = self._RGB_image_command(last_period)
         return self._execute_cmd('/mapid', params)
 
     def ndfi1id(self):
@@ -470,11 +480,19 @@ class NDFI(object):
             });
         return specs;
 
-    def _baseline_image(self):
-        return {
-            'creator': CALL_SCOPE + '/com.google.earthengine.examples.sad.ProdesImage',
-            'args': ["Xy539pUtkRlazIO1"]
-        }
+    def _baseline_image(self, asset_id):
+
+        classification = {"algorithm":"Image.select",
+                 "input":{"type":"Image", "id":asset_id},
+                 "bandSelectors":["classification"]}
+
+        mask = {"algorithm":"Image.eq", 
+                "image1":classification,
+                "image2":{"algorithm":"Constant","value":4}}
+
+        image = {"algorithm":"Image.mask", "image":classification, "mask":mask}
+        return image
+            
 
     def _krig_filter(self, period):
         work_month = self.getMidMonth(period['start'], period['end'])
@@ -546,13 +564,10 @@ class NDFI(object):
             "gamma": 1.6
         }
 
-    def _baseline_image_command(self):
-        baseline_image = self._baseline_image()
+    def _baseline_image_command(self, asset_id):
+        baseline_image = self._baseline_image(asset_id)
         return {
-            "image": json.dumps(baseline_image),
-            "bands": 'classification',
-            "min": 0,
-            "max": 9
+            "image": json.dumps(baseline_image)
         }
 
     def _RGB_image_command(self, period):

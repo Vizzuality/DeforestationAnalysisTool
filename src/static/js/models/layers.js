@@ -63,6 +63,7 @@ var RGBStrechLayer = LayerModel.extend({
 
     //parses token and mapid response from server and creates tile url
     parse: function(data) {
+        //var base_url = 'https://earthengine.sandbox.google.com/map/{mapid}/{Z}/{X}/{Y}?token={token}';
         var base_url = 'https://earthengine.googleapis.com/map/{mapid}/{Z}/{X}/{Y}?token={token}';
         var url = base_url.replace('{mapid}', data.mapid).replace('{token}', data.token);
         return {'url_pattern': url };
