@@ -272,6 +272,7 @@ class NDFI(object):
         previous = "%04d%02d" % (previous_year, previous_month)
 	start_filter = [{'property':'compounddate','greater_than':start},{'property':'compounddate','less_than':end}]
         deforested_asset = self.paint_deforestation(asset_id, work_month, work_year)
+        # 1zqKClXoaHjUovWSydYDfOvwsrLVw-aNU4rh3wLc  was 1868251
         json_cmd = {"creator":CALL_SCOPE + "/com.google.earthengine.examples.sad.GetNDFIDelta","args": [
             self.last_period['start'] - year_msec,
             self.last_period['end'],
@@ -279,8 +280,8 @@ class NDFI(object):
             self.work_period['end'],
             "MODIS/MOD09GA",
             "MODIS/MOD09GQ",
-            {'type':'FeatureCollection','table_id': 1868251, 'mark': str(timestamp()), 'filter':start_filter},
-            {'type':'FeatureCollection','table_id': 1868251, 'mark': str(timestamp()), 
+            {'type':'FeatureCollection','id': 'ft:1zqKClXoaHjUovWSydYDfOvwsrLVw-aNU4rh3wLc', 'mark': str(timestamp()), 'filter':start_filter},
+            {'type':'FeatureCollection','id': 'ft:1zqKClXoaHjUovWSydYDfOvwsrLVw-aNU4rh3wLc', 'mark': str(timestamp()), 
 		'filter':[{"property":"month","equals":work_month},{"property":"year","equals":work_year}]},
             {'type':'FeatureCollection','table_id': 4468280, 'mark': str(timestamp()), 
 		'filter':[{"property":"Compounddate","equals":int(previous)}]},
@@ -607,7 +608,7 @@ class NDFI(object):
           "creator": CALL_SCOPE + '/com.google.earthengine.examples.sad.MakeMosaic',
           "args": [{"id":"MODIS/MOD09GA","version":micro_yesterday,"start_time":start_time,"end_time":period['end']},
                    {"id":"MODIS/MOD09GQ","version":micro_yesterday,"start_time":start_time,"end_time":period['end']}, 
-                   {'type':'FeatureCollection','table_id':1868251, 
+                   {'type':'FeatureCollection','id':'ft:1zqKClXoaHjUovWSydYDfOvwsrLVw-aNU4rh3wLc', 
                       'filter':filter}, start_time, period['end']]
         }
 
