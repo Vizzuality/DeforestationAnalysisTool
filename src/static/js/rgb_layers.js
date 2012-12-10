@@ -4,16 +4,23 @@ var RGB_layers =  [
     {
         r: 1,
         g: 4,
-        b: 3,
+        b: 1, /*3,*/
         sensor: 'modis',
         description: 'True color RGB141'
     },
     {
-        r: 5,
+        r: 4, /*5,*/
         g: 2,
         b: 1,
         sensor: 'modis',
         description: 'False color RGB421'
+    },
+    {
+        r: 1,
+        g: 2,
+        b: 1,
+        sensor: 'modis',
+        description: 'False color RGB121'
     },
     {
         r: 2,
@@ -27,7 +34,28 @@ var RGB_layers =  [
         g: 20,
         b: 10,
         sensor: 'landsat',
-        description: 'Landsat Stretch'
+        description: 'Landsat Stretch RGB321'
+    },
+    {
+        r: 50,
+        g: 40,
+        b: 30,
+        sensor: 'landsat',
+        description: 'Landsat Stretch RGB543'
+    },
+    {
+        r: 40,
+        g: 30,
+        b: 20,
+        sensor: 'landsat',
+        description: 'Landsat Stretch RGB432'
+    },
+    {
+        r: 10,
+        g: 20,
+        b: 10,
+        sensor: 'landsat',
+        description: 'Landsat Stretch RGB121'
     }
 ];
 
