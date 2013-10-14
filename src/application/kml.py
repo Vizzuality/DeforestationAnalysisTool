@@ -7,9 +7,6 @@ def path_to_kml(paths):
     kml+="<coordinates>"
     for p in paths[0]:
         kml+= str(p[1]) + "," + str(p[0]) + ",0\n"
-    # close polygon
-    p = paths[0][0]
-    kml += str(p[1]) + "," + str(p[0]) + ",0\n"
     kml += "</coordinates>"
     kml+= "</LinearRing>"
     kml+= "</outerBoundaryIs>"
@@ -19,9 +16,6 @@ def path_to_kml(paths):
         kml+="<coordinates>"
         for p in inner:
             kml+= str(p[1]) + "," + str(p[0]) + ",0\n"
-        # close polygon
-        p = inner[0][0]
-        kml += str(p[1]) + "," + str(p[0]) + ",0\n"
         kml += "</coordinates>"
         kml+= "</LinearRing>"
         kml +="</innerBoundaryIs>"
