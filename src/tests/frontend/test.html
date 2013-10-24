@@ -3,10 +3,14 @@
 <html>
 <head>
   <script src="http://code.jquery.com/jquery-latest.js"></script>
-  <link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css" media="screen" />
-  <script type="text/javascript" src="http://code.jquery.com/qunit/git/qunit.js"></script>
-  <script type="text/javascript" src="../../static/js/underscore.js"></script>
+  <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.12.0.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="http://code.jquery.com/qunit/qunit-1.12.0.js"></script>
+  <script type="text/javascript" src="../../static/js/libs/underscore-min.js"></script>
+  <script type="text/javascript" src="../../static/js/libs/backbone.js"></script>
   <script type="text/javascript" src="../../static/js/pixel_ops.js"></script>
+  <script type="text/javascript" src="../../static/js/models/polygon.js"></script>
+
+  <script type="text/javascript" src="./polygon.test.js"></script>
 
   <script>
   $(document).ready(function(){
@@ -70,9 +74,9 @@
           for(var i=1; i<5; ++i) {
             for(var j=1; j<5; ++j) {
                 var p = 4*(i*6 + j);
-                equals(px[p], 255);
-                equals(px[p + 1], 254);
-                equals(px[p + 2], 253);
+                equal(px[p], 255);
+                equal(px[p + 1], 254);
+                equal(px[p + 2], 253);
                     
             }
           }
@@ -82,43 +86,43 @@
 
         test("should contour a shape with same color", function() {
           var poly = contour(generate_pixels(bitmap), 6, 6, 1, 1);
-          equals( poly.length, 14 ,"test");
+          equal( poly.length, 14 ,"test");
           var poly = contour(generate_pixels(bitmap), 6, 6, 3, 3);
-          equals( poly.length, 14 ,"test");
+          equal( poly.length, 14 ,"test");
         });
 
         test("should contour a small shape with same color", function() {
           var poly = contour(generate_pixels(small_bitmap), 4, 4, 1, 1);
-          equals( poly.length, 4 ,"test");
+          equal( poly.length, 4 ,"test");
         });
 
         test("should does NOT contour 1px shape with same color", function() {
           var poly = contour(generate_pixels(one_px_bitmap), 4, 4, 1, 1);
-          equals( poly.length, 0 ,"test");
+          equal( poly.length, 0 ,"test");
         });
 
         test("should contour a shape with holes with same color", function() {
           var poly = contour(generate_pixels(bitmap_hole), 8, 8, 1, 1);
-          equals( poly.length, 22 ,"test");
+          equal( poly.length, 22 ,"test");
           var poly = contour(generate_pixels(bitmap_hole), 8, 8, 3, 2);
-          equals( poly.length, 22 ,"test");
+          equal( poly.length, 22 ,"test");
         });
 
         test("should find holes", function() {
           var outer_poly = contour(generate_pixels(bitmap_hole), 8, 8, 2, 2);
           var poly = inner_polygons(generate_pixels(bitmap_hole), 8, 8, outer_poly, [1,1,1]);
-          equals( poly.length, 1 ,"test");
-          equals( poly[0].length, 8 ,"test");
-          equals( poly[0][0][0], 3 ,"test");
-          equals( poly[0][0][1], 4 ,"test");
+          equal( poly.length, 1 ,"test");
+          equal( poly[0].length, 8 ,"test");
+          equal( poly[0][0][0], 3 ,"test");
+          equal( poly[0][0][1], 4 ,"test");
             
         });
         test("should find 2 holes", function() {
           var outer_poly = contour(generate_pixels(bitmap_hole_2), 8, 8, 2, 2);
           var poly = inner_polygons(generate_pixels(bitmap_hole_2), 8, 8, outer_poly, [1,1,1]);
-          equals( poly.length, 2 ,"test");
-          equals( poly[0].length, 2 ,"test");
-          equals( poly[1].length, 2 ,"test");
+          equal( poly.length, 2 ,"test");
+          equal( poly[0].length, 2 ,"test");
+          equal( poly[1].length, 2 ,"test");
         });
 
   });

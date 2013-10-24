@@ -26,6 +26,35 @@ var Polygon = Backbone.Model.extend({
         // we're changing the internal reference so
         // change signal will not be called. Call it manually
         this.trigger('change');
+    },
+
+    // duplicate last vertex for each polygon before sending to
+    // the server as GeoJSON/kml requires
+    toJSON: function() {
+        var paths = this.get('paths');
+        var geojsonPath = _.map(paths, function (path) {
+          var p = _.clone(path);
+          p.push(p[0]);
+          return p;
+        });
+        return {
+          type: this.attributes.type,
+          paths: geojsonPath
+        };
+    },
+
+    parse: function(resp) {
+      // remove duplicated points from paths
+      // if the first and the last one are equal to maintain compatibility
+      // modify resp in place
+      _.each(resp.paths, function(path) {
+        if(_.isEqual(path[0], path[path.length - 1])) {
+          path.splice(path.length - 1, 1);
+        }
+      });
+
+      return resp;
+
     }
 
 
